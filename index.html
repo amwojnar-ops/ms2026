@@ -485,7 +485,7 @@
   <div class="copy-section">
     <button class="copy-btn" id="copy-btn" onclick="copyResults()">
       <span id="copy-icon">📋</span>
-      <span id="copy-label">KOPIUJ TYPY</span>
+      <span id="copy-label">KOPIUJ TYPY<br><small style="font-size:11px;letter-spacing:1px;opacity:.8">(wyniki trafią do schowka — wejdź na WhatsApp i wklej)</small></span>
     </button>
   </div>
 
@@ -747,13 +747,21 @@ function copyResults() {
   }
 
   // Build output: one typ per line in format "X-Y"
-  // First line: GRACZ name, second: MISTRZ pick, then one score per line
+  // After each group section: 2 blank lines (to skip Suma + next group header rows in Excel)
   const lines = [];
   lines.push(`GRACZ: ${name}`);
   lines.push(`MISTRZ: ${champ}`);
   lines.push('---');
-  allSelects.forEach(({ homeEl, awayEl }) => {
-    lines.push(`${homeEl.value}-${awayEl.value}`);
+
+  let selectIdx = 0;
+  MATCHES.forEach(group => {
+    group.matches.forEach(() => {
+      const { homeEl, awayEl } = allSelects[selectIdx++];
+      lines.push(`${homeEl.value}-${awayEl.value}`);
+    });
+    // 2 puste wiersze po każdej grupie (omijają wiersz Sumy i nagłówek kolejnej grupy)
+    lines.push('');
+    lines.push('');
   });
 
   const text = lines.join('\n');
