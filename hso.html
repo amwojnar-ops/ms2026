@@ -404,7 +404,7 @@ header::after {
 .exp-champ-line { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
 .exp-champ-line strong { color: var(--gold); }
 
-/* ── Gracze — karty FIFA ── */
+/* ── Gracze — karty FIFA TOTY ── */
 .players-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -420,125 +420,49 @@ header::after {
   cursor: pointer;
   transition: transform .25s, box-shadow .25s;
   overflow: hidden;
-  background: linear-gradient(160deg, #c8a830 0%, #f0d060 35%, #a07010 60%, #c8a830 100%);
-  border: 2px solid rgba(255,220,100,.5);
   box-shadow: 0 4px 16px rgba(0,0,0,.5);
+  font-family: 'Barlow Condensed', sans-serif;
 }
 .fifa-card:hover {
   transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 12px 32px rgba(0,0,0,.6), 0 0 20px rgba(232,184,75,.3);
+  box-shadow: 0 12px 32px rgba(0,0,0,.6);
 }
 .fifa-card.selected {
   box-shadow: 0 0 0 3px var(--gold), 0 12px 32px rgba(0,0,0,.6);
   transform: translateY(-4px) scale(1.03);
 }
-.fifa-card::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(160deg,
-    rgba(255,255,255,.15) 0%,
-    transparent 40%,
-    rgba(0,0,0,.2) 100%);
-  pointer-events: none;
-  z-index: 1;
-}
 
-/* zdjęcie gracza — kółko wyżej */
-.fifa-photo {
-  position: absolute;
-  top: 26%; left: 0; right: 0;
-  height: 44%;
-  overflow: visible;
-  display: flex; align-items: center; justify-content: center;
-}
-.fifa-photo img {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  object-fit: cover; object-position: center top;
-  border: 3px solid rgba(255,220,100,.6);
-  box-shadow: 0 2px 12px rgba(0,0,0,.5);
-  display: block;
-  position: relative; z-index: 2;
-}
-.fifa-photo-placeholder {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.25);
-  border: 3px solid rgba(255,220,100,.3);
-  font-size: 40px;
-  opacity: .5;
-}
+/* tło */
+.card-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #0a1628 0%, #0d1f45 40%, #111b3a 70%, #0a1220 100%); }
+.card-shine { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(100,160,255,.18) 0%, transparent 50%, rgba(80,120,255,.08) 100%); }
+.card-crystal { position: absolute; top: -10px; right: -10px; width: 90px; height: 90px; background: radial-gradient(ellipse at 60% 40%, rgba(100,160,255,.25) 0%, rgba(60,100,220,.12) 40%, transparent 70%); border-radius: 50%; }
+.card-border { position: absolute; inset: 2px; border-radius: 10px; border: 1px solid rgba(180,210,255,.2); pointer-events: none; z-index: 1; }
+.card-ribbon { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #e8c84a 30%, #fff 50%, #e8c84a 70%, transparent); z-index: 3; }
 
-/* gradient fadeout — usunięty */
+/* lewy górny — HSO 2026 */
+.card-top { position: absolute; top: 8px; left: 8px; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; }
+.card-hso { font-size: 18px; font-weight: 800; color: #e8c84a; line-height: 1; letter-spacing: .04em; }
+.card-year { font-size: 9px; font-weight: 600; letter-spacing: .12em; color: rgba(180,210,255,.7); }
 
-/* górna sekcja karty — HSO + rok + imię */
-.fifa-top {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  padding: 6px 8px 4px;
-  z-index: 2;
-  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
-}
-.fifa-top-row {
-  display: flex; align-items: baseline; gap: 5px;
-}
-.fifa-rating {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 18px; font-weight: 700;
-  color: #fff;
-  text-shadow: 0 1px 4px rgba(0,0,0,.5);
-  line-height: 1;
-}
-.fifa-pos-badge {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px; font-weight: 600; letter-spacing: .06em;
-  color: rgba(255,255,255,.75);
-}
-.fifa-name-top {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px; font-weight: 700;
-  color: #fff;
-  text-shadow: 0 1px 4px rgba(0,0,0,.7);
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  max-width: 100%;
-  line-height: 1.1;
-}
+/* prawy górny — flaga mistrza + kod */
+.card-badge { position: absolute; top: 6px; right: 8px; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.card-champ-flag { width: 24px; height: 16px; border-radius: 2px; object-fit: cover; border: 1px solid rgba(255,255,255,.2); }
+.card-champ-code { font-size: 8px; font-weight: 700; color: #e8c84a; letter-spacing: .05em; }
 
-/* dolna sekcja — pkt i status */
-.fifa-bottom {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 4px 8px 6px;
-  z-index: 2;
-  text-align: center;
-}
-.fifa-champ {
-  font-size: 10px; color: var(--gold);
-  font-weight: 500;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  text-shadow: 0 1px 4px rgba(0,0,0,.6);
-  margin-bottom: 2px;
-  margin-top: 2px;
-}
-.fifa-stats {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 4px; gap: 4px;
-}
-.fifa-pts {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px; font-weight: 700; color: #fff;
-  text-shadow: 0 1px 4px rgba(0,0,0,.8);
-  white-space: nowrap;
-}
-.fifa-fill {
-  font-size: 9px; font-weight: 600; padding: 1px 5px;
-  border-radius: 4px; white-space: nowrap;
-}
-.fifa-fill-full  { background: rgba(62,207,110,.3);  color: #3ecf6e; border: 1px solid rgba(62,207,110,.4); }
-.fifa-fill-empty { background: rgba(255,255,255,.12); color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.15); }
+/* zdjęcie */
+.fifa-photo { position: absolute; top: 30px; left: 0; right: 0; display: flex; justify-content: center; z-index: 2; }
+.fifa-photo img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; object-position: center top; border: 2px solid rgba(180,210,255,.3); box-shadow: 0 2px 12px rgba(0,0,0,.5); }
+.fifa-photo-placeholder { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,.07); border: 2px solid rgba(180,210,255,.15); display: flex; align-items: center; justify-content: center; font-size: 32px; color: rgba(255,255,255,.2); }
+
+/* imię */
+.card-name { position: absolute; bottom: 44px; left: 0; right: 0; text-align: center; z-index: 2; font-size: 14px; font-weight: 700; color: #fff; letter-spacing: .06em; text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
+.card-divider { position: absolute; bottom: 40px; left: 10px; right: 10px; height: 1px; background: linear-gradient(90deg, transparent, rgba(180,210,255,.3), transparent); z-index: 2; }
+
+/* statystyki */
+.card-stats { position: absolute; bottom: 6px; left: 0; right: 0; z-index: 2; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 0 4px; }
+.card-stat { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.card-stat-val { font-size: 15px; font-weight: 700; color: #e8c84a; line-height: 1; }
+.card-stat-lbl { font-size: 7px; font-weight: 600; letter-spacing: .06em; color: rgba(180,210,255,.6); text-transform: uppercase; white-space: nowrap; }
 
 /* panel typów gracza */
 .player-detail-panel {
@@ -1210,7 +1134,7 @@ const PHOTOS = {
   'Borys': 'img/borys.jpg',
   'Agnieszka': 'img/agnieszka.jpg','Aldona': 'img/aldona.jpg','Andrzej G.': 'img/andrzej_g.jpg','Andrzej W.': 'img/andrzej_w.jpg','Iwona': 'img/iwona.jpg','Iza': 'img/iza.jpg','Jacek': 'img/jacek.jpg',  'Justyna': 'img/justyna.jpg','Kacper': 'img/kacper.jpg','Leszek': 'img/leszek.jpg','Łukasz':'','Magda': 'img/magda.jpg',
   'Mariusz': 'img/mariusz.jpg','Mateusz': 'img/mateusz.jpg','Marysia': 'img/marysia.jpg','Ola': 'img/ola.jpg',
-  'Paweł': 'img/pawel.jpg','Robert': 'img/robert.jpg','Tomek': 'img/tomek.jpg','Waldek': 'img/waldek.jpg',
+  'Paweł': 'img/paweł.jpg','Robert': 'img/robert.jpg','Tomek': 'img/tomek.jpg','Waldek': 'img/waldek.jpg',
 };
 
 let activePlayerCard = null;
@@ -1219,21 +1143,26 @@ function renderPlayerCards(){
   const grid = document.getElementById('playersGrid');
   grid.innerHTML = '';
   const ranked = calcAll();
-  PLAYERS.forEach(p => {
+  const leaderPts = ranked[0] ? ranked[0].pts : 0;
+
+  ranked.forEach((rp, i) => {
+    const p = PLAYERS.find(x => x.name === rp.name);
+    if(!p) return;
     const card = document.createElement('div');
     card.className = 'fifa-card';
     card.dataset.name = p.name;
 
-    // punkty z rankingu
-    const rp = ranked.find(r => r.name === p.name);
-    const pts = rp ? rp.pts : 0;
+    const pts = rp.pts;
+    const pos = rp._pos || (i + 1);
+    const diff = pts - leaderPts;
+    const diffStr = diff === 0 ? '—' : String(diff);
 
-    // status uzupełnienia typów
-    const totalM = MATCHES.length;
-    const filled = p.tips ? p.tips.filter((t,i) => i>0 && t && t!=='').length : 0;
-    const pct = totalM > 0 ? Math.round(filled / totalM * 100) : 0;
-    const fillCls  = pct === 100 ? 'fifa-fill-full' : 'fifa-fill-empty';
-    const fillLabel = pct === 100 ? '100%' : (pct > 0 ? `${pct}%` : '0%');
+    // flaga i kod mistrza
+    const champISO = ISO[p.champ] || '';
+    const champCode = SHORT[p.champ] || (p.champ ? p.champ.substring(0,3).toUpperCase() : '—');
+    const flagHTML = champISO
+      ? `<img class="card-champ-flag" src="https://flagcdn.com/24x16/${champISO}.png" alt="${p.champ}">`
+      : `<div class="card-champ-flag" style="background:rgba(255,255,255,.1)"></div>`;
 
     const photoSrc = PHOTOS[p.name] || '';
     const photoHTML = photoSrc
@@ -1241,20 +1170,26 @@ function renderPlayerCards(){
       : `<div class="fifa-photo-placeholder">👤</div>`;
 
     card.innerHTML = `
-      <div class="fifa-top">
-        <div class="fifa-top-row">
-          <div class="fifa-rating">HSO</div>
-          <div class="fifa-pos-badge">2026</div>
-        </div>
-        <div class="fifa-name-top">${p.name}</div>
+      <div class="card-bg"></div>
+      <div class="card-shine"></div>
+      <div class="card-crystal"></div>
+      <div class="card-ribbon"></div>
+      <div class="card-border"></div>
+      <div class="card-top">
+        <div class="card-hso">HSO</div>
+        <div class="card-year">2026</div>
+      </div>
+      <div class="card-badge">
+        ${flagHTML}
+        <div class="card-champ-code">${champCode}</div>
       </div>
       <div class="fifa-photo">${photoHTML}</div>
-      <div class="fifa-bottom">
-        <div class="fifa-champ">⭐ ${p.champ||'—'}</div>
-        <div class="fifa-stats">
-          <span class="fifa-pts">${pts} pkt</span>
-          <span class="fifa-fill ${fillCls}">${fillLabel}</span>
-        </div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-divider"></div>
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val">${pos}</div><div class="card-stat-lbl">miejsce</div></div>
+        <div class="card-stat"><div class="card-stat-val">${pts}</div><div class="card-stat-lbl">pkt</div></div>
+        <div class="card-stat"><div class="card-stat-val">${diffStr}</div><div class="card-stat-lbl">do lidera</div></div>
       </div>`;
 
     card.addEventListener('click', () => {
