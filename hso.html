@@ -464,6 +464,22 @@ header::after {
 .card-stat-val { font-size: 15px; font-weight: 700; color: #e8c84a; line-height: 1; }
 .card-stat-lbl { font-size: 7px; font-weight: 600; letter-spacing: .06em; color: rgba(180,210,255,.6); text-transform: uppercase; white-space: nowrap; }
 
+/* karta lidera — złote tło + granatowa obwódka */
+.fifa-card.leader { box-shadow: 0 0 0 3px #1a3a6e, 0 8px 28px rgba(0,0,0,.6); }
+.fifa-card.leader .card-bg { background: linear-gradient(160deg, #3a2000 0%, #7a4a00 35%, #c8860a 65%, #f5d060 100%); }
+.fifa-card.leader .card-shine { background: linear-gradient(135deg, rgba(255,240,150,.25) 0%, transparent 50%, rgba(200,140,20,.15) 100%); }
+.fifa-card.leader .card-crystal { background: radial-gradient(ellipse at 60% 40%, rgba(255,220,80,.3) 0%, rgba(200,140,20,.15) 40%, transparent 70%); }
+.fifa-card.leader .card-border { border: 2px solid #1a3a6e; }
+.fifa-card.leader .card-ribbon { background: linear-gradient(90deg, transparent, #fff 30%, #ffe066 50%, #fff 70%, transparent); }
+.fifa-card.leader .card-hso { color: #fff; }
+.fifa-card.leader .card-year { color: rgba(255,240,180,.8); }
+.fifa-card.leader .card-champ-code { color: #fff; }
+.fifa-card.leader .card-stat-val { color: #fff; }
+.fifa-card.leader .card-stat-lbl { color: rgba(255,240,180,.7); }
+.fifa-card.leader .card-divider { background: linear-gradient(90deg, transparent, rgba(255,220,80,.5), transparent); }
+.fifa-card.leader .fifa-photo img { border-color: rgba(255,220,80,.5); }
+.fifa-card.leader .fifa-photo-placeholder { border-color: rgba(255,220,80,.3); }
+
 /* panel typów gracza */
 .player-detail-panel {
   display: none;
@@ -1149,7 +1165,7 @@ function renderPlayerCards(){
     const p = PLAYERS.find(x => x.name === rp.name);
     if(!p) return;
     const card = document.createElement('div');
-    card.className = 'fifa-card';
+    card.className = 'fifa-card' + (rp._pos === 1 ? ' leader' : '');
     card.dataset.name = p.name;
 
     const pts = rp.pts;
@@ -1198,8 +1214,10 @@ function renderPlayerCards(){
       } else {
         openPlayerPanel(p);
         activePlayerCard = p.name;
-        document.querySelectorAll('.fifa-card').forEach(c =>
-          c.classList.toggle('selected', c.dataset.name === p.name));
+        document.querySelectorAll('.fifa-card').forEach(c => {
+          const isSelected = c.dataset.name === p.name;
+          c.classList.toggle('selected', isSelected);
+        });
       }
     });
     grid.appendChild(card);
