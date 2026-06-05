@@ -464,7 +464,43 @@ header::after {
 .card-stat-val { font-size: 15px; font-weight: 700; color: #e8c84a; line-height: 1; }
 .card-stat-lbl { font-size: 7px; font-weight: 600; letter-spacing: .06em; color: rgba(180,210,255,.6); text-transform: uppercase; white-space: nowrap; }
 
-/* karta z wpisanymi typami — zielona obwódka */
+/* ── Animacja przy pierwszym wejściu ── */
+.fifa-card.card-hidden { opacity: 0 !important; pointer-events: none; }
+
+.fly-card {
+  position: fixed;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.7);
+  pointer-events: none;
+  z-index: 9999;
+  will-change: left, top, transform;
+  background: linear-gradient(135deg, #0d1b3e 0%, #1a2a5e 40%, #0d1b3e 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.fly-card::before {
+  content: '';
+  position: absolute; inset: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(232,184,75,.3);
+  background: repeating-linear-gradient(45deg,
+    transparent, transparent 8px,
+    rgba(232,184,75,.06) 8px, rgba(232,184,75,.06) 9px);
+}
+.fly-card-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 800;
+  color: rgba(232,184,75,.65);
+  letter-spacing: .08em;
+  position: relative; z-index: 1;
+}
+.fly-card-front {
+  position: absolute; inset: 0;
+  border-radius: 12px; overflow: hidden;
+  opacity: 0; transition: opacity .18s ease-in;
+}
+.fly-card.show-front .fly-card-front { opacity: 1; }
+.fly-card.show-front .fly-card-logo  { opacity: 0; transition: opacity .18s ease-in; }
 .fifa-card.has-tips { box-shadow: 0 0 0 2px rgba(62,207,110,.5), 0 4px 16px rgba(0,0,0,.5); }
 .fifa-card.has-tips.leader { box-shadow: 0 0 0 3px #1a3a6e, 0 8px 28px rgba(0,0,0,.6); }
 .card-check { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); z-index: 4; width: 10px; height: 10px; background: var(--green); border-radius: 50%; box-shadow: 0 0 6px rgba(62,207,110,.7); }
@@ -1332,6 +1368,96 @@ function switchTab(tab,el){
   ['gracze','mecze','ranking','admin'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
 }
 renderPlayerCards();renderMatches();renderRanking();renderAdmin();
+
+// ── Animacja kart — pierwsze wejście danego dnia ──────────────────────────
+(function(){
+  const TODAY = new Date().toISOString().slice(0,10);
+  const KEY   = 'hso_card_anim';
+  if(localStorage.getItem(KEY) === TODAY) return;
+
+  const grid = document.getElementById('playersGrid');
+  if(!grid) return;
+
+  // Poczekaj na render DOM
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const cards = Array.from(grid.querySelectorAll('.fifa-card'));
+      if(!cards.length) return;
+
+      // Pobierz pozycje docelowe w viewporcie
+      const rects = cards.map(c => c.getBoundingClientRect());
+
+      // Ukryj oryginalne karty
+      cards.forEach(c => c.classList.add('card-hidden'));
+
+      // Środek ekranu (punkt startowy)
+      const sx = window.innerWidth  / 2;
+      const sy = window.innerHeight / 2;
+
+      // Buduj latające karty
+      const flyers = cards.map((card, i) => {
+        const r = rects[i];
+
+        // Kontener
+        const fly = document.createElement('div');
+        fly.className = 'fly-card';
+        fly.style.cssText = `left:${sx - r.width/2}px; top:${sy - r.height/2}px; width:${r.width}px; height:${r.height}px; transition:none;`;
+
+        // Logo HSO na tyle
+        const logo = document.createElement('div');
+        logo.className = 'fly-card-logo';
+        logo.textContent = 'HSO';
+        fly.appendChild(logo);
+
+        // Front — skopiowany HTML karty
+        const front = document.createElement('div');
+        front.className = 'fly-card-front';
+        front.innerHTML = card.innerHTML;
+        fly.appendChild(front);
+
+        document.body.appendChild(fly);
+        return fly;
+      });
+
+      // Po 2s — rozsyp karty
+      setTimeout(()=>{
+        flyers.forEach((fly, i) => {
+          const r    = rects[i];
+          const del  = i * 75; // 75ms między kartami
+
+          setTimeout(()=>{
+            // Leć na docelową pozycję
+            fly.style.transition = `left .55s cubic-bezier(.22,.68,0,1.15),
+                                    top  .55s cubic-bezier(.22,.68,0,1.15)`;
+            fly.style.left = r.left + 'px';
+            fly.style.top  = r.top  + 'px';
+
+            // W połowie lotu — obróć (scaleX 1→0→1) i odkryj front
+            setTimeout(()=>{
+              fly.style.transition += ', transform .15s ease-in';
+              fly.style.transform   = 'scaleX(0)';
+            }, 240);
+            setTimeout(()=>{
+              fly.classList.add('show-front');
+              fly.style.transition  = 'left .55s cubic-bezier(.22,.68,0,1.15), top .55s cubic-bezier(.22,.68,0,1.15), transform .15s ease-out';
+              fly.style.transform   = 'scaleX(1)';
+            }, 400);
+
+            // Po wylądowaniu — pokaż oryginalną kartę i usuń flyer
+            setTimeout(()=>{
+              cards[i].classList.remove('card-hidden');
+              fly.remove();
+              if(i === flyers.length - 1){
+                localStorage.setItem(KEY, TODAY);
+              }
+            }, 620);
+
+          }, del);
+        });
+      }, 2000);
+    });
+  });
+})();
 </script>
 </body>
 </html>
