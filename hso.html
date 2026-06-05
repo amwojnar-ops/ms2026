@@ -446,7 +446,7 @@ header::after {
 
 /* prawy górny — flaga mistrza + kod */
 .card-badge { position: absolute; top: 6px; right: 8px; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.card-champ-flag { width: 24px; height: 16px; border-radius: 2px; object-fit: cover; border: 1px solid rgba(255,255,255,.2); }
+.card-champ-flag { width: 16px; height: 12px; border-radius: 2px; object-fit: cover; border: 1px solid rgba(255,255,255,.2); }
 .card-champ-code { font-size: 8px; font-weight: 700; color: #e8c84a; letter-spacing: .05em; }
 
 /* zdjęcie */
@@ -1177,7 +1177,7 @@ function renderPlayerCards(){
     const champISO = ISO[p.champ] || '';
     const champCode = SHORT[p.champ] || (p.champ ? p.champ.substring(0,3).toUpperCase() : '—');
     const flagHTML = champISO
-      ? `<img class="card-champ-flag" src="https://flagcdn.com/24x16/${champISO}.png" alt="${p.champ}">`
+      ? `<img class="card-champ-flag" src="https://flagcdn.com/16x12/${champISO}.png" alt="${p.champ}">`
       : `<div class="card-champ-flag" style="background:rgba(255,255,255,.1)"></div>`;
 
     const photoSrc = PHOTOS[p.name] || '';
