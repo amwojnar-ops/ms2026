@@ -1360,7 +1360,7 @@ function renderPlayerCards(){
 function openPlayerPanel(p){
   activePlayerCard = p.name;
   document.getElementById('pdpName').textContent = p.name;
-  document.getElementById('pdpSub').textContent = `Typ na mistrza: ${p.champ||'—'}`;
+  document.getElementById('pdpSub').textContent = '';
   document.getElementById('pdpChamp').textContent = p.champ || '—';
   const stats=playerStats(p);
   document.getElementById('pdpStats').innerHTML=`
