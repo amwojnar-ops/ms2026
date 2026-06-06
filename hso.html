@@ -232,6 +232,19 @@ header::after {
 }
 .tab:hover { color: var(--text); background: rgba(255,255,255,.04); }
 .tab.active { background: var(--card); color: #fff; }
+.tab.disabled {
+  position: relative; color: rgba(122,138,160,.5); cursor: not-allowed;
+}
+.tab.disabled:hover { color: rgba(122,138,160,.5); background: none; }
+.tab.disabled::after {
+  content: 'wkrótce'; display: inline-block; margin-left: 5px;
+  padding: 1px 5px; border-radius: 99px;
+  font-family: 'Barlow', sans-serif; font-size: 7px; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--gold); background: var(--gold-dim);
+  border: 1px solid rgba(232,184,75,.22);
+  vertical-align: 2px;
+}
 
 /* ── kolory grup ── */
 :root {
@@ -620,6 +633,18 @@ header::after {
   .pdp-stats { grid-template-columns: repeat(2, 1fr); }
   .pdp-stat:nth-child(2) { border-right: none; }
   .pdp-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .tab { padding-left: 5px; padding-right: 5px; font-size: 13px; }
+  .tab.disabled {
+    font-size: 0; line-height: 1.05;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .tab.disabled::before { content: 'Faza'; font-size: 13px; }
+  .tab.disabled::after {
+    content: 'Pucharowa'; display: block; margin: 2px 0 0;
+    padding: 0; border: 0; border-radius: 0;
+    color: rgba(122,138,160,.65); background: none;
+    font-size: 8px; line-height: 1; letter-spacing: .06em;
+  }
 }
 @media (max-width: 540px) {
   .stats { grid-template-columns: repeat(2,1fr); }
@@ -682,6 +707,7 @@ header::after {
   <button class="tab active" onclick="switchTab('gracze',this)">Gracze</button>
   <button class="tab" onclick="switchTab('mecze',this)">Mecze</button>
   <button class="tab" onclick="switchTab('ranking',this)">Ranking</button>
+  <button class="tab disabled" type="button" disabled aria-disabled="true" title="Faza pucharowa zostanie uruchomiona później">Faza pucharowa</button>
 </div>
 
 <div id="tab-gracze">
