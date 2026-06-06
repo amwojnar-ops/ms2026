@@ -466,7 +466,7 @@ header::after {
 
 /* karta z wpisanymi typami — zielona obwódka */
 .fifa-card.has-tips { box-shadow: 0 0 0 2px rgba(62,207,110,.5), 0 4px 16px rgba(0,0,0,.5); }
-.fifa-card.has-tips.leader { box-shadow: 0 0 0 3px #1a3a6e, 0 8px 28px rgba(0,0,0,.6); }
+.fifa-card.has-tips.leader { box-shadow: 0 0 0 2px rgba(62,207,110,.75), 0 8px 28px rgba(0,0,0,.6); }
 .card-check { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); z-index: 4; width: 10px; height: 10px; background: var(--green); border-radius: 50%; box-shadow: 0 0 6px rgba(62,207,110,.7); }
 .fifa-card.leader { box-shadow: 0 0 0 3px #1a3a6e, 0 8px 28px rgba(0,0,0,.6); }
 .fifa-card.leader .card-bg { background: linear-gradient(160deg, #3a2000 0%, #7a4a00 35%, #c8860a 65%, #f5d060 100%); }
@@ -505,6 +505,18 @@ header::after {
 .pdp-champ { padding: 8px 16px; font-size: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
 .pdp-champ span { color: var(--muted); }
 .pdp-champ strong { color: var(--gold); }
+.pdp-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.015);
+}
+.pdp-stat { padding: 10px 8px; text-align: center; border-right: 1px solid var(--border); }
+.pdp-stat:last-child { border-right: none; }
+.pdp-stat strong {
+  display: block; color: #fff;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 19px;
+}
+.pdp-stat span { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
 .pdp-section-lbl {
   padding: 8px 16px 4px;
   font-size: 10px; font-weight: 600; letter-spacing: .08em;
@@ -530,6 +542,9 @@ header::after {
 /* responsive */
 @media (max-width: 540px) {
   .players-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .pdp-stats { grid-template-columns: repeat(2, 1fr); }
+  .pdp-stat:nth-child(2) { border-right: none; }
+  .pdp-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
 }
 @media (max-width: 540px) {
   .stats { grid-template-columns: repeat(2,1fr); }
@@ -578,7 +593,6 @@ header::after {
   <button class="tab active" onclick="switchTab('gracze',this)">Gracze</button>
   <button class="tab" onclick="switchTab('mecze',this)">Mecze</button>
   <button class="tab" onclick="switchTab('ranking',this)">Ranking</button>
-  <button class="tab admin-tab" id="adminTab" style="display:none" onclick="switchTab('admin',this)">⚙ Panel</button>
 </div>
 
 <div id="tab-gracze">
@@ -592,6 +606,7 @@ header::after {
       <button class="pdp-close" onclick="closePlayerPanel()">✕</button>
     </div>
     <div class="pdp-champ"><span>Typ na mistrza</span><strong id="pdpChamp">—</strong></div>
+    <div class="pdp-stats" id="pdpStats"></div>
     <div id="pdpMatches"></div>
   </div>
 </div>
@@ -633,10 +648,6 @@ header::after {
       <div class="sp-matches" id="spMatches"></div>
     </div>
   </div>
-</div>
-
-<div id="tab-admin" style="display:none">
-  <div class="admin-panel" id="adminPanel"></div>
 </div>
 
 </div>
@@ -727,7 +738,95 @@ const MATCHES=[
   {g:'L',date:'27.06',time:'23:00',home:'Panama',              away:'Anglia',           status:'soon'},
   {g:'L',date:'27.06',time:'23:00',home:'Chorwacja',           away:'Ghana',            status:'soon'},
 ];
-let results=new Array(72).fill(null);
+// WYNIKI MECZOW - edytuj tylko te tablice.
+// Po meczu zamien odpowiednie null na wynik, np. '2-1', i opublikuj plik.
+const RESULTS = [
+  // Grupa A
+  null, // 11.06 Meksyk - RPA
+  null, // 12.06 Korea Pld. - Czechy
+  null, // 18.06 Czechy - RPA
+  null, // 19.06 Meksyk - Korea Pld.
+  null, // 25.06 Czechy - Meksyk
+  null, // 25.06 RPA - Korea Pld.
+  // Grupa B
+  null, // 12.06 Kanada - Bosnia i Herc.
+  null, // 13.06 Katar - Szwajcaria
+  null, // 18.06 Szwajcaria - Bosnia i Herc.
+  null, // 19.06 Kanada - Katar
+  null, // 24.06 Szwajcaria - Kanada
+  null, // 24.06 Bosnia i Herc. - Katar
+  // Grupa C
+  null, // 14.06 Brazylia - Maroko
+  null, // 14.06 Haiti - Szkocja
+  null, // 20.06 Szkocja - Maroko
+  null, // 20.06 Brazylia - Haiti
+  null, // 25.06 Szkocja - Brazylia
+  null, // 25.06 Maroko - Haiti
+  // Grupa D
+  null, // 13.06 USA - Paragwaj
+  null, // 14.06 Australia - Turcja
+  null, // 20.06 Turcja - Paragwaj
+  null, // 19.06 USA - Australia
+  null, // 26.06 Turcja - USA
+  null, // 26.06 Paragwaj - Australia
+  // Grupa E
+  null, // 14.06 Niemcy - Curacao
+  null, // 15.06 Wybrzeze K.Sl. - Ekwador
+  null, // 20.06 Niemcy - Wybrzeze K.Sl.
+  null, // 21.06 Ekwador - Curacao
+  null, // 25.06 Ekwador - Niemcy
+  null, // 25.06 Curacao - Wybrzeze K.Sl.
+  // Grupa F
+  null, // 14.06 Holandia - Japonia
+  null, // 15.06 Szwecja - Tunezja
+  null, // 20.06 Holandia - Szwecja
+  null, // 21.06 Tunezja - Japonia
+  null, // 26.06 Tunezja - Holandia
+  null, // 26.06 Japonia - Szwecja
+  // Grupa G
+  null, // 15.06 Belgia - Egipt
+  null, // 16.06 Iran - Nowa Zelandia
+  null, // 21.06 Belgia - Iran
+  null, // 22.06 Nowa Zelandia - Egipt
+  null, // 27.06 Nowa Zelandia - Belgia
+  null, // 27.06 Egipt - Iran
+  // Grupa H
+  null, // 15.06 Hiszpania - Rep. Ziel. Przyl.
+  null, // 16.06 Arabia Saudyjska - Urugwaj
+  null, // 21.06 Hiszpania - Arabia Saudyjska
+  null, // 22.06 Urugwaj - Rep. Ziel. Przyl.
+  null, // 27.06 Urugwaj - Hiszpania
+  null, // 27.06 Rep. Ziel. Przyl. - Arabia Saudyjska
+  // Grupa I
+  null, // 16.06 Francja - Senegal
+  null, // 17.06 Irak - Norwegia
+  null, // 22.06 Francja - Irak
+  null, // 23.06 Norwegia - Senegal
+  null, // 26.06 Norwegia - Francja
+  null, // 26.06 Senegal - Irak
+  // Grupa J
+  null, // 17.06 Argentyna - Algieria
+  null, // 17.06 Austria - Jordania
+  null, // 22.06 Argentyna - Austria
+  null, // 23.06 Jordania - Algieria
+  null, // 28.06 Jordania - Argentyna
+  null, // 28.06 Algieria - Austria
+  // Grupa K
+  null, // 17.06 Portugalia - DR Konga
+  null, // 18.06 Uzbekistan - Kolumbia
+  null, // 23.06 Portugalia - Uzbekistan
+  null, // 24.06 Kolumbia - DR Konga
+  null, // 28.06 Kolumbia - Portugalia
+  null, // 28.06 DR Konga - Uzbekistan
+  // Grupa L
+  null, // 17.06 Anglia - Chorwacja
+  null, // 18.06 Ghana - Panama
+  null, // 22.06 Anglia - Ghana
+  null, // 24.06 Panama - Chorwacja
+  null, // 27.06 Panama - Anglia
+  null, // 27.06 Chorwacja - Ghana
+];
+const results = RESULTS;
 const PLAYERS=[
   {name:'Agnieszka', champ:'Portugalia', tips:[,'3-1','0-2','0-1','2-0','1-1','2-1','2-1','2-3','1-1','1-2','0-0','0-1','3-0','0-2','1-0','4-0','1-3','1-1','1-0','1-2','2-1','1-1','1-0','0-2','2-0','1-0','1-0','2-0','1-1','0-0','2-0','2-0','2-2','0-1','0-3','0-2','3-0','0-1','3-0','1-0','0-4','1-1','3-0','1-2','2-0','0-1','1-3','0-2','3-1','0-1','2-0','1-0','1-2','1-1','3-0','2-0','1-0','1-1','0-4','0-2','3-0','1-1','5-0','1-1','1-3','0-0','1-2','0-0','2-1','0-3','0-2','2-1']},
   {name:'Aldona', champ:'', tips:[]},
@@ -776,7 +875,7 @@ const SHORT = {
 function flag(t){
   const code=ISO[t];
   if(!code)return '';
-  return `<img src="https://flagcdn.com/16x12/${code}.png" width="16" height="12" alt="${t}" style="vertical-align:middle;border-radius:2px;margin:0 2px">`;
+  return `<img src="img/flags/${code}.png" width="16" height="12" alt="${t}" style="vertical-align:middle;border-radius:2px;margin:0 2px">`;
 }
 function disp(t){ return SHORT[t]||t; }
 function teamHTML(t, side='home'){
@@ -792,16 +891,63 @@ function sc(t,r){
   if(isNaN(th)||isNaN(rh))return null;
   const s=x=>x>0?1:x<0?-1:0;return s(th-ta)===s(rh-ra)?1:0;
 }
-function calcAll(){
+function calcAll(resultSet=results){
   return PLAYERS.map(p=>{
     let pts=0,ex=0,en=0;
-    results.forEach((r,i)=>{const s=sc(p.tips[i+1],r);if(s===3){pts+=3;ex++;}else if(s===1){pts+=1;en++;}});
+    resultSet.forEach((r,i)=>{const s=sc(p.tips[i+1],r);if(s===3){pts+=3;ex++;}else if(s===1){pts+=1;en++;}});
     return{...p,pts,ex,en};
   }).sort((a,b)=>{
     if(b.pts!==a.pts) return b.pts-a.pts;           // 1. punkty
     if(b.ex!==a.ex)  return b.ex-a.ex;              // 2. dokładne wyniki (3 pkt)
     return a.name.localeCompare(b.name,'pl');         // 3. alfabetycznie
   });
+}
+function assignPositions(ranked){
+  ranked.forEach((p,i)=>{
+    if(i===0) p._pos=1;
+    else {
+      const prev=ranked[i-1];
+      p._pos=(p.pts===prev.pts && p.ex===prev.ex) ? prev._pos : i+1;
+    }
+  });
+  return ranked;
+}
+function latestCompletedIndex(){
+  let latest=-1,latestTime=-Infinity;
+  results.forEach((r,i)=>{
+    if(!r)return;
+    const time=matchDateTime(MATCHES[i]).getTime();
+    if(time>latestTime){latestTime=time;latest=i;}
+  });
+  return latest;
+}
+function rankingMovement(){
+  const latest=latestCompletedIndex();
+  if(latest<0)return {};
+  const previousResults=results.map((r,i)=>i===latest?null:r);
+  const previous=assignPositions(calcAll(previousResults));
+  return Object.fromEntries(previous.map(p=>[p.name,p._pos]));
+}
+function playerStats(p){
+  const playedIndexes=results.map((r,i)=>r?i:-1).filter(i=>i>=0)
+    .sort((a,b)=>matchDateTime(MATCHES[a])-matchDateTime(MATCHES[b]));
+  let scored=0,pts=0,streak=0,bestStreak=0;
+  const groupPts={};
+  playedIndexes.forEach(i=>{
+    const value=sc(p.tips[i+1],results[i])??0;
+    pts+=value;
+    if(value>0){scored++;streak++;bestStreak=Math.max(bestStreak,streak);}
+    else streak=0;
+    groupPts[MATCHES[i].g]=(groupPts[MATCHES[i].g]||0)+value;
+  });
+  const bestGroup=Object.entries(groupPts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0];
+  return {
+    efficiency:playedIndexes.length?Math.round(scored/playedIndexes.length*100):0,
+    average:playedIndexes.length?(pts/playedIndexes.length).toFixed(2).replace('.',','):'0,00',
+    bestGroup:bestGroup&&bestGroup[1]>0?`Grupa ${bestGroup[0]}`:'—',
+    streak,
+    bestStreak
+  };
 }
 function breakdown(idx){
   const r=results[idx];if(!r)return null;
@@ -821,6 +967,13 @@ function matchDateTime(m){
   const [h, mi] = m.time.split(':').map(Number);
   // CEST = UTC+2 → odejmujemy 2h żeby dostać UTC
   return new Date(Date.UTC(2026, mo-1, d, h-2, mi, 0));
+}
+function matchStatus(m,idx){
+  if(results[idx])return 'done';
+  const diff=Date.now()-matchDateTime(m).getTime();
+  if(diff>=0 && diff<3*60*60*1000)return 'live';
+  if(diff>=3*60*60*1000)return 'waiting';
+  return 'soon';
 }
 
 // Formatuje pozostały czas do meczu
@@ -860,14 +1013,15 @@ function tickCountdown(){
 
 function nextMatch(){
   // Znajdź "następne" mecze — live lub najbliższe soon
-  const live = MATCHES.filter(m=>m.status==='live');
+  const indexed=MATCHES.map((m,idx)=>({...m,idx,status:matchStatus(m,idx)}));
+  const live = indexed.filter(m=>m.status==='live');
   if(live.length){
     startRotation(live);
     _countdownMatch = null;
     stopCountdown();
     return nextMatchHTML(live[0]);
   }
-  const soon = MATCHES.filter(m=>m.status==='soon');
+  const soon = indexed.filter(m=>m.status==='soon').sort((a,b)=>matchDateTime(a)-matchDateTime(b));
   if(!soon.length){ stopRotation(); stopCountdown(); return '—'; }
   // Grupuj po dacie+godzinie — weź pierwsze (najwcześniejsze)
   const firstTime = soon[0].date + soon[0].time;
@@ -976,7 +1130,8 @@ function closePanel(){
 }
 
 function renderRanking(){
-  const ranked=calcAll();
+  const ranked=assignPositions(calcAll());
+  const previousPositions=rankingMovement();
   const played=results.filter(Boolean).length;
   document.getElementById('s-played').textContent=`${played} / 72`;
   document.getElementById('s-leader').textContent=ranked[0]?.name||'—';
@@ -985,28 +1140,15 @@ function renderRanking(){
 
   const tbody=document.getElementById('rankingBody');tbody.innerHTML='';
   ranked.forEach((p,i)=>{
-    // pozycja: ex equo gdy te same pts i te same ex
-    let pos;
-    if(i===0){
-      pos=1;
-    } else {
-      const prev=ranked[i-1];
-      if(p.pts===prev.pts && p.ex===prev.ex){
-        // wszystkie kryteria równe — ta sama pozycja (opcja 1)
-        pos=ranked[i-1]._pos;
-      } else {
-        // różnią się — pozycja = numer w tablicy+1
-        pos=i+1;
-      }
-    }
-    p._pos=pos;
-
+    const pos=p._pos;
     const pc=pos===1?'pos-1':pos===2?'pos-2':pos===3?'pos-3':'pos-n';
     const posLabel=pos===ranked[i-1]?._pos&&pos<4?`=${pos}`:String(pos);
-    const chg=i<5?`<span class="up">▲${5-i}</span>`:i>14?`<span class="dn">▼1</span>`:`<span class="eq">—</span>`;
+    const previous=previousPositions[p.name];
+    const movement=previous==null?0:previous-pos;
+    const chg=movement>0?`<span class="up">▲${movement}</span>`:movement<0?`<span class="dn">▼${Math.abs(movement)}</span>`:`<span class="eq">—</span>`;
     const tr=document.createElement('tr');tr.className='row';tr.dataset.name=p.name;
     if(p.name===activePlayer)tr.classList.add('hi');
-    tr.innerHTML=`<td class="pos ${pc}">${pos}</td>
+    tr.innerHTML=`<td class="pos ${pc}">${posLabel}</td>
       <td class="p-name">${p.name}</td>
       <td class="p-num">${p.ex}</td>
       <td class="p-num">${p.en}</td>
@@ -1032,19 +1174,21 @@ function switchMatchView(view, el){
 
 function buildTile(m, gcVar){
   const r=results[m.idx];
+  const status=matchStatus(m,m.idx);
   const tile=document.createElement('div');
-  tile.className=`tile ${m.status}`;
+  tile.className=`tile ${status}`;
   tile.style.setProperty('--g-color',`var(${gcVar||'--muted'})`);
   let sHTML='';
-  if(m.status==='done')      sHTML=`<span class="dot dot-done"></span><span style="color:var(--muted)">Zakończony</span>`;
-  else if(m.status==='live') sHTML=`<span class="dot dot-live"></span><span style="color:var(--red);font-weight:600">Trwa</span>`;
-  else                       sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">Wkrótce · ${m.date} ${m.time}</span>`;
+  if(status==='done')         sHTML=`<span class="dot dot-done"></span><span style="color:var(--muted)">Zakończony</span>`;
+  else if(status==='live')    sHTML=`<span class="dot dot-live"></span><span style="color:var(--red);font-weight:600">Trwa</span>`;
+  else if(status==='waiting') sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">Oczekuje na wynik</span>`;
+  else                        sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">Wkrótce · ${m.date} ${m.time}</span>`;
   let scHTML='';
   if(r){const[h,a]=r.split('-');scHTML=`<div class="t-score"><span>${h}</span><span class="sep">–</span><span>${a}</span></div>`;}
-  else if(m.status==='live') scHTML=`<div class="t-live-badge">Trwa</div>`;
+  else if(status==='live') scHTML=`<div class="t-live-badge">Trwa</div>`;
   else scHTML=`<div class="t-vs">VS</div>`;
   let fHTML='';
-  if(m.status==='done'&&r){
+  if(status==='done'&&r){
     const bd=breakdown(m.idx);
     fHTML=`<span class="f3">▲ ${bd[3].length} × 3 pkt</span><span class="f1">${bd[1].length} × 1 pkt</span><span class="f-hint">↓</span>`;
   } else {
@@ -1052,7 +1196,7 @@ function buildTile(m, gcVar){
     fHTML=`<span>${cnt}/${PLAYERS.length} typów</span><span class="f-hint">↓</span>`;
   }
   let dHTML='';
-  if(m.status==='done'&&r){
+  if(status==='done'&&r){
     const bd=breakdown(m.idx);
     dHTML=`<div class="tile-expand" id="tx-${m.idx}">`;
     [{pts:3,cls:'lbl-g exp-lbl',label:'3 pkt',cc:'chip-g'},{pts:1,cls:'lbl-a exp-lbl',label:'1 pkt',cc:'chip-a'},{pts:0,cls:'lbl-r exp-lbl',label:'0 pkt',cc:'chip-r'}].forEach(({pts,cls,label,cc})=>{
@@ -1130,26 +1274,6 @@ function renderMatches(){
   }
 }
 
-function renderAdmin(){
-  const panel=document.getElementById('adminPanel');panel.innerHTML='';
-  MATCHES.forEach((m,i)=>{
-    const div=document.createElement('div');div.className='admin-row';
-    const hasVal=!!results[i];
-    div.innerHTML=`<span style="font-size:13px;color:var(--muted)">${m.date} ${m.time} &nbsp;<span style="color:var(--text);font-weight:500">${flag(m.home)} ${disp(m.home)}</span> – <span style="color:var(--text);font-weight:500">${disp(m.away)} ${flag(m.away)}</span></span>
-      <input type="text" id="r-${i}" placeholder="X-Y" value="${results[i]||''}" class="${hasVal?'has-val':''}">
-      <button class="save-btn" onclick="saveRes(${i})">✓ Zapisz</button>
-      <span class="ok-badge" id="ok-${i}">✓ Zapisano</span>`;
-    panel.appendChild(div);
-  });
-}
-function saveRes(i){
-  const v=document.getElementById(`r-${i}`).value.trim();
-  if(!/^\d-\d$/.test(v)){alert('Format: X-Y, np. 2-1');return;}
-  results[i]=v;MATCHES[i].status='done';
-  document.getElementById(`r-${i}`).classList.add('has-val');
-  renderMatches();renderRanking();renderPlayerCards();
-  const ok=document.getElementById(`ok-${i}`);ok.style.display='inline';setTimeout(()=>ok.style.display='none',2000);
-}
 // Zdjęcia graczy — wstaw URL zdjęcia lub zostaw '' dla placeholdera
 const PHOTOS = {
   'Borys': 'img/borys.jpg',
@@ -1165,13 +1289,15 @@ function renderPlayerCards(){
   grid.innerHTML = '';
   const ranked = calcAll();
   const leaderPts = ranked[0] ? ranked[0].pts : 0;
+  const hasResults = results.some(Boolean);
 
   ranked.forEach((rp, i) => {
     const p = PLAYERS.find(x => x.name === rp.name);
     if(!p) return;
     const card = document.createElement('div');
     const hasTips = p.tips && p.tips.filter((t,i) => i>0 && t && t!=='').length === 72;
-    card.className = 'fifa-card' + (rp._pos === 1 ? ' leader' : '') + (hasTips ? ' has-tips' : '');
+    const isLeader = hasResults && rp.pts === leaderPts;
+    card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '');
     card.dataset.name = p.name;
 
     const pts = rp.pts;
@@ -1183,7 +1309,7 @@ function renderPlayerCards(){
     const champISO = ISO[p.champ] || '';
     const champCode = SHORT[p.champ] || (p.champ ? p.champ.substring(0,3).toUpperCase() : '—');
     const flagHTML = champISO
-      ? `<img class="card-champ-flag" src="https://flagcdn.com/16x12/${champISO}.png" alt="${p.champ}">`
+      ? `<img class="card-champ-flag" src="img/flags/${champISO}.png" alt="${p.champ}">`
       : `<div class="card-champ-flag" style="background:rgba(255,255,255,.1)"></div>`;
 
     const photoSrc = PHOTOS[p.name] || '';
@@ -1236,6 +1362,12 @@ function openPlayerPanel(p){
   document.getElementById('pdpName').textContent = p.name;
   document.getElementById('pdpSub').textContent = `Typ na mistrza: ${p.champ||'—'}`;
   document.getElementById('pdpChamp').textContent = p.champ || '—';
+  const stats=playerStats(p);
+  document.getElementById('pdpStats').innerHTML=`
+    <div class="pdp-stat"><strong>${stats.efficiency}%</strong><span>skuteczność</span></div>
+    <div class="pdp-stat"><strong>${stats.average}</strong><span>pkt / mecz</span></div>
+    <div class="pdp-stat"><strong>${stats.bestGroup}</strong><span>najlepsza grupa</span></div>
+    <div class="pdp-stat"><strong>${stats.streak}</strong><span>aktualna seria</span></div>`;
 
   const cont = document.getElementById('pdpMatches');
   cont.innerHTML = '';
@@ -1279,7 +1411,7 @@ function closePlayerPanel(){
 }
 
 // ── Panel — dostęp tylko dla organizatora ─────────────────────────────────
-(function(){
+if(false){
   const HASH = 'panel';
   // prosta suma kontrolna — nie wymaga btoa
   function hashPwd(s){ let h=0; for(let i=0;i<s.length;i++) h=(Math.imul(31,h)+s.charCodeAt(i))|0; return h; }
@@ -1328,12 +1460,12 @@ function closePlayerPanel(){
       }
     }
   });
-})();
+}
 function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
-  ['gracze','mecze','ranking','admin'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
+  ['gracze','mecze','ranking'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
 }
-renderPlayerCards();renderMatches();renderRanking();renderAdmin();
+renderPlayerCards();renderMatches();renderRanking();
 </script>
 </body>
 </html>
