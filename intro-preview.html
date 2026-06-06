@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loża Ekspertów - MŚ 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#e8b84b;--bg:#080d18;--text:#edf2f8;--muted:#7f8da3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;min-height:100vh}
+.page{min-height:100vh;background:radial-gradient(ellipse at top,#172951 0,transparent 46%),#080d18;padding:42px 18px;opacity:0;animation:pageIn .8s ease 3.1s forwards}
+.content{max-width:780px;margin:auto}.page h1{font:700 clamp(42px,8vw,70px)/.9 "Barlow Condensed";margin:0}.page h1 span{color:var(--gold)}.page p{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:40px}.card{height:150px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:#192338}
+
+.intro{position:fixed;z-index:50;inset:0;display:grid;place-items:center;overflow:hidden;background:#060a12;animation:introOut .75s cubic-bezier(.7,0,.3,1) 2.75s forwards}
+.intro:before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 50% 45%,rgba(39,72,145,.45),transparent 32%),linear-gradient(115deg,transparent 38%,rgba(232,184,75,.05) 48%,transparent 58%);animation:atmosphere 2.6s ease-out both}
+.pitch{position:absolute;inset:0;opacity:.2;background:linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.14) 50%,transparent 50.2%),repeating-linear-gradient(0deg,transparent,transparent 55px,rgba(255,255,255,.05) 56px);transform:perspective(500px) rotateX(65deg) scale(1.5);transform-origin:center bottom}
+.brand{position:relative;text-align:center;transform:scale(.72);opacity:0;animation:brandIn .7s cubic-bezier(.17,.84,.44,1) .25s forwards}
+.hso{position:relative;font:700 clamp(86px,22vw,190px)/.75 "Barlow Condensed";letter-spacing:.04em;color:#fff;text-shadow:0 0 42px rgba(110,160,255,.22)}
+.hso:after{content:"";position:absolute;inset:-15% -30%;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.95) 49%,rgba(232,184,75,.85) 51%,transparent 58%);mix-blend-mode:screen;transform:translateX(-80%);animation:shine .75s ease 1.15s forwards}
+.year{font:600 clamp(24px,6vw,46px)/1 "Barlow Condensed";letter-spacing:.55em;color:var(--gold);margin:22px 0 0;padding-left:.55em;opacity:0;animation:fadeUp .45s ease .8s forwards}
+.name{font:500 clamp(15px,3vw,22px)/1.2 Barlow;letter-spacing:.18em;text-transform:uppercase;color:#aab7ca;margin-top:17px;opacity:0;animation:fadeUp .45s ease 1s forwards}
+.gold-line{width:0;height:2px;margin:21px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 16px var(--gold);animation:lineIn .75s ease 1.35s forwards}
+.skip{position:absolute;right:22px;bottom:20px;border:1px solid rgba(255,255,255,.18);border-radius:99px;background:rgba(255,255,255,.04);color:#aab7ca;padding:8px 14px;font:500 12px Barlow;cursor:pointer;animation:fadeUp .4s ease 1.4s both}
+.intro.skip-now{animation:introOut .45s ease forwards}
+
+@keyframes brandIn{to{opacity:1;transform:scale(1)}}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes shine{to{transform:translateX(80%)}}@keyframes lineIn{to{width:min(430px,72vw)}}@keyframes atmosphere{from{transform:scale(.8);opacity:0}to{transform:scale(1.08);opacity:1}}
+@keyframes introOut{to{opacity:0;visibility:hidden;transform:scale(1.04)}}@keyframes pageIn{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.intro{animation:none}.brand,.year,.name,.gold-line,.skip{animation:none;opacity:1;transform:none}.gold-line{width:min(430px,72vw)}.page{animation:none;opacity:1}}
+@media(max-width:600px){.cards{grid-template-columns:repeat(2,1fr)}.skip{right:14px;bottom:14px}}
+</style>
+</head>
+<body>
+<div class="intro" id="intro">
+  <div class="pitch"></div>
+  <div class="brand">
+    <div class="hso">LOŻA</div>
+    <div class="year">EKSPERTÓW</div>
+    <div class="name">MŚ 2026</div>
+    <div class="gold-line"></div>
+  </div>
+  <button class="skip" id="skip">Pomiń intro</button>
+</div>
+<main class="page">
+  <div class="content">
+    <h1>LOŻA <span>EKSPERTÓW</span></h1>
+    <p>Mistrzostwa Świata 2026 · strona odsłania się płynnie po intro</p>
+    <div class="cards"><div class="card"></div><div class="card"></div><div class="card"></div><div class="card"></div></div>
+  </div>
+</main>
+<script>
+document.getElementById('skip').addEventListener('click',()=>document.getElementById('intro').classList.add('skip-now'));
+</script>
+</body>
+</html>
