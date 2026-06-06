@@ -36,6 +36,81 @@ body {
   line-height: 1.5;
   min-height: 100vh;
 }
+body.intro-active { overflow: hidden; }
+
+/* intro Loza Ekspertow */
+.site-intro {
+  position: fixed; z-index: 1000; inset: 0;
+  display: grid; place-items: center; overflow: hidden;
+  background: #060a12;
+  transition: opacity .65s ease, visibility .65s ease, transform .65s ease;
+}
+.site-intro.hidden { opacity: 0; visibility: hidden; transform: scale(1.035); pointer-events: none; }
+.site-intro::before {
+  content: ''; position: absolute; inset: -30%;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(39,72,145,.45), transparent 32%),
+    linear-gradient(115deg, transparent 38%, rgba(232,184,75,.05) 48%, transparent 58%);
+  animation: intro-atmosphere 2.6s ease-out both;
+}
+.intro-pitch {
+  position: absolute; inset: 0; opacity: .2;
+  background:
+    linear-gradient(90deg, transparent 49.8%, rgba(255,255,255,.14) 50%, transparent 50.2%),
+    repeating-linear-gradient(0deg, transparent, transparent 55px, rgba(255,255,255,.05) 56px);
+  transform: perspective(500px) rotateX(65deg) scale(1.5);
+  transform-origin: center bottom;
+}
+.intro-brand {
+  position: relative; text-align: center;
+  transform: scale(.72); opacity: 0;
+  animation: intro-brand-in .7s cubic-bezier(.17,.84,.44,1) .2s forwards;
+}
+.intro-title {
+  position: relative;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(86px,22vw,190px); font-weight: 700; line-height: .75;
+  letter-spacing: .04em; color: #fff;
+  text-shadow: 0 0 42px rgba(110,160,255,.22);
+  overflow: hidden;
+}
+.intro-title::after {
+  content: ''; position: absolute; inset: -15% -30%;
+  background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,.95) 49%, rgba(232,184,75,.85) 51%, transparent 58%);
+  mix-blend-mode: screen; transform: translateX(-80%);
+  animation: intro-shine .75s ease 1.1s forwards;
+}
+.intro-name {
+  margin: 22px 0 0; padding-left: .12em;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(24px,6vw,46px); font-weight: 600; line-height: 1;
+  letter-spacing: .12em; color: var(--gold);
+  opacity: 0; animation: intro-fade-up .45s ease .75s forwards;
+}
+.intro-year {
+  margin-top: 17px;
+  font-size: clamp(15px,3vw,22px); font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase; color: #aab7ca;
+  opacity: 0; animation: intro-fade-up .45s ease .95s forwards;
+}
+.intro-line {
+  width: 0; height: 2px; margin: 21px auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  box-shadow: 0 0 16px var(--gold);
+  animation: intro-line-in .75s ease 1.3s forwards;
+}
+.intro-skip {
+  position: absolute; right: 22px; bottom: 20px;
+  border: 1px solid rgba(255,255,255,.18); border-radius: 99px;
+  background: rgba(255,255,255,.04); color: #aab7ca;
+  padding: 8px 14px; font: 500 12px 'Barlow', sans-serif; cursor: pointer;
+  opacity: 0; animation: intro-fade-up .4s ease 1.35s forwards;
+}
+@keyframes intro-brand-in { to { opacity: 1; transform: scale(1); } }
+@keyframes intro-fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes intro-shine { to { transform: translateX(80%); } }
+@keyframes intro-line-in { to { width: min(430px,72vw); } }
+@keyframes intro-atmosphere { from { transform: scale(.8); opacity: 0; } to { transform: scale(1.08); opacity: 1; } }
 
 /* ── murawa: siatka boiskowa ── */
 body::before {
@@ -554,9 +629,23 @@ header::after {
   header { flex-direction: column; align-items: flex-start; gap: 10px; }
   .admin-row { grid-template-columns: 1fr 60px 76px; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .site-intro { display: none; }
+  body.intro-active { overflow: auto; }
+}
 </style>
 </head>
-<body>
+<body class="intro-active">
+<div class="site-intro" id="siteIntro" aria-label="Loża Ekspertów, MŚ 2026">
+  <div class="intro-pitch"></div>
+  <div class="intro-brand">
+    <div class="intro-title">LOŻA</div>
+    <div class="intro-name">EKSPERTÓW</div>
+    <div class="intro-year">MŚ 2026</div>
+    <div class="intro-line"></div>
+  </div>
+  <button class="intro-skip" id="introSkip" type="button">Pomiń intro</button>
+</div>
 <div class="wrap">
 
 <header>
@@ -652,6 +741,24 @@ header::after {
 
 </div>
 <script>
+const INTRO_SESSION_KEY='loza_ekspertow_intro_seen';
+const siteIntro=document.getElementById('siteIntro');
+function closeIntro(){
+  siteIntro.classList.add('hidden');
+  document.body.classList.remove('intro-active');
+  try{sessionStorage.setItem(INTRO_SESSION_KEY,'1');}catch(e){}
+  setTimeout(()=>siteIntro.remove(),700);
+}
+let introSeen=false;
+try{introSeen=sessionStorage.getItem(INTRO_SESSION_KEY)==='1';}catch(e){}
+if(introSeen || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  siteIntro.remove();
+  document.body.classList.remove('intro-active');
+}else{
+  document.getElementById('introSkip').addEventListener('click',closeIntro);
+  setTimeout(closeIntro,3000);
+}
+
 const MATCHES=[
   // Grupa A
   {g:'A',date:'11.06',time:'21:00',home:'Meksyk',             away:'RPA',              status:'soon'},
