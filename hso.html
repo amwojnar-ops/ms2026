@@ -1432,11 +1432,12 @@ let activePlayerCard = null;
 function renderPlayerCards(){
   const grid = document.getElementById('playersGrid');
   grid.innerHTML = '';
-  const ranked = calcAll();
+  const ranked = assignPositions(calcAll());
+  const sorted = [...ranked].sort((a, b) => a.name.localeCompare(b.name, 'pl'));
   const leaderPts = ranked[0] ? ranked[0].pts : 0;
   const hasResults = results.some(Boolean);
 
-  ranked.forEach((rp, i) => {
+  sorted.forEach((rp, i) => {
     const p = PLAYERS.find(x => x.name === rp.name);
     if(!p) return;
     const card = document.createElement('div');
