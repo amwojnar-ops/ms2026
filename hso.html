@@ -397,6 +397,18 @@ header::after {
   color: #2a1000;
   box-shadow: 0 2px 8px rgba(180,100,40,.3);
 }
+.rank-table tr.row:hover td.pos-1,
+.rank-table tr.row.hi td.pos-1 {
+  background: linear-gradient(135deg, #c8960a, #f5d060);
+}
+.rank-table tr.row:hover td.pos-2,
+.rank-table tr.row.hi td.pos-2 {
+  background: linear-gradient(135deg, #7a8fa0, #c8d8e8);
+}
+.rank-table tr.row:hover td.pos-3,
+.rank-table tr.row.hi td.pos-3 {
+  background: linear-gradient(135deg, #8b4c1a, #d4895a);
+}
 .pos-n { color: var(--muted); font-size: 14px; }
 .p-name { font-weight: 500; color: #fff; }
 .p-num { text-align: center; color: var(--muted); font-size: 13px; }
@@ -1275,7 +1287,7 @@ function renderRanking(){
   ranked.forEach((p,i)=>{
     const pos=p._pos;
     const pc=pos===1?'pos-1':pos===2?'pos-2':pos===3?'pos-3':'pos-n';
-    const posLabel=pos===ranked[i-1]?._pos&&pos<4?`=${pos}`:String(pos);
+    const posLabel=String(pos);
     const previous=previousPositions[p.name];
     const movement=previous==null?0:previous-pos;
     const chg=movement>0?`<span class="up">▲${movement}</span>`:movement<0?`<span class="dn">▼${Math.abs(movement)}</span>`:`<span class="eq">—</span>`;
