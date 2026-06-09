@@ -1280,7 +1280,7 @@ function renderRanking(){
   const previousPositions=rankingMovement();
   const played=results.filter(Boolean).length;
   const leaderPts=ranked[0]?.pts;
-  const leaders=played>0 ? ranked.filter(p=>p.pts===leaderPts) : [];
+  const leaders=played>0 ? ranked.filter(p=>p._pos===1) : [];
   const manyLeaders=leaders.length>1;
   const leaderNames=leaders.map(p=>p.name).join(', ');
   document.getElementById('s-played').textContent=`${played} / 72`;
@@ -1451,7 +1451,7 @@ function renderPlayerCards(){
     if(!p) return;
     const card = document.createElement('div');
     const hasTips = p.tips && p.tips.filter((t,i) => i>0 && t && t!=='').length === 72;
-    const isLeader = hasResults && rp.pts === leaderPts;
+    const isLeader = hasResults && rp._pos === 1;
     card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '');
     card.dataset.name = p.name;
 
