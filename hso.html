@@ -145,6 +145,15 @@ header {
   gap: 16px;
   overflow: hidden;
 }
+.lang-switch {
+  position: absolute; top: 4px; right: 0; z-index: 3;
+  min-width: 42px; padding: 5px 10px;
+  border: 1px solid rgba(232,184,75,.35); border-radius: 7px;
+  background: rgba(11,15,26,.65); color: var(--gold);
+  font: 700 11px 'Barlow', sans-serif; letter-spacing: .08em;
+  cursor: pointer; transition: background .15s, color .15s;
+}
+.lang-switch:hover { background: var(--gold); color: #241700; }
 
 /* gradient nieba — granatowo-fioletowe wieczorne niebo nad stadionem */
 header::before {
@@ -238,7 +247,7 @@ header::after {
 }
 .tab.disabled:hover { color: rgba(122,138,160,.5); background: none; }
 .tab.disabled::after {
-  content: 'wkrótce'; display: inline-block; margin-left: 5px;
+  content: attr(data-coming); display: inline-block; margin-left: 5px;
   padding: 1px 5px; border-radius: 99px;
   font-family: 'Barlow', sans-serif; font-size: 7px; font-weight: 600;
   letter-spacing: .04em; text-transform: uppercase;
@@ -677,9 +686,9 @@ header::after {
 <div class="site-intro" id="siteIntro" aria-label="Loża Ekspertów, MŚ 2026">
   <div class="intro-pitch"></div>
   <div class="intro-brand">
-    <div class="intro-title">LOŻA</div>
-    <div class="intro-name">EKSPERTÓW</div>
-    <div class="intro-year">MŚ 2026</div>
+    <div class="intro-title" id="introTitle">LOŻA</div>
+    <div class="intro-name" id="introName">EKSPERTÓW</div>
+    <div class="intro-year" id="introYear">MŚ 2026</div>
     <div class="intro-line"></div>
   </div>
   <button class="intro-skip" id="introSkip" type="button">Pomiń intro</button>
@@ -687,11 +696,12 @@ header::after {
 <div class="wrap">
 
 <header>
+  <button class="lang-switch" id="langSwitch" type="button" aria-label="Switch language">EN</button>
   <div class="header-title">
-    <h1>LOŻA <span>EKSPERTÓW</span></h1>
-    <p>Mistrzostwa Świata 2026 &nbsp;·&nbsp; Kanada · Meksyk · USA &nbsp;·&nbsp; 11 czerwca – 19 lipca</p>
+    <h1 id="headerTitle">LOŻA <span>EKSPERTÓW</span></h1>
+    <p id="headerSubtitle">Mistrzostwa Świata 2026 &nbsp;·&nbsp; Kanada · Meksyk · USA &nbsp;·&nbsp; 11 czerwca – 19 lipca</p>
   </div>
-  <div class="lock-badge">
+  <div class="lock-badge" id="lockBadge">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     Typy zablokowane · 10.06
   </div>
@@ -699,7 +709,7 @@ header::after {
 
 <div class="stats">
   <div class="stat-card">
-    <div class="lbl">Rozegranych</div>
+    <div class="lbl" id="playedLabel">Rozegranych</div>
     <div class="val" id="s-played">0 / 72</div>
   </div>
   <div class="stat-card">
@@ -711,16 +721,16 @@ header::after {
     <div class="val" id="s-leadpts">—</div>
   </div>
   <div class="stat-card">
-    <div class="lbl">Następny mecz</div>
+    <div class="lbl" id="nextMatchLabel">Następny mecz</div>
     <div class="val" id="s-next" style="font-size:13px;font-weight:400;line-height:1.5;margin-top:4px;transition:opacity .2s ease">—</div>
   </div>
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('gracze',this)">Gracze</button>
-  <button class="tab" onclick="switchTab('mecze',this)">Mecze</button>
-  <button class="tab" onclick="switchTab('ranking',this)">Ranking</button>
-  <button class="tab disabled" type="button" disabled aria-disabled="true" title="Faza pucharowa zostanie uruchomiona później">Faza pucharowa</button>
+  <button class="tab active" id="tabPlayersBtn" onclick="switchTab('gracze',this)">Gracze</button>
+  <button class="tab" id="tabMatchesBtn" onclick="switchTab('mecze',this)">Mecze</button>
+  <button class="tab" id="tabRankingBtn" onclick="switchTab('ranking',this)">Ranking</button>
+  <button class="tab disabled" id="tabKnockoutBtn" type="button" disabled aria-disabled="true" data-coming="wkrótce" title="Faza pucharowa zostanie uruchomiona później">Faza pucharowa</button>
 </div>
 
 <div id="tab-gracze">
@@ -733,7 +743,7 @@ header::after {
       </div>
       <button class="pdp-close" onclick="closePlayerPanel()">✕</button>
     </div>
-    <div class="pdp-champ"><span>Typ na mistrza</span><strong id="pdpChamp">—</strong></div>
+    <div class="pdp-champ"><span id="pdpChampLabel">Typ na mistrza</span><strong id="pdpChamp">—</strong></div>
     <div class="pdp-stats" id="pdpStats"></div>
     <div id="pdpMatches"></div>
   </div>
@@ -753,11 +763,11 @@ header::after {
       <table class="rank-table">
         <thead><tr>
           <th style="width:30px">#</th>
-          <th>Gracz</th>
-          <th style="text-align:center;width:50px">3 pkt</th>
-          <th style="text-align:center;width:50px">1 pkt</th>
-          <th style="text-align:center;width:76px">Mistrz</th>
-          <th style="text-align:right;width:60px">Razem</th>
+          <th id="rankPlayer">Gracz</th>
+          <th id="rankExact" style="text-align:center;width:50px">3 pkt</th>
+          <th id="rankOutcome" style="text-align:center;width:50px">1 pkt</th>
+          <th id="rankChampion" style="text-align:center;width:76px">Mistrz</th>
+          <th id="rankTotal" style="text-align:right;width:60px">Razem</th>
           <th style="text-align:center;width:36px">±</th>
         </tr></thead>
         <tbody id="rankingBody"></tbody>
@@ -771,8 +781,8 @@ header::after {
         </div>
         <button class="sp-close" onclick="closePanel()">✕</button>
       </div>
-      <div class="sp-champ"><span>Typ na mistrza</span><strong id="spChamp">—</strong></div>
-      <div class="sp-hdr"><span>Data</span><span>Mecz</span><span style="text-align:center">Wynik</span><span style="text-align:center">Typ / pkt</span></div>
+      <div class="sp-champ"><span id="spChampLabel">Typ na mistrza</span><strong id="spChamp">—</strong></div>
+      <div class="sp-hdr"><span id="spDateLabel">Data</span><span id="spMatchLabel">Mecz</span><span id="spResultLabel" style="text-align:center">Wynik</span><span id="spPredictionLabel" style="text-align:center">Typ / pkt</span></div>
       <div class="sp-matches" id="spMatches"></div>
     </div>
   </div>
@@ -780,6 +790,68 @@ header::after {
 
 </div>
 <script>
+const TRANSLATIONS = {
+  pl: {
+    pageTitle:'Loża Ekspertów · MŚ 2026',
+    introTitle:'LOŻA', introName:'EKSPERTÓW', worldCup:'MŚ 2026', skipIntro:'Pomiń intro',
+    headerTitle:'LOŻA <span>EKSPERTÓW</span>',
+    headerSubtitle:'Mistrzostwa Świata 2026 &nbsp;·&nbsp; Kanada · Meksyk · USA &nbsp;·&nbsp; 11 czerwca – 19 lipca',
+    locked:'Typy zablokowane · 10.06', played:'Rozegranych', leader:'Lider', leaders:'Liderzy',
+    leaderPoints:'Pkt lidera', leadersPoints:'Pkt liderów', nextMatch:'Następny mecz',
+    players:'Gracze', matches:'Mecze', ranking:'Ranking', knockout:'Faza pucharowa',
+    knockoutTitle:'Faza pucharowa zostanie uruchomiona później', coming:'wkrótce',
+    byGroups:'Wg grup', byDates:'Wg dat', championPick:'Typ na mistrza',
+    player:'Gracz', champion:'Mistrz', total:'Razem', date:'Data', match:'Mecz',
+    result:'Wynik', predictionPoints:'Typ / pkt', group:'Grupa',
+    finished:'Zakończony', live:'Trwa', waiting:'Oczekuje na wynik', soon:'Wkrótce',
+    predictions:'typów', playerPredictions:'Typy graczy',
+    efficiency:'skuteczność', pointsPerMatch:'pkt / mecz',
+    bestGroup:'najlepsza grupa', currentStreak:'aktualna seria',
+    place:'miejsce', point:'pkt', points:'pkt', toLeader:'do lidera'
+  },
+  en: {
+    pageTitle:"Experts' Lounge · World Cup 2026",
+    introTitle:'EXPERTS’', introName:'LOUNGE', worldCup:'WORLD CUP 2026', skipIntro:'Skip intro',
+    headerTitle:"EXPERTS' <span>LOUNGE</span>",
+    headerSubtitle:'World Cup 2026 &nbsp;·&nbsp; Canada · Mexico · USA &nbsp;·&nbsp; June 11 – July 19',
+    locked:'Predictions locked · June 10', played:'Played', leader:'Leader', leaders:'Leaders',
+    leaderPoints:'Leader points', leadersPoints:'Leaders’ points', nextMatch:'Next match',
+    players:'Players', matches:'Matches', ranking:'Ranking', knockout:'Knockout stage',
+    knockoutTitle:'The knockout stage will be available later', coming:'soon',
+    byGroups:'By group', byDates:'By date', championPick:'World champion pick',
+    player:'Player', champion:'Champion', total:'Total', date:'Date', match:'Match',
+    result:'Result', predictionPoints:'Prediction / pts', group:'Group',
+    finished:'Finished', live:'Live', waiting:'Waiting for result', soon:'Coming up',
+    predictions:'predictions', playerPredictions:'Player predictions',
+    efficiency:'accuracy', pointsPerMatch:'pts / match',
+    bestGroup:'best group', currentStreak:'current streak',
+    place:'place', point:'pt', points:'pts', toLeader:'behind leader'
+  }
+};
+const TEAM_EN = {
+  'Algieria':'Algeria','Anglia':'England','Arabia Saudyjska':'Saudi Arabia','Argentyna':'Argentina',
+  'Australia':'Australia','Austria':'Austria','Belgia':'Belgium','Bośnia i Herc.':'Bosnia & Herz.',
+  'Brazylia':'Brazil','Chorwacja':'Croatia','Curaçao':'Curaçao','Czechy':'Czechia',
+  'DR Konga':'DR Congo','Egipt':'Egypt','Ekwador':'Ecuador','Francja':'France',
+  'Ghana':'Ghana','Haiti':'Haiti','Hiszpania':'Spain','Holandia':'Netherlands',
+  'Irak':'Iraq','Iran':'Iran','Japonia':'Japan','Jordania':'Jordan',
+  'Kanada':'Canada','Katar':'Qatar','Kolumbia':'Colombia','Korea Płd.':'South Korea',
+  'Maroko':'Morocco','Meksyk':'Mexico','Niemcy':'Germany','Norwegia':'Norway',
+  'Nowa Zelandia':'New Zealand','Panama':'Panama','Paragwaj':'Paraguay','Portugalia':'Portugal',
+  'Rep. Ziel. Przył.':'Cape Verde','RPA':'South Africa','Senegal':'Senegal','Szwajcaria':'Switzerland',
+  'Szwecja':'Sweden','Szkocja':'Scotland','Tunezja':'Tunisia','Turcja':'Turkey',
+  'Urugwaj':'Uruguay','USA':'USA','Uzbekistan':'Uzbekistan','Wybrzeże K.Sł.':'Ivory Coast'
+};
+const queryLanguage=new URLSearchParams(location.search).get('lang');
+let savedLanguage='pl';
+try{savedLanguage=localStorage.getItem('hso_lang')==='en'?'en':'pl';}catch(e){}
+let LANG=queryLanguage==='en'||queryLanguage==='pl'
+  ? queryLanguage
+  : savedLanguage;
+function tr(key){ return TRANSLATIONS[LANG][key] ?? key; }
+function teamName(name){ return LANG==='en' ? (TEAM_EN[name]||name) : name; }
+function pointsLabel(value){ return value===1 ? tr('point') : tr('points'); }
+
 const INTRO_SESSION_KEY='loza_ekspertow_intro_seen';
 const siteIntro=document.getElementById('siteIntro');
 function closeIntro(){
@@ -797,6 +869,52 @@ if(introSeen || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.getElementById('introSkip').addEventListener('click',closeIntro);
   setTimeout(closeIntro,2000);
 }
+
+function setText(id,key){
+  const el=document.getElementById(id);
+  if(el)el.textContent=tr(key);
+}
+function applyLanguage(){
+  document.documentElement.lang=LANG;
+  document.title=tr('pageTitle');
+  const intro=document.getElementById('siteIntro');
+  if(intro)intro.setAttribute('aria-label',LANG==='en'?"Experts' Lounge, World Cup 2026":'Loża Ekspertów, MŚ 2026');
+  setText('introTitle','introTitle'); setText('introName','introName'); setText('introYear','worldCup');
+  setText('introSkip','skipIntro');
+  document.getElementById('headerTitle').innerHTML=tr('headerTitle');
+  document.getElementById('headerSubtitle').innerHTML=tr('headerSubtitle');
+  const lock=document.getElementById('lockBadge');
+  if(lock)lock.lastChild.textContent=` ${tr('locked')}`;
+  setText('playedLabel','played'); setText('nextMatchLabel','nextMatch');
+  setText('tabPlayersBtn','players'); setText('tabMatchesBtn','matches'); setText('tabRankingBtn','ranking');
+  setText('tabKnockoutBtn','knockout');
+  document.getElementById('tabKnockoutBtn').title=tr('knockoutTitle');
+  document.getElementById('tabKnockoutBtn').dataset.coming=tr('coming');
+  setText('subtab-grupy','byGroups'); setText('subtab-daty','byDates');
+  setText('pdpChampLabel','championPick'); setText('spChampLabel','championPick');
+  setText('rankPlayer','player'); setText('rankChampion','champion'); setText('rankTotal','total');
+  document.getElementById('rankExact').textContent=`3 ${pointsLabel(3)}`;
+  document.getElementById('rankOutcome').textContent=`1 ${pointsLabel(1)}`;
+  setText('spDateLabel','date'); setText('spMatchLabel','match');
+  setText('spResultLabel','result'); setText('spPredictionLabel','predictionPoints');
+  document.getElementById('langSwitch').textContent=LANG==='pl'?'EN':'PL';
+  document.getElementById('langSwitch').title=LANG==='pl'?'English':'Polski';
+}
+function switchLanguage(){
+  LANG=LANG==='pl'?'en':'pl';
+  try{localStorage.setItem('hso_lang',LANG);}catch(e){}
+  const url=new URL(location.href);
+  if(LANG==='en')url.searchParams.set('lang','en'); else url.searchParams.delete('lang');
+  history.replaceState(null,'',url);
+  closePanel();
+  closePlayerPanel();
+  applyLanguage();
+  renderPlayerCards();
+  renderMatches();
+  renderRanking();
+}
+document.getElementById('langSwitch').addEventListener('click',switchLanguage);
+applyLanguage();
 
 const MATCHES=[
   // Grupa A
@@ -1023,9 +1141,9 @@ const SHORT = {
 function flag(t){
   const code=ISO[t];
   if(!code)return '';
-  return `<img src="img/flags/${code}.png" width="16" height="12" alt="${t}" style="vertical-align:middle;border-radius:2px;margin:0 2px">`;
+  return `<img src="img/flags/${code}.png" width="16" height="12" alt="${teamName(t)}" style="vertical-align:middle;border-radius:2px;margin:0 2px">`;
 }
-function disp(t){ return SHORT[t]||t; }
+function disp(t){ return LANG==='en' ? teamName(t) : (SHORT[t]||t); }
 function teamHTML(t, side='home'){
   const f=flag(t), d=disp(t);
   return side==='home'
@@ -1091,8 +1209,8 @@ function playerStats(p){
   const bestGroup=Object.entries(groupPts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0];
   return {
     efficiency:playedIndexes.length?Math.round(scored/playedIndexes.length*100):0,
-    average:playedIndexes.length?(pts/playedIndexes.length).toFixed(2).replace('.',','):'0,00',
-    bestGroup:bestGroup&&bestGroup[1]>0?`Grupa ${bestGroup[0]}`:'—',
+    average:playedIndexes.length?(pts/playedIndexes.length).toFixed(2).replace('.',LANG==='pl'?',':'.'):(LANG==='pl'?'0,00':'0.00'),
+    bestGroup:bestGroup&&bestGroup[1]>0?`${tr('group')} ${bestGroup[0]}`:'—',
     streak,
     bestStreak
   };
@@ -1219,7 +1337,7 @@ function buildSpRows(p){
     if(!r)return;
     const m=MATCHES[i],t=p.tips[i+1]||'—',s=sc(t,r);
     const cls=s===3?'sp-p3':s===1?'sp-p1':s===0?'sp-p0':'sp-pq';
-    const lbl=s===3?'3 pkt':s===1?'1 pkt':s===0?'0 pkt':'?';
+    const lbl=s===3?`3 ${pointsLabel(3)}`:s===1?`1 ${pointsLabel(1)}`:s===0?`0 ${pointsLabel(0)}`:'?';
     h+=`<div class="sp-match">
       <span class="sp-date">${m.date}</span>
       <span class="sp-teams">${flag(m.home)} ${disp(m.home)}–${disp(m.away)} ${flag(m.away)}</span>
@@ -1230,12 +1348,12 @@ function buildSpRows(p){
   return h;
 }
 function buildExpRows(p){
-  let h=`<div class="exp-match-row hdr"><span>Data</span><span>Mecz</span><span style="text-align:center">Wynik</span><span style="text-align:center">Typ / pkt</span></div>`;
+  let h=`<div class="exp-match-row hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>`;
   results.forEach((r,i)=>{
     if(!r)return;
     const m=MATCHES[i],t=p.tips[i+1]||'—',s=sc(t,r);
     const cls=s===3?'ep3':s===1?'ep1':s===0?'ep0':'ep-muted';
-    const lbl=s===3?'3 pkt':s===1?'1 pkt':s===0?'0 pkt':'?';
+    const lbl=s===3?`3 ${pointsLabel(3)}`:s===1?`1 ${pointsLabel(1)}`:s===0?`0 ${pointsLabel(0)}`:'?';
     h+=`<div class="exp-match-row">
       <span style="color:var(--muted)">${m.date}</span>
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${flag(m.home)} ${disp(m.home)}–${disp(m.away)} ${flag(m.away)}</span>
@@ -1255,13 +1373,13 @@ function openPanel(name,ranked){
     if(exp){
       exp.classList.add('open');
       document.getElementById('exp-in-'+name).innerHTML=
-        `<div class="exp-champ-line">Mistrz: <strong>${p.champ||'—'}</strong> &nbsp;·&nbsp; ${p.pts} pkt (${p.ex}×3 + ${p.en}×1)</div>`
+        `<div class="exp-champ-line">${tr('champion')}: <strong>${p.champ?teamName(p.champ):'—'}</strong> &nbsp;·&nbsp; ${p.pts} ${pointsLabel(p.pts)} (${p.ex}×3 + ${p.en}×1)</div>`
         +buildExpRows(p);
     }
   } else {
     document.getElementById('spName').textContent=name;
-    document.getElementById('spSub').textContent=`${p.pts} pkt · ${p.ex}× 3 pkt + ${p.en}× 1 pkt`;
-    document.getElementById('spChamp').textContent=p.champ||'—';
+    document.getElementById('spSub').textContent=`${p.pts} ${pointsLabel(p.pts)} · ${p.ex}× 3 ${pointsLabel(3)} + ${p.en}× 1 ${pointsLabel(1)}`;
+    document.getElementById('spChamp').textContent=p.champ?teamName(p.champ):'—';
     document.getElementById('spMatches').innerHTML=buildSpRows(p);
     document.getElementById('sidePanel').classList.add('open');
     document.getElementById('rankingWrap').classList.add('panel-open');
@@ -1286,8 +1404,8 @@ function renderRanking(){
   const manyLeaders=leaders.length>1;
   const leaderNames=leaders.map(p=>p.name).join(', ');
   document.getElementById('s-played').textContent=`${played} / 72`;
-  document.getElementById('s-leader-label').textContent=manyLeaders?'Liderzy':'Lider';
-  document.getElementById('s-leadpts-label').textContent=manyLeaders?'Pkt liderów':'Pkt lidera';
+  document.getElementById('s-leader-label').textContent=manyLeaders?tr('leaders'):tr('leader');
+  document.getElementById('s-leadpts-label').textContent=manyLeaders?tr('leadersPoints'):tr('leaderPoints');
   const leaderEl=document.getElementById('s-leader');
   leaderEl.textContent=leaderNames||'—';
   leaderEl.classList.toggle('leaders',manyLeaders);
@@ -1308,7 +1426,7 @@ function renderRanking(){
       <td class="p-name">${p.name}</td>
       <td class="p-num">${p.ex}</td>
       <td class="p-num">${p.en}</td>
-      <td class="p-num" style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.champ||'—'}</td>
+      <td class="p-num" style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.champ?teamName(p.champ):'—'}</td>
       <td class="p-pts">${p.pts}</td>
       <td class="p-chg">${chg}</td>`;
     tr.onclick=()=>activePlayer===p.name?closePanel():openPanel(p.name,ranked);
@@ -1335,27 +1453,27 @@ function buildTile(m, gcVar){
   tile.className=`tile ${status}`;
   tile.style.setProperty('--g-color',`var(${gcVar||'--muted'})`);
   let sHTML='';
-  if(status==='done')         sHTML=`<span class="dot dot-done"></span><span style="color:var(--muted)">Zakończony</span>`;
-  else if(status==='live')    sHTML=`<span class="dot dot-live"></span><span style="color:var(--red);font-weight:600">Trwa</span>`;
-  else if(status==='waiting') sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">Oczekuje na wynik</span>`;
-  else                        sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">Wkrótce · ${m.date} ${m.time}</span>`;
+  if(status==='done')         sHTML=`<span class="dot dot-done"></span><span style="color:var(--muted)">${tr('finished')}</span>`;
+  else if(status==='live')    sHTML=`<span class="dot dot-live"></span><span style="color:var(--red);font-weight:600">${tr('live')}</span>`;
+  else if(status==='waiting') sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">${tr('waiting')}</span>`;
+  else                        sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">${tr('soon')} · ${m.date} ${m.time}</span>`;
   let scHTML='';
   if(r){const[h,a]=r.split('-');scHTML=`<div class="t-score"><span>${h}</span><span class="sep">–</span><span>${a}</span></div>`;}
-  else if(status==='live') scHTML=`<div class="t-live-badge">Trwa</div>`;
+  else if(status==='live') scHTML=`<div class="t-live-badge">${tr('live')}</div>`;
   else scHTML=`<div class="t-vs">VS</div>`;
   let fHTML='';
   if(status==='done'&&r){
     const bd=breakdown(m.idx);
-    fHTML=`<span class="f3">▲ ${bd[3].length} × 3 pkt</span><span class="f1">${bd[1].length} × 1 pkt</span><span class="f-hint">↓</span>`;
+    fHTML=`<span class="f3">▲ ${bd[3].length} × 3 ${pointsLabel(3)}</span><span class="f1">${bd[1].length} × 1 ${pointsLabel(1)}</span><span class="f-hint">↓</span>`;
   } else {
     const cnt=PLAYERS.filter(p=>p.tips[m.idx+1]).length;
-    fHTML=`<span>${cnt}/${PLAYERS.length} typów</span><span class="f-hint">↓</span>`;
+    fHTML=`<span>${cnt}/${PLAYERS.length} ${tr('predictions')}</span><span class="f-hint">↓</span>`;
   }
   let dHTML='';
   if(status==='done'&&r){
     const bd=breakdown(m.idx);
     dHTML=`<div class="tile-expand" id="tx-${m.idx}">`;
-    [{pts:3,cls:'lbl-g exp-lbl',label:'3 pkt',cc:'chip-g'},{pts:1,cls:'lbl-a exp-lbl',label:'1 pkt',cc:'chip-a'},{pts:0,cls:'lbl-r exp-lbl',label:'0 pkt',cc:'chip-r'}].forEach(({pts,cls,label,cc})=>{
+    [{pts:3,cls:'lbl-g exp-lbl',label:`3 ${pointsLabel(3)}`,cc:'chip-g'},{pts:1,cls:'lbl-a exp-lbl',label:`1 ${pointsLabel(1)}`,cc:'chip-a'},{pts:0,cls:'lbl-r exp-lbl',label:`0 ${pointsLabel(0)}`,cc:'chip-r'}].forEach(({pts,cls,label,cc})=>{
       if(!bd[pts].length)return;
       dHTML+=`<div class="exp-section"><div class="${cls}">${label}</div><div class="chips">`;
       bd[pts].forEach(({name,tip})=>{dHTML+=`<span class="chip ${cc}">${name}<span class="chip-tip">${tip}</span></span>`;});
@@ -1363,7 +1481,7 @@ function buildTile(m, gcVar){
     });
     dHTML+=`</div>`;
   } else {
-    dHTML=`<div class="tile-expand" id="tx-${m.idx}"><div class="exp-section"><div class="exp-lbl" style="color:var(--muted)">Typy graczy</div><div class="chips">`;
+    dHTML=`<div class="tile-expand" id="tx-${m.idx}"><div class="exp-section"><div class="exp-lbl" style="color:var(--muted)">${tr('playerPredictions')}</div><div class="chips">`;
     const withTip=PLAYERS.filter(p=>p.tips[m.idx+1]).sort((a,b)=>a.name.localeCompare(b.name,'pl'));
     const noTip=PLAYERS.filter(p=>!p.tips[m.idx+1]).sort((a,b)=>a.name.localeCompare(b.name,'pl'));
     withTip.forEach(p=>{dHTML+=`<span class="chip chip-tip-pre"><span class="chip-pname">${p.name}</span><span class="chip-tip">${p.tips[m.idx+1]}</span></span>`;});
@@ -1398,7 +1516,7 @@ function renderMatches(){
       const lbl=document.createElement('div');
       lbl.className='section-lbl';
       lbl.style.setProperty('--g-color',`var(${GC[grp]||'--muted'})`);
-      lbl.textContent=`Grupa ${grp}`;
+      lbl.textContent=`${tr('group')} ${grp}`;
       cont.appendChild(lbl);
       const grid=document.createElement('div');grid.className='tiles-grid';
       ms.forEach(m=>grid.appendChild(buildTile(m, GC[m.g])));
@@ -1407,8 +1525,12 @@ function renderMatches(){
   } else {
     const byDate={};
     MATCHES.forEach((m,i)=>{if(!byDate[m.date])byDate[m.date]=[];byDate[m.date].push({...m,idx:i});});
-    const months=['','stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
-    const days=['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
+    const months=LANG==='en'
+      ? ['','January','February','March','April','May','June','July','August','September','October','November','December']
+      : ['','stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+    const days=LANG==='en'
+      ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+      : ['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
     const sorted=Object.keys(byDate).sort((a,b)=>{
       const[da,ma]=a.split('.').map(Number),[db,mb]=b.split('.').map(Number);
       return (ma-mb)||(da-db);
@@ -1464,9 +1586,9 @@ function renderPlayerCards(){
 
     // flaga i kod mistrza
     const champISO = ISO[p.champ] || '';
-    const champCode = SHORT[p.champ] || (p.champ ? p.champ.substring(0,3).toUpperCase() : '—');
+    const champCode = SHORT[p.champ] || (p.champ ? teamName(p.champ).substring(0,3).toUpperCase() : '—');
     const flagHTML = champISO
-      ? `<img class="card-champ-flag" src="img/flags/${champISO}.png" alt="${p.champ}">`
+      ? `<img class="card-champ-flag" src="img/flags/${champISO}.png" alt="${teamName(p.champ)}">`
       : `<div class="card-champ-flag" style="background:rgba(255,255,255,.1)"></div>`;
 
     const photoSrc = PHOTOS[p.name] || '';
@@ -1481,7 +1603,7 @@ function renderPlayerCards(){
       <div class="card-ribbon"></div>
       <div class="card-border"></div>
       <div class="card-top">
-        <div class="card-hso">MŚ</div>
+        <div class="card-hso">${LANG==='en'?'WC':'MŚ'}</div>
         <div class="card-year">2026</div>
       </div>
       <div class="card-badge">
@@ -1492,9 +1614,9 @@ function renderPlayerCards(){
       <div class="card-name">${p.name}</div>
       <div class="card-divider"></div>
       <div class="card-stats">
-        <div class="card-stat"><div class="card-stat-val">${pos}</div><div class="card-stat-lbl">miejsce</div></div>
-        <div class="card-stat"><div class="card-stat-val">${pts}</div><div class="card-stat-lbl">pkt</div></div>
-        <div class="card-stat"><div class="card-stat-val">${diffStr}</div><div class="card-stat-lbl">do lidera</div></div>
+        <div class="card-stat"><div class="card-stat-val">${pos}</div><div class="card-stat-lbl">${tr('place')}</div></div>
+        <div class="card-stat"><div class="card-stat-val">${pts}</div><div class="card-stat-lbl">${tr('points')}</div></div>
+        <div class="card-stat"><div class="card-stat-val">${diffStr}</div><div class="card-stat-lbl">${tr('toLeader')}</div></div>
       </div>
       ${hasTips ? '<div class="card-check"></div>' : ''}`;
 
@@ -1518,21 +1640,19 @@ function openPlayerPanel(p){
   activePlayerCard = p.name;
   document.getElementById('pdpName').textContent = p.name;
   document.getElementById('pdpSub').textContent = '';
-  document.getElementById('pdpChamp').textContent = p.champ || '—';
+  document.getElementById('pdpChamp').textContent = p.champ ? teamName(p.champ) : '—';
   const stats=playerStats(p);
   document.getElementById('pdpStats').innerHTML=`
-    <div class="pdp-stat"><strong>${stats.efficiency}%</strong><span>skuteczność</span></div>
-    <div class="pdp-stat"><strong>${stats.average}</strong><span>pkt / mecz</span></div>
-    <div class="pdp-stat"><strong>${stats.bestGroup}</strong><span>najlepsza grupa</span></div>
-    <div class="pdp-stat"><strong>${stats.streak}</strong><span>aktualna seria</span></div>`;
+    <div class="pdp-stat"><strong>${stats.efficiency}%</strong><span>${tr('efficiency')}</span></div>
+    <div class="pdp-stat"><strong>${stats.average}</strong><span>${tr('pointsPerMatch')}</span></div>
+    <div class="pdp-stat"><strong>${stats.bestGroup}</strong><span>${tr('bestGroup')}</span></div>
+    <div class="pdp-stat"><strong>${stats.streak}</strong><span>${tr('currentStreak')}</span></div>`;
 
   const cont = document.getElementById('pdpMatches');
   cont.innerHTML = '';
 
   // grupuj mecze według grup
   const grouped = {};
-  const GN = {A:'Grupa A',B:'Grupa B',C:'Grupa C',D:'Grupa D',E:'Grupa E',F:'Grupa F',
-               G:'Grupa G',H:'Grupa H',I:'Grupa I',J:'Grupa J',K:'Grupa K',L:'Grupa L'};
   MATCHES.forEach((m,i) => {
     if(!grouped[m.g]) grouped[m.g] = [];
     grouped[m.g].push({...m, idx:i});
@@ -1541,7 +1661,7 @@ function openPlayerPanel(p){
   Object.entries(grouped).forEach(([grp, ms]) => {
     const lbl = document.createElement('div');
     lbl.className = 'pdp-section-lbl';
-    lbl.textContent = GN[grp] || `Grupa ${grp}`;
+    lbl.textContent = `${tr('group')} ${grp}`;
     cont.appendChild(lbl);
 
     ms.forEach(m => {
