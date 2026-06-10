@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Podgląd statusu meczu</title>
+<style>
+:root{
+  --bg:#09101f;--card:#111a2d;--border:rgba(255,255,255,.1);
+  --muted:#7a8aa0;--red:#e85656;--green:#3ecf6e;--gold:#e8b84b;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
+.preview{width:620px;padding:28px}
+.caption{margin:0 0 12px;color:var(--muted);font-size:13px}
+.tile{background:var(--card);border:1px solid var(--border);border-left:3px solid #4d8cff;border-radius:10px;padding:16px 18px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.tile-top{display:flex;justify-content:space-between;margin-bottom:14px}
+.tile-status{display:flex;align-items:center;gap:7px;color:var(--red);font-size:12px;font-weight:700}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
+.tile-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
+.team{font-size:21px;font-weight:700}.away{text-align:right}
+.score{display:flex;align-items:center;gap:8px;font-family:"Courier New",monospace;font-size:34px;font-weight:700}
+.sep{color:var(--muted);font-size:22px}
+.footer{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12px}
+.points3{color:var(--green);font-weight:700}.points1{color:var(--gold);font-weight:700}
+</style>
+</head>
+<body>
+<div class="preview">
+  <p class="caption">Przykład kafla po wpisaniu wyniku:</p>
+  <div class="tile">
+    <div class="tile-top">
+      <div class="tile-status"><span class="dot"></span><span>Zakończony</span></div>
+    </div>
+    <div class="tile-teams">
+      <span class="team">Meksyk</span>
+      <div class="score"><span>2</span><span class="sep">–</span><span>1</span></div>
+      <span class="team away">RPA</span>
+    </div>
+    <div class="footer">
+      <span class="points3">▲ 4 × 3 pkt</span>
+      <span class="points1">8 × 1 pkt</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
