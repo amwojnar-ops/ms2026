@@ -3,9 +3,11 @@ import { execFileSync } from 'node:child_process';
 
 const outputPath = 'data/football-data.json';
 const pollingMarkerPath = 'data/.football-data-polling';
+const waitingMarkerPath = 'data/.football-data-waiting';
 const pagePath = 'hso-test.html';
-const now = Date.now();
+const now = process.env.TEST_NOW ? Date.parse(process.env.TEST_NOW) : Date.now();
 const activeWindowMs = 4 * 60 * 60 * 1000;
+const preStartWindowMs = 35 * 60 * 1000;
 
 let previousMatches = [];
 try {
@@ -86,15 +88,33 @@ const schedule = [...page.matchAll(/\{g:'[^']+',date:'(\d{2}\.\d{2})',time:'(\d{
 const scheduledNow = schedule.some(match =>
   now >= match.kickoff && now < match.kickoff + activeWindowMs
 );
+const nextMatch = schedule
+  .filter(match => match.kickoff > now)
+  .sort((a, b) => a.kickoff - b.kickoff)[0];
 const unfinishedStartedMatch = previousMatches.some(match =>
   Date.parse(match.utcDate) <= now && match.status !== 'FINISHED'
 );
 
+if (!scheduledNow && !unfinishedStartedMatch && nextMatch
+    && nextMatch.kickoff - now <= preStartWindowMs) {
+  const waitSeconds = Math.max(1, Math.ceil((nextMatch.kickoff - now) / 1000));
+  await mkdir('data', { recursive: true });
+  await writeFile(pollingMarkerPath, 'active\n', 'utf8');
+  await writeFile(waitingMarkerPath, `${waitSeconds}\n`, 'utf8');
+  console.log(
+    `Najbliższy mecz ${nextMatch.home} - ${nextMatch.away} rozpocznie się za ${waitSeconds} s.`
+  );
+  process.exit(0);
+}
+
 if (!scheduledNow && !unfinishedStartedMatch) {
   await rm(pollingMarkerPath, { force: true });
+  await rm(waitingMarkerPath, { force: true });
   console.log('Brak trwającego meczu. Pomijam zapytanie do API.');
   process.exit(0);
 }
+
+await rm(waitingMarkerPath, { force: true });
 
 const token = process.env.FOOTBALL_DATA_TOKEN;
 if (!token) {

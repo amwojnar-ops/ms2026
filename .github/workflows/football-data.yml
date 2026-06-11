@@ -28,6 +28,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for attempt in $(seq 1 48); do
             node scripts/update-football-data.mjs
+            if [ -f data/.football-data-waiting ]; then
+              wait_seconds=$(cat data/.football-data-waiting)
+              rm -f data/.football-data-waiting
+              echo "Mecz jeszcze sie nie rozpoczal. Czekam ${wait_seconds} s."
+              sleep "$wait_seconds"
+              continue
+            fi
             git add data/football-data.json
             if ! git diff --cached --quiet; then
               git commit -m "Aktualizuj wyniki meczow"
@@ -41,4 +48,4 @@ jobs:
             sleep 300
             git pull --rebase
           done
-          rm -f data/.football-data-polling
+          rm -f data/.football-data-polling data/.football-data-waiting
