@@ -37,6 +37,7 @@ function betterMatch(current, candidate) {
   if (candidateRank > currentRank) return candidate;
   if (candidateRank < currentRank) return current;
   if (hasScore(candidate) && !hasScore(current)) return candidate;
+  if (hasScore(current) && !hasScore(candidate)) return current;
   const currentUpdated = Date.parse(current.lastUpdated) || 0;
   const candidateUpdated = Date.parse(candidate.lastUpdated) || 0;
   return candidateUpdated >= currentUpdated ? candidate : current;
