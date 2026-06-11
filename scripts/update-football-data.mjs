@@ -1,4 +1,5 @@
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 
 const outputPath = 'data/football-data.json';
 const pollingMarkerPath = 'data/.football-data-polling';
@@ -12,6 +13,62 @@ try {
   previousMatches = previous.matches || [];
 } catch {
   // Pierwsze uruchomienie nie ma jeszcze pliku danych.
+}
+
+const statusRank = {
+  SCHEDULED: 1,
+  TIMED: 1,
+  POSTPONED: 1,
+  SUSPENDED: 2,
+  IN_PLAY: 3,
+  PAUSED: 3,
+  FINISHED: 4
+};
+
+function hasScore(match) {
+  return Number.isInteger(match?.score?.fullTime?.home)
+    && Number.isInteger(match?.score?.fullTime?.away);
+}
+
+function betterMatch(current, candidate) {
+  if (!current) return candidate;
+  const currentRank = statusRank[current.status] || 0;
+  const candidateRank = statusRank[candidate.status] || 0;
+  if (candidateRank > currentRank) return candidate;
+  if (candidateRank < currentRank) return current;
+  if (hasScore(candidate) && !hasScore(current)) return candidate;
+  const currentUpdated = Date.parse(current.lastUpdated) || 0;
+  const candidateUpdated = Date.parse(candidate.lastUpdated) || 0;
+  return candidateUpdated >= currentUpdated ? candidate : current;
+}
+
+function historicalBestMatches() {
+  const best = new Map(previousMatches.map(match => [match.id, match]));
+  try {
+    const revisions = execFileSync(
+      'git',
+      ['log', '-20', '--format=%H', '--', outputPath],
+      { encoding: 'utf8' }
+    ).trim().split(/\s+/).filter(Boolean);
+
+    for (const revision of revisions) {
+      try {
+        const snapshot = JSON.parse(execFileSync(
+          'git',
+          ['show', `${revision}:${outputPath}`],
+          { encoding: 'utf8' }
+        ));
+        for (const match of snapshot.matches || []) {
+          best.set(match.id, betterMatch(best.get(match.id), match));
+        }
+      } catch {
+        // Pomijamy nieczytelny lub nieistniejący historyczny plik.
+      }
+    }
+  } catch {
+    // Poza repozytorium Git historia może być niedostępna.
+  }
+  return best;
 }
 
 const page = await readFile(pagePath, 'utf8');
@@ -53,7 +110,7 @@ if (!response.ok) {
 }
 
 const payload = await response.json();
-const matches = (payload.matches || []).map(match => ({
+const freshMatches = (payload.matches || []).map(match => ({
   id: match.id,
   utcDate: match.utcDate,
   status: match.status,
@@ -75,6 +132,9 @@ const matches = (payload.matches || []).map(match => ({
   },
   lastUpdated: match.lastUpdated
 }));
+
+const historicalMatches = historicalBestMatches();
+const matches = freshMatches.map(match => betterMatch(historicalMatches.get(match.id), match));
 
 const apiHasUnfinishedActiveMatch = matches.some(match => {
   const kickoff = Date.parse(match.utcDate);
