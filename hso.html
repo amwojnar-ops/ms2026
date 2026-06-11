@@ -227,6 +227,16 @@ header::after {
 .stat-card .val.sm { font-size: 14px; font-weight: 400; color: var(--text); font-family: 'Barlow', sans-serif; line-height: 1.4; margin-top: 2px; }
 .stat-card.gold-accent { border-color: rgba(232,184,75,.3); }
 .stat-card.gold-accent .val { color: var(--gold); }
+.live-summary { display: block; margin-top: 4px; }
+.live-summary-status {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--green); font-size: 11px; font-weight: 600;
+  margin-bottom: 6px;
+}
+.live-summary-match {
+  display: block; color: #fff; font-size: 12px; line-height: 1.35;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
 /* ── tabs ── */
 .tabs {
@@ -1265,6 +1275,12 @@ function formatCountdown(ms){
 }
 
 function nextMatchHTML(m){
+  if(matchStatus(m,m.idx)==='live'){
+    return `<span class="live-summary">
+      <span class="live-summary-status"><span class="dot dot-live"></span>${tr('live')}</span>
+      <span class="live-summary-match">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
+    </span>`;
+  }
   const dt = matchDateTime(m);
   const diff = dt - Date.now();
   const countdown = diff > 0 ? formatCountdown(diff) : null;
@@ -1288,11 +1304,15 @@ function nextMatch(){
   const indexed=MATCHES.map((m,idx)=>({...m,idx,status:matchStatus(m,idx)}));
   const live = indexed.filter(m=>m.status==='live');
   if(live.length){
+    document.getElementById('nextMatchLabel').textContent=live.length>1
+      ? (LANG==='pl'?'Mecze trwają':'Matches live')
+      : (LANG==='pl'?'Mecz trwa':'Match live');
     startRotation(live);
     _countdownMatch = null;
     stopCountdown();
     return nextMatchHTML(live[0]);
   }
+  document.getElementById('nextMatchLabel').textContent=tr('nextMatch');
   const soon = indexed.filter(m=>m.status==='soon').sort((a,b)=>matchDateTime(a)-matchDateTime(b));
   if(!soon.length){ stopRotation(); stopCountdown(); return '—'; }
   // Grupuj po dacie+godzinie — weź pierwsze (najwcześniejsze)
