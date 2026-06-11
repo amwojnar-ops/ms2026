@@ -3,27 +3,42 @@ name: Aktualizacja wynikow football-data.org
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "2,17,32,47 * * * *"
 
 permissions:
   contents: write
 
+concurrency:
+  group: football-data-live-monitor
+  cancel-in-progress: false
+
 jobs:
   update-results:
     runs-on: ubuntu-latest
+    timeout-minutes: 300
     steps:
       - name: Pobierz repozytorium
         uses: actions/checkout@v4
 
-      - name: Pobierz wyniki z API
+      - name: Monitoruj trwajacy mecz
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN || secrets.FOOTBALL_DATA_API_KEY }}
-        run: node scripts/update-football-data.mjs
-
-      - name: Zapisz zmiany
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/football-data.json
-          git diff --cached --quiet || git commit -m "Aktualizuj wyniki meczow"
-          git push
+          for attempt in $(seq 1 48); do
+            node scripts/update-football-data.mjs
+            git add data/football-data.json
+            if ! git diff --cached --quiet; then
+              git commit -m "Aktualizuj wyniki meczow"
+              git push
+            fi
+            if [ ! -f data/.football-data-polling ]; then
+              echo "Brak trwajacego meczu albo API zwrocilo FINISHED."
+              break
+            fi
+            echo "Kolejna kontrola za 5 minut."
+            sleep 300
+            git pull --rebase
+          done
+          rm -f data/.football-data-polling

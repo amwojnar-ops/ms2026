@@ -1,6 +1,7 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 
 const outputPath = 'data/football-data.json';
+const pollingMarkerPath = 'data/.football-data-polling';
 const pagePath = 'hso-test.html';
 const now = Date.now();
 const activeWindowMs = 4 * 60 * 60 * 1000;
@@ -32,6 +33,7 @@ const unfinishedStartedMatch = previousMatches.some(match =>
 );
 
 if (!scheduledNow && !unfinishedStartedMatch) {
+  await rm(pollingMarkerPath, { force: true });
   console.log('Brak trwającego meczu. Pomijam zapytanie do API.');
   process.exit(0);
 }
@@ -74,12 +76,26 @@ const matches = (payload.matches || []).map(match => ({
   lastUpdated: match.lastUpdated
 }));
 
+const apiHasUnfinishedActiveMatch = matches.some(match => {
+  const kickoff = Date.parse(match.utcDate);
+  return Number.isFinite(kickoff)
+    && now >= kickoff
+    && now < kickoff + activeWindowMs
+    && match.status !== 'FINISHED';
+});
+
+await mkdir('data', { recursive: true });
+if (apiHasUnfinishedActiveMatch) {
+  await writeFile(pollingMarkerPath, 'active\n', 'utf8');
+} else {
+  await rm(pollingMarkerPath, { force: true });
+}
+
 if (JSON.stringify(previousMatches) === JSON.stringify(matches)) {
   console.log(`Brak zmian w ${matches.length} meczach.`);
   process.exit(0);
 }
 
-await mkdir('data', { recursive: true });
 await writeFile(
   outputPath,
   `${JSON.stringify({ updatedAt: new Date().toISOString(), matches }, null, 2)}\n`,
