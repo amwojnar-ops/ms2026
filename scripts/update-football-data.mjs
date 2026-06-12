@@ -7,14 +7,14 @@ const waitingMarkerPath = 'data/.football-data-waiting';
 const pagePath = 'hso.html';
 const now = process.env.TEST_NOW ? Date.parse(process.env.TEST_NOW) : Date.now();
 const activeWindowMs = 4 * 60 * 60 * 1000;
-const preStartWindowMs = 35 * 60 * 1000;
+const preStartWindowMs = 30 * 60 * 1000;
 
 let previousMatches = [];
 try {
   const previous = JSON.parse(await readFile(outputPath, 'utf8'));
   previousMatches = previous.matches || [];
 } catch {
-  // Pierwsze uruchomienie nie ma jeszcze pliku danych.
+  // The first run may not have an existing data file.
 }
 
 const statusRank = {
@@ -65,11 +65,11 @@ function historicalBestMatches() {
           best.set(match.id, betterMatch(best.get(match.id), match));
         }
       } catch {
-        // Pomijamy nieczytelny lub nieistniejący historyczny plik.
+        // Ignore unreadable historical snapshots.
       }
     }
   } catch {
-    // Poza repozytorium Git historia może być niedostępna.
+    // Git history may be unavailable outside the repository.
   }
   return best;
 }
@@ -80,45 +80,57 @@ const schedule = [...page.matchAll(/\{g:'[^']+',date:'(\d{2}\.\d{2})',time:'(\d{
     const [day, month] = date.split('.').map(Number);
     const [hour, minute] = time.split(':').map(Number);
     return {
-      date, time, home, away,
+      date,
+      time,
+      home,
+      away,
       kickoff: Date.UTC(2026, month - 1, day, hour - 2, minute)
     };
   });
 
-const scheduledNow = schedule.some(match =>
+const scheduledActiveMatches = schedule.filter(match =>
   now >= match.kickoff && now < match.kickoff + activeWindowMs
 );
 const nextMatch = schedule
   .filter(match => match.kickoff > now)
   .sort((a, b) => a.kickoff - b.kickoff)[0];
-const unfinishedStartedMatch = previousMatches.some(match =>
-  Date.parse(match.utcDate) <= now && match.status !== 'FINISHED'
-);
-
-if (!scheduledNow && !unfinishedStartedMatch && nextMatch
-    && nextMatch.kickoff - now <= preStartWindowMs) {
-  const waitSeconds = Math.max(1, Math.ceil((nextMatch.kickoff - now) / 1000));
-  await mkdir('data', { recursive: true });
-  await writeFile(pollingMarkerPath, 'active\n', 'utf8');
-  await writeFile(waitingMarkerPath, `${waitSeconds}\n`, 'utf8');
-  console.log(
-    `Najbliższy mecz ${nextMatch.home} - ${nextMatch.away} rozpocznie się za ${waitSeconds} s.`
+const activeApiMatches = previousMatches.filter(match => {
+  const kickoff = Date.parse(match.utcDate);
+  return Number.isFinite(kickoff)
+    && now >= kickoff
+    && now < kickoff + activeWindowMs;
+});
+const matchInProgress = scheduledActiveMatches.length > 0
+  && (
+    activeApiMatches.length === 0
+    || activeApiMatches.some(match => match.status !== 'FINISHED')
   );
-  process.exit(0);
-}
+const matchApproaching = nextMatch
+  && nextMatch.kickoff - now <= preStartWindowMs;
+const fiveMinuteCheck = Math.floor(now / 60000) % 5 === 0;
 
-if (!scheduledNow && !unfinishedStartedMatch) {
+if (!matchInProgress && (!matchApproaching || !fiveMinuteCheck)) {
   await rm(pollingMarkerPath, { force: true });
   await rm(waitingMarkerPath, { force: true });
-  console.log('Brak trwającego meczu. Pomijam zapytanie do API.');
+  console.log('No API request needed in this minute.');
   process.exit(0);
 }
 
-await rm(waitingMarkerPath, { force: true });
+await mkdir('data', { recursive: true });
+if (matchInProgress) {
+  await writeFile(pollingMarkerPath, 'active\n', 'utf8');
+  await rm(waitingMarkerPath, { force: true });
+  console.log('Active match: checking football-data.org.');
+} else {
+  const waitSeconds = Math.max(1, Math.ceil((nextMatch.kickoff - now) / 1000));
+  await rm(pollingMarkerPath, { force: true });
+  await writeFile(waitingMarkerPath, `${waitSeconds}\n`, 'utf8');
+  console.log(`Next match starts in ${waitSeconds} seconds: checking pre-match status.`);
+}
 
 const token = process.env.FOOTBALL_DATA_TOKEN;
 if (!token) {
-  throw new Error('Brak sekretu FOOTBALL_DATA_TOKEN.');
+  throw new Error('Missing FOOTBALL_DATA_TOKEN secret.');
 }
 
 const url = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026';
@@ -127,7 +139,7 @@ const response = await fetch(url, {
 });
 
 if (!response.ok) {
-  throw new Error(`football-data.org zwróciło HTTP ${response.status}: ${await response.text()}`);
+  throw new Error(`football-data.org returned HTTP ${response.status}: ${await response.text()}`);
 }
 
 const payload = await response.json();
@@ -165,7 +177,6 @@ const apiHasUnfinishedActiveMatch = matches.some(match => {
     && match.status !== 'FINISHED';
 });
 
-await mkdir('data', { recursive: true });
 if (apiHasUnfinishedActiveMatch) {
   await writeFile(pollingMarkerPath, 'active\n', 'utf8');
 } else {
@@ -173,7 +184,7 @@ if (apiHasUnfinishedActiveMatch) {
 }
 
 if (JSON.stringify(previousMatches) === JSON.stringify(matches)) {
-  console.log(`Brak zmian w ${matches.length} meczach.`);
+  console.log(`No changes in ${matches.length} matches.`);
   process.exit(0);
 }
 
@@ -183,4 +194,4 @@ await writeFile(
   'utf8'
 );
 
-console.log(`Zapisano ${matches.length} meczów.`);
+console.log(`Saved ${matches.length} matches.`);
