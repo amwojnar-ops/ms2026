@@ -1218,7 +1218,7 @@ function playerStats(p){
   playedIndexes.forEach(i=>{
     const value=sc(p.tips[i+1],results[i])??0;
     pts+=value;
-    if(value>0){scored++;streak++;bestStreak=Math.max(bestStreak,streak);}
+    if(value>0){scored++;streak+=value;bestStreak=Math.max(bestStreak,streak);}
     else streak=0;
     groupPts[MATCHES[i].g]=(groupPts[MATCHES[i].g]||0)+value;
   });
@@ -1673,7 +1673,7 @@ function openPlayerPanel(p){
     <div class="pdp-stat"><strong>${stats.efficiency}%</strong><span>${tr('efficiency')}</span></div>
     <div class="pdp-stat"><strong>${stats.average}</strong><span>${tr('pointsPerMatch')}</span></div>
     <div class="pdp-stat"><strong>${stats.bestGroup}</strong><span>${tr('bestGroup')}</span></div>
-    <div class="pdp-stat"><strong>${stats.streak}</strong><span>${tr('currentStreak')}</span></div>`;
+    <div class="pdp-stat"><strong>${stats.streak} ${lang==='pl'?'pkt.':'pts.'}</strong><span>${tr('currentStreak')}</span></div>`;
 
   const cont = document.getElementById('pdpMatches');
   cont.innerHTML = '';
