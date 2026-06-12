@@ -3,7 +3,7 @@ name: Aktualizacja wynikow football-data.org
 on:
   workflow_dispatch:
   schedule:
-    - cron: "2,17,32,47 * * * *"
+    - cron: "7/15 * * * *"
 
 permissions:
   contents: write
@@ -24,6 +24,9 @@ jobs:
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN || secrets.FOOTBALL_DATA_API_KEY }}
         run: |
+          echo "Wyzwolenie: ${{ github.event_name }}"
+          echo "Plan: ${{ github.event.schedule }}"
+          echo "Start UTC: $(date -u '+%Y-%m-%d %H:%M:%S')"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for attempt in $(seq 1 48); do
