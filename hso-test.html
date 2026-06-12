@@ -1796,7 +1796,7 @@ function openPlayerPanel(p){
     <div class="pdp-stat"><strong>${stats.efficiency}%</strong><span>${tr('efficiency')}</span></div>
     <div class="pdp-stat"><strong>${stats.average}</strong><span>${tr('pointsPerMatch')}</span></div>
     <div class="pdp-stat"><strong>${stats.bestGroup}</strong><span>${tr('bestGroup')}</span></div>
-    <div class="pdp-stat"><strong>${stats.streak} ${lang==='pl'?'pkt.':'pts.'}</strong><span>${tr('currentStreak')}</span></div>`;
+    <div class="pdp-stat"><strong>${stats.streak} ${LANG==='pl'?'pkt.':'pts.'}</strong><span>${tr('currentStreak')}</span></div>`;
 
   const cont = document.getElementById('pdpMatches');
   cont.innerHTML = '';
