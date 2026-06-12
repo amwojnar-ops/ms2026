@@ -4,15 +4,15 @@ Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$hsoPath = Join-Path $scriptDir 'hso-manual.html'
+$manualHsoPath = Join-Path $scriptDir 'hso-manual.html'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
-function Read-Hso {
-    if (-not (Test-Path -LiteralPath $hsoPath)) {
+function Read-ManualHso {
+    if (-not (Test-Path -LiteralPath $manualHsoPath)) {
         throw "Nie znaleziono pliku hso-manual.html w folderze formularza."
     }
 
-    return [System.IO.File]::ReadAllText($hsoPath, [System.Text.Encoding]::UTF8)
+    return [System.IO.File]::ReadAllText($manualHsoPath, [System.Text.Encoding]::UTF8)
 }
 
 function Get-ResultsBlock([string]$html) {
@@ -113,14 +113,14 @@ function Get-ResultRows([string]$body, $schedule) {
 function Show-Error([string]$message) {
     [System.Windows.Forms.MessageBox]::Show(
         $message,
-        'Formularz wyników',
+        'Formularz wyników - hso-manual.html',
         [System.Windows.Forms.MessageBoxButtons]::OK,
         [System.Windows.Forms.MessageBoxIcon]::Error
     ) | Out-Null
 }
 
 $form = New-Object System.Windows.Forms.Form
-$form.Text = 'MŚ 2026 - wpisywanie wyników'
+$form.Text = 'MŚ 2026 - wyniki ręczne (hso-manual.html)'
 $form.StartPosition = 'CenterScreen'
 $form.Size = New-Object System.Drawing.Size(720, 720)
 $form.MinimumSize = New-Object System.Drawing.Size(720, 540)
@@ -130,7 +130,7 @@ $form.ForeColor = [System.Drawing.Color]::FromArgb(232, 237, 245)
 $form.Font = New-Object System.Drawing.Font('Segoe UI', 10)
 
 $title = New-Object System.Windows.Forms.Label
-$title.Text = 'WYNIKI MECZÓW'
+$title.Text = 'WYNIKI MECZÓW - WERSJA RĘCZNA'
 $title.Font = New-Object System.Drawing.Font('Segoe UI Semibold', 20)
 $title.ForeColor = [System.Drawing.Color]::FromArgb(232, 184, 75)
 $title.AutoSize = $true
@@ -138,7 +138,7 @@ $title.Location = New-Object System.Drawing.Point(22, 18)
 $form.Controls.Add($title)
 
 $help = New-Object System.Windows.Forms.Label
-$help.Text = 'Wpisz gole w dwóch ostatnich kolumnach. Puste pola oznaczają brak wyniku.'
+$help.Text = 'Wyniki zostaną zapisane w hso-manual.html. Puste pola oznaczają brak wyniku.'
 $help.AutoSize = $true
 $help.ForeColor = [System.Drawing.Color]::FromArgb(150, 165, 185)
 $help.Location = New-Object System.Drawing.Point(25, 60)
@@ -219,10 +219,10 @@ $grid.Columns['Away'].Width = 85
 $form.Controls.Add($grid)
 
 $saveButton = New-Object System.Windows.Forms.Button
-$saveButton.Text = 'ZAPISZ W HSO'
-$saveButton.Size = New-Object System.Drawing.Size(170, 42)
+$saveButton.Text = 'ZAPISZ W HSO-MANUAL'
+$saveButton.Size = New-Object System.Drawing.Size(190, 42)
 $saveButton.Anchor = 'Bottom,Right'
-$saveButton.Location = New-Object System.Drawing.Point(512, 625)
+$saveButton.Location = New-Object System.Drawing.Point(492, 625)
 $saveButton.BackColor = [System.Drawing.Color]::FromArgb(232, 184, 75)
 $saveButton.ForeColor = [System.Drawing.Color]::FromArgb(35, 27, 8)
 $saveButton.FlatStyle = 'Flat'
@@ -234,7 +234,7 @@ $reloadButton = New-Object System.Windows.Forms.Button
 $reloadButton.Text = 'ODŚWIEŻ'
 $reloadButton.Size = New-Object System.Drawing.Size(110, 42)
 $reloadButton.Anchor = 'Bottom,Right'
-$reloadButton.Location = New-Object System.Drawing.Point(390, 625)
+$reloadButton.Location = New-Object System.Drawing.Point(370, 625)
 $reloadButton.BackColor = [System.Drawing.Color]::FromArgb(26, 34, 53)
 $reloadButton.ForeColor = [System.Drawing.Color]::FromArgb(232, 237, 245)
 $reloadButton.FlatStyle = 'Flat'
@@ -242,17 +242,17 @@ $reloadButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(65, 
 $form.Controls.Add($reloadButton)
 
 $pathLabel = New-Object System.Windows.Forms.Label
-$pathLabel.Text = $hsoPath
+$pathLabel.Text = $manualHsoPath
 $pathLabel.AutoEllipsis = $true
 $pathLabel.ForeColor = [System.Drawing.Color]::FromArgb(100, 116, 138)
 $pathLabel.Anchor = 'Bottom,Left,Right'
 $pathLabel.Location = New-Object System.Drawing.Point(22, 638)
-$pathLabel.Size = New-Object System.Drawing.Size(350, 24)
+$pathLabel.Size = New-Object System.Drawing.Size(330, 24)
 $form.Controls.Add($pathLabel)
 
 function Load-Grid {
     try {
-        $html = Read-Hso
+        $html = Read-ManualHso
         $block = Get-ResultsBlock $html
         $schedule = Get-MatchSchedule $html
         $rows = Get-ResultRows $block.Groups['body'].Value $schedule
@@ -330,14 +330,14 @@ $saveButton.Add_Click({
         if ($changed -eq 0) {
             [System.Windows.Forms.MessageBox]::Show(
                 'Nie ma żadnych zmian do zapisania.',
-                'Formularz wyników',
+                'Formularz wyników - hso-manual.html',
                 [System.Windows.Forms.MessageBoxButtons]::OK,
                 [System.Windows.Forms.MessageBoxIcon]::Information
             ) | Out-Null
             return
         }
 
-        $html = Read-Hso
+        $html = Read-ManualHso
         $block = Get-ResultsBlock $html
         $body = $block.Groups['body'].Value
         $replaceState = @{ Index = 0 }
@@ -357,11 +357,11 @@ $saveButton.Add_Click({
         $newBlock = $block.Groups['start'].Value + $newBody + $block.Groups['end'].Value
         $updatedHtml = $html.Substring(0, $block.Index) + $newBlock + $html.Substring($block.Index + $block.Length)
 
-        [System.IO.File]::WriteAllText($hsoPath, $updatedHtml, $utf8NoBom)
+        [System.IO.File]::WriteAllText($manualHsoPath, $updatedHtml, $utf8NoBom)
 
         [System.Windows.Forms.MessageBox]::Show(
             "Zapisano $changed zmian w hso-manual.html.`r`nGitHub Desktop powinien teraz wykryć zmianę pliku.",
-            'Formularz wyników',
+            'Formularz wyników - hso-manual.html',
             [System.Windows.Forms.MessageBoxButtons]::OK,
             [System.Windows.Forms.MessageBoxIcon]::Information
         ) | Out-Null
