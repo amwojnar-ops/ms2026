@@ -227,15 +227,24 @@ header::after {
 .stat-card .val.sm { font-size: 14px; font-weight: 400; color: var(--text); font-family: 'Barlow', sans-serif; line-height: 1.4; margin-top: 2px; }
 .stat-card.gold-accent { border-color: rgba(232,184,75,.3); }
 .stat-card.gold-accent .val { color: var(--gold); }
-.live-summary { display: block; margin-top: 4px; }
+.live-summary { margin-top: 4px; }
 .live-summary-status {
   display: flex; align-items: center; gap: 6px;
   color: var(--green); font-size: 11px; font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
-.live-summary-match {
-  display: block; color: #fff; font-size: 12px; line-height: 1.35;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+.live-summary-team {
+  display: grid; grid-template-columns: minmax(0,1fr) auto;
+  align-items: center; gap: 8px; min-height: 20px;
+  color: #fff; font-size: 12px;
+}
+.live-summary-name {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.live-summary-score {
+  width: 24px; text-align: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; font-weight: 700; line-height: 1;
 }
 
 /* ── tabs ── */
@@ -1021,8 +1030,8 @@ const MATCHES=[
 // Po meczu zamien odpowiednie null na wynik, np. '2-1', i opublikuj plik.
 const RESULTS = [
   // Grupa A
-  '2-0', // 11.06 Meksyk - RPA
-  '2-1', // 12.06 Korea Pld. - Czechy
+  null, // 11.06 Meksyk - RPA
+  null, // 12.06 Korea Pld. - Czechy
   null, // 18.06 Czechy - RPA
   null, // 19.06 Meksyk - Korea Pld.
   null, // 25.06 Czechy - Meksyk
@@ -1105,7 +1114,106 @@ const RESULTS = [
   null, // 27.06 Panama - Anglia
   null, // 27.06 Chorwacja - Ghana
 ];
-const results = RESULTS;
+const results = [...RESULTS];
+let API_MATCHES = [];
+let API_LAST_UPDATED = null;
+const DEMO_MODE = new URLSearchParams(location.search).get('demo');
+
+const API_TEAM_ALIASES = {
+  'south africa':'rpa',
+  'korea republic':'korea pld',
+  'south korea':'korea pld',
+  'bosnia and herzegovina':'bosnia i herc',
+  'ivory coast':'wybrzeze ksl',
+  'cote divoire':'wybrzeze ksl',
+  'cape verde':'rep ziel przyl',
+  'saudi arabia':'arabia saudyjska',
+  'new zealand':'nowa zelandia',
+  'dr congo':'dr konga',
+  'congo dr':'dr konga',
+  'united states':'usa',
+  'united states of america':'usa'
+};
+
+const LOCAL_TEAM_TLA = {
+  'Meksyk':'MEX','RPA':'RSA','Korea Płd.':'KOR','Czechy':'CZE',
+  'Kanada':'CAN','Bośnia i Herc.':'BIH','Katar':'QAT','Szwajcaria':'SUI',
+  'Brazylia':'BRA','Maroko':'MAR','Haiti':'HAI','Szkocja':'SCO',
+  'USA':'USA','Paragwaj':'PAR','Australia':'AUS','Turcja':'TUR',
+  'Niemcy':'GER','Curaçao':'CUW','Wybrzeże K.Sł.':'CIV','Ekwador':'ECU',
+  'Holandia':'NED','Japonia':'JPN','Szwecja':'SWE','Tunezja':'TUN',
+  'Belgia':'BEL','Egipt':'EGY','Iran':'IRN','Nowa Zelandia':'NZL',
+  'Hiszpania':'ESP','Rep. Ziel. Przył.':'CPV','Arabia Saudyjska':'KSA','Urugwaj':'URU',
+  'Francja':'FRA','Senegal':'SEN','Irak':'IRQ','Norwegia':'NOR',
+  'Argentyna':'ARG','Algieria':'ALG','Austria':'AUT','Jordania':'JOR',
+  'Portugalia':'POR','DR Konga':'COD','Uzbekistan':'UZB','Kolumbia':'COL',
+  'Anglia':'ENG','Chorwacja':'CRO','Ghana':'GHA','Panama':'PAN'
+};
+
+function normalizedTeamName(name){
+  const normalized=(name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  return API_TEAM_ALIASES[normalized]||normalized;
+}
+
+function apiMatchFor(m){
+  const demoLive=DEMO_MODE==='live'&&m.home==='Meksyk'&&m.away==='RPA';
+  const demoMulti=DEMO_MODE==='multi'&&m.date==='25.06'&&m.time==='05:00';
+  const demoFinished=DEMO_MODE==='finished'&&m.home==='Meksyk'&&m.away==='RPA';
+  if(demoLive||demoMulti||demoFinished){
+    return {
+      utcDate:matchDateTime(m).toISOString(),
+      status:demoFinished?'FINISHED':'IN_PLAY',
+      homeTeam:{name:m.home,tla:LOCAL_TEAM_TLA[m.home]},
+      awayTeam:{name:m.away,tla:LOCAL_TEAM_TLA[m.away]},
+      score:{fullTime:demoFinished?{home:2,away:1}:demoLive?{home:1,away:0}:{home:m.home==='Czechy'?2:0,away:1}}
+    };
+  }
+  const target=matchDateTime(m).getTime();
+  return API_MATCHES.find(api=>{
+    const kickoff=Date.parse(api.utcDate);
+    if(!Number.isFinite(kickoff)||Math.abs(kickoff-target)>30*60*1000)return false;
+    const homeTla=(api.homeTeam?.tla||'').toUpperCase();
+    const awayTla=(api.awayTeam?.tla||'').toUpperCase();
+    if(homeTla&&awayTla){
+      return homeTla===LOCAL_TEAM_TLA[m.home]&&awayTla===LOCAL_TEAM_TLA[m.away];
+    }
+    const home=normalizedTeamName(api.homeTeam?.name||api.homeTeam?.shortName);
+    const away=normalizedTeamName(api.awayTeam?.name||api.awayTeam?.shortName);
+    return home===normalizedTeamName(m.home)&&away===normalizedTeamName(m.away);
+  })||null;
+}
+
+function apiResult(api){
+  if(!api||api.status!=='FINISHED')return null;
+  const score=api.score?.fullTime;
+  return Number.isInteger(score?.home)&&Number.isInteger(score?.away)
+    ? `${score.home}-${score.away}` : null;
+}
+
+function applyApiResults(){
+  MATCHES.forEach((m,idx)=>{
+    if(RESULTS[idx])return;
+    const result=apiResult(apiMatchFor(m));
+    results[idx]=result;
+  });
+}
+
+async function refreshApiData(){
+  try{
+    const response=await fetch(`data/football-data.json?t=${Date.now()}`,{cache:'no-store'});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    const data=await response.json();
+    API_MATCHES=Array.isArray(data.matches)?data.matches:[];
+    API_LAST_UPDATED=data.updatedAt||null;
+    applyApiResults();
+    renderPlayerCards();
+    renderMatches();
+    renderRanking();
+  }catch(error){
+    console.warn('Nie udało się odczytać danych football-data.org:',error);
+  }
+}
 const PLAYERS=[
   {name:'Alex', champ:'Hiszpania', tips:[,'2-0','0-2','3-1','1-1','2-2','0-1','2-1','0-3','2-1','1-2','3-2','2-0','3-1','0-1','1-1','6-0','2-3','2-1','1-1','1-2','1-1','1-2','2-0','2-1','4-0','1-2','3-0','1-1','1-3','1-1','1-1','2-1','2-1','2-2','0-3','2-2','1-2','0-0','2-1','0-0','1-3','1-2','4-0','1-2','3-1','2-0','1-2','1-3','4-0','1-3','2-0','2-1','2-2','2-1','3-0','2-0','2-1','0-1','0-2','1-3','2-0','1-2','1-0','1-0','1-1','0-0','2-1','0-0','1-0','0-1','0-1','2-0']},
   {name:'Agnieszka', champ:'Portugalia', tips:[,'3-1','0-2','0-1','2-0','1-1','2-1','2-1','2-3','1-1','1-2','0-0','0-1','3-0','0-2','1-0','4-0','1-3','1-1','1-0','1-2','2-1','1-1','1-0','0-2','2-0','1-0','1-0','2-0','1-1','0-0','2-0','2-0','2-2','0-1','0-3','0-2','3-0','0-1','3-0','1-0','0-4','1-1','3-0','1-2','2-0','0-1','1-3','0-2','3-1','0-1','2-0','1-0','1-2','1-1','3-0','2-0','1-0','1-1','0-4','0-2','3-0','1-1','5-0','1-1','1-3','0-0','1-2','0-0','2-1','0-3','0-2','2-1']},
@@ -1252,9 +1360,12 @@ function matchDateTime(m){
 }
 function matchStatus(m,idx){
   if(results[idx])return 'done';
+  if(DEMO_MODE==='live'&&m.home==='Meksyk'&&m.away==='RPA')return 'live';
+  if(DEMO_MODE==='multi'&&m.date==='25.06'&&m.time==='05:00')return 'live';
+  const api=apiMatchFor(m);
+  if(api?.status==='FINISHED')return 'done';
   const diff=Date.now()-matchDateTime(m).getTime();
-  if(diff>=0 && diff<3*60*60*1000)return 'live';
-  if(diff>=3*60*60*1000)return 'waiting';
+  if(diff>=0)return 'live';
   return 'soon';
 }
 
@@ -1275,10 +1386,22 @@ function formatCountdown(ms){
 }
 
 function nextMatchHTML(m){
-  if(matchStatus(m,m.idx)==='live'){
+  const status=matchStatus(m,m.idx);
+  const api=apiMatchFor(m);
+  if(status==='live'){
+    const score=api?.score?.fullTime;
+    const homeScore=Number.isInteger(score?.home)?score.home:'–';
+    const awayScore=Number.isInteger(score?.away)?score.away:'–';
     return `<span class="live-summary">
       <span class="live-summary-status"><span class="dot dot-live"></span>${tr('live')}</span>
-      <span class="live-summary-match">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
+      <span class="live-summary-team">
+        <span class="live-summary-name">${flag(m.home)} ${disp(m.home)}</span>
+        <span class="live-summary-score">${homeScore}</span>
+      </span>
+      <span class="live-summary-team">
+        <span class="live-summary-name">${flag(m.away)} ${disp(m.away)}</span>
+        <span class="live-summary-score">${awayScore}</span>
+      </span>
     </span>`;
   }
   const dt = matchDateTime(m);
@@ -1769,7 +1892,10 @@ function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   ['gracze','mecze','ranking'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
 }
+if(DEMO_MODE)applyApiResults();
 renderPlayerCards();renderMatches();renderRanking();
+refreshApiData();
+setInterval(refreshApiData,60*1000);
 </script>
 </body>
 </html>

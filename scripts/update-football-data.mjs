@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 const outputPath = 'data/football-data.json';
 const pollingMarkerPath = 'data/.football-data-polling';
 const waitingMarkerPath = 'data/.football-data-waiting';
-const pagePath = 'hso-test.html';
+const pagePath = 'hso.html';
 const now = process.env.TEST_NOW ? Date.parse(process.env.TEST_NOW) : Date.now();
 const activeWindowMs = 4 * 60 * 60 * 1000;
 const preStartWindowMs = 35 * 60 * 1000;
