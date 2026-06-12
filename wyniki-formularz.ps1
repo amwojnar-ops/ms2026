@@ -4,12 +4,12 @@ Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$hsoPath = Join-Path $scriptDir 'hso.html'
+$hsoPath = Join-Path $scriptDir 'hso-manual.html'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
 function Read-Hso {
     if (-not (Test-Path -LiteralPath $hsoPath)) {
-        throw "Nie znaleziono pliku hso.html w folderze formularza."
+        throw "Nie znaleziono pliku hso-manual.html w folderze formularza."
     }
 
     return [System.IO.File]::ReadAllText($hsoPath, [System.Text.Encoding]::UTF8)
@@ -20,7 +20,7 @@ function Get-ResultsBlock([string]$html) {
     $block = [regex]::Match($html, $pattern)
 
     if (-not $block.Success) {
-        throw "Nie znaleziono tablicy RESULTS w hso.html."
+        throw "Nie znaleziono tablicy RESULTS w hso-manual.html."
     }
 
     return $block
@@ -33,7 +33,7 @@ function Get-MatchSchedule([string]$html) {
     )
 
     if (-not $matchBlock.Success) {
-        throw "Nie znaleziono tablicy MATCHES w hso.html."
+        throw "Nie znaleziono tablicy MATCHES w hso-manual.html."
     }
 
     $schedule = New-Object System.Collections.Generic.List[object]
@@ -360,7 +360,7 @@ $saveButton.Add_Click({
         [System.IO.File]::WriteAllText($hsoPath, $updatedHtml, $utf8NoBom)
 
         [System.Windows.Forms.MessageBox]::Show(
-            "Zapisano $changed zmian w hso.html.`r`nGitHub Desktop powinien teraz wykryć zmianę pliku.",
+            "Zapisano $changed zmian w hso-manual.html.`r`nGitHub Desktop powinien teraz wykryć zmianę pliku.",
             'Formularz wyników',
             [System.Windows.Forms.MessageBoxButtons]::OK,
             [System.Windows.Forms.MessageBoxIcon]::Information
