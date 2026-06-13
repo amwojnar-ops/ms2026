@@ -862,9 +862,9 @@ header::after {
 
 <div class="tabs">
   <button class="tab active" id="tabPlayersBtn" onclick="switchTab('gracze',this)">Gracze</button>
-  <button class="tab" id="tabMatchesBtn" onclick="switchTab('mecze',this)">Mecze</button>
-  <button class="tab" id="tabRankingBtn" onclick="switchTab('ranking',this)">Ranking</button>
+  <button class="tab" id="tabMatchesBtn" onclick="switchTab('mecze',this)">Faza grupowa</button>
   <button class="tab" id="tabKnockoutBtn" type="button" onclick="switchTab('pucharowa',this)">Faza pucharowa</button>
+  <button class="tab" id="tabRankingBtn" onclick="switchTab('ranking',this)">Ranking</button>
 </div>
 
 <div id="tab-gracze">
@@ -978,7 +978,7 @@ const TRANSLATIONS = {
     headerSubtitle:'Mistrzostwa Świata 2026 &nbsp;·&nbsp; Kanada · Meksyk · USA &nbsp;·&nbsp; 11 czerwca – 19 lipca',
     locked:'Typy zablokowane · 10.06', played:'Rozegranych', leader:'Lider', leaders:'Liderzy',
     leaderPoints:'Pkt lidera', leadersPoints:'Pkt liderów', nextMatch:'Następny mecz',
-    players:'Gracze', matches:'Mecze', ranking:'Ranking', knockout:'Faza pucharowa',
+    players:'Gracze', matches:'Faza grupowa', ranking:'Ranking', knockout:'Faza pucharowa',
     knockoutTitle:'Faza pucharowa zostanie uruchomiona później', coming:'wkrótce',
     byGroups:'Wg grup', byDates:'Wg dat', championPick:'Typ na mistrza',
     player:'Gracz', champion:'Mistrz', total:'Razem', date:'Data', match:'Mecz',
@@ -996,7 +996,7 @@ const TRANSLATIONS = {
     headerSubtitle:'World Cup 2026 &nbsp;·&nbsp; Canada · Mexico · USA &nbsp;·&nbsp; June 11 – July 19',
     locked:'Predictions locked · June 10', played:'Played', leader:'Leader', leaders:'Leaders',
     leaderPoints:'Leader points', leadersPoints:'Leaders’ points', nextMatch:'Next match',
-    players:'Players', matches:'Matches', ranking:'Ranking', knockout:'Knockout stage',
+    players:'Players', matches:'Group stage', ranking:'Ranking', knockout:'Knockout stage',
     knockoutTitle:'The knockout stage will be available later', coming:'soon',
     byGroups:'By group', byDates:'By date', championPick:'World champion pick',
     player:'Player', champion:'Champion', total:'Total', date:'Date', match:'Match',
