@@ -1298,12 +1298,17 @@ const SHORT = {
   'Wybrzeże K.Sł.':  'WKS',
   'Rep. Ziel. Przył.':'RZP',
 };
+const MATCH_SHORT = {
+  'Bośnia i Herc.':  'BIH',
+  'Wybrzeże K.Sł.':  'WKS',
+  'Rep. Ziel. Przył.':'RZP',
+};
 function flag(t){
   const code=ISO[t];
   if(!code)return '';
   return `<img src="img/flags/${code}.png" width="16" height="12" alt="${teamName(t)}" style="vertical-align:middle;border-radius:2px;margin:0 2px">`;
 }
-function disp(t){ return LANG==='en' ? teamName(t) : (SHORT[t]||t); }
+function disp(t){ return LANG==='en' ? teamName(t) : (MATCH_SHORT[t]||t); }
 function teamHTML(t, side='home'){
   const f=flag(t), d=disp(t);
   return side==='home'
