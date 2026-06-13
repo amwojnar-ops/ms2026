@@ -134,15 +134,59 @@ if (!token) {
 }
 
 const url = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026';
-const response = await fetch(url, {
-  headers: { 'X-Auth-Token': token }
-});
+const retryDelaysMs = [3000, 7000];
+const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-if (!response.ok) {
-  throw new Error(`football-data.org returned HTTP ${response.status}: ${await response.text()}`);
+async function fetchFootballData() {
+  let lastError;
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: { 'X-Auth-Token': token }
+      });
+
+      if (response.ok) {
+        return await response.json();
+      }
+
+      const responseText = await response.text();
+      const error = new Error(
+        `football-data.org returned HTTP ${response.status}: ${responseText}`
+      );
+
+      // Authentication and other client errors require configuration changes,
+      // so retrying them would only hide a permanent problem.
+      if (response.status >= 400 && response.status < 500 && response.status !== 429) {
+        throw Object.assign(error, { permanent: true });
+      }
+
+      lastError = error;
+    } catch (error) {
+      if (error.permanent) {
+        throw error;
+      }
+      lastError = error;
+    }
+
+    if (attempt < 3) {
+      const delay = retryDelaysMs[attempt - 1];
+      console.warn(`API attempt ${attempt}/3 failed. Retrying in ${delay / 1000} seconds.`);
+      await sleep(delay);
+    }
+  }
+
+  console.warn(
+    `football-data.org is temporarily unavailable after 3 attempts: ${lastError?.message || lastError}`
+  );
+  return null;
 }
 
-const payload = await response.json();
+const payload = await fetchFootballData();
+if (!payload) {
+  console.log('Keeping the last saved match data. The next workflow run will try again.');
+  process.exit(0);
+}
 const freshMatches = (payload.matches || []).map(match => ({
   id: match.id,
   utcDate: match.utcDate,
