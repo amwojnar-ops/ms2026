@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-13T18:30:33.181Z",
+  "updatedAt": "2026-06-13T19:06:13.004Z",
   "matches": [
     {
       "id": 537327,
@@ -92,7 +92,7 @@
     {
       "id": 537334,
       "utcDate": "2026-06-13T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Qatar",
         "shortName": "Qatar",
@@ -105,11 +105,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-13T00:20:14Z"
+      "lastUpdated": "2026-06-13T19:05:53Z"
     },
     {
       "id": 537339,
