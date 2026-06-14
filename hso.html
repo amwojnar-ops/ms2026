@@ -1119,6 +1119,30 @@ let API_MATCHES = [];
 let API_LAST_UPDATED = null;
 let API_DATA_READY = false;
 const DEMO_MODE = new URLSearchParams(location.search).get('demo');
+const FINISHED_RESULTS_CACHE_KEY = 'ms2026_finished_results_v1';
+
+function loadFinishedResultsCache(){
+  if(DEMO_MODE)return {};
+  try{
+    const cached=JSON.parse(localStorage.getItem(FINISHED_RESULTS_CACHE_KEY));
+    return cached&&typeof cached==='object'&&!Array.isArray(cached)?cached:{};
+  }catch{
+    return {};
+  }
+}
+
+function saveFinishedResultsCache(){
+  if(DEMO_MODE)return;
+  try{
+    localStorage.setItem(FINISHED_RESULTS_CACHE_KEY,JSON.stringify(FINISHED_RESULTS_CACHE));
+  }catch{}
+}
+
+const FINISHED_RESULTS_CACHE=loadFinishedResultsCache();
+Object.entries(FINISHED_RESULTS_CACHE).forEach(([idx,result])=>{
+  const matchIndex=Number(idx);
+  if(!RESULTS[matchIndex]&&/^\d+-\d+$/.test(result))results[matchIndex]=result;
+});
 
 const API_TEAM_ALIASES = {
   'south africa':'rpa',
@@ -1193,11 +1217,22 @@ function apiResult(api){
 }
 
 function applyApiResults(){
+  let cacheChanged=false;
   MATCHES.forEach((m,idx)=>{
     if(RESULTS[idx])return;
-    const result=apiResult(apiMatchFor(m));
-    results[idx]=result;
+    const finishedResult=apiResult(apiMatchFor(m));
+    if(finishedResult){
+      results[idx]=finishedResult;
+      if(!DEMO_MODE&&FINISHED_RESULTS_CACHE[idx]!==finishedResult){
+        FINISHED_RESULTS_CACHE[idx]=finishedResult;
+        cacheChanged=true;
+      }
+    }else if(FINISHED_RESULTS_CACHE[idx]){
+      // Raz potwierdzony FINISHED nie może zostać cofnięty przez IN_PLAY lub TIMED.
+      results[idx]=FINISHED_RESULTS_CACHE[idx];
+    }
   });
+  if(cacheChanged)saveFinishedResultsCache();
 }
 
 async function refreshApiData(){
