@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T18:13:13.984Z",
+  "updatedAt": "2026-06-14T18:15:24.282Z",
   "matches": [
     {
       "id": 537327,
@@ -180,7 +180,7 @@
     {
       "id": 537351,
       "utcDate": "2026-06-14T17:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Germany",
         "shortName": "Germany",
@@ -193,11 +193,11 @@
       },
       "score": {
         "fullTime": {
-          "home": 3,
+          "home": 4,
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-14T18:01:53Z"
+      "lastUpdated": "2026-06-14T18:15:05Z"
     },
     {
       "id": 537357,
