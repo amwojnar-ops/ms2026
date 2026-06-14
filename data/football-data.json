@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T03:10:20.886Z",
+  "updatedAt": "2026-06-14T04:06:14.904Z",
   "matches": [
     {
       "id": 537327,
@@ -158,7 +158,7 @@
     {
       "id": 537346,
       "utcDate": "2026-06-14T04:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Australia",
         "shortName": "Australia",
@@ -171,11 +171,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-13T15:20:17Z"
+      "lastUpdated": "2026-06-14T04:05:50Z"
     },
     {
       "id": 537351,
