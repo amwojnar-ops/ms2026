@@ -765,6 +765,27 @@ header::after {
   font-family: 'Courier New', monospace;
   font-size: 13px; font-weight: 700; color: var(--gold);
 }
+.pdp-phase { border-bottom: 1px solid var(--border); }
+.pdp-phase:last-child { border-bottom: 0; }
+.pdp-phase-toggle {
+  display: grid; grid-template-columns: minmax(0,1fr) auto 18px; align-items: center; gap: 8px;
+  width: 100%; padding: 11px 16px; border: 0; background: var(--surface); color: #fff;
+  font: inherit; cursor: pointer; text-align: left;
+}
+.pdp-phase-title { font-size: 12px; font-weight: 700; }
+.pdp-phase-summary { color: var(--muted); font-size: 10px; }
+.pdp-phase-chevron { color: var(--gold); text-align: center; transition: transform .2s; }
+.pdp-phase.open .pdp-phase-chevron { transform: rotate(180deg); }
+.pdp-phase-body { display: none; }
+.pdp-phase.open .pdp-phase-body { display: block; }
+.pdp-round {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px;
+  padding: 9px 16px; color: #dbe3ee; background: rgba(255,255,255,.015);
+  border-bottom: 1px solid var(--border); font-size: 11px;
+}
+.pdp-round:last-child { border-bottom: 0; }
+.pdp-round-status { color: var(--muted); font-size: 10px; text-align: right; }
+.pdp-empty { padding: 13px 16px; color: var(--muted); font-size: 11px; line-height: 1.5; }
 
 /* responsive */
 @media (max-width: 540px) {
@@ -1434,6 +1455,95 @@ function knockoutTipDotPlayers(){
     : new Set(completePlayers.map(player => player.name));
 }
 
+const PLAYER_KNOCKOUT_STAGES = [
+  {ids:['1/16','r32'], pl:'1/16 finału', en:'Round of 32'},
+  {ids:['1/8','r16'], pl:'1/8 finału', en:'Round of 16'},
+  {ids:['1/4','qf'], pl:'Ćwierćfinały', en:'Quarter-finals'},
+  {ids:['1/2','sf'], pl:'Półfinały', en:'Semi-finals'},
+  {ids:['medale','third','final'], pl:'Mecze o medale', en:'Medal matches'}
+];
+
+function togglePlayerPhase(button){
+  button.closest('.pdp-phase')?.classList.toggle('open');
+}
+
+function knockoutRoundComplete(round){
+  const matches=(round?.matches||[]).filter(match=>match.home&&match.away);
+  return matches.length>0&&PLAYERS.every(player=>matches.every((match,index)=>{
+    const key=match.id||String(index);
+    const tip=round.tipsByPlayer?.[player.name]?.[key];
+    return typeof tip==='string'&&tip.trim()!=='';
+  }));
+}
+
+function playerKnockoutStageData(stage,p){
+  const rounds=KNOCKOUT_TIP_ROUNDS.filter(round=>stage.ids.includes(round.id));
+  const matches=rounds.flatMap(round=>(round.matches||[])
+    .filter(match=>match.home&&match.away)
+    .map((match,index)=>({round,match,key:match.id||String(index)})));
+  const visible=rounds.length>0&&rounds.every(knockoutRoundComplete);
+  const tips=matches.filter(({round,key})=>{
+    const tip=round.tipsByPlayer?.[p.name]?.[key];
+    return typeof tip==='string'&&tip.trim()!=='';
+  }).length;
+  return {rounds,matches,visible,tips};
+}
+
+function playerGroupPhaseRows(p){
+  const grouped={};
+  MATCHES.forEach((m,i)=>{
+    if(!grouped[m.g])grouped[m.g]=[];
+    grouped[m.g].push({...m,idx:i});
+  });
+  return Object.entries(grouped).map(([grp,matches])=>`
+    <div class="pdp-section-lbl">${tr('group')} ${grp}</div>
+    ${matches.map(m=>`
+      <div class="pdp-match">
+        <span class="pdp-date">${m.date}</span>
+        <span class="pdp-teams">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
+        <span class="pdp-tip">${p.tips[m.idx+1]||'—'}</span>
+      </div>`).join('')}`).join('');
+}
+
+function playerKnockoutPhaseRows(p){
+  return PLAYER_KNOCKOUT_STAGES.map(stage=>{
+    const data=playerKnockoutStageData(stage,p);
+    const name=LANG==='en'?stage.en:stage.pl;
+    if(!data.matches.length){
+      return `<div class="pdp-round"><span>${name}</span><span class="pdp-round-status">${LANG==='en'?'waiting':'oczekiwanie'}</span></div>`;
+    }
+    if(!data.visible){
+      return `<div class="pdp-round"><span>${name}</span><span class="pdp-round-status">${data.tips}/${data.matches.length} · ${LANG==='en'?'predictions hidden':'typy ukryte'}</span></div>`;
+    }
+    return `<div class="pdp-section-lbl">${name}</div>${data.matches.map(({round,match,key})=>`
+      <div class="pdp-match">
+        <span class="pdp-date">${match.date||'—'}</span>
+        <span class="pdp-teams">${match.home} – ${match.away}</span>
+        <span class="pdp-tip">${round.tipsByPlayer?.[p.name]?.[key]||'—'}</span>
+      </div>`).join('')}`;
+  }).join('');
+}
+
+function buildPlayerPhases(p){
+  const groupStageFinished=results.length>=MATCHES.length&&MATCHES.every((_,index)=>Boolean(results[index]));
+  return `<section class="pdp-phase${groupStageFinished?'':' open'}">
+      <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
+        <span class="pdp-phase-title">${LANG==='en'?'Group stage':'Faza grupowa'}</span>
+        <span class="pdp-phase-summary">72 ${LANG==='en'?'predictions':'typy'}</span>
+        <span class="pdp-phase-chevron">⌃</span>
+      </button>
+      <div class="pdp-phase-body">${playerGroupPhaseRows(p)}</div>
+    </section>
+    <section class="pdp-phase${groupStageFinished?' open':''}">
+      <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
+        <span class="pdp-phase-title">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</span>
+        <span class="pdp-phase-summary">${LANG==='en'?'rounds':'rundy'}</span>
+        <span class="pdp-phase-chevron">⌃</span>
+      </button>
+      <div class="pdp-phase-body">${playerKnockoutPhaseRows(p)}</div>
+    </section>`;
+}
+
 const ISO = {
   'Algieria':'dz','Anglia':'gb-eng','Arabia Saudyjska':'sa','Argentyna':'ar',
   'Australia':'au','Austria':'at','Belgia':'be','Bośnia i Herc.':'ba',
@@ -2058,32 +2168,7 @@ function openPlayerPanel(p){
     <div class="pdp-stat"><strong>${stats.streak} ${LANG==='pl'?'pkt.':'pts.'}</strong><span>${tr('currentStreak')}</span></div>`;
 
   const cont = document.getElementById('pdpMatches');
-  cont.innerHTML = '';
-
-  // grupuj mecze według grup
-  const grouped = {};
-  MATCHES.forEach((m,i) => {
-    if(!grouped[m.g]) grouped[m.g] = [];
-    grouped[m.g].push({...m, idx:i});
-  });
-
-  Object.entries(grouped).forEach(([grp, ms]) => {
-    const lbl = document.createElement('div');
-    lbl.className = 'pdp-section-lbl';
-    lbl.textContent = `${tr('group')} ${grp}`;
-    cont.appendChild(lbl);
-
-    ms.forEach(m => {
-      const tip = p.tips[m.idx+1] || '—';
-      const row = document.createElement('div');
-      row.className = 'pdp-match';
-      row.innerHTML = `
-        <span class="pdp-date">${m.date}</span>
-        <span class="pdp-teams">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
-        <span class="pdp-tip">${tip}</span>`;
-      cont.appendChild(row);
-    });
-  });
+  cont.innerHTML = buildPlayerPhases(p);
 
   const panel = document.getElementById('playerDetailPanel');
   panel.classList.add('open');
