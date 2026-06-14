@@ -38,6 +38,8 @@ const config = ROUND_CONFIG[pageKey];
 const storageKey = `ms2026_${config.key}_typy`;
 let roundMatches = [];
 let selects = [];
+let roundDeadline = null;
+let roundTeamsReady = false;
 
 function knockoutMatches(matches) {
   return matches
@@ -65,6 +67,26 @@ function formatDate(utcDate) {
       timeZone: "Europe/Warsaw", hour: "2-digit", minute: "2-digit"
     }).format(date)
   };
+}
+
+function deadlineFromFirstMatch(utcDate) {
+  if (!utcDate) return null;
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Warsaw", year: "numeric", month: "2-digit", day: "2-digit"
+  }).formatToParts(new Date(utcDate)).reduce((result, part) => {
+    if (part.type !== "literal") result[part.type] = Number(part.value);
+    return result;
+  }, {});
+  // Rundy odbywają się podczas czasu CEST (UTC+2).
+  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day - 1, 21, 59, 59));
+}
+
+function deadlineLabel(deadline) {
+  if (!deadline) return "termin zostanie podany po ustaleniu terminarza";
+  return new Intl.DateTimeFormat("pl-PL", {
+    timeZone: "Europe/Warsaw", day: "2-digit", month: "2-digit", year: "numeric",
+    hour: "2-digit", minute: "2-digit"
+  }).format(deadline).replace(",", " ·");
 }
 
 function buildPlayerSelect() {
@@ -103,6 +125,7 @@ function renderMatches() {
   selects = [];
   const allKnown = roundMatches.length === config.count &&
     roundMatches.every(match => match.homeTeam?.name && match.awayTeam?.name);
+  roundTeamsReady = allKnown;
 
   roundMatches.forEach((match, index) => {
     const homeKnown = Boolean(match.homeTeam?.name);
@@ -155,13 +178,21 @@ function placeholderMatches() {
   }));
 }
 
-function setAvailability(ready) {
+function setAvailability(teamsReady) {
+  const beforeDeadline = !roundDeadline || Date.now() <= roundDeadline.getTime();
+  const ready = teamsReady && beforeDeadline;
   const status = document.getElementById("status");
   status.classList.toggle("ready", ready);
-  document.getElementById("status-text").textContent = ready
-    ? "Wszystkie pary znane · formularz aktywny"
-    : "Oczekiwanie na wszystkie drużyny";
+  document.getElementById("status-text").textContent = !beforeDeadline
+    ? "Termin minął · typowanie zamknięte"
+    : ready
+      ? `Formularz aktywny · termin ${deadlineLabel(roundDeadline)}`
+      : `Oczekiwanie na wszystkie drużyny · termin ${deadlineLabel(roundDeadline)}`;
   document.getElementById("copy").disabled = !ready;
+  selects.forEach(({ home, away }) => {
+    home.disabled = !ready;
+    away.disabled = !ready;
+  });
 }
 
 async function loadMatches() {
@@ -179,6 +210,7 @@ async function loadMatches() {
     const current = [...roundMatches];
     roundMatches = placeholderMatches().map((fallback, index) => current[index] || fallback);
   }
+  roundDeadline = deadlineFromFirstMatch(roundMatches[0]?.utcDate);
   renderMatches();
 }
 
@@ -390,3 +422,6 @@ document.getElementById("copy").addEventListener("click", copyResults);
 buildPlayerSelect();
 addFinalActions();
 loadMatches();
+setInterval(() => {
+  if (roundMatches.length) setAvailability(roundTeamsReady);
+}, 60 * 1000);

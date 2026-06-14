@@ -858,7 +858,7 @@ header::after {
   </div>
   <div class="lock-badge" id="lockBadge">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-    Typy zablokowane · 10.06
+    Typy fazy grupowej zamknięte
   </div>
 </header>
 
@@ -971,6 +971,7 @@ header::after {
         <section class="ko-action">
           <h3 id="koActionTitle">Typowanie rundy</h3>
           <p id="koActionCopy">Formularz zostanie odblokowany, gdy poznamy wszystkie pary tego etapu.</p>
+          <p class="ko-progress-note" id="koDeadline">Termin pojawi się po ustaleniu terminarza.</p>
           <a class="ko-action-btn" id="koActionBtn" href="#" aria-disabled="true">Oczekiwanie na drużyny</a>
         </section>
 
@@ -997,7 +998,7 @@ const TRANSLATIONS = {
     introTitle:'LOŻA', introName:'EKSPERTÓW', worldCup:'MŚ 2026', skipIntro:'Pomiń intro',
     headerTitle:'LOŻA <span>EKSPERTÓW</span>',
     headerSubtitle:'Mistrzostwa Świata 2026 &nbsp;·&nbsp; Kanada · Meksyk · USA &nbsp;·&nbsp; 11 czerwca – 19 lipca',
-    locked:'Typy zablokowane · 10.06', played:'Rozegranych', leader:'Lider', leaders:'Liderzy',
+    locked:'Typy fazy grupowej zamknięte', played:'Rozegranych', leader:'Lider', leaders:'Liderzy',
     leaderPoints:'Pkt lidera', leadersPoints:'Pkt liderów', nextMatch:'Następny mecz',
     players:'Gracze', matches:'Faza grupowa', ranking:'Ranking', knockout:'Faza pucharowa',
     knockoutTitle:'Faza pucharowa zostanie uruchomiona później', coming:'wkrótce',
@@ -1015,7 +1016,7 @@ const TRANSLATIONS = {
     introTitle:'EXPERTS’', introName:'LOUNGE', worldCup:'WORLD CUP 2026', skipIntro:'Skip intro',
     headerTitle:"EXPERTS' <span>LOUNGE</span>",
     headerSubtitle:'World Cup 2026 &nbsp;·&nbsp; Canada · Mexico · USA &nbsp;·&nbsp; June 11 – July 19',
-    locked:'Predictions locked · June 10', played:'Played', leader:'Leader', leaders:'Leaders',
+    locked:'Group-stage predictions closed', played:'Played', leader:'Leader', leaders:'Leaders',
     leaderPoints:'Leader points', leadersPoints:'Leaders’ points', nextMatch:'Next match',
     players:'Players', matches:'Group stage', ranking:'Ranking', knockout:'Knockout stage',
     knockoutTitle:'The knockout stage will be available later', coming:'soon',
@@ -2256,6 +2257,24 @@ function knockoutDate(utcDate){
     timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'
   }).format(new Date(utcDate)).replace(',',' ·');
 }
+function knockoutDeadline(firstMatchUtc){
+  if(!firstMatchUtc)return null;
+  const parts=new Intl.DateTimeFormat('en-CA',{
+    timeZone:'Europe/Warsaw',year:'numeric',month:'2-digit',day:'2-digit'
+  }).formatToParts(new Date(firstMatchUtc)).reduce((out,part)=>{
+    if(part.type!=='literal')out[part.type]=Number(part.value);
+    return out;
+  },{});
+  // Wszystkie rundy MŚ 2026 przypadają podczas czasu CEST (UTC+2).
+  return new Date(Date.UTC(parts.year,parts.month-1,parts.day-1,21,59,59));
+}
+function knockoutDeadlineLabel(deadline){
+  if(!deadline)return LANG==='en'?'Deadline will appear when the schedule is known.':'Termin pojawi się po ustaleniu terminarza.';
+  return new Intl.DateTimeFormat(LANG==='en'?'en-GB':'pl-PL',{
+    timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit',year:'numeric',
+    hour:'2-digit',minute:'2-digit'
+  }).format(deadline).replace(',',' ·');
+}
 function knockoutTeamName(team){
   const name=team?.shortName||team?.name;
   if(!name)return LANG==='en'?'Team not known yet':'Drużyna jeszcze nieznana';
@@ -2298,6 +2317,14 @@ function renderKnockout(){
   const knownPairs=roundMatches.filter(match=>match.homeTeam?.name&&match.awayTeam?.name).length;
   const allKnown=roundMatches.length===activeRound.count&&knownPairs===activeRound.count;
   const allFinished=roundMatches.length===activeRound.count&&roundMatches.every(match=>match.status==='FINISHED');
+  const formMatches=activeRound.form==='hso-typowanie1.html'
+    ? allMatches.slice(30,32)
+    : roundMatches;
+  const formAllKnown=formMatches.length===(activeRound.form==='hso-typowanie1.html'?2:activeRound.count)
+    &&formMatches.every(match=>match.homeTeam?.name&&match.awayTeam?.name);
+  const deadline=knockoutDeadline(formMatches[0]?.utcDate);
+  const beforeDeadline=!deadline||Date.now()<=deadline.getTime();
+  const formReady=formAllKnown&&beforeDeadline;
 
   document.getElementById('koEyebrow').textContent=LANG==='en'?'Road to the final':'Droga do finału';
   document.getElementById('koTitle').textContent=LANG==='en'?'Knockout stage':'Faza pucharowa';
@@ -2351,21 +2378,28 @@ function renderKnockout(){
   }).join('') : `<div class="ko-match">${LANG==='en'?'No fixture data.':'Brak danych o meczach.'}</div>`;
 
   document.getElementById('koActionTitle').textContent=LANG==='en'?'Round predictions':'Typowanie rundy';
-  document.getElementById('koActionCopy').textContent=allKnown
+  document.getElementById('koActionCopy').textContent=!beforeDeadline
     ? (LANG==='en'
+      ? 'The prediction deadline for this stage has passed.'
+      : 'Termin typowania tej rundy minął.')
+    : formAllKnown
+      ? (LANG==='en'
       ? 'Open the round form, enter every prediction and send the copied text exactly as in the group-stage form.'
       : 'Otwórz formularz rundy, wpisz wszystkie typy i prześlij skopiowany tekst dokładnie tak jak w formularzu fazy grupowej.')
-    : (LANG==='en'
-      ? 'The round form will become available after every fixture in this stage is known.'
-      : 'Formularz rundy zostanie udostępniony po poznaniu wszystkich par tego etapu.');
+      : (LANG==='en'
+        ? 'The round form will become available after every fixture in this stage is known.'
+        : 'Formularz rundy zostanie udostępniony po poznaniu wszystkich par tego etapu.');
+  document.getElementById('koDeadline').textContent=(LANG==='en'?'Deadline: ':'Termin typowania: ')+knockoutDeadlineLabel(deadline);
   const actionBtn=document.getElementById('koActionBtn');
-  actionBtn.textContent=allKnown
+  actionBtn.textContent=!beforeDeadline
+    ? (LANG==='en'?'Predictions closed':'Typowanie zamknięte')
+    : formAllKnown
     ? (LANG==='en'?'Open prediction form':'Otwórz formularz typowania')
     : (LANG==='en'?'Waiting for teams':'Oczekiwanie na drużyny');
-  actionBtn.href=allKnown?activeRound.form:'#';
-  actionBtn.classList.toggle('ready',allKnown);
-  actionBtn.setAttribute('aria-disabled',String(!allKnown));
-  actionBtn.onclick=allKnown?null:event=>event.preventDefault();
+  actionBtn.href=formReady?activeRound.form:'#';
+  actionBtn.classList.toggle('ready',formReady);
+  actionBtn.setAttribute('aria-disabled',String(!formReady));
+  actionBtn.onclick=formReady?null:event=>event.preventDefault();
   document.getElementById('koProgressLabel').textContent=LANG==='en'?'Predictions submitted':'Oddane typy';
   document.getElementById('koProgressValue').textContent=`0 / ${PLAYERS.length}`;
   document.getElementById('koProgressFill').style.width='0%';
