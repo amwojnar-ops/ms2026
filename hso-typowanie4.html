@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Typowanie ćwierćfinałów · MŚ 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="formularz-pucharowy.css">
+</head>
+<body data-round="index4">
+  <main class="page">
+    <header class="hero"><div class="eyebrow">Loża Ekspertów · MŚ 2026</div><h1 id="round-title"></h1><p>Wynik typujemy po 90 minutach. Dogrywka i rzuty karne nie są uwzględniane.</p><div class="status" id="status"><span class="status-dot"></span><span id="status-text"></span></div></header>
+    <section class="info"><div class="field"><label for="player">Gracz</label><select id="player"><option value="">— wybierz swoje imię —</option></select></div><div class="round-count"><strong id="match-count"></strong><span id="match-word"></span><span> · </span><span id="round-dates"></span></div></section>
+    <div class="notice">Formularz zapisuje wybór gracza i wyniki lokalnie w tej przeglądarce. Typy prześlij prywatnie organizatorowi.</div>
+    <div class="progress"><div class="progress-label"><span>Postęp typowania</span><strong id="progress-count">0 / 0</strong></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></div>
+    <section class="matches" id="matches"></section><div class="actions"><button class="copy-btn" id="copy" disabled>KOPIUJ TYPY</button></div><section class="preview" id="preview"><h2>Podgląd danych</h2><pre id="preview-text"></pre></section>
+  </main><div class="toast" id="toast"></div><script src="formularz-pucharowy.js"></script>
+</body>
+</html>
