@@ -1295,6 +1295,7 @@ const RESULTS = [
 const results = [...RESULTS];
 let API_MATCHES = [];
 let API_LAST_UPDATED = null;
+let API_DATA_READY = false;
 const DEMO_MODE = new URLSearchParams(location.search).get('demo');
 
 const API_TEAM_ALIASES = {
@@ -1336,7 +1337,7 @@ function normalizedTeamName(name){
 
 function apiMatchFor(m){
   const demoLive=DEMO_MODE==='live'&&m.home==='Meksyk'&&m.away==='RPA';
-  const demoMulti=DEMO_MODE==='multi'&&m.date==='25.06'&&m.time==='05:00';
+  const demoMulti=DEMO_MODE==='multi'&&m.date==='25.06'&&m.time==='03:00';
   const demoFinished=DEMO_MODE==='finished'&&m.home==='Meksyk'&&m.away==='RPA';
   if(demoLive||demoMulti||demoFinished){
     return {
@@ -1384,6 +1385,7 @@ async function refreshApiData(){
     const data=await response.json();
     API_MATCHES=Array.isArray(data.matches)?data.matches:[];
     API_LAST_UPDATED=data.updatedAt||null;
+    API_DATA_READY=true;
     applyApiResults();
     renderPlayerCards();
     renderMatches();
@@ -1670,12 +1672,17 @@ function matchDateTime(m){
 function matchStatus(m,idx){
   if(results[idx])return 'done';
   if(DEMO_MODE==='live'&&m.home==='Meksyk'&&m.away==='RPA')return 'live';
-  if(DEMO_MODE==='multi'&&m.date==='25.06'&&m.time==='05:00')return 'live';
+  if(DEMO_MODE==='multi'&&m.date==='25.06'&&m.time==='03:00')return 'live';
   const api=apiMatchFor(m);
   if(api?.status==='FINISHED')return 'done';
+  if(['IN_PLAY','PAUSED','LIVE'].includes(api?.status))return 'live';
   const diff=Date.now()-matchDateTime(m).getTime();
-  if(diff>=0)return 'live';
-  return 'soon';
+  if(diff<0)return 'soon';
+  if(!API_DATA_READY)return 'waiting';
+  // Awaryjnie uznajemy mecz za trwający tylko przez cztery godziny od rozpoczęcia.
+  // Zapobiega to powrotowi zakończonych spotkań do rotacji przy opóźnieniu API.
+  if(diff<=4*60*60*1000)return 'live';
+  return 'waiting';
 }
 
 // Formatuje pozostały czas do meczu
