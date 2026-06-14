@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-14T00:11:13.575Z",
+  "updatedAt": "2026-06-14T01:06:18.670Z",
   "matches": [
     {
       "id": 537327,
@@ -136,7 +136,7 @@
     {
       "id": 537340,
       "utcDate": "2026-06-14T01:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Haiti",
         "shortName": "Haiti",
@@ -149,11 +149,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-13T00:20:14Z"
+      "lastUpdated": "2026-06-14T01:05:59Z"
     },
     {
       "id": 537346,
