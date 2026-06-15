@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T00:08:14.143Z",
+  "updatedAt": "2026-06-15T00:09:13.765Z",
   "matches": [
     {
       "id": 537327,
@@ -189,7 +189,7 @@
       "awayTeam": {
         "name": "Curaçao",
         "shortName": "Curaçao",
-        "tla": "CUR"
+        "tla": "CUW"
       },
       "score": {
         "fullTime": {
@@ -224,7 +224,7 @@
     {
       "id": 537352,
       "utcDate": "2026-06-14T23:00:00Z",
-      "status": "SCHEDULED",
+      "status": "TIMED",
       "homeTeam": {
         "name": "Ivory Coast",
         "shortName": "Ivory Coast",
