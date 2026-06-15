@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T16:48:16.501Z",
+  "updatedAt": "2026-06-15T16:49:24.933Z",
   "matches": [
     {
       "id": 537327,
@@ -189,7 +189,7 @@
       "awayTeam": {
         "name": "Curaçao",
         "shortName": "Curaçao",
-        "tla": "CUW"
+        "tla": "CUR"
       },
       "score": {
         "fullTime": {
@@ -285,7 +285,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-15T16:47:46Z"
+      "lastUpdated": "2026-06-15T16:48:58Z"
     },
     {
       "id": 537363,
