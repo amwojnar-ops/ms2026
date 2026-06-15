@@ -2303,7 +2303,7 @@ function knockoutDate(utcDate){
 }
 function knockoutDeadline(firstMatchUtc){
   if(!firstMatchUtc)return null;
-  return new Date(Date.parse(firstMatchUtc)-30*60*1000);
+  return new Date(Date.parse(firstMatchUtc)-120*60*1000);
 }
 function knockoutDeadlineLabel(deadline){
   if(!deadline)return LANG==='en'?'Deadline will appear when the schedule is known.':'Termin pojawi się po ustaleniu terminarza.';
