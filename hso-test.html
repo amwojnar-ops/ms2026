@@ -2303,14 +2303,7 @@ function knockoutDate(utcDate){
 }
 function knockoutDeadline(firstMatchUtc){
   if(!firstMatchUtc)return null;
-  const parts=new Intl.DateTimeFormat('en-CA',{
-    timeZone:'Europe/Warsaw',year:'numeric',month:'2-digit',day:'2-digit'
-  }).formatToParts(new Date(firstMatchUtc)).reduce((out,part)=>{
-    if(part.type!=='literal')out[part.type]=Number(part.value);
-    return out;
-  },{});
-  // Wszystkie rundy MŚ 2026 przypadają podczas czasu CEST (UTC+2).
-  return new Date(Date.UTC(parts.year,parts.month-1,parts.day-1,21,59,59));
+  return new Date(Date.parse(firstMatchUtc)-30*60*1000);
 }
 function knockoutDeadlineLabel(deadline){
   if(!deadline)return LANG==='en'?'Deadline will appear when the schedule is known.':'Termin pojawi się po ustaleniu terminarza.';
@@ -2364,11 +2357,10 @@ function renderKnockout(){
   const formMatches=activeRound.form==='hso-typowanie1.html'
     ? allMatches.slice(30,32)
     : roundMatches;
-  const formAllKnown=formMatches.length===(activeRound.form==='hso-typowanie1.html'?2:activeRound.count)
-    &&formMatches.every(match=>match.homeTeam?.name&&match.awayTeam?.name);
+  const formKnownPairs=formMatches.filter(match=>match.homeTeam?.name&&match.awayTeam?.name).length;
   const deadline=knockoutDeadline(formMatches[0]?.utcDate);
   const beforeDeadline=!deadline||Date.now()<=deadline.getTime();
-  const formReady=formAllKnown&&beforeDeadline;
+  const formReady=formKnownPairs>0&&beforeDeadline;
 
   document.getElementById('koEyebrow').textContent=LANG==='en'?'Road to the final':'Droga do finału';
   document.getElementById('koTitle').textContent=LANG==='en'?'Knockout stage':'Faza pucharowa';
@@ -2426,18 +2418,18 @@ function renderKnockout(){
     ? (LANG==='en'
       ? 'The prediction deadline for this stage has passed.'
       : 'Termin typowania tej rundy minął.')
-    : formAllKnown
+    : formKnownPairs>0
       ? (LANG==='en'
-      ? 'Open the round form, enter every prediction and send the copied text exactly as in the group-stage form.'
-      : 'Otwórz formularz rundy, wpisz wszystkie typy i prześlij skopiowany tekst dokładnie tak jak w formularzu fazy grupowej.')
+      ? 'You can start with the confirmed fixtures. Earlier predictions stay saved when more fixtures are added.'
+      : 'Możesz rozpocząć od potwierdzonych par. Wcześniejsze typy pozostaną zapisane po dodaniu kolejnych meczów.')
       : (LANG==='en'
-        ? 'The round form will become available after every fixture in this stage is known.'
-        : 'Formularz rundy zostanie udostępniony po poznaniu wszystkich par tego etapu.');
+        ? 'The round form will become available as soon as the first fixture is known.'
+        : 'Formularz rundy zostanie udostępniony po poznaniu pierwszej pary tego etapu.');
   document.getElementById('koDeadline').textContent=(LANG==='en'?'Deadline: ':'Termin typowania: ')+knockoutDeadlineLabel(deadline);
   const actionBtn=document.getElementById('koActionBtn');
   actionBtn.textContent=!beforeDeadline
     ? (LANG==='en'?'Predictions closed':'Typowanie zamknięte')
-    : formAllKnown
+    : formKnownPairs>0
     ? (LANG==='en'?'Open prediction form':'Otwórz formularz typowania')
     : (LANG==='en'?'Waiting for teams':'Oczekiwanie na drużyny');
   actionBtn.href=formReady?activeRound.form:'#';

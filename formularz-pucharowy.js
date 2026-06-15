@@ -36,10 +36,11 @@ const API_TO_PL = {
 const pageKey = document.body.dataset.round;
 const config = ROUND_CONFIG[pageKey];
 const storageKey = `ms2026_${config.key}_typy`;
+const PREDICTION_LOCK_MINUTES = 30;
 let roundMatches = [];
 let selects = [];
 let roundDeadline = null;
-let roundTeamsReady = false;
+let knownPairCount = 0;
 
 function knockoutMatches(matches) {
   return matches
@@ -71,14 +72,7 @@ function formatDate(utcDate) {
 
 function deadlineFromFirstMatch(utcDate) {
   if (!utcDate) return null;
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Europe/Warsaw", year: "numeric", month: "2-digit", day: "2-digit"
-  }).formatToParts(new Date(utcDate)).reduce((result, part) => {
-    if (part.type !== "literal") result[part.type] = Number(part.value);
-    return result;
-  }, {});
-  // Rundy odbywają się podczas czasu CEST (UTC+2).
-  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day - 1, 21, 59, 59));
+  return new Date(Date.parse(utcDate) - PREDICTION_LOCK_MINUTES * 60 * 1000);
 }
 
 function deadlineLabel(deadline) {
@@ -99,9 +93,10 @@ function buildPlayerSelect() {
   });
 }
 
-function scoreSelect(index, side, locked) {
+function scoreSelect(index, slotId, side, locked) {
   const select = document.createElement("select");
   select.dataset.index = index;
+  select.dataset.slotId = slotId;
   select.dataset.side = side;
   select.disabled = locked;
   select.innerHTML = '<option value="">–</option>' +
@@ -123,17 +118,21 @@ function renderMatches() {
   const container = document.getElementById("matches");
   container.innerHTML = "";
   selects = [];
-  const allKnown = roundMatches.length === config.count &&
-    roundMatches.every(match => match.homeTeam?.name && match.awayTeam?.name);
-  roundTeamsReady = allKnown;
+  const beforeDeadline = !roundDeadline || Date.now() <= roundDeadline.getTime();
+  knownPairCount = roundMatches.filter(match =>
+    match.homeTeam?.name && match.awayTeam?.name
+  ).length;
 
   roundMatches.forEach((match, index) => {
+    const slotId = `${config.key}-${index + 1}`;
     const homeKnown = Boolean(match.homeTeam?.name);
     const awayKnown = Boolean(match.awayTeam?.name);
-    const locked = !allKnown;
+    const pairKnown = homeKnown && awayKnown;
+    const locked = !pairKnown || !beforeDeadline;
     const date = formatDate(match.utcDate);
     const row = document.createElement("div");
     row.className = `match${locked ? " locked" : ""}`;
+    row.dataset.slotId = slotId;
 
     const time = document.createElement("div");
     time.className = "match-time";
@@ -153,18 +152,18 @@ function renderMatches() {
 
     const score = document.createElement("div");
     score.className = "score";
-    const home = scoreSelect(index, "home", locked);
-    const away = scoreSelect(index, "away", locked);
+    const home = scoreSelect(index, slotId, "home", locked);
+    const away = scoreSelect(index, slotId, "away", locked);
     score.append(home, Object.assign(document.createElement("span"), {
       className: "score-sep", textContent: "–"
     }), away);
 
     row.append(time, teams, score);
     container.appendChild(row);
-    selects.push({ home, away, row });
+    selects.push({ home, away, row, slotId, pairKnown });
   });
 
-  setAvailability(allKnown);
+  setAvailability();
   loadState();
   updateRows();
 }
@@ -178,20 +177,22 @@ function placeholderMatches() {
   }));
 }
 
-function setAvailability(teamsReady) {
+function setAvailability() {
   const beforeDeadline = !roundDeadline || Date.now() <= roundDeadline.getTime();
-  const ready = teamsReady && beforeDeadline;
+  const allKnown = knownPairCount === config.count;
+  const anyKnown = knownPairCount > 0;
+  const readyToSend = allKnown && beforeDeadline;
   const status = document.getElementById("status");
-  status.classList.toggle("ready", ready);
+  status.classList.toggle("ready", anyKnown && beforeDeadline);
   document.getElementById("status-text").textContent = !beforeDeadline
     ? "Termin minął · typowanie zamknięte"
-    : ready
-      ? `Formularz aktywny · termin ${deadlineLabel(roundDeadline)}`
-      : `Oczekiwanie na wszystkie drużyny · termin ${deadlineLabel(roundDeadline)}`;
-  document.getElementById("copy").disabled = !ready;
-  selects.forEach(({ home, away }) => {
-    home.disabled = !ready;
-    away.disabled = !ready;
+    : anyKnown
+      ? `Dostępne pary: ${knownPairCount}/${config.count} · termin ${deadlineLabel(roundDeadline)}`
+      : `Oczekiwanie na pierwszą parę · termin ${deadlineLabel(roundDeadline)}`;
+  document.getElementById("copy").disabled = !readyToSend;
+  selects.forEach(({ home, away, pairKnown }) => {
+    home.disabled = !pairKnown || !beforeDeadline;
+    away.disabled = !pairKnown || !beforeDeadline;
   });
 }
 
@@ -217,7 +218,10 @@ async function loadMatches() {
 function saveState() {
   const data = {
     player: document.getElementById("player").value,
-    scores: selects.map(({ home, away }) => ({ home: home.value, away: away.value }))
+    scores: Object.fromEntries(selects.map(({ slotId, home, away }) => [
+      slotId,
+      { home: home.value, away: away.value }
+    ]))
   };
   try { localStorage.setItem(storageKey, JSON.stringify(data)); } catch (_) {}
 }
@@ -227,12 +231,16 @@ function loadState() {
   try { data = JSON.parse(localStorage.getItem(storageKey)); } catch (_) {}
   if (!data) return;
   document.getElementById("player").value = PLAYERS.includes(data.player) ? data.player : "";
-  (data.scores || []).forEach((score, index) => {
-    if (!selects[index]) return;
-    selects[index].home.value = score.home ?? "";
-    selects[index].away.value = score.away ?? "";
-    selects[index].home.classList.toggle("set", selects[index].home.value !== "");
-    selects[index].away.classList.toggle("set", selects[index].away.value !== "");
+  selects.forEach(({ slotId, home, away }, index) => {
+    // Obsługa starszego zapisu tablicowego oraz nowego zapisu po stałym ID meczu.
+    const score = Array.isArray(data.scores)
+      ? data.scores[index]
+      : data.scores?.[slotId];
+    if (!score) return;
+    home.value = score.home ?? "";
+    away.value = score.away ?? "";
+    home.classList.toggle("set", home.value !== "");
+    away.classList.toggle("set", away.value !== "");
   });
 }
 
@@ -423,5 +431,5 @@ buildPlayerSelect();
 addFinalActions();
 loadMatches();
 setInterval(() => {
-  if (roundMatches.length) setAvailability(roundTeamsReady);
+  if (roundMatches.length) setAvailability();
 }, 60 * 1000);
