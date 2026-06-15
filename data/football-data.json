@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-15T00:09:13.765Z",
+  "updatedAt": "2026-06-15T00:16:14.673Z",
   "matches": [
     {
       "id": 537327,
@@ -224,7 +224,7 @@
     {
       "id": 537352,
       "utcDate": "2026-06-14T23:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Ivory Coast",
         "shortName": "Ivory Coast",
@@ -241,7 +241,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-14T23:58:32Z"
+      "lastUpdated": "2026-06-15T00:15:31Z"
     },
     {
       "id": 537358,
