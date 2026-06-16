@@ -972,7 +972,7 @@ header::after {
       <aside class="ko-side">
         <section class="ko-action">
           <h3 id="koActionTitle">Typowanie rundy</h3>
-          <p id="koActionCopy">Formularz zostanie odblokowany, gdy poznamy wszystkie pary tego etapu.</p>
+          <p id="koActionCopy">Formularz zostanie odblokowany po poznaniu pierwszej pary tego etapu.</p>
           <p class="ko-progress-note" id="koDeadline">Termin pojawi się po ustaleniu terminarza.</p>
           <a class="ko-action-btn" id="koActionBtn" href="#" aria-disabled="true">Oczekiwanie na drużyny</a>
         </section>
@@ -2315,12 +2315,34 @@ const KNOCKOUT_ROUNDS = [
   {id:'third', pl:'3. miejsce', en:'Third place', count:1, start:30, form:'hso-typowanie1.html'},
   {id:'final', pl:'Finał', en:'Final', count:1, start:31, form:'hso-typowanie1.html'}
 ];
+const KNOCKOUT_FALLBACK_DATES = [
+  '2026-06-28T19:00:00Z','2026-06-29T17:00:00Z','2026-06-29T20:30:00Z','2026-06-30T01:00:00Z',
+  '2026-06-30T17:00:00Z','2026-06-30T21:00:00Z','2026-07-01T01:00:00Z','2026-07-01T16:00:00Z',
+  '2026-07-01T20:00:00Z','2026-07-02T00:00:00Z','2026-07-02T19:00:00Z','2026-07-02T23:00:00Z',
+  '2026-07-03T03:00:00Z','2026-07-03T18:00:00Z','2026-07-03T22:00:00Z','2026-07-04T01:30:00Z',
+  '2026-07-04T17:00:00Z','2026-07-04T21:00:00Z','2026-07-05T20:00:00Z','2026-07-06T00:00:00Z',
+  '2026-07-06T19:00:00Z','2026-07-07T00:00:00Z','2026-07-07T16:00:00Z','2026-07-07T20:00:00Z',
+  '2026-07-09T20:00:00Z','2026-07-10T19:00:00Z','2026-07-11T21:00:00Z','2026-07-12T01:00:00Z',
+  '2026-07-14T19:00:00Z','2026-07-15T19:00:00Z','2026-07-18T21:00:00Z','2026-07-19T19:00:00Z'
+];
 let selectedKnockoutRound = 0;
 
+function knockoutPlaceholderMatch(utcDate,index){
+  return {
+    id:`ko-fallback-${index+1}`,
+    utcDate,
+    status:'TIMED',
+    homeTeam:{name:null,shortName:null,tla:null},
+    awayTeam:{name:null,shortName:null,tla:null},
+    score:{fullTime:{home:null,away:null}},
+    fallback:true
+  };
+}
 function knockoutMatches(){
-  return API_MATCHES
+  const matches = API_MATCHES
     .filter(match => Date.parse(match.utcDate) >= Date.parse('2026-06-28T19:00:00Z'))
     .sort((a,b) => Date.parse(a.utcDate)-Date.parse(b.utcDate));
+  return matches.length ? matches : KNOCKOUT_FALLBACK_DATES.map(knockoutPlaceholderMatch);
 }
 function knockoutRoundName(round){
   return LANG==='en' ? round.en : round.pl;
