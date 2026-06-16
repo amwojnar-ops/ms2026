@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T00:09:13.829Z",
+  "updatedAt": "2026-06-16T00:10:28.673Z",
   "matches": [
     {
       "id": 537327,
@@ -312,7 +312,7 @@
     {
       "id": 537370,
       "utcDate": "2026-06-15T22:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Saudi Arabia",
         "shortName": "Saudi Arabia",
@@ -329,7 +329,7 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-16T00:09:04Z"
+      "lastUpdated": "2026-06-16T00:09:30Z"
     },
     {
       "id": 537364,
