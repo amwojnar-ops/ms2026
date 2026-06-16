@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T19:03:24.537Z",
+  "updatedAt": "2026-06-16T19:06:25.009Z",
   "matches": [
     {
       "id": 537327,
@@ -356,7 +356,7 @@
     {
       "id": 537391,
       "utcDate": "2026-06-16T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "France",
         "shortName": "France",
@@ -369,11 +369,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-15T15:20:14Z"
+      "lastUpdated": "2026-06-16T19:06:13Z"
     },
     {
       "id": 537392,
