@@ -38,6 +38,7 @@ const config = ROUND_CONFIG[pageKey];
 const storageKey = `ms2026_${config.key}_typy`;
 const PREDICTION_LOCK_MINUTES = 120;
 let roundMatches = [];
+let sourceMatches = [];
 let selects = [];
 let roundDeadline = null;
 let knownPairCount = 0;
@@ -55,6 +56,71 @@ function teamName(team) {
 
 function teamCode(team) {
   return team?.tla || "?";
+}
+
+function teamKey(team) {
+  const source = team?.tla || team?.name || team?.shortName || "";
+  return source.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, "");
+}
+
+function finishedMatchScore(match) {
+  const score = match?.score?.fullTime;
+  return Number.isInteger(score?.home) && Number.isInteger(score?.away)
+    ? score
+    : null;
+}
+
+function teamHistory(team, beforeUtcDate) {
+  const key = teamKey(team);
+  if (!key) return [];
+  const before = beforeUtcDate ? Date.parse(beforeUtcDate) : Infinity;
+  return sourceMatches
+    .filter(match => {
+      if (match.status !== "FINISHED") return false;
+      if (!finishedMatchScore(match)) return false;
+      if (Date.parse(match.utcDate) >= before) return false;
+      return teamKey(match.homeTeam) === key || teamKey(match.awayTeam) === key;
+    })
+    .sort((a, b) => Date.parse(a.utcDate) - Date.parse(b.utcDate));
+}
+
+function historyRow(match, team) {
+  const score = finishedMatchScore(match);
+  const homeSide = teamKey(match.homeTeam) === teamKey(team);
+  const opponent = homeSide ? match.awayTeam : match.homeTeam;
+  const teamGoals = homeSide ? score.home : score.away;
+  const opponentGoals = homeSide ? score.away : score.home;
+  const resultClass = teamGoals > opponentGoals
+    ? "win"
+    : teamGoals < opponentGoals
+      ? "loss"
+      : "draw";
+  const date = formatDate(match.utcDate);
+  return `<div class="history-match ${resultClass}">
+    <span class="history-date">${date.date}</span>
+    <span class="history-opponent">${homeSide ? "vs" : "z"} ${teamName(opponent)}</span>
+    <strong class="history-score">${teamGoals}–${opponentGoals}</strong>
+  </div>`;
+}
+
+function buildHistoryColumn(team, matches) {
+  const rows = matches.map(match => historyRow(match, team)).join("");
+  return `<div class="history-column">
+    <div class="history-team"><span>${teamCode(team)}</span>${teamName(team)}</div>
+    ${rows || '<div class="history-empty">Brak zakończonych meczów tej drużyny.</div>'}
+  </div>`;
+}
+
+function buildMatchHistory(match) {
+  const homeHistory = teamHistory(match.homeTeam, match.utcDate);
+  const awayHistory = teamHistory(match.awayTeam, match.utcDate);
+  return `<div class="match-history" hidden>
+    ${buildHistoryColumn(match.homeTeam, homeHistory)}
+    ${buildHistoryColumn(match.awayTeam, awayHistory)}
+  </div>`;
 }
 
 function formatDate(utcDate) {
@@ -133,10 +199,11 @@ function renderMatches() {
     const row = document.createElement("div");
     row.className = `match${locked ? " locked" : ""}`;
     row.dataset.slotId = slotId;
+    if (pairKnown) row.classList.add("expandable");
 
     const time = document.createElement("div");
     time.className = "match-time";
-    time.innerHTML = `<strong>${roundLabel(index)}</strong>${date.date} · ${date.time}`;
+    time.innerHTML = `<strong>${roundLabel(index)}</strong>${date.date} · ${date.time}<span class="match-more">Historia ↓</span>`;
 
     const teams = document.createElement("div");
     teams.className = "teams";
@@ -158,7 +225,20 @@ function renderMatches() {
       className: "score-sep", textContent: "–"
     }), away);
 
+    const history = document.createElement("div");
+    history.innerHTML = pairKnown ? buildMatchHistory(match) : "";
+    const historyNode = history.firstElementChild;
+
     row.append(time, teams, score);
+    if (historyNode) row.appendChild(historyNode);
+    row.addEventListener("click", event => {
+      if (!pairKnown || event.target.closest("select")) return;
+      const details = row.querySelector(".match-history");
+      if (!details) return;
+      const open = !details.hidden;
+      details.hidden = open;
+      row.classList.toggle("expanded", !open);
+    });
     container.appendChild(row);
     selects.push({ home, away, row, slotId, pairKnown });
   });
@@ -201,7 +281,8 @@ async function loadMatches() {
     const response = await fetch("data/football-data.json", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    const all = knockoutMatches(Array.isArray(data.matches) ? data.matches : []);
+    sourceMatches = Array.isArray(data.matches) ? data.matches : [];
+    const all = knockoutMatches(sourceMatches);
     roundMatches = all.slice(config.start, config.start + config.count);
   } catch (error) {
     console.warn("Nie udało się pobrać par:", error);
