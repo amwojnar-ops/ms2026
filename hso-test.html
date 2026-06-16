@@ -908,8 +908,8 @@ header::after {
 
 <div id="tab-mecze" style="display:none">
   <div class="subtabs">
-    <button class="subtab active" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
-    <button class="subtab" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
+    <button class="subtab active" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
+    <button class="subtab" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
   </div>
   <div id="matches-content"></div>
 </div>
@@ -1978,7 +1978,7 @@ function renderRanking(){
   });
 }
 
-let _matchView = 'grupy';
+let _matchView = 'daty';
 let expandedMatchIdx = null;
 
 function switchMatchView(view, el){
@@ -1986,6 +1986,34 @@ function switchMatchView(view, el){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   renderMatches();
+  if(view==='daty')scrollToRelevantMatch();
+}
+
+function setMatchSubtabState(){
+  document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
+  const active=document.getElementById(_matchView==='daty'?'subtab-daty':'subtab-grupy');
+  if(active)active.classList.add('active');
+}
+
+function relevantMatchIndex(){
+  const ordered=MATCHES.map((m,idx)=>({...m,idx}))
+    .sort((a,b)=>matchDateTime(a)-matchDateTime(b));
+  const active=ordered.find(m=>['live','waiting'].includes(matchStatus(m,m.idx)));
+  if(active)return active.idx;
+  const next=ordered.find(m=>matchStatus(m,m.idx)!=='done');
+  return next?next.idx:null;
+}
+
+function scrollToRelevantMatch(){
+  if(_matchView!=='daty')return;
+  const tab=document.getElementById('tab-mecze');
+  if(!tab||tab.style.display==='none')return;
+  const idx=relevantMatchIndex();
+  if(idx==null)return;
+  requestAnimationFrame(()=>{
+    const tile=document.querySelector(`[data-match-idx="${idx}"]`);
+    if(tile)tile.scrollIntoView({behavior:'smooth',block:'center'});
+  });
 }
 
 function buildTile(m, gcVar){
@@ -1993,6 +2021,7 @@ function buildTile(m, gcVar){
   const status=matchStatus(m,m.idx);
   const tile=document.createElement('div');
   tile.className=`tile ${status}`;
+  tile.dataset.matchIdx=m.idx;
   tile.style.setProperty('--g-color',`var(${gcVar||'--muted'})`);
   let sHTML='';
   if(status==='done')         sHTML=`<span class="dot dot-done"></span><span style="color:var(--red);font-weight:600">${tr('finished')}</span>`;
@@ -2067,6 +2096,7 @@ function renderMatches(){
   const cont=document.getElementById('matches-content');
   if(!cont) return;
   cont.innerHTML='';
+  setMatchSubtabState();
   const GC={A:'--ga',B:'--gb',C:'--gc',D:'--gd',E:'--ge',F:'--gf',G:'--gg',H:'--gh',I:'--gi',J:'--gj',K:'--gk',L:'--gl'};
 
   if(_matchView==='grupy'){
@@ -2451,6 +2481,11 @@ function renderKnockout(){
 function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   ['gracze','mecze','ranking','pucharowa'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
+  if(tab==='mecze'){
+    _matchView='daty';
+    renderMatches();
+    scrollToRelevantMatch();
+  }
   if(tab==='pucharowa')renderKnockout();
 }
 if(DEMO_MODE)applyApiResults();
