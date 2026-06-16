@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-16T22:59:17.712Z",
+  "updatedAt": "2026-06-16T23:00:52.364Z",
   "matches": [
     {
       "id": 537327,
@@ -378,7 +378,7 @@
     {
       "id": 537392,
       "utcDate": "2026-06-16T22:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Iraq",
         "shortName": "Iraq",
@@ -395,7 +395,7 @@
           "away": 2
         }
       },
-      "lastUpdated": "2026-06-16T22:58:22Z"
+      "lastUpdated": "2026-06-16T22:59:34Z"
     },
     {
       "id": 537397,
