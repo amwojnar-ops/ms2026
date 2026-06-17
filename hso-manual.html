@@ -1682,7 +1682,7 @@ function renderPlayerCards(){
   const grid = document.getElementById('playersGrid');
   grid.innerHTML = '';
   const ranked = assignPositions(calcAll());
-  const sorted = [...ranked].sort((a, b) => a.name.localeCompare(b.name, 'pl'));
+  const sorted = ranked;
   const leaderPts = ranked[0] ? ranked[0].pts : 0;
   const hasResults = results.some(Boolean);
   const tipDotPlayers = knockoutTipDotPlayers();
