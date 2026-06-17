@@ -1669,6 +1669,13 @@ function renderRanking(){
     expTr.innerHTML=`<td colspan="7"><div class="expand-inner" id="exp-in-${p.name}"></div></td>`;
     tbody.appendChild(expTr);
   });
+  if(activePlayer){
+    if(ranked.some(p=>p.name===activePlayer)){
+      openPanel(activePlayer,ranked);
+    }else{
+      closePanel();
+    }
+  }
 }
 
 let _matchView = 'daty';
