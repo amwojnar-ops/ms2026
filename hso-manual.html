@@ -652,7 +652,7 @@ header::after {
   border-bottom: 1px solid var(--border);
 }
 .pdp-match {
-  display: grid; grid-template-columns: 40px 1fr 60px;
+  display: grid; grid-template-columns: 40px minmax(0,1fr) 42px 50px;
   gap: 6px; align-items: center;
   padding: 7px 16px; border-bottom: 0.5px solid var(--border);
   font-size: 12px;
@@ -660,11 +660,16 @@ header::after {
 .pdp-match:last-child { border-bottom: none; }
 .pdp-date { color: var(--muted); font-size: 11px; }
 .pdp-teams { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pdp-result,
 .pdp-tip {
   text-align: center;
   font-family: 'Courier New', monospace;
   font-size: 13px; font-weight: 700; color: var(--gold);
 }
+.pdp-result { color: var(--muted); }
+.pdp-result.r3 { color: var(--green); }
+.pdp-result.r1 { color: var(--amber); }
+.pdp-result.r0 { color: var(--red); }
 
 /* responsive */
 @media (max-width: 540px) {
@@ -672,6 +677,10 @@ header::after {
   .pdp-stats { grid-template-columns: repeat(2, 1fr); }
   .pdp-stat:nth-child(2) { border-right: none; }
   .pdp-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .pdp-match { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 7px 10px; font-size: 11px; }
+  .pdp-date { font-size: 10px; }
+  .pdp-result,
+  .pdp-tip { font-size: 12px; }
   .tab { padding-left: 5px; padding-right: 5px; font-size: 13px; }
   .tab.disabled {
     font-size: 0; line-height: 1.05;
@@ -1775,11 +1784,15 @@ function openPlayerPanel(p){
 
     ms.forEach(m => {
       const tip = p.tips[m.idx+1] || '—';
+      const result = results[m.idx] || '—';
+      const score = results[m.idx] ? sc(tip, results[m.idx]) : null;
+      const resultClass = score === 3 ? 'r3' : score === 1 ? 'r1' : score === 0 ? 'r0' : '';
       const row = document.createElement('div');
       row.className = 'pdp-match';
       row.innerHTML = `
         <span class="pdp-date">${m.date}</span>
         <span class="pdp-teams">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
+        <span class="pdp-result ${resultClass}">${result}</span>
         <span class="pdp-tip">${tip}</span>`;
       cont.appendChild(row);
     });
