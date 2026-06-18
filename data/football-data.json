@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T16:56:19.495Z",
+  "updatedAt": "2026-06-18T17:11:35.471Z",
   "matches": [
     {
       "id": 537327,
@@ -532,7 +532,7 @@
     {
       "id": 537329,
       "utcDate": "2026-06-18T16:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Czechia",
         "shortName": "Czechia",
@@ -549,7 +549,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-18T16:56:04Z"
+      "lastUpdated": "2026-06-18T17:11:18Z"
     },
     {
       "id": 537335,
