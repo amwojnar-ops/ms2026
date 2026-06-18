@@ -1469,6 +1469,15 @@ function apiResult(api){
   return Number.isInteger(score?.home)&&Number.isInteger(score?.away)
     ? `${score.home}-${score.away}` : null;
 }
+function apiLiveScore(api){
+  const candidates=[
+    api?.score?.fullTime,
+    api?.score?.regularTime,
+    api?.score?.halfTime
+  ];
+  const score=candidates.find(s=>Number.isInteger(s?.home)&&Number.isInteger(s?.away));
+  return score||{home:0,away:0};
+}
 
 function applyApiResults(){
   let cacheChanged=false;
@@ -1833,9 +1842,9 @@ function nextMatchHTML(m){
   const status=matchStatus(m,m.idx);
   const api=apiMatchFor(m);
   if(status==='live'){
-    const score=api?.score?.fullTime;
-    const homeScore=Number.isInteger(score?.home)?score.home:'–';
-    const awayScore=Number.isInteger(score?.away)?score.away:'–';
+    const score=apiLiveScore(api);
+    const homeScore=score.home;
+    const awayScore=score.away;
     return `<span class="live-summary">
       <span class="live-summary-status"><span class="dot dot-live"></span>${tr('live')}</span>
       <span class="live-summary-team">
@@ -2114,7 +2123,10 @@ function buildTile(m, gcVar){
   else                        sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">${tr('soon')} · ${m.date} ${m.time}</span>`;
   let scHTML='';
   if(r){const[h,a]=r.split('-');scHTML=`<div class="t-score"><span>${h}</span><span class="sep">–</span><span>${a}</span></div>`;}
-  else if(status==='live') scHTML=`<div class="t-live-badge">${tr('live')}</div>`;
+  else if(status==='live'){
+    const score=apiLiveScore(apiMatchFor(m));
+    scHTML=`<div class="t-score"><span>${score.home}</span><span class="sep">–</span><span>${score.away}</span></div>`;
+  }
   else scHTML=`<div class="t-vs">VS</div>`;
   let fHTML='';
   if(status==='done'&&r){
