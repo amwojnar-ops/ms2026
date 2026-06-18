@@ -2372,9 +2372,22 @@ function renderPlayerCards(){
     });
     grid.appendChild(card);
   });
+
+  if(activePlayerCard){
+    const active=PLAYERS.find(p=>p.name===activePlayerCard);
+    if(active){
+      openPlayerPanel(active,false);
+      document.querySelectorAll('.fifa-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.name === activePlayerCard);
+      });
+    }
+  }
 }
 
-function openPlayerPanel(p){
+function openPlayerPanel(p, scroll=true){
+  const panel = document.getElementById('playerDetailPanel');
+  const phaseStates = !scroll ? [...panel.querySelectorAll('.pdp-phase')].map(el=>el.classList.contains('open')) : null;
+  const subsectionStates = !scroll ? [...panel.querySelectorAll('.pdp-subsection')].map(el=>el.classList.contains('open')) : null;
   activePlayerCard = p.name;
   document.getElementById('pdpName').textContent = p.name;
   document.getElementById('pdpSub').textContent = '';
@@ -2388,10 +2401,13 @@ function openPlayerPanel(p){
 
   const cont = document.getElementById('pdpMatches');
   cont.innerHTML = buildPlayerPhases(p);
+  if(!scroll){
+    document.querySelectorAll('#pdpMatches .pdp-phase').forEach((el,i)=>el.classList.toggle('open', phaseStates?.[i] ?? el.classList.contains('open')));
+    document.querySelectorAll('#pdpMatches .pdp-subsection').forEach((el,i)=>el.classList.toggle('open', subsectionStates?.[i] ?? el.classList.contains('open')));
+  }
 
-  const panel = document.getElementById('playerDetailPanel');
   panel.classList.add('open');
-  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  if(scroll)panel.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
 function closePlayerPanel(){
