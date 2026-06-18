@@ -1721,7 +1721,7 @@ function rankingCompletedItems(p){
     if(!r)return null;
     const m=MATCHES[i], tip=p.tips[i+1]||'—', pts=sc(tip,r);
     return {m,idx:i,result:r,tip,pts};
-  }).filter(Boolean).sort((a,b)=>matchDateTime(b.m)-matchDateTime(a.m));
+  }).filter(Boolean);
 }
 
 function rankingHistoryRows(items){
@@ -1737,34 +1737,11 @@ function rankingHistoryRows(items){
   }).join('');
 }
 
-function toggleFullRankingHistory(button){
-  const wrap=button.closest('.sp-history-wrap');
-  const full=wrap?.querySelector('.sp-full-history');
-  if(!full)return;
-  const open=full.classList.toggle('open');
-  button.textContent=open
-    ? (LANG==='en'?'Hide full history':'Ukryj pełną historię')
-    : (LANG==='en'?'Show full history':'Pokaż pełną historię');
-}
-
 function buildSpRows(p){
   const items=rankingCompletedItems(p);
-  const recent=items.slice(0,5);
-  const recentLabel=LANG==='en'?'Recent completed matches':'Ostatnie rozegrane mecze';
-  const fullLabel=LANG==='en'?'Full group-stage history':'Pełna historia fazy grupowej';
   const empty=LANG==='en'?'No completed matches yet.':'Brak rozegranych meczów.';
-  const koEmpty=LANG==='en'
-    ? 'Knockout points will appear here after knockout matches are played.'
-    : 'Punkty fazy pucharowej pojawią się tutaj po rozegraniu jej meczów.';
-  return `<div class="pdp-subsection-lbl">${recentLabel}</div>
-    <div class="sp-hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>
-    ${rankingHistoryRows(recent)||`<div class="pdp-empty">${empty}</div>`}
-    <div class="sp-history-wrap">
-      ${items.length>5?`<div class="sp-actions"><button class="sp-more-btn" type="button" onclick="toggleFullRankingHistory(this)">${LANG==='en'?'Show full history':'Pokaż pełną historię'}</button></div>
-      <div class="sp-full-history"><div class="pdp-subsection-lbl">${fullLabel}</div>${rankingHistoryRows(items)}</div>`:''}
-    </div>
-    <div class="pdp-subsection-lbl">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</div>
-    <div class="pdp-empty">${koEmpty}</div>`;
+  return `<div class="sp-hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>
+    ${rankingHistoryRows(items)||`<div class="pdp-empty">${empty}</div>`}`;
 }
 function buildExpRows(p){
   return buildSpRows(p);
