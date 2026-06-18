@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-18T21:30:33.654Z",
+  "updatedAt": "2026-06-18T22:06:16.034Z",
   "matches": [
     {
       "id": 537327,
@@ -576,7 +576,7 @@
     {
       "id": 537336,
       "utcDate": "2026-06-18T22:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Canada",
         "shortName": "Canada",
@@ -589,11 +589,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-18T21:10:00Z"
+      "lastUpdated": "2026-06-18T22:05:44Z"
     },
     {
       "id": 537330,
