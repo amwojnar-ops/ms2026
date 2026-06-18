@@ -661,11 +661,20 @@ header::after {
   border-bottom: 1px solid var(--border);
 }
 .pdp-subsection-lbl {
+  display: grid; grid-template-columns: 40px minmax(0,1fr) 42px 50px;
+  gap: 6px; align-items: center;
   padding: 8px 16px 4px;
   font-size: 9px; font-weight: 700; letter-spacing: .08em;
   text-transform: uppercase; color: var(--gold);
   background: rgba(255,255,255,.018);
   border-bottom: 1px solid var(--border);
+}
+.pdp-subsection-lbl-title { grid-column: 1 / 3; }
+.pdp-subsection-col {
+  color: var(--muted);
+  font-size: 8px;
+  letter-spacing: .06em;
+  text-align: center;
 }
 .pdp-subsection { border-bottom: 1px solid var(--border); }
 .pdp-subsection-toggle {
@@ -729,20 +738,25 @@ header::after {
   .pdp-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
   .pdp-match { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 7px 10px; font-size: 11px; }
   .pdp-cols { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 6px 10px 5px; font-size: 8px; }
+  .pdp-subsection-lbl { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 8px 10px 5px; }
+  .pdp-subsection-col { font-size: 7px; }
   .pdp-date { font-size: 10px; }
   .pdp-result,
   .pdp-tip { font-size: 12px; }
   .subtabs {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, max-content);
+    justify-content: start;
     gap: 8px;
     margin-bottom: 14px;
   }
   .subtab {
-    flex: 0 0 auto;
-    padding: 6px 11px;
+    width: max-content;
+    padding: 6px 10px;
     font-size: 12px;
     line-height: 1.1;
   }
+  #subtab-nadchodzace { grid-column: 4; }
   .tab { padding-left: 5px; padding-right: 5px; font-size: 13px; }
   .tab.disabled {
     font-size: 0; line-height: 1.05;
@@ -1257,6 +1271,13 @@ function playerPredictionMatchRow(p,m){
     <span class="pdp-tip">${tip}</span>
   </div>`;
 }
+function playerSubsectionLabel(title){
+  return `<div class="pdp-subsection-lbl">
+    <span class="pdp-subsection-lbl-title">${title}</span>
+    <span class="pdp-subsection-col">${LANG==='en'?'Result':'Wynik'}</span>
+    <span class="pdp-subsection-col">${LANG==='en'?'Tip':'Typ'}</span>
+  </div>`;
+}
 function playerPredictionRows(p,matches,emptyText){
   return matches.length
     ? matches.map(m=>playerPredictionMatchRow(p,m)).join('')
@@ -1266,9 +1287,9 @@ function playerGroupPhaseRows(p){
   const all=MATCHES.map((m,idx)=>({...m,idx}));
   const played=all.filter(m=>Boolean(results[m.idx]));
   const upcoming=all.filter(m=>!results[m.idx]);
-  return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+  return `${playerSubsectionLabel(LANG==='en'?'Played':'Rozegrane')}
     ${playerPredictionRows(p,played,LANG==='en'?'No completed matches.':'Brak rozegranych meczów.')}
-    <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>
+    ${playerSubsectionLabel(LANG==='en'?'Upcoming':'Nadchodzące')}
     ${playerPredictionRows(p,upcoming,LANG==='en'?'No upcoming matches.':'Brak nadchodzących meczów.')}`;
 }
 function playerKnockoutPhaseRows(p){
@@ -1276,9 +1297,9 @@ function playerKnockoutPhaseRows(p){
     .filter(match=>match.home&&match.away)
     .map((match,index)=>({round,match,key:match.id||String(index)})));
   if(!matches.length){
-    return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+    return `${playerSubsectionLabel(LANG==='en'?'Played':'Rozegrane')}
       <div class="pdp-empty">${LANG==='en'?'No completed knockout matches.':'Brak rozegranych meczów pucharowych.'}</div>
-      <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>
+      ${playerSubsectionLabel(LANG==='en'?'Upcoming':'Nadchodzące')}
       <div class="pdp-empty">${LANG==='en'?'Knockout fixtures are not known yet.':'Pary fazy pucharowej nie są jeszcze znane.'}</div>`;
   }
   const played=matches.filter(({match})=>match.result);
@@ -1295,9 +1316,9 @@ function playerKnockoutPhaseRows(p){
       <span class="pdp-tip">${tip}</span>
     </div>`;
   };
-  return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+  return `${playerSubsectionLabel(LANG==='en'?'Played':'Rozegrane')}
     ${played.length?played.map(row).join(''):`<div class="pdp-empty">${LANG==='en'?'No completed knockout matches.':'Brak rozegranych meczów pucharowych.'}</div>`}
-    <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>
+    ${playerSubsectionLabel(LANG==='en'?'Upcoming':'Nadchodzące')}
     ${upcoming.length?upcoming.map(row).join(''):`<div class="pdp-empty">${LANG==='en'?'No upcoming knockout matches.':'Brak nadchodzących meczów pucharowych.'}</div>`}`;
 }
 function togglePlayerPhase(button){
