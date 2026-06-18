@@ -302,6 +302,7 @@ header::after {
 }
 .subtab:hover { color: var(--text); border-color: rgba(255,255,255,.2); }
 .subtab.active { background: var(--card); color: #fff; border-color: rgba(232,184,75,.4); }
+.subtab-muted { opacity: .85; }
 .section-lbl {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 11px; font-weight: 600; letter-spacing: .1em;
@@ -496,6 +497,14 @@ header::after {
 .sp-p1 { color: var(--amber); font-weight: 600; }
 .sp-p0 { color: var(--red); }
 .sp-pq { color: var(--muted); }
+.sp-actions { padding: 10px 14px; border-top: 1px solid var(--border); background: rgba(255,255,255,.015); }
+.sp-more-btn {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 7px;
+  background: var(--surface); color: #fff; cursor: pointer; font-size: 11px; font-weight: 700;
+}
+.sp-more-btn:hover { border-color: rgba(232,184,75,.45); color: var(--gold); }
+.sp-full-history { display: none; }
+.sp-full-history.open { display: block; }
 
 /* admin panel */
 .admin-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
@@ -660,6 +669,14 @@ header::after {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
+.pdp-subsection-lbl {
+  padding: 8px 16px 4px;
+  font-size: 9px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--gold);
+  background: rgba(255,255,255,.018);
+  border-bottom: 1px solid var(--border);
+}
+.pdp-empty { padding: 10px 16px; color: var(--muted); font-size: 11px; border-bottom: 1px solid var(--border); }
 .pdp-match {
   display: grid; grid-template-columns: 40px minmax(0,1fr) 42px 50px;
   gap: 6px; align-items: center;
@@ -679,6 +696,19 @@ header::after {
 .pdp-result.r3 { color: var(--green); }
 .pdp-result.r1 { color: var(--amber); }
 .pdp-result.r0 { color: var(--red); }
+.pdp-phase { border-bottom: 1px solid var(--border); }
+.pdp-phase:last-child { border-bottom: 0; }
+.pdp-phase-toggle {
+  display: grid; grid-template-columns: minmax(0,1fr) auto 18px; align-items: center; gap: 8px;
+  width: 100%; padding: 11px 16px; border: 0; background: var(--surface); color: #fff;
+  font: inherit; cursor: pointer; text-align: left;
+}
+.pdp-phase-title { font-size: 12px; font-weight: 700; }
+.pdp-phase-summary { color: var(--muted); font-size: 10px; }
+.pdp-phase-chevron { color: var(--gold); text-align: center; transition: transform .2s; }
+.pdp-phase.open .pdp-phase-chevron { transform: rotate(180deg); }
+.pdp-phase-body { display: none; }
+.pdp-phase.open .pdp-phase-body { display: block; }
 
 /* responsive */
 @media (max-width: 540px) {
@@ -786,8 +816,11 @@ header::after {
 
 <div id="tab-mecze" style="display:none">
   <div class="subtabs">
-    <button class="subtab active" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
-    <button class="subtab" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
+    <button class="subtab active" id="subtab-skrot" onclick="switchMatchView('skrot',this)">Skrót</button>
+    <button class="subtab subtab-muted" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
+    <button class="subtab subtab-muted" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
+    <button class="subtab subtab-muted" id="subtab-zakonczone" onclick="switchMatchView('zakonczone',this)">Zakończone</button>
+    <button class="subtab subtab-muted" id="subtab-nadchodzace" onclick="switchMatchView('nadchodzace',this)">Nadchodzące</button>
   </div>
   <div id="matches-content"></div>
 </div>
@@ -1325,6 +1358,83 @@ function knockoutTipDotPlayers(){
     : new Set(completePlayers.map(player => player.name));
 }
 
+function playerPredictionMatchRow(p,m){
+  const tip=p.tips[m.idx+1]||'—';
+  const result=results[m.idx]||'—';
+  const score=results[m.idx]?sc(tip,results[m.idx]):null;
+  const resultClass=score===3?'r3':score===1?'r1':score===0?'r0':'';
+  return `<div class="pdp-match">
+    <span class="pdp-date">${m.date||'—'}</span>
+    <span class="pdp-teams">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
+    <span class="pdp-result ${resultClass}">${result}</span>
+    <span class="pdp-tip">${tip}</span>
+  </div>`;
+}
+function playerPredictionRows(p,matches,emptyText){
+  return matches.length
+    ? matches.map(m=>playerPredictionMatchRow(p,m)).join('')
+    : `<div class="pdp-empty">${emptyText}</div>`;
+}
+function playerGroupPhaseRows(p){
+  const all=MATCHES.map((m,idx)=>({...m,idx}));
+  const played=all.filter(m=>Boolean(results[m.idx]));
+  const upcoming=all.filter(m=>!results[m.idx]);
+  return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+    ${playerPredictionRows(p,played,LANG==='en'?'No completed matches.':'Brak rozegranych meczów.')}
+    <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>
+    ${playerPredictionRows(p,upcoming,LANG==='en'?'No upcoming matches.':'Brak nadchodzących meczów.')}`;
+}
+function playerKnockoutPhaseRows(p){
+  const matches=KNOCKOUT_TIP_ROUNDS.flatMap(round=>(round.matches||[])
+    .filter(match=>match.home&&match.away)
+    .map((match,index)=>({round,match,key:match.id||String(index)})));
+  if(!matches.length){
+    return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+      <div class="pdp-empty">${LANG==='en'?'No completed knockout matches.':'Brak rozegranych meczów pucharowych.'}</div>
+      <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>
+      <div class="pdp-empty">${LANG==='en'?'Knockout fixtures are not known yet.':'Pary fazy pucharowej nie są jeszcze znane.'}</div>`;
+  }
+  const played=matches.filter(({match})=>match.result);
+  const upcoming=matches.filter(({match})=>!match.result);
+  const row=({round,match,key})=>{
+    const tip=round.tipsByPlayer?.[p.name]?.[key]||'—';
+    const result=match.result||'—';
+    const score=match.result?sc(tip,match.result):null;
+    const resultClass=score===3?'r3':score===1?'r1':score===0?'r0':'';
+    return `<div class="pdp-match">
+      <span class="pdp-date">${match.date||'—'}</span>
+      <span class="pdp-teams">${match.home} – ${match.away}</span>
+      <span class="pdp-result ${resultClass}">${result}</span>
+      <span class="pdp-tip">${tip}</span>
+    </div>`;
+  };
+  return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+    ${played.length?played.map(row).join(''):`<div class="pdp-empty">${LANG==='en'?'No completed knockout matches.':'Brak rozegranych meczów pucharowych.'}</div>`}
+    <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>
+    ${upcoming.length?upcoming.map(row).join(''):`<div class="pdp-empty">${LANG==='en'?'No upcoming knockout matches.':'Brak nadchodzących meczów pucharowych.'}</div>`}`;
+}
+function togglePlayerPhase(button){
+  button.closest('.pdp-phase')?.classList.toggle('open');
+}
+function buildPlayerPhases(p){
+  return `<section class="pdp-phase open">
+      <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
+        <span class="pdp-phase-title">${LANG==='en'?'Group stage':'Faza grupowa'}</span>
+        <span class="pdp-phase-summary">${LANG==='en'?'played and upcoming':'rozegrane i nadchodzące'}</span>
+        <span class="pdp-phase-chevron">⌄</span>
+      </button>
+      <div class="pdp-phase-body">${playerGroupPhaseRows(p)}</div>
+    </section>
+    <section class="pdp-phase">
+      <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
+        <span class="pdp-phase-title">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</span>
+        <span class="pdp-phase-summary">${LANG==='en'?'played and upcoming':'rozegrane i nadchodzące'}</span>
+        <span class="pdp-phase-chevron">⌄</span>
+      </button>
+      <div class="pdp-phase-body">${playerKnockoutPhaseRows(p)}</div>
+    </section>`;
+}
+
 const ISO = {
   'Algieria':'dz','Anglia':'gb-eng','Arabia Saudyjska':'sa','Argentyna':'ar',
   'Australia':'au','Austria':'at','Belgia':'be','Bośnia i Herc.':'ba',
@@ -1574,39 +1684,59 @@ function isMobile(){return window.innerWidth<=540;}
 
 let activePlayer=null;
 
-function buildSpRows(p){
-  let h='';
-  results.forEach((r,i)=>{
-    if(!r)return;
-    const m=MATCHES[i],t=p.tips[i+1]||'—',s=sc(t,r);
-    const cls=s===3?'sp-p3':s===1?'sp-p1':s===0?'sp-p0':'sp-pq';
-    const lbl=s===3?`3 ${pointsLabel(3)}`:s===1?`1 ${pointsLabel(1)}`:s===0?`0 ${pointsLabel(0)}`:'?';
-    h+=`<div class="sp-match">
-      <span class="sp-date">${m.date}</span>
-      <span class="sp-teams">${flag(m.home)} ${disp(m.home)}–${disp(m.away)} ${flag(m.away)}</span>
-      <span class="sp-res">${r}</span>
-      <span class="${cls}">${t} / ${lbl}</span>
-    </div>`;
-  });
-  return h;
-}
-function buildExpRows(p){
-  let h=`<div class="exp-match-row hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>`;
-  results.forEach((r,i)=>{
-    if(!r)return;
-    const m=MATCHES[i],t=p.tips[i+1]||'—',s=sc(t,r);
-    const cls=s===3?'ep3':s===1?'ep1':s===0?'ep0':'ep-muted';
-    const lbl=s===3?`3 ${pointsLabel(3)}`:s===1?`1 ${pointsLabel(1)}`:s===0?`0 ${pointsLabel(0)}`:'?';
-    h+=`<div class="exp-match-row">
-      <span style="color:var(--muted)">${m.date}</span>
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${flag(m.home)} ${disp(m.home)}–${disp(m.away)} ${flag(m.away)}</span>
-      <span class="em-res">${r}</span>
-      <span class="${cls}">${t} / ${lbl}</span>
-    </div>`;
-  });
-  return h;
+function rankingCompletedItems(p){
+  return results.map((r,i)=>{
+    if(!r)return null;
+    const m=MATCHES[i], tip=p.tips[i+1]||'—', pts=sc(tip,r);
+    return {m,idx:i,result:r,tip,pts};
+  }).filter(Boolean).sort((a,b)=>matchDateTime(b.m)-matchDateTime(a.m));
 }
 
+function rankingHistoryRows(items){
+  return items.map(({m,result,tip,pts})=>{
+    const cls=pts===3?'sp-p3':pts===1?'sp-p1':pts===0?'sp-p0':'sp-pq';
+    const lbl=pts===3?`3 ${pointsLabel(3)}`:pts===1?`1 ${pointsLabel(1)}`:pts===0?`0 ${pointsLabel(0)}`:'?';
+    return `<div class="sp-match">
+      <span class="sp-date">${m.date}</span>
+      <span class="sp-teams">${flag(m.home)} ${disp(m.home)}–${disp(m.away)} ${flag(m.away)}</span>
+      <span class="sp-res">${result}</span>
+      <span class="${cls}">${tip} / ${lbl}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleFullRankingHistory(button){
+  const wrap=button.closest('.sp-history-wrap');
+  const full=wrap?.querySelector('.sp-full-history');
+  if(!full)return;
+  const open=full.classList.toggle('open');
+  button.textContent=open
+    ? (LANG==='en'?'Hide full history':'Ukryj pełną historię')
+    : (LANG==='en'?'Show full history':'Pokaż pełną historię');
+}
+
+function buildSpRows(p){
+  const items=rankingCompletedItems(p);
+  const recent=items.slice(0,5);
+  const recentLabel=LANG==='en'?'Recent completed matches':'Ostatnie rozegrane mecze';
+  const fullLabel=LANG==='en'?'Full group-stage history':'Pełna historia fazy grupowej';
+  const empty=LANG==='en'?'No completed matches yet.':'Brak rozegranych meczów.';
+  const koEmpty=LANG==='en'
+    ? 'Knockout points will appear here after knockout matches are played.'
+    : 'Punkty fazy pucharowej pojawią się tutaj po rozegraniu jej meczów.';
+  return `<div class="pdp-subsection-lbl">${recentLabel}</div>
+    <div class="sp-hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>
+    ${rankingHistoryRows(recent)||`<div class="pdp-empty">${empty}</div>`}
+    <div class="sp-history-wrap">
+      ${items.length>5?`<div class="sp-actions"><button class="sp-more-btn" type="button" onclick="toggleFullRankingHistory(this)">${LANG==='en'?'Show full history':'Pokaż pełną historię'}</button></div>
+      <div class="sp-full-history"><div class="pdp-subsection-lbl">${fullLabel}</div>${rankingHistoryRows(items)}</div>`:''}
+    </div>
+    <div class="pdp-subsection-lbl">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</div>
+    <div class="pdp-empty">${koEmpty}</div>`;
+}
+function buildExpRows(p){
+  return buildSpRows(p);
+}
 function openPanel(name,ranked){
   const p=ranked.find(x=>x.name===name);
   activePlayer=name;
@@ -1687,7 +1817,7 @@ function renderRanking(){
   }
 }
 
-let _matchView = 'daty';
+let _matchView = 'skrot';
 let expandedMatchIdx = null;
 
 function switchMatchView(view, el){
@@ -1695,12 +1825,12 @@ function switchMatchView(view, el){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   renderMatches();
-  if(view==='daty')scrollToRelevantMatch();
 }
 
 function setMatchSubtabState(){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
-  const active=document.getElementById(_matchView==='daty'?'subtab-daty':'subtab-grupy');
+  const ids={skrot:'subtab-skrot',daty:'subtab-daty',grupy:'subtab-grupy',zakonczone:'subtab-zakonczone',nadchodzace:'subtab-nadchodzace'};
+  const active=document.getElementById(ids[_matchView]||'subtab-skrot');
   if(active)active.classList.add('active');
 }
 
@@ -1801,12 +1931,71 @@ function restoreExpandedMatch(){
   tile.classList.add('expanded');
 }
 
+function todayMatchKey(){
+  const parts=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit'}).formatToParts(new Date());
+  const day=parts.find(p=>p.type==='day')?.value||'';
+  const month=parts.find(p=>p.type==='month')?.value||'';
+  return `${day}.${month}`;
+}
+
+function matchFilterList(view){
+  const items=MATCHES.map((m,idx)=>({...m,idx})).sort((a,b)=>matchDateTime(a)-matchDateTime(b));
+  if(view==='zakonczone')return items.filter(m=>matchStatus(m,m.idx)==='done');
+  if(view==='nadchodzace')return items.filter(m=>!['done','live','waiting'].includes(matchStatus(m,m.idx)));
+  if(view==='skrot'){
+    const key=todayMatchKey();
+    const selected=[];
+    const add=m=>{if(!selected.some(x=>x.idx===m.idx))selected.push(m);};
+    items.filter(m=>m.date===key).forEach(add);
+    items.filter(m=>['live','waiting'].includes(matchStatus(m,m.idx))).forEach(add);
+    items.filter(m=>!['done','live','waiting'].includes(matchStatus(m,m.idx))).slice(0,4).forEach(add);
+    if(!selected.length)items.filter(m=>matchStatus(m,m.idx)==='done').slice(-4).forEach(add);
+    return selected.sort((a,b)=>matchDateTime(a)-matchDateTime(b));
+  }
+  return items;
+}
+
+function renderMatchesByDate(cont,matches,GC){
+  if(!matches.length){
+    const empty=document.createElement('div');
+    empty.className='pdp-empty';
+    empty.textContent=LANG==='en'?'No matches in this view.':'Brak meczów w tym widoku.';
+    cont.appendChild(empty);
+    return;
+  }
+  const byDate={};
+  matches.forEach(m=>{if(!byDate[m.date])byDate[m.date]=[];byDate[m.date].push(m);});
+  const sorted=Object.keys(byDate).sort((a,b)=>{
+    const[da,ma]=a.split('.').map(Number),[db,mb]=b.split('.').map(Number);
+    return (ma-mb)||(da-db);
+  });
+  sorted.forEach(date=>{
+    const ms=byDate[date];
+    const[d,mo]=date.split('.').map(Number);
+    const label=new Intl.DateTimeFormat(LANG==='en'?'en-GB':'pl-PL',{timeZone:'Europe/Warsaw',day:'numeric',month:'long',weekday:'long'}).format(new Date(Date.UTC(2026,mo-1,d,12)));
+    const lbl=document.createElement('div');
+    lbl.className='section-lbl';
+    lbl.style.setProperty('--g-color','rgba(255,255,255,.35)');
+    lbl.textContent=label;
+    cont.appendChild(lbl);
+    const grid=document.createElement('div');grid.className='tiles-grid';
+    ms.sort((a,b)=>a.time.localeCompare(b.time));
+    ms.forEach(m=>grid.appendChild(buildTile(m, GC[m.g])));
+    cont.appendChild(grid);
+  });
+}
 function renderMatches(){
   const cont=document.getElementById('matches-content');
   if(!cont) return;
   cont.innerHTML='';
   setMatchSubtabState();
   const GC={A:'--ga',B:'--gb',C:'--gc',D:'--gd',E:'--ge',F:'--gf',G:'--gg',H:'--gh',I:'--gi',J:'--gj',K:'--gk',L:'--gl'};
+
+  if(_matchView!=='grupy'){
+    renderMatchesByDate(cont,matchFilterList(_matchView),GC);
+    if(typeof restoreExpandedMatch==='function')restoreExpandedMatch();
+    return;
+  }
 
   if(_matchView==='grupy'){
     const grouped={};
@@ -1951,37 +2140,7 @@ function openPlayerPanel(p){
     <div class="pdp-stat"><strong>${stats.bestGroup}</strong><span>${tr('bestGroup')}</span></div>
     <div class="pdp-stat"><strong>${stats.streak} ${LANG==='pl'?'pkt.':'pts.'}</strong><span>${tr('currentStreak')}</span></div>`;
 
-  const cont = document.getElementById('pdpMatches');
-  cont.innerHTML = '';
-
-  // grupuj mecze według grup
-  const grouped = {};
-  MATCHES.forEach((m,i) => {
-    if(!grouped[m.g]) grouped[m.g] = [];
-    grouped[m.g].push({...m, idx:i});
-  });
-
-  Object.entries(grouped).forEach(([grp, ms]) => {
-    const lbl = document.createElement('div');
-    lbl.className = 'pdp-section-lbl';
-    lbl.textContent = `${tr('group')} ${grp}`;
-    cont.appendChild(lbl);
-
-    ms.forEach(m => {
-      const tip = p.tips[m.idx+1] || '—';
-      const result = results[m.idx] || '—';
-      const score = results[m.idx] ? sc(tip, results[m.idx]) : null;
-      const resultClass = score === 3 ? 'r3' : score === 1 ? 'r1' : score === 0 ? 'r0' : '';
-      const row = document.createElement('div');
-      row.className = 'pdp-match';
-      row.innerHTML = `
-        <span class="pdp-date">${m.date}</span>
-        <span class="pdp-teams">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
-        <span class="pdp-result ${resultClass}">${result}</span>
-        <span class="pdp-tip">${tip}</span>`;
-      cont.appendChild(row);
-    });
-  });
+  document.getElementById('pdpMatches').innerHTML = buildPlayerPhases(p);
 
   const panel = document.getElementById('playerDetailPanel');
   panel.classList.add('open');
@@ -2049,9 +2208,8 @@ function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   ['gracze','mecze','ranking'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
   if(tab==='mecze'){
-    _matchView='daty';
+    _matchView='skrot';
     renderMatches();
-    scrollToRelevantMatch();
   }
 }
 if(DEMO_MODE)applyApiResults();
@@ -2061,3 +2219,6 @@ setInterval(refreshApiData,60*1000);
 </script>
 </body>
 </html>
+
+
+

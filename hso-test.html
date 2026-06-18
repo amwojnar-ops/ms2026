@@ -302,6 +302,7 @@ header::after {
 }
 .subtab:hover { color: var(--text); border-color: rgba(255,255,255,.2); }
 .subtab.active { background: var(--card); color: #fff; border-color: rgba(232,184,75,.4); }
+.subtab-muted { opacity: .85; }
 .section-lbl {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 11px; font-weight: 600; letter-spacing: .1em;
@@ -521,6 +522,14 @@ header::after {
 .sp-p1 { color: var(--amber); font-weight: 600; }
 .sp-p0 { color: var(--red); }
 .sp-pq { color: var(--muted); }
+.sp-actions { padding: 10px 14px; border-top: 1px solid var(--border); background: rgba(255,255,255,.015); }
+.sp-more-btn {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 7px;
+  background: var(--surface); color: #fff; cursor: pointer; font-size: 11px; font-weight: 700;
+}
+.sp-more-btn:hover { border-color: rgba(232,184,75,.45); color: var(--gold); }
+.sp-full-history { display: none; }
+.sp-full-history.open { display: block; }
 
 /* admin panel */
 .admin-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
@@ -753,6 +762,13 @@ header::after {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
+.pdp-subsection-lbl {
+  padding: 8px 16px 4px;
+  font-size: 9px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--gold);
+  background: rgba(255,255,255,.018);
+  border-bottom: 1px solid var(--border);
+}
 .pdp-match {
   display: grid; grid-template-columns: 40px minmax(0,1fr) 42px 50px;
   gap: 6px; align-items: center;
@@ -917,8 +933,11 @@ header::after {
 
 <div id="tab-mecze" style="display:none">
   <div class="subtabs">
-    <button class="subtab active" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
-    <button class="subtab" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
+    <button class="subtab active" id="subtab-skrot" onclick="switchMatchView('skrot',this)">Skrót</button>
+    <button class="subtab subtab-muted" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
+    <button class="subtab subtab-muted" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
+    <button class="subtab subtab-muted" id="subtab-zakonczone" onclick="switchMatchView('zakonczone',this)">Zakończone</button>
+    <button class="subtab subtab-muted" id="subtab-nadchodzace" onclick="switchMatchView('nadchodzace',this)">Nadchodzące</button>
   </div>
   <div id="matches-content"></div>
 </div>
@@ -1539,14 +1558,10 @@ function playerKnockoutStageData(stage,p){
 }
 
 function playerGroupPhaseRows(p){
-  const grouped={};
-  MATCHES.forEach((m,i)=>{
-    if(!grouped[m.g])grouped[m.g]=[];
-    grouped[m.g].push({...m,idx:i});
-  });
-  return Object.entries(grouped).map(([grp,matches])=>`
-    <div class="pdp-section-lbl">${tr('group')} ${grp}</div>
-    ${matches.map(m=>{
+  const all=MATCHES.map((m,idx)=>({...m,idx}));
+  const played=all.filter(m=>Boolean(results[m.idx]));
+  const upcoming=all.filter(m=>!results[m.idx]);
+  const rows=matches=>matches.length?matches.map(m=>{
       const tip=p.tips[m.idx+1]||'—';
       const result=results[m.idx]||'—';
       const score=results[m.idx]?sc(tip,results[m.idx]):null;
@@ -1557,11 +1572,15 @@ function playerGroupPhaseRows(p){
         <span class="pdp-teams">${flag(m.home)} ${disp(m.home)} – ${disp(m.away)} ${flag(m.away)}</span>
         <span class="pdp-result ${resultClass}">${result}</span>
         <span class="pdp-tip">${tip}</span>
-      </div>`}).join('')}`).join('');
+      </div>`}).join(''):`<div class="pdp-empty">${LANG==='en'?'No matches.':'Brak meczów.'}</div>`;
+  return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+    ${rows(played)}
+    <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>
+    ${rows(upcoming)}`;
 }
 
 function playerKnockoutPhaseRows(p){
-  return PLAYER_KNOCKOUT_STAGES.map(stage=>{
+  const content=PLAYER_KNOCKOUT_STAGES.map(stage=>{
     const data=playerKnockoutStageData(stage,p);
     const name=LANG==='en'?stage.en:stage.pl;
     if(!data.matches.length){
@@ -1578,6 +1597,9 @@ function playerKnockoutPhaseRows(p){
         <span class="pdp-tip">${round.tipsByPlayer?.[p.name]?.[key]||'—'}</span>
       </div>`).join('')}`;
   }).join('');
+  return `<div class="pdp-subsection-lbl">${LANG==='en'?'Played':'Rozegrane'}</div>
+    <div class="pdp-empty">${LANG==='en'?'No completed knockout matches.':'Brak rozegranych meczów pucharowych.'}</div>
+    <div class="pdp-subsection-lbl">${LANG==='en'?'Upcoming':'Nadchodzące'}</div>${content}`;
 }
 
 function buildPlayerPhases(p){
@@ -1875,51 +1897,59 @@ function playerOverview(p){
 function toggleRankingStage(button){
   button.closest('.sp-stage')?.classList.toggle('open');
 }
-function buildSpRows(p){
-  const played=results.filter(Boolean).length;
-  const groupSummary=LANG==='en'
-    ? `${played} matches · ${p.pts} ${pointsLabel(p.pts)}`
-    : `${played} meczów · ${p.pts} ${pointsLabel(p.pts)}`;
-  const groupRows=rankingStageRows(p);
-  return `<section class="sp-stage open">
-      <button class="sp-stage-toggle" type="button" onclick="toggleRankingStage(this)">
-        <span class="sp-stage-title">${LANG==='en'?'Group stage':'Faza grupowa'}</span>
-        <span class="sp-stage-summary">${groupSummary}</span><span class="sp-stage-chevron">⌃</span>
-      </button>
-      <div class="sp-stage-body">
-        <div class="sp-hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>
-        ${groupRows||`<div class="sp-empty">${LANG==='en'?'No completed matches.':'Brak rozegranych meczów.'}</div>`}
-      </div>
-    </section>
-    <section class="sp-stage">
-      <button class="sp-stage-toggle" type="button" onclick="toggleRankingStage(this)">
-        <span class="sp-stage-title">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</span>
-        <span class="sp-stage-summary">${LANG==='en'?'not started':'nierozpoczęta'}</span><span class="sp-stage-chevron">⌃</span>
-      </button>
-      <div class="sp-stage-body"><div class="sp-empty">${LANG==='en'
-        ? 'Round sections and points will appear here as the tournament progresses.'
-        : 'W miarę rozgrywania turnieju pojawią się tutaj osobne rundy i zdobyte punkty.'}</div></div>
-    </section>`;
-}
-function buildExpRows(p){
-  return `<div class="sp-overview">${playerOverview(p)}</div>${buildSpRows(p)}`;
-  /*
-  let h=`<div class="exp-match-row hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>`;
-  results.forEach((r,i)=>{
-    if(!r)return;
-    const m=MATCHES[i],t=p.tips[i+1]||'—',s=sc(t,r);
-    const cls=s===3?'ep3':s===1?'ep1':s===0?'ep0':'ep-muted';
-    const lbl=s===3?`3 ${pointsLabel(3)}`:s===1?`1 ${pointsLabel(1)}`:s===0?`0 ${pointsLabel(0)}`:'?';
-    h+=`<div class="exp-match-row">
-      <span style="color:var(--muted)">${m.date}</span>
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${flag(m.home)} ${disp(m.home)}–${disp(m.away)} ${flag(m.away)}</span>
-      <span class="em-res">${r}</span>
-      <span class="${cls}">${t} / ${lbl}</span>
-    </div>`;
-  });
-  return h;*/
+function rankingCompletedItems(p){
+  return results.map((r,i)=>{
+    if(!r)return null;
+    const m=MATCHES[i], tip=p.tips[i+1]||'—', pts=sc(tip,r);
+    return {m,idx:i,result:r,tip,pts};
+  }).filter(Boolean).sort((a,b)=>matchDateTime(b.m)-matchDateTime(a.m));
 }
 
+function rankingHistoryRows(items){
+  return items.map(({m,result,tip,pts})=>{
+    const cls=pts===3?'sp-p3':pts===1?'sp-p1':pts===0?'sp-p0':'sp-pq';
+    const lbl=pts===3?`3 ${pointsLabel(3)}`:pts===1?`1 ${pointsLabel(1)}`:pts===0?`0 ${pointsLabel(0)}`:'?';
+    return `<div class="sp-match">
+      <span class="sp-date">${m.date}</span>
+      <span class="sp-teams">${flag(m.home)} ${disp(m.home)}–${disp(m.away)} ${flag(m.away)}</span>
+      <span class="sp-res">${result}</span>
+      <span class="${cls}">${tip} / ${lbl}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleFullRankingHistory(button){
+  const wrap=button.closest('.sp-history-wrap');
+  const full=wrap?.querySelector('.sp-full-history');
+  if(!full)return;
+  const open=full.classList.toggle('open');
+  button.textContent=open
+    ? (LANG==='en'?'Hide full history':'Ukryj pełną historię')
+    : (LANG==='en'?'Show full history':'Pokaż pełną historię');
+}
+
+function buildSpRows(p){
+  const items=rankingCompletedItems(p);
+  const recent=items.slice(0,5);
+  const recentLabel=LANG==='en'?'Recent completed matches':'Ostatnie rozegrane mecze';
+  const fullLabel=LANG==='en'?'Full group-stage history':'Pełna historia fazy grupowej';
+  const empty=LANG==='en'?'No completed matches yet.':'Brak rozegranych meczów.';
+  const koEmpty=LANG==='en'
+    ? 'Knockout points will appear here after knockout matches are played.'
+    : 'Punkty fazy pucharowej pojawią się tutaj po rozegraniu jej meczów.';
+  return `<div class="pdp-subsection-lbl">${recentLabel}</div>
+    <div class="sp-hdr"><span>${tr('date')}</span><span>${tr('match')}</span><span style="text-align:center">${tr('result')}</span><span style="text-align:center">${tr('predictionPoints')}</span></div>
+    ${rankingHistoryRows(recent)||`<div class="pdp-empty">${empty}</div>`}
+    <div class="sp-history-wrap">
+      ${items.length>5?`<div class="sp-actions"><button class="sp-more-btn" type="button" onclick="toggleFullRankingHistory(this)">${LANG==='en'?'Show full history':'Pokaż pełną historię'}</button></div>
+      <div class="sp-full-history"><div class="pdp-subsection-lbl">${fullLabel}</div>${rankingHistoryRows(items)}</div>`:''}
+    </div>
+    <div class="pdp-subsection-lbl">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</div>
+    <div class="pdp-empty">${koEmpty}</div>`;
+}
+function buildExpRows(p){
+  return buildSpRows(p);
+}
 function openPanel(name,ranked){
   const p=ranked.find(x=>x.name===name);
   activePlayer=name;
@@ -2001,7 +2031,7 @@ function renderRanking(){
   }
 }
 
-let _matchView = 'daty';
+let _matchView = 'skrot';
 let expandedMatchIdx = null;
 
 function switchMatchView(view, el){
@@ -2009,12 +2039,12 @@ function switchMatchView(view, el){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   renderMatches();
-  if(view==='daty')scrollToRelevantMatch();
 }
 
 function setMatchSubtabState(){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
-  const active=document.getElementById(_matchView==='daty'?'subtab-daty':'subtab-grupy');
+  const ids={skrot:'subtab-skrot',daty:'subtab-daty',grupy:'subtab-grupy',zakonczone:'subtab-zakonczone',nadchodzace:'subtab-nadchodzace'};
+  const active=document.getElementById(ids[_matchView]||'subtab-skrot');
   if(active)active.classList.add('active');
 }
 
@@ -2115,12 +2145,71 @@ function restoreExpandedMatch(){
   tile.classList.add('expanded');
 }
 
+function todayMatchKey(){
+  const parts=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit'}).formatToParts(new Date());
+  const day=parts.find(p=>p.type==='day')?.value||'';
+  const month=parts.find(p=>p.type==='month')?.value||'';
+  return `${day}.${month}`;
+}
+
+function matchFilterList(view){
+  const items=MATCHES.map((m,idx)=>({...m,idx})).sort((a,b)=>matchDateTime(a)-matchDateTime(b));
+  if(view==='zakonczone')return items.filter(m=>matchStatus(m,m.idx)==='done');
+  if(view==='nadchodzace')return items.filter(m=>!['done','live','waiting'].includes(matchStatus(m,m.idx)));
+  if(view==='skrot'){
+    const key=todayMatchKey();
+    const selected=[];
+    const add=m=>{if(!selected.some(x=>x.idx===m.idx))selected.push(m);};
+    items.filter(m=>m.date===key).forEach(add);
+    items.filter(m=>['live','waiting'].includes(matchStatus(m,m.idx))).forEach(add);
+    items.filter(m=>!['done','live','waiting'].includes(matchStatus(m,m.idx))).slice(0,4).forEach(add);
+    if(!selected.length)items.filter(m=>matchStatus(m,m.idx)==='done').slice(-4).forEach(add);
+    return selected.sort((a,b)=>matchDateTime(a)-matchDateTime(b));
+  }
+  return items;
+}
+
+function renderMatchesByDate(cont,matches,GC){
+  if(!matches.length){
+    const empty=document.createElement('div');
+    empty.className='pdp-empty';
+    empty.textContent=LANG==='en'?'No matches in this view.':'Brak meczów w tym widoku.';
+    cont.appendChild(empty);
+    return;
+  }
+  const byDate={};
+  matches.forEach(m=>{if(!byDate[m.date])byDate[m.date]=[];byDate[m.date].push(m);});
+  const sorted=Object.keys(byDate).sort((a,b)=>{
+    const[da,ma]=a.split('.').map(Number),[db,mb]=b.split('.').map(Number);
+    return (ma-mb)||(da-db);
+  });
+  sorted.forEach(date=>{
+    const ms=byDate[date];
+    const[d,mo]=date.split('.').map(Number);
+    const label=new Intl.DateTimeFormat(LANG==='en'?'en-GB':'pl-PL',{timeZone:'Europe/Warsaw',day:'numeric',month:'long',weekday:'long'}).format(new Date(Date.UTC(2026,mo-1,d,12)));
+    const lbl=document.createElement('div');
+    lbl.className='section-lbl';
+    lbl.style.setProperty('--g-color','rgba(255,255,255,.35)');
+    lbl.textContent=label;
+    cont.appendChild(lbl);
+    const grid=document.createElement('div');grid.className='tiles-grid';
+    ms.sort((a,b)=>a.time.localeCompare(b.time));
+    ms.forEach(m=>grid.appendChild(buildTile(m, GC[m.g])));
+    cont.appendChild(grid);
+  });
+}
 function renderMatches(){
   const cont=document.getElementById('matches-content');
   if(!cont) return;
   cont.innerHTML='';
   setMatchSubtabState();
   const GC={A:'--ga',B:'--gb',C:'--gc',D:'--gd',E:'--ge',F:'--gf',G:'--gg',H:'--gh',I:'--gi',J:'--gj',K:'--gk',L:'--gl'};
+
+  if(_matchView!=='grupy'){
+    renderMatchesByDate(cont,matchFilterList(_matchView),GC);
+    if(typeof restoreExpandedMatch==='function')restoreExpandedMatch();
+    return;
+  }
 
   if(_matchView==='grupy'){
     const grouped={};
@@ -2527,9 +2616,8 @@ function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   ['gracze','mecze','ranking','pucharowa'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
   if(tab==='mecze'){
-    _matchView='daty';
+    _matchView='skrot';
     renderMatches();
-    scrollToRelevantMatch();
   }
   if(tab==='pucharowa')renderKnockout();
 }
@@ -2540,3 +2628,6 @@ setInterval(refreshApiData,60*1000);
 </script>
 </body>
 </html>
+
+
+
