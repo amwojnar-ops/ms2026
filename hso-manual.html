@@ -1284,7 +1284,7 @@ function playerPredictionRows(p,matches,emptyText){
     : `<div class="pdp-empty">${emptyText}</div>`;
 }
 function playerGroupPhaseRows(p){
-  const all=MATCHES.map((m,idx)=>({...m,idx}));
+  const all=MATCHES.map((m,idx)=>({...m,idx})).sort((a,b)=>matchDateTime(a)-matchDateTime(b));
   const played=all.filter(m=>Boolean(results[m.idx]));
   const upcoming=all.filter(m=>!results[m.idx]);
   return `${playerSubsectionLabel(LANG==='en'?'Played':'Rozegrane')}
