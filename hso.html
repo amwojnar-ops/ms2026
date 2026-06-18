@@ -737,9 +737,21 @@ header::after {
   .pdp-stat:nth-child(2) { border-right: none; }
   .pdp-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
   .pdp-match { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 7px 10px; font-size: 11px; }
-  .pdp-cols { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 6px 10px 5px; font-size: 8px; }  .pdp-date { font-size: 10px; }
+  .pdp-cols { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 6px 10px 5px; font-size: 8px; }
+  .pdp-date { font-size: 10px; }
   .pdp-result,
   .pdp-tip { font-size: 12px; }
+  .subtabs {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .subtab {
+    flex: 0 0 auto;
+    padding: 6px 11px;
+    font-size: 12px;
+    line-height: 1.1;
+  }
   .tab { padding-left: 5px; padding-right: 5px; font-size: 13px; }
   .tab.disabled {
     font-size: 0; line-height: 1.05;
