@@ -769,6 +769,26 @@ header::after {
   background: rgba(255,255,255,.018);
   border-bottom: 1px solid var(--border);
 }
+.pdp-subsection { border-bottom: 1px solid var(--border); }
+.pdp-subsection-toggle {
+  display: grid; grid-template-columns: minmax(0,1fr) 18px; align-items: center; gap: 8px;
+  width: 100%; padding: 8px 16px 7px; border: 0; border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.018); color: var(--gold);
+  font: inherit; cursor: pointer; text-align: left;
+}
+.pdp-subsection-title { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.pdp-subsection-chevron { text-align: center; transition: transform .2s; }
+.pdp-subsection.open .pdp-subsection-chevron { transform: rotate(180deg); }
+.pdp-subsection-body { display: none; }
+.pdp-subsection.open .pdp-subsection-body { display: block; }
+.pdp-cols {
+  display: grid; grid-template-columns: 40px minmax(0,1fr) 42px 50px;
+  gap: 6px; align-items: center;
+  padding: 6px 16px 5px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.pdp-cols span:nth-child(3), .pdp-cols span:nth-child(4) { text-align: center; }
 .pdp-match {
   display: grid; grid-template-columns: 40px minmax(0,1fr) 42px 50px;
   gap: 6px; align-items: center;
@@ -817,7 +837,7 @@ header::after {
   .pdp-stat:nth-child(2) { border-right: none; }
   .pdp-stat:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
   .pdp-match { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 7px 10px; font-size: 11px; }
-  .pdp-date { font-size: 10px; }
+  .pdp-cols { grid-template-columns: 34px minmax(0,1fr) 36px 42px; gap: 4px; padding: 6px 10px 5px; font-size: 8px; }  .pdp-date { font-size: 10px; }
   .pdp-result,
   .pdp-tip { font-size: 12px; }
   .tab { padding-left: 5px; padding-right: 5px; font-size: 13px; }
@@ -1603,20 +1623,19 @@ function playerKnockoutPhaseRows(p){
 }
 
 function buildPlayerPhases(p){
-  const groupStageFinished=results.length>=MATCHES.length&&MATCHES.every((_,index)=>Boolean(results[index]));
-  return `<section class="pdp-phase${groupStageFinished?'':' open'}">
+  return `<section class="pdp-phase open">
       <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
         <span class="pdp-phase-title">${LANG==='en'?'Group stage':'Faza grupowa'}</span>
         <span class="pdp-phase-summary">72 ${LANG==='en'?'predictions':'typy'}</span>
-        <span class="pdp-phase-chevron">⌃</span>
+        <span class="pdp-phase-chevron">⌄</span>
       </button>
       <div class="pdp-phase-body">${playerGroupPhaseRows(p)}</div>
     </section>
-    <section class="pdp-phase${groupStageFinished?' open':''}">
+    <section class="pdp-phase">
       <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
         <span class="pdp-phase-title">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</span>
         <span class="pdp-phase-summary">${LANG==='en'?'rounds':'rundy'}</span>
-        <span class="pdp-phase-chevron">⌃</span>
+        <span class="pdp-phase-chevron">⌄</span>
       </button>
       <div class="pdp-phase-body">${playerKnockoutPhaseRows(p)}</div>
     </section>`;
@@ -2039,6 +2058,7 @@ function switchMatchView(view, el){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   renderMatches();
+  if(view==='daty')scrollToRelevantMatch();
 }
 
 function setMatchSubtabState(){
