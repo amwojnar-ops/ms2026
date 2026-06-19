@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T21:09:14.104Z",
+  "updatedAt": "2026-06-19T21:10:25.066Z",
   "matches": [
     {
       "id": 537327,
@@ -620,7 +620,7 @@
     {
       "id": 537348,
       "utcDate": "2026-06-19T19:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "United States",
         "shortName": "USA",
@@ -637,7 +637,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-19T21:08:58Z"
+      "lastUpdated": "2026-06-19T21:10:10Z"
     },
     {
       "id": 537342,
