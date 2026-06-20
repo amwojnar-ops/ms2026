@@ -1,4 +1,9 @@
 @echo off
-cd /d "%~dp0"
-powershell.exe -NoProfile -ExecutionPolicy Bypass -STA -File "%~dp0wyniki-formularz.ps1"
-if errorlevel 1 pause
+title MS 2026 - wyniki
+echo.
+echo Wersja reczna hso-manual zostala wygaszona.
+echo Wyniki sa teraz aktualizowane w hso.html przez API football-data.org.
+echo.
+echo Ten skrot nie uruchamia juz formularza recznego wpisywania wynikow.
+echo.
+pause
