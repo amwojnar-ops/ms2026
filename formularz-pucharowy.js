@@ -287,7 +287,6 @@ function setAvailability() {
   const beforeDeadline = !roundDeadline || Date.now() <= roundDeadline.getTime();
   const allKnown = knownPairCount === config.count;
   const anyKnown = knownPairCount > 0;
-  const readyToSend = allKnown && beforeDeadline;
   const status = document.getElementById("status");
   status.classList.toggle("ready", anyKnown && beforeDeadline);
   document.getElementById("status-text").textContent = !beforeDeadline
@@ -295,11 +294,11 @@ function setAvailability() {
     : anyKnown
       ? `Dostępne pary: ${knownPairCount}/${config.count} · termin ${deadlineLabel(roundDeadline)}`
       : `Oczekiwanie na pierwszą parę · termin ${deadlineLabel(roundDeadline)}`;
-  document.getElementById("copy").disabled = !readyToSend;
   selects.forEach(({ home, away, pairKnown }) => {
     home.disabled = !pairKnown || !beforeDeadline;
     away.disabled = !pairKnown || !beforeDeadline;
   });
+  updateCopyButton();
 }
 
 async function loadMatches() {
@@ -360,6 +359,16 @@ function updateRows() {
   });
   document.getElementById("progress-count").textContent = `${filled} / ${config.count}`;
   document.getElementById("progress-fill").style.width = `${config.count ? filled / config.count * 100 : 0}%`;
+  updateCopyButton(filled);
+}
+
+function updateCopyButton(filledCount) {
+  const beforeDeadline = !roundDeadline || Date.now() <= roundDeadline.getTime();
+  const allKnown = knownPairCount === config.count;
+  const filled = Number.isInteger(filledCount)
+    ? filledCount
+    : selects.filter(({ home, away }) => home.value !== "" && away.value !== "").length;
+  document.getElementById("copy").disabled = !(allKnown && beforeDeadline && filled === config.count);
 }
 
 function showToast(message) {

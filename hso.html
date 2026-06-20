@@ -303,6 +303,57 @@ header::after {
 .subtab:hover { color: var(--text); border-color: rgba(255,255,255,.2); }
 .subtab.active { background: var(--card); color: #fff; border-color: rgba(232,184,75,.4); }
 .subtab-muted { opacity: .85; }
+.group-standings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.group-table-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--g-color, var(--border));
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.group-table-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.group-table-head strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; color: #fff; letter-spacing: .02em;
+}
+.group-table-head span {
+  font-size: 11px; color: var(--g-color, var(--gold));
+  font-weight: 600; text-transform: uppercase; letter-spacing: .08em;
+}
+.group-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.group-table th,
+.group-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid rgba(255,255,255,.055);
+  font-size: 12px;
+}
+.group-table tr:last-child td { border-bottom: none; }
+.group-table th {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.group-table .rank-pos { width: 28px; text-align: center; color: var(--gold); font-weight: 700; }
+.group-table .team-cell { color: #fff; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.group-table .num-cell { width: 34px; text-align: center; color: var(--text); font-weight: 600; }
+.group-table .goals-cell { width: 62px; text-align: center; color: var(--muted); font-weight: 600; }
+.group-table .positive { color: var(--green); }
+.group-table .negative { color: var(--red); }
 .section-lbl {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 11px; font-weight: 600; letter-spacing: .1em;
@@ -766,6 +817,13 @@ header::after {
     line-height: 1.1;
   }
   #subtab-nadchodzace { grid-column: 4; }
+  #subtab-tabele { grid-column: 4; grid-row: 1; }
+  .group-standings-grid { grid-template-columns: 1fr; gap: 10px; }
+  .group-table th,
+  .group-table td { padding: 6px 7px; }
+  .group-table .rank-pos { width: 24px; }
+  .group-table .num-cell { width: 30px; }
+  .group-table .goals-cell { width: 56px; }
   .tab { padding-left: 5px; padding-right: 5px; font-size: 13px; }
   .tab.disabled {
     font-size: 0; line-height: 1.05;
@@ -865,6 +923,7 @@ header::after {
     <button class="subtab active" id="subtab-skrot" onclick="switchMatchView('skrot',this)">Skrót</button>
     <button class="subtab subtab-muted" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
     <button class="subtab subtab-muted" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
+    <button class="subtab subtab-muted" id="subtab-tabele" onclick="switchMatchView('tabele',this)">Grupy</button>
     <button class="subtab subtab-muted" id="subtab-zakonczone" onclick="switchMatchView('zakonczone',this)">Zakończone</button>
     <button class="subtab subtab-muted" id="subtab-nadchodzace" onclick="switchMatchView('nadchodzace',this)">Nadchodzące</button>
   </div>
@@ -914,9 +973,10 @@ const TRANSLATIONS = {
     leaderPoints:'Pkt lidera', leadersPoints:'Pkt liderów', nextMatch:'Następny mecz',
     players:'Gracze', matches:'Mecze', ranking:'Ranking', knockout:'Faza pucharowa',
     knockoutTitle:'Faza pucharowa zostanie uruchomiona później', coming:'wkrótce',
-    byGroups:'Wg grup', byDates:'Wg dat', championPick:'Typ na mistrza',
-    player:'Gracz', champion:'Mistrz', total:'Razem', date:'Data', match:'Mecz',
+    byGroups:'Wg grup', byDates:'Wg dat', groupTables:'Tabele', championPick:'Typ na mistrza',
+    player:'Gracz', team:'Zespół', champion:'Mistrz', total:'Razem', date:'Data', match:'Mecz',
     result:'Wynik', predictionPoints:'Typ / pkt', group:'Grupa',
+    playedShort:'M', pointsShort:'Pkt', goalsForAgainst:'Bramki',
     finished:'Zakończony', live:'Trwa', waiting:'Oczekuje na wynik', soon:'Wkrótce',
     predictions:'typów', playerPredictions:'Typy graczy',
     efficiency:'skuteczność', pointsPerMatch:'pkt / mecz',
@@ -932,9 +992,10 @@ const TRANSLATIONS = {
     leaderPoints:'Leader points', leadersPoints:'Leaders’ points', nextMatch:'Next match',
     players:'Players', matches:'Matches', ranking:'Ranking', knockout:'Knockout stage',
     knockoutTitle:'The knockout stage will be available later', coming:'soon',
-    byGroups:'By group', byDates:'By date', championPick:'World champion pick',
-    player:'Player', champion:'Champion', total:'Total', date:'Date', match:'Match',
+    byGroups:'By group', byDates:'By date', groupTables:'Tables', championPick:'World champion pick',
+    player:'Player', team:'Team', champion:'Champion', total:'Total', date:'Date', match:'Match',
     result:'Result', predictionPoints:'Prediction / pts', group:'Group',
+    playedShort:'P', pointsShort:'Pts', goalsForAgainst:'Goals',
     finished:'Finished', live:'Live', waiting:'Waiting for result', soon:'Coming up',
     predictions:'predictions', playerPredictions:'Player predictions',
     efficiency:'accuracy', pointsPerMatch:'pts / match',
@@ -1004,7 +1065,7 @@ function applyLanguage(){
   setText('tabKnockoutBtn','knockout');
   document.getElementById('tabKnockoutBtn').title=tr('knockoutTitle');
   document.getElementById('tabKnockoutBtn').dataset.coming=tr('coming');
-  setText('subtab-grupy','byGroups'); setText('subtab-daty','byDates');
+  setText('subtab-grupy','byGroups'); setText('subtab-daty','byDates'); setText('subtab-tabele','groupTables');
   setText('pdpChampLabel','championPick'); setText('spChampLabel','championPick');
   setText('rankPlayer','player'); setText('rankChampion','champion'); setText('rankTotal','total');
   document.getElementById('rankExact').textContent=`3 ${pointsLabel(3)}`;
@@ -1869,7 +1930,7 @@ function switchMatchView(view, el){
 
 function setMatchSubtabState(){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
-  const ids={skrot:'subtab-skrot',daty:'subtab-daty',grupy:'subtab-grupy',zakonczone:'subtab-zakonczone',nadchodzace:'subtab-nadchodzace'};
+  const ids={skrot:'subtab-skrot',daty:'subtab-daty',grupy:'subtab-grupy',tabele:'subtab-tabele',zakonczone:'subtab-zakonczone',nadchodzace:'subtab-nadchodzace'};
   const active=document.getElementById(ids[_matchView]||'subtab-skrot');
   if(active)active.classList.add('active');
 }
@@ -2027,12 +2088,89 @@ function renderMatchesByDate(cont,matches,GC){
     cont.appendChild(grid);
   });
 }
+function groupTableRows(group){
+  const teams={};
+  const ensure=name=>teams[name]||(teams[name]={team:name,played:0,pts:0,gf:0,ga:0});
+  MATCHES.forEach((m,idx)=>{
+    if(m.g!==group)return;
+    ensure(m.home); ensure(m.away);
+    const r=results[idx];
+    if(!r)return;
+    const[homeGoals,awayGoals]=r.split('-').map(Number);
+    const home=ensure(m.home);
+    const away=ensure(m.away);
+    home.played++; away.played++;
+    home.gf+=homeGoals; home.ga+=awayGoals;
+    away.gf+=awayGoals; away.ga+=homeGoals;
+    if(homeGoals>awayGoals)home.pts+=3;
+    else if(homeGoals<awayGoals)away.pts+=3;
+    else {home.pts++; away.pts++;}
+  });
+  return Object.values(teams)
+    .map(row=>({...row,gd:row.gf-row.ga}))
+    .sort((a,b)=>{
+      const basic=b.pts-a.pts||b.gd-a.gd||b.gf-a.gf;
+      if(basic)return basic;
+      const direct=MATCHES.find((m,idx)=>m.g===group&&results[idx]&&(
+        (m.home===a.team&&m.away===b.team)||(m.home===b.team&&m.away===a.team)
+      ));
+      if(direct){
+        const idx=MATCHES.indexOf(direct);
+        const[homeGoals,awayGoals]=results[idx].split('-').map(Number);
+        if(homeGoals!==awayGoals){
+          const winner=homeGoals>awayGoals?direct.home:direct.away;
+          return winner===a.team?-1:1;
+        }
+      }
+      return a.team.localeCompare(b.team,'pl');
+    });
+}
+function renderGroupTables(cont,GC){
+  const groups=[...new Set(MATCHES.map(m=>m.g))].sort((a,b)=>a.localeCompare(b,'pl'));
+  const grid=document.createElement('div');
+  grid.className='group-standings-grid';
+  groups.forEach(group=>{
+    const card=document.createElement('div');
+    card.className='group-table-card';
+    card.style.setProperty('--g-color',`var(${GC[group]||'--muted'})`);
+    const rows=groupTableRows(group);
+    card.innerHTML=`
+      <div class="group-table-head"><strong>${tr('group')} ${group}</strong><span>${rows.reduce((sum,row)=>sum+row.played,0)/2}/6</span></div>
+      <table class="group-table">
+        <thead><tr>
+          <th class="rank-pos">#</th>
+          <th>${tr('team')}</th>
+          <th class="num-cell">${tr('playedShort')}</th>
+          <th class="num-cell">${tr('pointsShort')}</th>
+          <th class="goals-cell">${tr('goalsForAgainst')}</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map((row,index)=>{
+            return `<tr>
+              <td class="rank-pos">${index+1}</td>
+              <td class="team-cell">${teamHTML(row.team,'home')}</td>
+              <td class="num-cell">${row.played}</td>
+              <td class="num-cell">${row.pts}</td>
+              <td class="goals-cell">${row.gf}-${row.ga}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+    grid.appendChild(card);
+  });
+  cont.appendChild(grid);
+}
 function renderMatches(){
   const cont=document.getElementById('matches-content');
   if(!cont) return;
   cont.innerHTML='';
   setMatchSubtabState();
   const GC={A:'--ga',B:'--gb',C:'--gc',D:'--gd',E:'--ge',F:'--gf',G:'--gg',H:'--gh',I:'--gi',J:'--gj',K:'--gk',L:'--gl'};
+
+  if(_matchView==='tabele'){
+    renderGroupTables(cont,GC);
+    return;
+  }
 
   if(_matchView!=='grupy'){
     renderMatchesByDate(cont,matchFilterList(_matchView),GC);
