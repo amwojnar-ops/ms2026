@@ -39,7 +39,8 @@ const storageKey = `ms2026_${config.key}_typy`;
 const PREDICTION_LOCK_MINUTES = 120;
 const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537425, side: "homeTeam", team: { name: "Mexico", shortName: "Mexico", tla: "MEX" } },
-  { matchId: 537421, side: "homeTeam", team: { name: "United States", shortName: "United States", tla: "USA" } }
+  { matchId: 537421, side: "homeTeam", team: { name: "United States", shortName: "United States", tla: "USA" } },
+  { matchId: 537415, side: "homeTeam", team: { name: "Germany", shortName: "Germany", tla: "GER" } }
 ];
 let roundMatches = [];
 let sourceMatches = [];
