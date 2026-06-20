@@ -2496,6 +2496,10 @@ const KNOCKOUT_FALLBACK_DATES = [
   '2026-07-09T20:00:00Z','2026-07-10T19:00:00Z','2026-07-11T21:00:00Z','2026-07-12T01:00:00Z',
   '2026-07-14T19:00:00Z','2026-07-15T19:00:00Z','2026-07-18T21:00:00Z','2026-07-19T19:00:00Z'
 ];
+const KNOWN_KNOCKOUT_TEAMS = [
+  {matchId:537425, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
+  {matchId:537421, side:'homeTeam', team:{name:'United States',shortName:'United States',tla:'USA'}}
+];
 let selectedKnockoutRound = 0;
 
 function knockoutPlaceholderMatch(utcDate,index){
@@ -2509,11 +2513,31 @@ function knockoutPlaceholderMatch(utcDate,index){
     fallback:true
   };
 }
+function hasKnockoutTeam(team){
+  return Boolean(team?.name || team?.shortName || team?.tla);
+}
+function withKnownKnockoutTeams(matches){
+  return matches.map(match=>{
+    const known=KNOWN_KNOCKOUT_TEAMS.filter(item=>item.matchId===match.id);
+    if(!known.length)return match;
+    let next=match;
+    known.forEach(item=>{
+      if(hasKnockoutTeam(next[item.side]))return;
+      next={
+        ...next,
+        [item.side]:{...item.team},
+        knownTeamFallback:true
+      };
+    });
+    return next;
+  });
+}
 function knockoutMatches(){
   const matches = API_MATCHES
     .filter(match => Date.parse(match.utcDate) >= Date.parse('2026-06-28T19:00:00Z'))
     .sort((a,b) => Date.parse(a.utcDate)-Date.parse(b.utcDate));
-  return matches.length ? matches : KNOCKOUT_FALLBACK_DATES.map(knockoutPlaceholderMatch);
+  const source = matches.length ? matches : KNOCKOUT_FALLBACK_DATES.map(knockoutPlaceholderMatch);
+  return withKnownKnockoutTeams(source);
 }
 function knockoutRoundName(round){
   return LANG==='en' ? round.en : round.pl;

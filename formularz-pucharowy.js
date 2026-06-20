@@ -37,6 +37,10 @@ const pageKey = document.body.dataset.round;
 const config = ROUND_CONFIG[pageKey];
 const storageKey = `ms2026_${config.key}_typy`;
 const PREDICTION_LOCK_MINUTES = 120;
+const KNOWN_KNOCKOUT_TEAMS = [
+  { matchId: 537425, side: "homeTeam", team: { name: "Mexico", shortName: "Mexico", tla: "MEX" } },
+  { matchId: 537421, side: "homeTeam", team: { name: "United States", shortName: "United States", tla: "USA" } }
+];
 let roundMatches = [];
 let sourceMatches = [];
 let selects = [];
@@ -44,9 +48,31 @@ let roundDeadline = null;
 let knownPairCount = 0;
 
 function knockoutMatches(matches) {
-  return matches
+  const knockout = matches
     .filter(match => Date.parse(match.utcDate) >= Date.parse("2026-06-28T19:00:00Z"))
     .sort((a, b) => Date.parse(a.utcDate) - Date.parse(b.utcDate));
+  return withKnownKnockoutTeams(knockout);
+}
+
+function hasKnownTeam(team) {
+  return Boolean(team?.name || team?.shortName || team?.tla);
+}
+
+function withKnownKnockoutTeams(matches) {
+  return matches.map(match => {
+    const known = KNOWN_KNOCKOUT_TEAMS.filter(item => item.matchId === match.id);
+    if (!known.length) return match;
+    let next = match;
+    known.forEach(item => {
+      if (hasKnownTeam(next[item.side])) return;
+      next = {
+        ...next,
+        [item.side]: { ...item.team },
+        knownTeamFallback: true
+      };
+    });
+    return next;
+  });
 }
 
 function teamName(team) {
