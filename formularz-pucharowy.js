@@ -84,6 +84,21 @@ function teamCode(team) {
   return team?.tla || "?";
 }
 
+const FLAG_BY_TLA = {
+  ALG:"dz", ARG:"ar", AUS:"au", AUT:"at", BEL:"be", BIH:"ba", BRA:"br", CAN:"ca",
+  CIV:"ci", COL:"co", COD:"cd", CPV:"cv", CRO:"hr", CUW:"cw", CZE:"cz", ECU:"ec",
+  EGY:"eg", ENG:"gb-eng", FRA:"fr", GER:"de", GHA:"gh", HAI:"ht", IRN:"ir", IRQ:"iq",
+  JOR:"jo", JPN:"jp", KOR:"kr", KSA:"sa", MAR:"ma", MEX:"mx", NED:"nl", NOR:"no",
+  NZL:"nz", PAN:"pa", PAR:"py", POR:"pt", QAT:"qa", RSA:"za", SCO:"gb-sct", SEN:"sn",
+  ESP:"es", SUI:"ch", SWE:"se", TUN:"tn", TUR:"tr", URU:"uy", USA:"us", UZB:"uz"
+};
+
+function teamFlag(team) {
+  const code = FLAG_BY_TLA[team?.tla];
+  if (!code) return "?";
+  return `<img src="img/flags/${code}.png" width="22" height="16" alt="${escapeHtml(teamName(team))}">`;
+}
+
 function teamKey(team) {
   const source = team?.tla || team?.name || team?.shortName || "";
   return source.normalize("NFD")
@@ -135,7 +150,7 @@ function historyRow(match, team) {
 function buildHistoryColumn(team, matches) {
   const rows = matches.map(match => historyRow(match, team)).join("");
   return `<div class="history-column">
-    <div class="history-team"><span>${teamCode(team)}</span>${teamName(team)}</div>
+    <div class="history-team"><span>${teamFlag(team)}</span>${teamName(team)}</div>
     ${rows || '<div class="history-empty">Brak zakończonych meczów tej drużyny.</div>'}
   </div>`;
 }
@@ -235,11 +250,11 @@ function renderMatches() {
     teams.className = "teams";
     teams.innerHTML = `
       <div class="team${homeKnown ? "" : " unknown"}">
-        <span class="team-code">${teamCode(match.homeTeam)}</span>
+        <span class="team-code">${teamFlag(match.homeTeam)}</span>
         <span class="team-name">${teamName(match.homeTeam)}</span>
       </div>
       <div class="team${awayKnown ? "" : " unknown"}">
-        <span class="team-code">${teamCode(match.awayTeam)}</span>
+        <span class="team-code">${teamFlag(match.awayTeam)}</span>
         <span class="team-name">${teamName(match.awayTeam)}</span>
       </div>`;
 

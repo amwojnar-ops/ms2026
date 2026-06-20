@@ -232,6 +232,13 @@ h1 {
   font-size: 9px;
   font-weight: 700;
 }
+.team-code img {
+  display: block;
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: cover;
+}
 .team-name { overflow: hidden; color: #f4f6f9; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .team.unknown .team-name { color: var(--muted); font-weight: 400; }
 
@@ -297,6 +304,13 @@ h1 {
   border: 1px solid rgba(243, 198, 66, .24);
   border-radius: 5px;
   font-size: 9px;
+}
+.history-team span img {
+  display: block;
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: cover;
 }
 
 .history-match {

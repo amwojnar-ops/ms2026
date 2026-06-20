@@ -742,7 +742,8 @@ header::after {
 .ko-match-top { display:flex; justify-content:space-between; gap:8px; margin-bottom:10px; color:var(--muted); font-size:9px; }
 .ko-team { display:grid; grid-template-columns:24px minmax(0,1fr) 24px; align-items:center; min-height:29px; gap:7px; border-top:1px solid rgba(255,255,255,.045); }
 .ko-team:first-of-type { border-top:0; }
-.ko-team-code { display:grid; place-items:center; width:22px; height:16px; border-radius:3px; background:rgba(255,255,255,.06); color:var(--muted); font-size:7px; font-weight:700; }
+.ko-team-flag { display:block; width:22px; height:16px; border-radius:3px; object-fit:cover; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); }
+.ko-team-flag.placeholder { display:grid; place-items:center; color:var(--muted); font-size:7px; font-weight:700; }
 .ko-team-name { overflow:hidden; font-size:12px; font-weight:600; text-overflow:ellipsis; white-space:nowrap; }
 .ko-team-score { color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700; text-align:center; }
 .ko-team.unknown .ko-team-name { color:#718098; font-weight:400; font-style:italic; }
@@ -2718,6 +2719,19 @@ function knockoutTeamName(team){
   };
   return apiToPl[name]||name;
 }
+const KNOCKOUT_FLAG_BY_TLA = {
+  ALG:'dz', ARG:'ar', AUS:'au', AUT:'at', BEL:'be', BIH:'ba', BRA:'br', CAN:'ca',
+  CIV:'ci', COL:'co', COD:'cd', CPV:'cv', CRO:'hr', CUW:'cw', CZE:'cz', ECU:'ec',
+  EGY:'eg', ENG:'gb-eng', FRA:'fr', GER:'de', GHA:'gh', HAI:'ht', IRN:'ir', IRQ:'iq',
+  JOR:'jo', JPN:'jp', KOR:'kr', KSA:'sa', MAR:'ma', MEX:'mx', NED:'nl', NOR:'no',
+  NZL:'nz', PAN:'pa', PAR:'py', POR:'pt', QAT:'qa', RSA:'za', SCO:'gb-sct', SEN:'sn',
+  ESP:'es', SUI:'ch', SWE:'se', TUN:'tn', TUR:'tr', URU:'uy', USA:'us', UZB:'uz'
+};
+function knockoutTeamFlag(team){
+  const code=KNOCKOUT_FLAG_BY_TLA[team?.tla]||ISO[knockoutTeamName(team)];
+  if(!code)return '<span class="ko-team-flag placeholder">?</span>';
+  return `<img class="ko-team-flag" src="img/flags/${code}.png" alt="${knockoutTeamName(team)}">`;
+}
 function knockoutStatus(match){
   if(match?.status==='FINISHED')return {cls:'finished',label:LANG==='en'?'Finished':'Zakończony'};
   if(['IN_PLAY','PAUSED','LIVE'].includes(match?.status))return {cls:'live',label:LANG==='en'?'Live':'Trwa'};
@@ -2795,8 +2809,8 @@ function renderKnockout(){
     const score=match.score?.fullTime||{};
     return `<article class="ko-match">
       <div class="ko-match-top"><span>${LANG==='en'?'Match':'Mecz'} ${index+1}</span><span>${knockoutDate(match.utcDate)}</span></div>
-      <div class="ko-team${homeKnown?'':' unknown'}"><span class="ko-team-code">${match.homeTeam?.tla||'?'}</span><span class="ko-team-name">${knockoutTeamName(match.homeTeam)}</span><span class="ko-team-score">${Number.isInteger(score.home)?score.home:'–'}</span></div>
-      <div class="ko-team${awayKnown?'':' unknown'}"><span class="ko-team-code">${match.awayTeam?.tla||'?'}</span><span class="ko-team-name">${knockoutTeamName(match.awayTeam)}</span><span class="ko-team-score">${Number.isInteger(score.away)?score.away:'–'}</span></div>
+      <div class="ko-team${homeKnown?'':' unknown'}">${knockoutTeamFlag(match.homeTeam)}<span class="ko-team-name">${knockoutTeamName(match.homeTeam)}</span><span class="ko-team-score">${Number.isInteger(score.home)?score.home:'–'}</span></div>
+      <div class="ko-team${awayKnown?'':' unknown'}">${knockoutTeamFlag(match.awayTeam)}<span class="ko-team-name">${knockoutTeamName(match.awayTeam)}</span><span class="ko-team-score">${Number.isInteger(score.away)?score.away:'–'}</span></div>
       <div class="ko-match-status ${status.cls}"><span class="ko-status-dot"></span>${status.label}</div>
     </article>`;
   }).join('') : `<div class="ko-match">${LANG==='en'?'No fixture data.':'Brak danych o meczach.'}</div>`;
