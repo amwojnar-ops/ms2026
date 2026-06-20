@@ -805,8 +805,7 @@ header::after {
   .pdp-tip { font-size: 12px; }
   .subtabs {
     display: grid;
-    grid-template-columns: repeat(4, max-content);
-    justify-content: start;
+    grid-template-columns: max-content 1fr max-content max-content 1fr max-content;
     gap: 8px;
     margin-bottom: 14px;
   }
@@ -816,8 +815,12 @@ header::after {
     font-size: 12px;
     line-height: 1.1;
   }
-  #subtab-nadchodzace { grid-column: 4; }
-  #subtab-tabele { grid-column: 4; grid-row: 1; }
+  #subtab-skrot,
+  #subtab-zakonczone { grid-column: 1; justify-self: start; }
+  #subtab-daty { grid-column: 3; grid-row: 1; justify-self: end; }
+  #subtab-grupy { grid-column: 4; grid-row: 1; justify-self: start; }
+  #subtab-tabele { grid-column: 6; grid-row: 1; justify-self: end; }
+  #subtab-nadchodzace { grid-column: 6; justify-self: end; }
   .group-standings-grid { grid-template-columns: 1fr; gap: 10px; }
   .group-table th,
   .group-table td { padding: 6px 7px; }
@@ -923,7 +926,7 @@ header::after {
     <button class="subtab active" id="subtab-skrot" onclick="switchMatchView('skrot',this)">Skrót</button>
     <button class="subtab subtab-muted" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
     <button class="subtab subtab-muted" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
-    <button class="subtab subtab-muted" id="subtab-tabele" onclick="switchMatchView('tabele',this)">Grupy</button>
+    <button class="subtab subtab-muted" id="subtab-tabele" onclick="switchMatchView('tabele',this)">Tabele</button>
     <button class="subtab subtab-muted" id="subtab-zakonczone" onclick="switchMatchView('zakonczone',this)">Zakończone</button>
     <button class="subtab subtab-muted" id="subtab-nadchodzace" onclick="switchMatchView('nadchodzace',this)">Nadchodzące</button>
   </div>
