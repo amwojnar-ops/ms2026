@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-21T18:08:12.235Z",
+  "updatedAt": "2026-06-21T19:06:12.645Z",
   "matches": [
     {
       "id": 537327,
@@ -818,7 +818,7 @@
     {
       "id": 537365,
       "utcDate": "2026-06-21T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Belgium",
         "shortName": "Belgium",
@@ -831,11 +831,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-20T15:20:13Z"
+      "lastUpdated": "2026-06-21T19:06:01Z"
     },
     {
       "id": 537372,
