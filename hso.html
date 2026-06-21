@@ -1535,6 +1535,11 @@ function apiResult(api){
     ? `${score.home}-${score.away}` : null;
 }
 function apiLiveScore(api){
+  // Tymczasowa korekta live: football-data.org trzyma anulowana bramke Iranu.
+  // Nie zapisuje wyniku i nie wplywa na ranking, dopoki mecz nie ma statusu FINISHED.
+  if(api?.id===537365&&['IN_PLAY','PAUSED','LIVE'].includes(api?.status)){
+    return {home:0,away:0};
+  }
   const candidates=[
     api?.score?.fullTime,
     api?.score?.regularTime,
