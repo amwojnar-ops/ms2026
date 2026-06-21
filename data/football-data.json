@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-21T00:54:14.151Z",
+  "updatedAt": "2026-06-21T00:55:19.788Z",
   "matches": [
     {
       "id": 537327,
@@ -752,7 +752,7 @@
     {
       "id": 537354,
       "utcDate": "2026-06-21T00:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Ecuador",
         "shortName": "Ecuador",
@@ -769,7 +769,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-21T00:54:13Z"
+      "lastUpdated": "2026-06-21T00:54:59Z"
     },
     {
       "id": 537360,
