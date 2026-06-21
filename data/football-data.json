@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T22:05:20.880Z",
+  "updatedAt": "2026-06-21T18:08:12.235Z",
   "matches": [
     {
       "id": 537327,
@@ -725,7 +725,7 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-20T21:02:47Z"
+      "lastUpdated": "2026-06-21T08:25:01Z"
     },
     {
       "id": 537353,
@@ -747,12 +747,12 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-20T22:05:03Z"
+      "lastUpdated": "2026-06-21T08:25:00Z"
     },
     {
       "id": 537354,
       "utcDate": "2026-06-21T00:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Ecuador",
         "shortName": "Ecuador",
@@ -765,16 +765,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-20T15:20:13Z"
+      "lastUpdated": "2026-06-21T08:25:01Z"
     },
     {
       "id": 537360,
       "utcDate": "2026-06-21T04:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Tunisia",
         "shortName": "Tunisia",
@@ -787,16 +787,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 4
         }
       },
-      "lastUpdated": "2026-06-20T15:20:13Z"
+      "lastUpdated": "2026-06-21T08:25:01Z"
     },
     {
       "id": 537371,
       "utcDate": "2026-06-21T16:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Spain",
         "shortName": "Spain",
@@ -809,11 +809,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 5,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-20T15:20:13Z"
+      "lastUpdated": "2026-06-21T18:07:46Z"
     },
     {
       "id": 537365,
