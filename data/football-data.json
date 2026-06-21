@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-21T21:06:12.246Z",
+  "updatedAt": "2026-06-21T21:07:12.002Z",
   "matches": [
     {
       "id": 537327,
@@ -818,7 +818,7 @@
     {
       "id": 537365,
       "utcDate": "2026-06-21T19:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Belgium",
         "shortName": "Belgium",
@@ -835,7 +835,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-21T21:06:01Z"
+      "lastUpdated": "2026-06-21T21:06:37Z"
     },
     {
       "id": 537372,
