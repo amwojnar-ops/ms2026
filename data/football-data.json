@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-21T22:45:26.302Z",
+  "updatedAt": "2026-06-21T22:46:16.701Z",
   "matches": [
     {
       "id": 537327,
@@ -844,7 +844,7 @@
       "homeTeam": {
         "name": "Uruguay",
         "shortName": "Uruguay",
-        "tla": "URY"
+        "tla": "URU"
       },
       "awayTeam": {
         "name": "Cape Verde Islands",
@@ -857,7 +857,7 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-21T22:44:52Z"
+      "lastUpdated": "2026-06-21T22:45:28Z"
     },
     {
       "id": 537366,
