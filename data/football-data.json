@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-22T01:06:13.005Z",
+  "updatedAt": "2026-06-22T01:07:11.102Z",
   "matches": [
     {
       "id": 537327,
@@ -862,7 +862,7 @@
     {
       "id": 537366,
       "utcDate": "2026-06-22T01:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "New Zealand",
         "shortName": "New Zealand",
@@ -875,11 +875,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-22T01:59:01Z"
+      "lastUpdated": "2026-06-22T01:06:46Z"
     },
     {
       "id": 537399,
