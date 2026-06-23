@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T17:43:13.556Z",
+  "updatedAt": "2026-06-23T17:44:13.405Z",
   "matches": [
     {
       "id": 537327,
@@ -985,11 +985,11 @@
       },
       "score": {
         "fullTime": {
-          "home": 2,
-          "away": 1
+          "home": 3,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T17:42:36Z"
+      "lastUpdated": "2026-06-23T17:43:38Z"
     },
     {
       "id": 537411,
