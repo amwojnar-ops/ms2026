@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T23:00:50.504Z",
+  "updatedAt": "2026-06-24T23:15:23.160Z",
   "matches": [
     {
       "id": 537327,
@@ -1104,7 +1104,7 @@
     {
       "id": 537344,
       "utcDate": "2026-06-24T22:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Morocco",
         "shortName": "Morocco",
@@ -1121,7 +1121,7 @@
           "away": 2
         }
       },
-      "lastUpdated": "2026-06-24T22:58:08Z"
+      "lastUpdated": "2026-06-24T23:14:56Z"
     },
     {
       "id": 537343,
