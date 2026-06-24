@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T02:04:13.218Z",
+  "updatedAt": "2026-06-24T02:56:15.576Z",
   "matches": [
     {
       "id": 537327,
@@ -1038,7 +1038,7 @@
     {
       "id": 537406,
       "utcDate": "2026-06-24T02:00:00Z",
-      "status": "SCHEDULED",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Colombia",
         "shortName": "Colombia",
@@ -1051,11 +1051,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-24T02:57:04Z"
+      "lastUpdated": "2026-06-24T02:55:18Z"
     },
     {
       "id": 537337,
