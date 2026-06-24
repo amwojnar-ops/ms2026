@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T21:30:36.240Z",
+  "updatedAt": "2026-06-24T22:06:12.151Z",
   "matches": [
     {
       "id": 537327,
@@ -1126,7 +1126,7 @@
     {
       "id": 537343,
       "utcDate": "2026-06-24T22:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Scotland",
         "shortName": "Scotland",
@@ -1139,11 +1139,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-24T22:05:56Z"
     },
     {
       "id": 537331,
