@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T04:03:11.307Z",
+  "updatedAt": "2026-06-24T19:06:14.296Z",
   "matches": [
     {
       "id": 537327,
@@ -1060,7 +1060,7 @@
     {
       "id": 537337,
       "utcDate": "2026-06-24T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Switzerland",
         "shortName": "Switzerland",
@@ -1073,16 +1073,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-24T19:06:07Z"
     },
     {
       "id": 537338,
       "utcDate": "2026-06-24T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Bosnia-Herzegovina",
         "shortName": "Bosnia-H.",
@@ -1095,11 +1095,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-24T19:06:05Z"
     },
     {
       "id": 537344,
