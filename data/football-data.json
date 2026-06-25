@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-25T23:54:12.433Z",
+  "updatedAt": "2026-06-25T23:55:19.251Z",
   "matches": [
     {
       "id": 537327,
@@ -1253,12 +1253,12 @@
           "away": 2
         }
       },
-      "lastUpdated": "2026-06-25T23:53:40Z"
+      "lastUpdated": "2026-06-25T23:54:17Z"
     },
     {
       "id": 537362,
       "utcDate": "2026-06-25T23:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Japan",
         "shortName": "Japan",
@@ -1275,7 +1275,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-25T23:54:08Z"
+      "lastUpdated": "2026-06-25T23:55:18Z"
     },
     {
       "id": 537349,
