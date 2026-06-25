@@ -41,6 +41,28 @@ button, select { font: inherit; }
   background: linear-gradient(135deg, rgba(243, 198, 66, .11), rgba(22, 32, 53, .96) 46%);
 }
 
+.lang-toggle {
+  position: absolute;
+  z-index: 2;
+  top: 16px;
+  right: 16px;
+  min-width: 44px;
+  height: 34px;
+  color: var(--gold);
+  border: 1px solid rgba(243, 198, 66, .52);
+  border-radius: 8px;
+  background: rgba(9, 14, 25, .68);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.lang-toggle:hover {
+  color: #111;
+  background: var(--gold);
+}
+
 .hero::after {
   content: "";
   position: absolute;
@@ -439,6 +461,7 @@ h1 {
 @media (max-width: 620px) {
   .page { width: min(100% - 18px, 820px); padding-top: 12px; }
   .hero { padding: 22px 18px; }
+  .lang-toggle { top: 12px; right: 12px; height: 32px; }
   .info { grid-template-columns: 1fr; align-items: stretch; }
   .round-count { text-align: left; }
   .match { grid-template-columns: 72px minmax(0, 1fr); gap: 10px; }

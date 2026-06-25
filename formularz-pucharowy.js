@@ -13,6 +13,103 @@ const ROUND_CONFIG = {
   index1:  { key: "index1",  title: "Mecze o medale", count: 2, start: 30, dates: "18–19 lipca" }
 };
 
+const ROUND_CONFIG_EN = {
+  index16: { title: "Round of 32", dates: "June 28 – July 4" },
+  index8:  { title: "Round of 16", dates: "July 4–7" },
+  index4:  { title: "Quarter-finals", dates: "July 9–11" },
+  index2:  { title: "Semi-finals", dates: "July 14–15" },
+  index1:  { title: "Medal matches", dates: "July 18–19" }
+};
+
+const I18N = {
+  pl: {
+    langToggle: "EN",
+    eyebrow: "Loża Ekspertów · MŚ 2026",
+    intro: "Wynik typujemy po 90 minutach. Dogrywka i rzuty karne nie są uwzględniane.",
+    player: "Gracz",
+    choosePlayer: "— wybierz swoje imię —",
+    notice: "Możesz typować poznane pary etapami. Wcześniejsze wyniki pozostaną zapisane lokalnie po dodaniu kolejnych meczów. Pełny zestaw wyślesz po poznaniu wszystkich par.",
+    progress: "Postęp typowania",
+    copy: "KOPIUJ TYPY",
+    copied: "SKOPIOWANO",
+    savePdf: "ZAPISZ PDF",
+    preview: "Podgląd danych",
+    match: "Mecz",
+    thirdPlace: "Mecz o 3. miejsce",
+    final: "Finał",
+    matchSingular: "mecz",
+    matchPlural: "meczów",
+    history: "Historia ↓",
+    noHistory: "Brak zakończonych meczów tej drużyny.",
+    unknownTeam: "Drużyna jeszcze nieznana",
+    dateFallback: "Termin",
+    noDate: "—",
+    deadlineUnknown: "termin zostanie podany po ustaleniu terminarza",
+    closed: "Termin minął · typowanie zamknięte",
+    available: (known, count, deadline) => `Dostępne pary: ${known}/${count} · termin ${deadline}`,
+    waiting: deadline => `Oczekiwanie na pierwszą parę · termin ${deadline}`,
+    selectPlayerToast: "Wybierz gracza.",
+    fillAllToast: "Uzupełnij wyniki wszystkich meczów.",
+    pdfPlayerToast: "Wybierz gracza przed zapisaniem PDF.",
+    popupToast: "Zezwól przeglądarce na otwieranie nowych okien.",
+    outputPlayer: "GRACZ",
+    outputRound: "RUNDA",
+    pdfHeader: "Loża Ekspertów · MŚ 2026 · wynik po 90 minutach",
+    pdfPlayer: "Gracz",
+    pdfFilled: "Wypełniono",
+    pdfGenerated: "Wygenerowano",
+    pdfMatch: "Mecz",
+    pdfDate: "Termin",
+    pdfPick: "Typ",
+    pdfFooter: "Prywatna kopia typów gracza. Dane zapisane w tym dokumencie nie są automatycznie przesyłane administratorowi.",
+    instructionTitle: "Jak przesłać typy",
+    instructionHtml: 'Po uzupełnieniu wszystkich wyników kliknij <strong>KOPIUJ TYPY</strong>. Następnie otwórz prywatną rozmowę na WhatsAppie z <strong>Andrzejem W. (administratorem)</strong>, wklej skopiowaną treść i wyślij ją w prywatnej wiadomości. Nie przesyłaj typów na grupę.'
+  },
+  en: {
+    langToggle: "PL",
+    eyebrow: "Experts' Lounge · World Cup 2026",
+    intro: "Predict the score after 90 minutes. Extra time and penalties do not count.",
+    player: "Player",
+    choosePlayer: "— choose your name —",
+    notice: "You can predict known fixtures step by step. Earlier scores stay saved locally when new fixtures are added. Send the full set once all fixtures are known.",
+    progress: "Prediction progress",
+    copy: "COPY PICKS",
+    copied: "COPIED",
+    savePdf: "SAVE PDF",
+    preview: "Data preview",
+    match: "Match",
+    thirdPlace: "Third-place match",
+    final: "Final",
+    matchSingular: "match",
+    matchPlural: "matches",
+    history: "History ↓",
+    noHistory: "No finished matches for this team.",
+    unknownTeam: "Team not known yet",
+    dateFallback: "Date",
+    noDate: "—",
+    deadlineUnknown: "deadline will be shown once the schedule is known",
+    closed: "Deadline passed · predictions closed",
+    available: (known, count, deadline) => `Available fixtures: ${known}/${count} · deadline ${deadline}`,
+    waiting: deadline => `Waiting for the first fixture · deadline ${deadline}`,
+    selectPlayerToast: "Choose a player.",
+    fillAllToast: "Fill in all match scores.",
+    pdfPlayerToast: "Choose a player before saving PDF.",
+    popupToast: "Allow your browser to open new windows.",
+    outputPlayer: "PLAYER",
+    outputRound: "ROUND",
+    pdfHeader: "Experts' Lounge · World Cup 2026 · score after 90 minutes",
+    pdfPlayer: "Player",
+    pdfFilled: "Filled",
+    pdfGenerated: "Generated",
+    pdfMatch: "Match",
+    pdfDate: "Date",
+    pdfPick: "Pick",
+    pdfFooter: "Private copy of the player's picks. Data saved in this document is not sent automatically to the administrator.",
+    instructionTitle: "How to send your picks",
+    instructionHtml: 'After filling in all scores, click <strong>COPY PICKS</strong>. Then open a private WhatsApp chat with <strong>Andrzej W. (administrator)</strong>, paste the copied text and send it privately. Do not send your picks to the group.'
+  }
+};
+
 const API_TO_PL = {
   "Mexico":"Meksyk", "South Africa":"RPA", "Korea Republic":"Korea Płd.",
   "South Korea":"Korea Płd.", "Czechia":"Czechy", "Canada":"Kanada",
@@ -36,6 +133,7 @@ const API_TO_PL = {
 const pageKey = document.body.dataset.round;
 const config = ROUND_CONFIG[pageKey];
 const storageKey = `ms2026_${config.key}_typy`;
+const langStorageKey = "ms2026_knockout_lang";
 const PREDICTION_LOCK_MINUTES = 120;
 const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537425, side: "homeTeam", team: { name: "Mexico", shortName: "Mexico", tla: "MEX" } },
@@ -53,6 +151,20 @@ let sourceMatches = [];
 let selects = [];
 let roundDeadline = null;
 let knownPairCount = 0;
+let LANG = localStorage.getItem(langStorageKey) === "en" ? "en" : "pl";
+
+function tr(key, ...args) {
+  const value = I18N[LANG][key];
+  return typeof value === "function" ? value(...args) : value;
+}
+
+function roundTitle() {
+  return LANG === "en" ? ROUND_CONFIG_EN[pageKey].title : config.title;
+}
+
+function roundDates() {
+  return LANG === "en" ? ROUND_CONFIG_EN[pageKey].dates : config.dates;
+}
 
 function knockoutMatches(matches) {
   const knockout = matches
@@ -84,7 +196,8 @@ function withKnownKnockoutTeams(matches) {
 
 function teamName(team) {
   const source = team?.shortName || team?.name;
-  return source ? (API_TO_PL[source] || source) : "Drużyna jeszcze nieznana";
+  if (!source) return tr("unknownTeam");
+  return LANG === "en" ? source : (API_TO_PL[source] || source);
 }
 
 function teamCode(team) {
@@ -149,7 +262,7 @@ function historyRow(match, team) {
   const date = formatDate(match.utcDate);
   return `<div class="history-match ${resultClass}">
     <span class="history-date">${date.date}</span>
-    <span class="history-opponent">${homeSide ? "vs" : "z"} ${teamName(opponent)}</span>
+    <span class="history-opponent">vs ${teamName(opponent)}</span>
     <strong class="history-score">${teamGoals}–${opponentGoals}</strong>
   </div>`;
 }
@@ -158,7 +271,7 @@ function buildHistoryColumn(team, matches) {
   const rows = matches.map(match => historyRow(match, team)).join("");
   return `<div class="history-column">
     <div class="history-team"><span>${teamFlag(team)}</span>${teamName(team)}</div>
-    ${rows || '<div class="history-empty">Brak zakończonych meczów tej drużyny.</div>'}
+    ${rows || `<div class="history-empty">${tr("noHistory")}</div>`}
   </div>`;
 }
 
@@ -172,13 +285,14 @@ function buildMatchHistory(match) {
 }
 
 function formatDate(utcDate) {
-  if (!utcDate) return { date: "Termin", time: "—" };
+  if (!utcDate) return { date: tr("dateFallback"), time: tr("noDate") };
   const date = new Date(utcDate);
+  const locale = LANG === "en" ? "en-GB" : "pl-PL";
   return {
-    date: new Intl.DateTimeFormat("pl-PL", {
+    date: new Intl.DateTimeFormat(locale, {
       timeZone: "Europe/Warsaw", day: "2-digit", month: "2-digit"
     }).format(date),
-    time: new Intl.DateTimeFormat("pl-PL", {
+    time: new Intl.DateTimeFormat(locale, {
       timeZone: "Europe/Warsaw", hour: "2-digit", minute: "2-digit"
     }).format(date)
   };
@@ -190,8 +304,8 @@ function deadlineFromFirstMatch(utcDate) {
 }
 
 function deadlineLabel(deadline) {
-  if (!deadline) return "termin zostanie podany po ustaleniu terminarza";
-  return new Intl.DateTimeFormat("pl-PL", {
+  if (!deadline) return tr("deadlineUnknown");
+  return new Intl.DateTimeFormat(LANG === "en" ? "en-GB" : "pl-PL", {
     timeZone: "Europe/Warsaw", day: "2-digit", month: "2-digit", year: "numeric",
     hour: "2-digit", minute: "2-digit"
   }).format(deadline).replace(",", " ·");
@@ -224,8 +338,8 @@ function scoreSelect(index, slotId, side, locked) {
 }
 
 function roundLabel(index) {
-  if (pageKey !== "index1") return `Mecz ${index + 1}`;
-  return index === 0 ? "Mecz o 3. miejsce" : "Finał";
+  if (pageKey !== "index1") return `${tr("match")} ${index + 1}`;
+  return index === 0 ? tr("thirdPlace") : tr("final");
 }
 
 function renderMatches() {
@@ -251,7 +365,7 @@ function renderMatches() {
 
     const time = document.createElement("div");
     time.className = "match-time";
-    time.innerHTML = `<strong>${roundLabel(index)}</strong>${date.date} · ${date.time}<span class="match-more">Historia ↓</span>`;
+    time.innerHTML = `<strong>${roundLabel(index)}</strong>${date.date} · ${date.time}<span class="match-more">${tr("history")}</span>`;
 
     const teams = document.createElement("div");
     teams.className = "teams";
@@ -307,15 +421,14 @@ function placeholderMatches() {
 
 function setAvailability() {
   const beforeDeadline = !roundDeadline || Date.now() <= roundDeadline.getTime();
-  const allKnown = knownPairCount === config.count;
   const anyKnown = knownPairCount > 0;
   const status = document.getElementById("status");
   status.classList.toggle("ready", anyKnown && beforeDeadline);
   document.getElementById("status-text").textContent = !beforeDeadline
-    ? "Termin minął · typowanie zamknięte"
+    ? tr("closed")
     : anyKnown
-      ? `Dostępne pary: ${knownPairCount}/${config.count} · termin ${deadlineLabel(roundDeadline)}`
-      : `Oczekiwanie na pierwszą parę · termin ${deadlineLabel(roundDeadline)}`;
+      ? tr("available", knownPairCount, config.count, deadlineLabel(roundDeadline))
+      : tr("waiting", deadlineLabel(roundDeadline));
   selects.forEach(({ home, away, pairKnown }) => {
     home.disabled = !pairKnown || !beforeDeadline;
     away.disabled = !pairKnown || !beforeDeadline;
@@ -402,7 +515,7 @@ function showToast(message) {
 
 function outputText() {
   const player = document.getElementById("player").value;
-  const lines = [`GRACZ: ${player}`, `RUNDA: ${config.title}`, "---"];
+  const lines = [`${tr("outputPlayer")}: ${player}`, `${tr("outputRound")}: ${roundTitle()}`, "---"];
   roundMatches.forEach((match, index) => {
     const score = selects[index];
     lines.push(`${roundLabel(index)}: ${teamName(match.homeTeam)} - ${teamName(match.awayTeam)} | ${score.home.value}-${score.away.value}`);
@@ -413,13 +526,13 @@ function outputText() {
 function copyResults() {
   const player = document.getElementById("player").value;
   if (!player) {
-    showToast("Wybierz gracza.");
+    showToast(tr("selectPlayerToast"));
     document.getElementById("player").focus();
     return;
   }
   const missing = selects.find(({ home, away }) => home.value === "" || away.value === "");
   if (missing) {
-    showToast("Uzupełnij wyniki wszystkich meczów.");
+    showToast(tr("fillAllToast"));
     missing.row.scrollIntoView({ behavior: "smooth", block: "center" });
     return;
   }
@@ -428,12 +541,12 @@ function copyResults() {
   const done = () => {
     const button = document.getElementById("copy");
     button.classList.add("success");
-    button.textContent = "SKOPIOWANO";
+    button.textContent = tr("copied");
     document.getElementById("preview-text").textContent = text;
     document.getElementById("preview").classList.add("visible");
     setTimeout(() => {
       button.classList.remove("success");
-      button.textContent = "KOPIUJ TYPY";
+      button.textContent = tr("copy");
     }, 2200);
   };
 
@@ -464,7 +577,7 @@ function escapeHtml(value) {
 function generatePDF() {
   const player = document.getElementById("player").value;
   if (!player) {
-    showToast("Wybierz gracza przed zapisaniem PDF.");
+    showToast(tr("pdfPlayerToast"));
     document.getElementById("player").focus();
     return;
   }
@@ -485,14 +598,14 @@ function generatePDF() {
     </tr>`;
   }).join("");
 
-  const generated = new Intl.DateTimeFormat("pl-PL", {
+  const generated = new Intl.DateTimeFormat(LANG === "en" ? "en-GB" : "pl-PL", {
     dateStyle: "short", timeStyle: "short"
   }).format(new Date());
   const html = `<!DOCTYPE html>
-<html lang="pl">
+<html lang="${LANG}">
 <head>
 <meta charset="UTF-8">
-<title>${escapeHtml(config.title)} · ${escapeHtml(player)}</title>
+<title>${escapeHtml(roundTitle())} · ${escapeHtml(player)}</title>
 <style>
   @page { size: A4 portrait; margin: 14mm; }
   * { box-sizing: border-box; }
@@ -514,21 +627,21 @@ function generatePDF() {
 </head>
 <body>
   <header>
-    <div><h1>${escapeHtml(config.title)}</h1><p>Loża Ekspertów · MŚ 2026 · wynik po 90 minutach</p></div>
-    <div class="player"><span>Gracz</span><strong>${escapeHtml(player)}</strong></div>
+    <div><h1>${escapeHtml(roundTitle())}</h1><p>${escapeHtml(tr("pdfHeader"))}</p></div>
+    <div class="player"><span>${escapeHtml(tr("pdfPlayer"))}</span><strong>${escapeHtml(player)}</strong></div>
   </header>
-  <div class="summary"><span>Wypełniono: <strong>${filled}/${config.count}</strong></span><span>Wygenerowano: ${escapeHtml(generated)}</span></div>
+  <div class="summary"><span>${escapeHtml(tr("pdfFilled"))}: <strong>${filled}/${config.count}</strong></span><span>${escapeHtml(tr("pdfGenerated"))}: ${escapeHtml(generated)}</span></div>
   <table>
-    <thead><tr><th>Mecz</th><th>Termin</th><th colspan="3">Typ</th></tr></thead>
+    <thead><tr><th>${escapeHtml(tr("pdfMatch"))}</th><th>${escapeHtml(tr("pdfDate"))}</th><th colspan="3">${escapeHtml(tr("pdfPick"))}</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
-  <footer>Prywatna kopia typów gracza. Dane zapisane w tym dokumencie nie są automatycznie przesyłane administratorowi.</footer>
+  <footer>${escapeHtml(tr("pdfFooter"))}</footer>
 </body>
 </html>`;
 
   const printWindow = window.open("", "_blank");
   if (!printWindow) {
-    showToast("Zezwól przeglądarce na otwieranie nowych okien.");
+    showToast(tr("popupToast"));
     return;
   }
   printWindow.document.write(html);
@@ -542,31 +655,60 @@ function addFinalActions() {
   const pdfButton = document.createElement("button");
   pdfButton.type = "button";
   pdfButton.className = "pdf-btn";
-  pdfButton.textContent = "ZAPISZ PDF";
+  pdfButton.id = "pdf";
+  pdfButton.textContent = tr("savePdf");
   pdfButton.addEventListener("click", generatePDF);
   actions.appendChild(pdfButton);
 
   const instruction = document.createElement("section");
   instruction.className = "send-instruction";
+  instruction.id = "sendInstruction";
   instruction.innerHTML = `
-    <h2>Jak przesłać typy</h2>
-    <p>
-      Po uzupełnieniu wszystkich wyników kliknij <strong>KOPIUJ TYPY</strong>.
-      Następnie otwórz prywatną rozmowę na WhatsAppie z
-      <strong>Andrzejem W. (administratorem)</strong>, wklej skopiowaną treść
-      i wyślij ją w prywatnej wiadomości. Nie przesyłaj typów na grupę.
-    </p>`;
+    <h2>${tr("instructionTitle")}</h2>
+    <p>${tr("instructionHtml")}</p>`;
   actions.insertAdjacentElement("afterend", instruction);
 }
 
-document.getElementById("round-title").textContent = config.title;
-document.getElementById("round-dates").textContent = config.dates;
-document.getElementById("match-count").textContent = config.count;
-document.getElementById("match-word").textContent = config.count === 1 ? "mecz" : "meczów";
+function applyLanguage() {
+  document.documentElement.lang = LANG;
+  document.title = `${roundTitle()} · ${LANG === "en" ? "World Cup 2026" : "MŚ 2026"}`;
+  document.getElementById("langToggle").textContent = tr("langToggle");
+  document.querySelector(".eyebrow").textContent = tr("eyebrow");
+  document.getElementById("introText").textContent = tr("intro");
+  document.getElementById("playerLabel").textContent = tr("player");
+  document.getElementById("playerEmpty").textContent = tr("choosePlayer");
+  document.getElementById("notice").textContent = tr("notice");
+  document.getElementById("progressLabel").textContent = tr("progress");
+  document.getElementById("copy").textContent = tr("copy");
+  const pdfButton = document.getElementById("pdf");
+  if (pdfButton) pdfButton.textContent = tr("savePdf");
+  document.getElementById("previewTitle").textContent = tr("preview");
+  document.getElementById("round-title").textContent = roundTitle();
+  document.getElementById("round-dates").textContent = roundDates();
+  document.getElementById("match-count").textContent = config.count;
+  document.getElementById("match-word").textContent = config.count === 1 ? tr("matchSingular") : tr("matchPlural");
+  const instruction = document.getElementById("sendInstruction");
+  if (instruction) instruction.innerHTML = `<h2>${tr("instructionTitle")}</h2><p>${tr("instructionHtml")}</p>`;
+  if (roundMatches.length) {
+    const savedScroll = window.scrollY;
+    renderMatches();
+    window.scrollTo(0, savedScroll);
+  } else {
+    setAvailability();
+  }
+}
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  saveState();
+  LANG = LANG === "pl" ? "en" : "pl";
+  localStorage.setItem(langStorageKey, LANG);
+  applyLanguage();
+});
 document.getElementById("player").addEventListener("change", saveState);
 document.getElementById("copy").addEventListener("click", copyResults);
 buildPlayerSelect();
 addFinalActions();
+applyLanguage();
 loadMatches();
 setInterval(() => {
   if (roundMatches.length) setAvailability();
