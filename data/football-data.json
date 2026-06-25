@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T21:04:12.908Z",
+  "updatedAt": "2026-06-25T03:30:33.172Z",
   "matches": [
     {
       "id": 537327,
@@ -681,7 +681,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T20:15:54Z"
+      "lastUpdated": "2026-06-25T03:25:00Z"
     },
     {
       "id": 537347,
@@ -989,7 +989,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T22:35:13Z"
+      "lastUpdated": "2026-06-25T03:25:01Z"
     },
     {
       "id": 537411,
@@ -1011,7 +1011,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-24T00:40:37Z"
+      "lastUpdated": "2026-06-25T03:25:01Z"
     },
     {
       "id": 537412,
@@ -1033,7 +1033,7 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-24T02:55:22Z"
+      "lastUpdated": "2026-06-25T03:25:01Z"
     },
     {
       "id": 537406,
@@ -1055,7 +1055,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-24T04:02:41Z"
+      "lastUpdated": "2026-06-25T03:25:01Z"
     },
     {
       "id": 537337,
@@ -1077,7 +1077,7 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-24T21:01:47Z"
+      "lastUpdated": "2026-06-25T03:25:00Z"
     },
     {
       "id": 537338,
@@ -1099,12 +1099,12 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-24T21:03:54Z"
+      "lastUpdated": "2026-06-25T03:25:00Z"
     },
     {
       "id": 537344,
       "utcDate": "2026-06-24T22:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Morocco",
         "shortName": "Morocco",
@@ -1117,16 +1117,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 4,
+          "away": 2
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-25T03:25:01Z"
     },
     {
       "id": 537343,
       "utcDate": "2026-06-24T22:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Scotland",
         "shortName": "Scotland",
@@ -1139,16 +1139,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 3
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-25T03:25:01Z"
     },
     {
       "id": 537331,
       "utcDate": "2026-06-25T01:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Czechia",
         "shortName": "Czechia",
@@ -1161,16 +1161,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 3
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-25T03:25:00Z"
     },
     {
       "id": 537332,
       "utcDate": "2026-06-25T01:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "South Africa",
         "shortName": "South Africa",
@@ -1183,11 +1183,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-25T03:25:00Z"
     },
     {
       "id": 537355,
