@@ -35,7 +35,7 @@ function hasScore(match) {
     && Number.isInteger(match?.score?.fullTime?.away);
 }
 
-function betterMatch(current, candidate) {
+function betterMatch(current, candidate, options = {}) {
   if (!current) return candidate;
   const currentRank = statusRank[current.status] || 0;
   const candidateRank = statusRank[candidate.status] || 0;
@@ -43,6 +43,7 @@ function betterMatch(current, candidate) {
   if (candidateRank < currentRank) return current;
   if (hasScore(candidate) && !hasScore(current)) return candidate;
   if (hasScore(current) && !hasScore(candidate)) return current;
+  if (options.preferFreshLive && candidateRank < statusRank.FINISHED) return candidate;
   const currentUpdated = Date.parse(current.lastUpdated) || 0;
   const candidateUpdated = Date.parse(candidate.lastUpdated) || 0;
   return candidateUpdated >= currentUpdated ? candidate : current;
@@ -227,7 +228,9 @@ const freshMatches = (payload.matches || []).map(match => ({
 }));
 
 const historicalMatches = historicalBestMatches();
-const matches = freshMatches.map(match => betterMatch(historicalMatches.get(match.id), match));
+const matches = freshMatches.map(match =>
+  betterMatch(historicalMatches.get(match.id), match, { preferFreshLive: true })
+);
 
 const apiHasUnfinishedActiveMatch = matches.some(match => {
   const kickoff = Date.parse(match.utcDate);
