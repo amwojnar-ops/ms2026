@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-25T20:54:14.144Z",
+  "updatedAt": "2026-06-25T20:55:14.796Z",
   "matches": [
     {
       "id": 537327,
@@ -1192,7 +1192,7 @@
     {
       "id": 537355,
       "utcDate": "2026-06-25T20:00:00Z",
-      "status": "TIMED",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Ecuador",
         "shortName": "Ecuador",
@@ -1205,11 +1205,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-25T20:54:44Z"
     },
     {
       "id": 537356,
