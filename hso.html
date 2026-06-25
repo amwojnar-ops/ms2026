@@ -2842,6 +2842,8 @@ function renderKnockout(){
     ? (LANG==='en'?'Open prediction form':'Otwórz formularz typowania')
     : (LANG==='en'?'Waiting for teams':'Oczekiwanie na drużyny');
   actionBtn.href=formReady?activeRound.form:'#';
+  actionBtn.target=formReady?'_blank':'';
+  actionBtn.rel=formReady?'noopener noreferrer':'';
   actionBtn.classList.toggle('ready',formReady);
   actionBtn.setAttribute('aria-disabled',String(!formReady));
   actionBtn.onclick=formReady?null:event=>event.preventDefault();
