@@ -3,7 +3,7 @@ name: Aktualizacja wynikow football-data.org
 on:
   workflow_dispatch:
   schedule:
-    - cron: "7/15 * * * *"
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write

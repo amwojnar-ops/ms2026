@@ -8,6 +8,8 @@ const pagePath = 'hso.html';
 const now = process.env.TEST_NOW ? Date.parse(process.env.TEST_NOW) : Date.now();
 const activeWindowMs = 4 * 60 * 60 * 1000;
 const preStartWindowMs = 30 * 60 * 1000;
+const tournamentMonitoringStart = Date.UTC(2026, 5, 11, 0, 0);
+const tournamentMonitoringEnd = Date.UTC(2026, 6, 20, 23, 59);
 const knockoutMonitoringStart = Date.UTC(2026, 5, 19, 0, 0);
 
 let previousMatches = [];
@@ -110,9 +112,12 @@ const matchApproaching = nextMatch
   && nextMatch.kickoff - now <= preStartWindowMs;
 const fiveMinuteCheck = Math.floor(now / 60000) % 5 === 0;
 const thirtyMinuteCheck = Math.floor(now / 60000) % 30 === 0;
+const tournamentMonitoring = now >= tournamentMonitoringStart
+  && now <= tournamentMonitoringEnd
+  && fiveMinuteCheck;
 const knockoutMonitoring = now >= knockoutMonitoringStart && thirtyMinuteCheck;
 
-if (!matchInProgress && (!matchApproaching || !fiveMinuteCheck) && !knockoutMonitoring) {
+if (!matchInProgress && (!matchApproaching || !fiveMinuteCheck) && !knockoutMonitoring && !tournamentMonitoring) {
   await rm(pollingMarkerPath, { force: true });
   await rm(waitingMarkerPath, { force: true });
   console.log('No API request needed in this minute.');
@@ -124,6 +129,10 @@ if (matchInProgress) {
   await writeFile(pollingMarkerPath, 'active\n', 'utf8');
   await rm(waitingMarkerPath, { force: true });
   console.log('Active match: checking football-data.org.');
+} else if (tournamentMonitoring) {
+  await rm(pollingMarkerPath, { force: true });
+  await rm(waitingMarkerPath, { force: true });
+  console.log('Tournament monitoring: checking football-data.org.');
 } else if (knockoutMonitoring) {
   await rm(pollingMarkerPath, { force: true });
   await rm(waitingMarkerPath, { force: true });
