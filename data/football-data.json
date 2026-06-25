@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-25T00:30:33.115Z",
+  "updatedAt": "2026-06-25T01:06:14.416Z",
   "matches": [
     {
       "id": 537327,
@@ -1148,7 +1148,7 @@
     {
       "id": 537331,
       "utcDate": "2026-06-25T01:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Czechia",
         "shortName": "Czechia",
@@ -1161,16 +1161,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-25T01:06:05Z"
     },
     {
       "id": 537332,
       "utcDate": "2026-06-25T01:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "South Africa",
         "shortName": "South Africa",
@@ -1183,11 +1183,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-23T15:20:15Z"
+      "lastUpdated": "2026-06-25T01:05:44Z"
     },
     {
       "id": 537355,
