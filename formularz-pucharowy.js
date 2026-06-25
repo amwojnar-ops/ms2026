@@ -144,7 +144,8 @@ const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537417, side: "awayTeam", team: { name: "Canada", shortName: "Canada", tla: "CAN" } },
   { matchId: 537429, side: "homeTeam", team: { name: "Switzerland", shortName: "Switzerland", tla: "SUI" } },
   { matchId: 537423, side: "homeTeam", team: { name: "Brazil", shortName: "Brazil", tla: "BRA" } },
-  { matchId: 537418, side: "awayTeam", team: { name: "Morocco", shortName: "Morocco", tla: "MAR" } }
+  { matchId: 537418, side: "awayTeam", team: { name: "Morocco", shortName: "Morocco", tla: "MAR" } },
+  { matchId: 537416, side: "homeTeam", team: { name: "Ivory Coast", shortName: "Ivory Coast", tla: "CIV" } }
 ];
 let roundMatches = [];
 let sourceMatches = [];
