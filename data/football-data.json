@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-26T19:58:15.167Z",
+  "updatedAt": "2026-06-26T20:02:14.849Z",
   "matches": [
     {
       "id": 537327,
@@ -1346,7 +1346,7 @@
     {
       "id": 537396,
       "utcDate": "2026-06-26T19:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Senegal",
         "shortName": "Senegal",
@@ -1359,11 +1359,11 @@
       },
       "score": {
         "fullTime": {
-          "home": 0,
+          "home": 1,
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-26T19:06:10Z"
+      "lastUpdated": "2026-06-26T20:01:58Z"
     },
     {
       "id": 537373,
