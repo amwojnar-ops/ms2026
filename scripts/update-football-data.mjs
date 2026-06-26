@@ -150,11 +150,12 @@ if (!token) {
   throw new Error('Missing FOOTBALL_DATA_TOKEN secret.');
 }
 
-const url = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026';
+const competitionUrl = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026';
+const liveUrl = 'https://api.football-data.org/v4/matches';
 const retryDelaysMs = [3000, 7000];
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-async function fetchFootballData() {
+async function fetchFootballData(url, label) {
   let lastError;
 
   for (let attempt = 1; attempt <= 3; attempt += 1) {
@@ -169,7 +170,7 @@ async function fetchFootballData() {
 
       const responseText = await response.text();
       const error = new Error(
-        `football-data.org returned HTTP ${response.status}: ${responseText}`
+        `football-data.org ${label} returned HTTP ${response.status}: ${responseText}`
       );
 
       // Authentication and other client errors require configuration changes,
@@ -188,44 +189,74 @@ async function fetchFootballData() {
 
     if (attempt < 3) {
       const delay = retryDelaysMs[attempt - 1];
-      console.warn(`API attempt ${attempt}/3 failed. Retrying in ${delay / 1000} seconds.`);
+      console.warn(`API ${label} attempt ${attempt}/3 failed. Retrying in ${delay / 1000} seconds.`);
       await sleep(delay);
     }
   }
 
   console.warn(
-    `football-data.org is temporarily unavailable after 3 attempts: ${lastError?.message || lastError}`
+    `football-data.org ${label} is temporarily unavailable after 3 attempts: ${lastError?.message || lastError}`
   );
   return null;
 }
 
-const payload = await fetchFootballData();
+function mapApiMatch(match) {
+  return {
+    id: match.id,
+    utcDate: match.utcDate,
+    status: match.status,
+    homeTeam: {
+      name: match.homeTeam?.name || null,
+      shortName: match.homeTeam?.shortName || null,
+      tla: match.homeTeam?.tla || null
+    },
+    awayTeam: {
+      name: match.awayTeam?.name || null,
+      shortName: match.awayTeam?.shortName || null,
+      tla: match.awayTeam?.tla || null
+    },
+    score: {
+      fullTime: {
+        home: match.score?.fullTime?.home ?? null,
+        away: match.score?.fullTime?.away ?? null
+      }
+    },
+    lastUpdated: match.lastUpdated
+  };
+}
+
+const payload = await fetchFootballData(competitionUrl, 'competition');
 if (!payload) {
   console.log('Keeping the last saved match data. The next workflow run will try again.');
   process.exit(0);
 }
-const freshMatches = (payload.matches || []).map(match => ({
-  id: match.id,
-  utcDate: match.utcDate,
-  status: match.status,
-  homeTeam: {
-    name: match.homeTeam?.name || null,
-    shortName: match.homeTeam?.shortName || null,
-    tla: match.homeTeam?.tla || null
-  },
-  awayTeam: {
-    name: match.awayTeam?.name || null,
-    shortName: match.awayTeam?.shortName || null,
-    tla: match.awayTeam?.tla || null
-  },
-  score: {
-    fullTime: {
-      home: match.score?.fullTime?.home ?? null,
-      away: match.score?.fullTime?.away ?? null
+const freshMatches = (payload.matches || []).map(mapApiMatch);
+
+if (matchInProgress || tournamentMonitoring) {
+  let livePayload = null;
+  try {
+    livePayload = await fetchFootballData(liveUrl, 'live');
+  } catch (error) {
+    console.warn(`Live endpoint skipped: ${error?.message || error}`);
+  }
+  if (livePayload) {
+    const byId = new Map(freshMatches.map(match => [match.id, match]));
+    let liveOverrides = 0;
+    for (const liveMatch of (livePayload.matches || []).map(mapApiMatch)) {
+      const competitionMatch = byId.get(liveMatch.id);
+      if (!competitionMatch) continue;
+      const merged = betterMatch(competitionMatch, liveMatch, { preferFreshLive: true });
+      if (JSON.stringify(merged) !== JSON.stringify(competitionMatch)) {
+        liveOverrides += 1;
+        byId.set(liveMatch.id, merged);
+      }
     }
-  },
-  lastUpdated: match.lastUpdated
-}));
+    if (liveOverrides > 0) {
+      console.log(`Live endpoint refreshed ${liveOverrides} World Cup match(es).`);
+    }
+    freshMatches.splice(0, freshMatches.length, ...freshMatches.map(match => byId.get(match.id) || match));
+  }
+}
 
 const historicalMatches = historicalBestMatches();
 const matches = freshMatches.map(match =>
