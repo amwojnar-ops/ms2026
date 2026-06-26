@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-26T00:10:20.634Z",
+  "updatedAt": "2026-06-26T00:11:13.290Z",
   "matches": [
     {
       "id": 537327,
@@ -1236,7 +1236,7 @@
     {
       "id": 537361,
       "utcDate": "2026-06-25T23:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Tunisia",
         "shortName": "Tunisia",
@@ -1253,7 +1253,7 @@
           "away": 2
         }
       },
-      "lastUpdated": "2026-06-25T23:54:17Z"
+      "lastUpdated": "2026-06-26T00:10:44Z"
     },
     {
       "id": 537362,
