@@ -148,6 +148,8 @@ const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537418, side: "homeTeam", team: { name: "Netherlands", shortName: "Netherlands", tla: "NED" } },
   { matchId: 537418, side: "awayTeam", team: { name: "Morocco", shortName: "Morocco", tla: "MAR" } },
   { matchId: 537416, side: "homeTeam", team: { name: "Ivory Coast", shortName: "Ivory Coast", tla: "CIV" } },
+  { matchId: 537416, side: "awayTeam", team: { name: "Norway", shortName: "Norway", tla: "NOR" } },
+  { matchId: 537424, side: "homeTeam", team: { name: "France", shortName: "France", tla: "FRA" } },
   { matchId: 537421, side: "awayTeam", team: { name: "Bosnia-Herzegovina", shortName: "Bosnia-H.", tla: "BIH" } },
   { matchId: 537428, side: "homeTeam", team: { name: "Australia", shortName: "Australia", tla: "AUS" } }
 ];
