@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-26T19:05:18.804Z",
+  "updatedAt": "2026-06-26T19:06:12.813Z",
   "matches": [
     {
       "id": 537327,
@@ -1324,7 +1324,7 @@
     {
       "id": 537395,
       "utcDate": "2026-06-26T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Norway",
         "shortName": "Norway",
@@ -1337,16 +1337,16 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-26T07:48:25Z"
+      "lastUpdated": "2026-06-26T19:06:02Z"
     },
     {
       "id": 537396,
       "utcDate": "2026-06-26T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Senegal",
         "shortName": "Senegal",
@@ -1359,11 +1359,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-26T07:48:25Z"
+      "lastUpdated": "2026-06-26T19:06:10Z"
     },
     {
       "id": 537373,
