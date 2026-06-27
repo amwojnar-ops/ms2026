@@ -150,8 +150,12 @@ const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537416, side: "homeTeam", team: { name: "Ivory Coast", shortName: "Ivory Coast", tla: "CIV" } },
   { matchId: 537416, side: "awayTeam", team: { name: "Norway", shortName: "Norway", tla: "NOR" } },
   { matchId: 537424, side: "homeTeam", team: { name: "France", shortName: "France", tla: "FRA" } },
+  { matchId: 537422, side: "homeTeam", team: { name: "Belgium", shortName: "Belgium", tla: "BEL" } },
+  { matchId: 537419, side: "homeTeam", team: { name: "Spain", shortName: "Spain", tla: "ESP" } },
   { matchId: 537421, side: "awayTeam", team: { name: "Bosnia-Herzegovina", shortName: "Bosnia-H.", tla: "BIH" } },
-  { matchId: 537428, side: "homeTeam", team: { name: "Australia", shortName: "Australia", tla: "AUS" } }
+  { matchId: 537428, side: "homeTeam", team: { name: "Australia", shortName: "Australia", tla: "AUS" } },
+  { matchId: 537428, side: "awayTeam", team: { name: "Egypt", shortName: "Egypt", tla: "EGY" } },
+  { matchId: 537427, side: "awayTeam", team: { name: "Cape Verde Islands", shortName: "Cape Verde", tla: "CPV" } }
 ];
 let roundMatches = [];
 let sourceMatches = [];
