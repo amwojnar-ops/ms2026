@@ -1638,8 +1638,10 @@ async function refreshApiData(){
     renderMatches();
     renderRanking();
     renderKnockout();
+    return true;
   }catch(error){
     console.warn('Nie udało się odczytać danych football-data.org:',error);
+    return false;
   }
 }
 const PLAYERS=[
@@ -3004,9 +3006,16 @@ function switchTab(tab,el){
   if(tab==='pucharowa')renderKnockout();
   requestAnimationFrame(updateMobileSectionBack);
 }
-if(DEMO_MODE)applyApiResults();
-renderPlayerCards();renderMatches();renderRanking();renderKnockout();
-refreshApiData();
+if(DEMO_MODE){
+  applyApiResults();
+  renderPlayerCards();renderMatches();renderRanking();renderKnockout();
+}else{
+  refreshApiData().then(loaded=>{
+    if(!loaded){
+      renderPlayerCards();renderMatches();renderRanking();renderKnockout();
+    }
+  });
+}
 setInterval(refreshApiData,60*1000);
 </script>
 </body>
