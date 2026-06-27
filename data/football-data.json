@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T22:24:19.698Z",
+  "updatedAt": "2026-06-27T22:25:16.562Z",
   "matches": [
     {
       "id": 537327,
@@ -1372,7 +1372,7 @@
       "homeTeam": {
         "name": "Uruguay",
         "shortName": "Uruguay",
-        "tla": "URU"
+        "tla": "URY"
       },
       "awayTeam": {
         "name": "Spain",
@@ -1473,7 +1473,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T22:24:02Z"
+      "lastUpdated": "2026-06-27T22:25:01Z"
     },
     {
       "id": 537414,
@@ -1495,7 +1495,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T22:23:21Z"
+      "lastUpdated": "2026-06-27T22:24:33Z"
     },
     {
       "id": 537407,
