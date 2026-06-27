@@ -2211,12 +2211,22 @@ function switchMatchView(view, el){
 
 function updateMobileSectionBack(){
   const button=document.getElementById('mobileSectionBack');
-  const tab=document.getElementById('tab-mecze');
-  const anchor=tab?.querySelector('.subtabs');
-  const longView=['daty','grupy','tabele','zakonczone','nadchodzace'].includes(_matchView);
-  const tabVisible=tab&&tab.style.display!=='none';
+  const matchesTab=document.getElementById('tab-mecze');
+  const playersTab=document.getElementById('tab-gracze');
+  const rankingTab=document.getElementById('tab-ranking');
+  const matchesVisible=matchesTab&&matchesTab.style.display!=='none';
+  const playersVisible=playersTab&&playersTab.style.display!=='none';
+  const rankingVisible=rankingTab&&rankingTab.style.display!=='none';
+  const longMatchView=['daty','grupy','tabele','zakonczone','nadchodzace'].includes(_matchView);
+  const anchor=matchesVisible&&longMatchView
+    ? matchesTab.querySelector('.subtabs')
+    : playersVisible
+      ? playersTab
+      : rankingVisible
+        ? rankingTab
+        : null;
   const pastAnchor=anchor&&(window.scrollY>anchor.getBoundingClientRect().top+window.scrollY+260);
-  button?.classList.toggle('visible',Boolean(tabVisible&&longView&&pastAnchor));
+  button?.classList.toggle('visible',Boolean(anchor&&pastAnchor));
 }
 
 function backToPageTop(){
