@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T22:56:15.950Z",
+  "updatedAt": "2026-06-27T23:10:23.308Z",
   "matches": [
     {
       "id": 537327,
@@ -1456,7 +1456,7 @@
     {
       "id": 537413,
       "utcDate": "2026-06-27T21:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Panama",
         "shortName": "Panama",
@@ -1473,12 +1473,12 @@
           "away": 2
         }
       },
-      "lastUpdated": "2026-06-27T22:56:02Z"
+      "lastUpdated": "2026-06-27T23:05:20Z"
     },
     {
       "id": 537414,
       "utcDate": "2026-06-27T21:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Croatia",
         "shortName": "Croatia",
@@ -1495,7 +1495,7 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-27T22:55:45Z"
+      "lastUpdated": "2026-06-27T23:04:51Z"
     },
     {
       "id": 537407,
