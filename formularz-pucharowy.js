@@ -149,9 +149,8 @@ const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537423, side: "awayTeam", team: { name: "Japan", shortName: "Japan", tla: "JPN" } },
   { matchId: 537418, side: "homeTeam", team: { name: "Netherlands", shortName: "Netherlands", tla: "NED" } },
   { matchId: 537418, side: "awayTeam", team: { name: "Morocco", shortName: "Morocco", tla: "MAR" } },
-  { matchId: 537416, side: "homeTeam", team: { name: "Ivory Coast", shortName: "Ivory Coast", tla: "CIV" } },
-  { matchId: 537416, side: "awayTeam", team: { name: "Norway", shortName: "Norway", tla: "NOR" } },
-  { matchId: 537424, side: "homeTeam", team: { name: "France", shortName: "France", tla: "FRA" } },
+  { matchId: 537416, side: "homeTeam", team: { name: "France", shortName: "France", tla: "FRA" } },
+  { matchId: 537424, side: "awayTeam", team: { name: "Norway", shortName: "Norway", tla: "NOR" } },
   { matchId: 537422, side: "homeTeam", team: { name: "Belgium", shortName: "Belgium", tla: "BEL" } },
   { matchId: 537419, side: "homeTeam", team: { name: "Spain", shortName: "Spain", tla: "ESP" } },
   { matchId: 537421, side: "awayTeam", team: { name: "Bosnia-Herzegovina", shortName: "Bosnia-H.", tla: "BIH" } },
@@ -480,10 +479,28 @@ function saveState() {
   try { localStorage.setItem(storageKey, JSON.stringify(data)); } catch (_) {}
 }
 
+function migrateSavedScores(data) {
+  if (pageKey !== "index16" || !data?.scores || Array.isArray(data.scores)) return data;
+  const oldSlot = "index16-6";
+  const correctSlot = "index16-5";
+  const oldScore = data.scores[oldSlot];
+  const correctScore = data.scores[correctSlot];
+  const hasValue = score => score && (score.home !== "" || score.away !== "");
+  if (hasValue(oldScore) && !hasValue(correctScore)) {
+    data.scores[correctSlot] = oldScore;
+  }
+  if (oldScore) {
+    delete data.scores[oldSlot];
+    try { localStorage.setItem(storageKey, JSON.stringify(data)); } catch (_) {}
+  }
+  return data;
+}
+
 function loadState() {
   let data;
   try { data = JSON.parse(localStorage.getItem(storageKey)); } catch (_) {}
   if (!data) return;
+  data = migrateSavedScores(data);
   document.getElementById("player").value = PLAYERS.includes(data.player) ? data.player : "";
   selects.forEach(({ slotId, home, away }, index) => {
     // Obsługa starszego zapisu tablicowego oraz nowego zapisu po stałym ID meczu.
