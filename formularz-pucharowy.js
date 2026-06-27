@@ -120,7 +120,7 @@ const API_TO_PL = {
   "Brazil":"Brazylia", "Morocco":"Maroko", "Scotland":"Szkocja",
   "Turkey":"Turcja", "Germany":"Niemcy", "Ivory Coast":"WKS",
   "Netherlands":"Holandia", "Sweden":"Szwecja", "Tunisia":"Tunezja",
-  "Spain":"Hiszpania", "Cape Verde Islands":"Cape Verde", "Cape Verde":"Cape Verde",
+  "Spain":"Hiszpania", "Cape Verde Islands":"RZP", "Cape Verde":"RZP",
   "Belgium":"Belgia", "Egypt":"Egipt", "Saudi Arabia":"Arabia Saudyjska",
   "Uruguay":"Urugwaj", "New Zealand":"Nowa Zelandia", "France":"Francja",
   "Norway":"Norwegia", "Argentina":"Argentyna", "Algeria":"Algieria",
