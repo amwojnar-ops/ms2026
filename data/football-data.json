@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T01:15:24.746Z",
+  "updatedAt": "2026-06-27T01:16:15.257Z",
   "matches": [
     {
       "id": 537327,
@@ -1368,7 +1368,7 @@
     {
       "id": 537373,
       "utcDate": "2026-06-27T00:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Uruguay",
         "shortName": "Uruguay",
@@ -1385,12 +1385,12 @@
           "away": 1
         }
       },
-      "lastUpdated": "2026-06-27T01:01:32Z"
+      "lastUpdated": "2026-06-27T01:15:56Z"
     },
     {
       "id": 537374,
       "utcDate": "2026-06-27T00:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Cape Verde Islands",
         "shortName": "Cape Verde",
@@ -1407,7 +1407,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T00:59:23Z"
+      "lastUpdated": "2026-06-27T01:16:11Z"
     },
     {
       "id": 537367,
