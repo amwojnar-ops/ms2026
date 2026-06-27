@@ -429,7 +429,7 @@ header::after {
 .tile.done { cursor: pointer; }
 .tile.done:hover { border-color: var(--g-color, rgba(255,255,255,.18)); }
 .tile.done.expanded { border-color: rgba(232,184,75,.6); }
-.tile.live { border-color: rgba(232,86,86,.7); }
+.tile.live, .tile.paused { border-color: rgba(232,86,86,.7); }
 .tile.upcoming { opacity: .65; }
 
 .tile-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -1198,7 +1198,7 @@ const TRANSLATIONS = {
     player:'Gracz', team:'Zespół', champion:'Mistrz', total:'Razem', date:'Data', match:'Mecz',
     result:'Wynik', predictionPoints:'Typ / pkt', group:'Grupa',
     playedShort:'M', pointsShort:'Pkt', goalsForAgainst:'Bramki',
-    finished:'Zakończony', live:'Trwa', waiting:'Oczekuje na wynik', soon:'Wkrótce',
+    finished:'Zakończony', live:'Trwa', paused:'Przerwa', waiting:'Oczekuje na wynik', soon:'Wkrótce',
     predictions:'typów', playerPredictions:'Typy graczy',
     efficiency:'skuteczność', pointsPerMatch:'pkt / mecz',
     bestGroup:'najlepsza grupa', currentStreak:'aktualna seria',
@@ -1217,7 +1217,7 @@ const TRANSLATIONS = {
     player:'Player', team:'Team', champion:'Champion', total:'Total', date:'Date', match:'Match',
     result:'Result', predictionPoints:'Prediction / pts', group:'Group',
     playedShort:'P', pointsShort:'Pts', goalsForAgainst:'Goals',
-    finished:'Finished', live:'Live', waiting:'Waiting for result', soon:'Coming up',
+    finished:'Finished', live:'Live', paused:'Half-time', waiting:'Waiting for result', soon:'Coming up',
     predictions:'predictions', playerPredictions:'Player predictions',
     efficiency:'accuracy', pointsPerMatch:'pts / match',
     bestGroup:'best group', currentStreak:'current streak',
@@ -1939,7 +1939,8 @@ function matchStatus(m,idx){
   if(DEMO_MODE==='multi'&&m.date==='25.06'&&m.time==='03:00')return 'live';
   const api=apiMatchFor(m);
   if(api?.status==='FINISHED')return 'done';
-  if(['IN_PLAY','PAUSED','LIVE'].includes(api?.status))return 'live';
+  if(api?.status==='PAUSED')return 'paused';
+  if(['IN_PLAY','LIVE'].includes(api?.status))return 'live';
   const diff=Date.now()-matchDateTime(m).getTime();
   if(diff<0)return 'soon';
   if(!API_DATA_READY)return 'waiting';
@@ -1968,12 +1969,12 @@ function formatCountdown(ms){
 function nextMatchHTML(m){
   const status=matchStatus(m,m.idx);
   const api=apiMatchFor(m);
-  if(status==='live'){
+  if(['live','paused'].includes(status)){
     const score=apiLiveScore(api);
     const homeScore=score.home;
     const awayScore=score.away;
     return `<span class="live-summary">
-      <span class="live-summary-status"><span class="dot dot-live"></span>${tr('live')}</span>
+      <span class="live-summary-status"><span class="dot dot-live"></span>${tr(status)}</span>
       <span class="live-summary-team">
         <span class="live-summary-name">${flag(m.home)} ${disp(m.home)}</span>
         <span class="live-summary-score">${homeScore}</span>
@@ -2005,7 +2006,7 @@ function tickCountdown(){
 function nextMatch(){
   // Znajdź "następne" mecze — live lub najbliższe soon
   const indexed=MATCHES.map((m,idx)=>({...m,idx,status:matchStatus(m,idx)}));
-  const live = indexed.filter(m=>m.status==='live');
+  const live = indexed.filter(m=>['live','paused'].includes(m.status));
   if(live.length){
     document.getElementById('nextMatchLabel').textContent=live.length>1
       ? (LANG==='pl'?'Mecze trwają':'Matches live')
@@ -2246,7 +2247,7 @@ function setMatchSubtabState(){
 function relevantMatchIndex(){
   const ordered=MATCHES.map((m,idx)=>({...m,idx}))
     .sort((a,b)=>matchDateTime(a)-matchDateTime(b));
-  const active=ordered.find(m=>['live','waiting'].includes(matchStatus(m,m.idx)));
+  const active=ordered.find(m=>['live','paused','waiting'].includes(matchStatus(m,m.idx)));
   if(active)return active.idx;
   const next=ordered.find(m=>matchStatus(m,m.idx)!=='done');
   return next?next.idx:null;
@@ -2274,11 +2275,12 @@ function buildTile(m, gcVar){
   let sHTML='';
   if(status==='done')         sHTML=`<span class="dot dot-done"></span><span style="color:var(--red);font-weight:600">${tr('finished')}</span>`;
   else if(status==='live')    sHTML=`<span class="dot dot-live"></span><span style="color:var(--green);font-weight:600">${tr('live')}</span>`;
+  else if(status==='paused')  sHTML=`<span class="dot dot-live"></span><span style="color:var(--green);font-weight:600">${tr('paused')}</span>`;
   else if(status==='waiting') sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">${tr('waiting')}</span>`;
   else                        sHTML=`<span class="dot dot-soon"></span><span style="color:var(--amber)">${tr('soon')} · ${m.date} ${m.time}</span>`;
   let scHTML='';
   if(r){const[h,a]=r.split('-');scHTML=`<div class="t-score"><span>${h}</span><span class="sep">–</span><span>${a}</span></div>`;}
-  else if(status==='live'){
+  else if(['live','paused'].includes(status)){
     const score=apiLiveScore(apiMatchFor(m));
     scHTML=`<div class="t-score"><span>${score.home}</span><span class="sep">–</span><span>${score.away}</span></div>`;
   }
@@ -2353,14 +2355,14 @@ function todayMatchKey(){
 function matchFilterList(view){
   const items=MATCHES.map((m,idx)=>({...m,idx})).sort((a,b)=>matchDateTime(a)-matchDateTime(b));
   if(view==='zakonczone')return items.filter(m=>matchStatus(m,m.idx)==='done');
-  if(view==='nadchodzace')return items.filter(m=>!['done','live','waiting'].includes(matchStatus(m,m.idx)));
+  if(view==='nadchodzace')return items.filter(m=>!['done','live','paused','waiting'].includes(matchStatus(m,m.idx)));
   if(view==='skrot'){
     const key=todayMatchKey();
     const selected=[];
     const add=m=>{if(!selected.some(x=>x.idx===m.idx))selected.push(m);};
     items.filter(m=>m.date===key).forEach(add);
-    items.filter(m=>['live','waiting'].includes(matchStatus(m,m.idx))).forEach(add);
-    items.filter(m=>!['done','live','waiting'].includes(matchStatus(m,m.idx))).slice(0,4).forEach(add);
+    items.filter(m=>['live','paused','waiting'].includes(matchStatus(m,m.idx))).forEach(add);
+    items.filter(m=>!['done','live','paused','waiting'].includes(matchStatus(m,m.idx))).slice(0,4).forEach(add);
     if(!selected.length)items.filter(m=>matchStatus(m,m.idx)==='done').slice(-4).forEach(add);
     return selected.sort((a,b)=>matchDateTime(a)-matchDateTime(b));
   }
@@ -2855,7 +2857,8 @@ function knockoutTeamFlag(team){
 }
 function knockoutStatus(match){
   if(match?.status==='FINISHED')return {cls:'finished',label:LANG==='en'?'Finished':'Zakończony'};
-  if(['IN_PLAY','PAUSED','LIVE'].includes(match?.status))return {cls:'live',label:LANG==='en'?'Live':'Trwa'};
+  if(match?.status==='PAUSED')return {cls:'live',label:LANG==='en'?'Half-time':'Przerwa'};
+  if(['IN_PLAY','LIVE'].includes(match?.status))return {cls:'live',label:LANG==='en'?'Live':'Trwa'};
   return {cls:'',label:LANG==='en'?'Scheduled':'Zaplanowany'};
 }
 function currentKnockoutRoundIndex(allMatches){
