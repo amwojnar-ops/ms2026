@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T22:11:13.642Z",
+  "updatedAt": "2026-06-27T22:12:16.021Z",
   "matches": [
     {
       "id": 537327,
@@ -1473,12 +1473,12 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T22:11:01Z"
+      "lastUpdated": "2026-06-27T22:12:02Z"
     },
     {
       "id": 537414,
       "utcDate": "2026-06-27T21:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Croatia",
         "shortName": "Croatia",
@@ -1495,7 +1495,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T21:55:27Z"
+      "lastUpdated": "2026-06-27T22:12:09Z"
     },
     {
       "id": 537407,
