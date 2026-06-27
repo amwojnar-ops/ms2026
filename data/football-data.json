@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T21:55:17.898Z",
+  "updatedAt": "2026-06-27T21:56:14.026Z",
   "matches": [
     {
       "id": 537327,
@@ -1473,7 +1473,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T21:54:57Z"
+      "lastUpdated": "2026-06-27T21:56:09Z"
     },
     {
       "id": 537414,
@@ -1495,7 +1495,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T21:54:42Z"
+      "lastUpdated": "2026-06-27T21:55:27Z"
     },
     {
       "id": 537407,
@@ -1561,7 +1561,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537402,
@@ -1583,21 +1583,21 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537417,
       "utcDate": "2026-06-28T19:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "South Africa",
-        "shortName": "South Africa",
-        "tla": "RSA"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
-        "name": "Canada",
-        "shortName": "Canada",
-        "tla": "CAN"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "score": {
         "fullTime": {
@@ -1605,21 +1605,21 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537423,
       "utcDate": "2026-06-29T17:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "Brazil",
-        "shortName": "Brazil",
-        "tla": "BRA"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
-        "name": "Japan",
-        "shortName": "Japan",
-        "tla": "JPN"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "score": {
         "fullTime": {
@@ -1627,16 +1627,16 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537415,
       "utcDate": "2026-06-29T20:30:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "Germany",
-        "shortName": "Germany",
-        "tla": "GER"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
         "name": null,
@@ -1649,38 +1649,16 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537418,
       "utcDate": "2026-06-30T01:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "Netherlands",
-        "shortName": "Netherlands",
-        "tla": "NED"
-      },
-      "awayTeam": {
-        "name": "Morocco",
-        "shortName": "Morocco",
-        "tla": "MAR"
-      },
-      "score": {
-        "fullTime": {
-          "home": null,
-          "away": null
-        }
-      },
-      "lastUpdated": "2026-06-26T15:20:14Z"
-    },
-    {
-      "id": 537424,
-      "utcDate": "2026-06-30T17:00:00Z",
-      "status": "TIMED",
-      "homeTeam": {
-        "name": "Ivory Coast",
-        "shortName": "Ivory Coast",
-        "tla": "CIV"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
         "name": null,
@@ -1693,7 +1671,29 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
+    },
+    {
+      "id": 537424,
+      "utcDate": "2026-06-30T17:00:00Z",
+      "status": "TIMED",
+      "homeTeam": {
+        "name": null,
+        "shortName": null,
+        "tla": null
+      },
+      "awayTeam": {
+        "name": null,
+        "shortName": null,
+        "tla": null
+      },
+      "score": {
+        "fullTime": {
+          "home": null,
+          "away": null
+        }
+      },
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537416,
@@ -1715,16 +1715,16 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537425,
       "utcDate": "2026-07-01T01:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "Mexico",
-        "shortName": "Mexico",
-        "tla": "MEX"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
         "name": null,
@@ -1737,7 +1737,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537426,
@@ -1759,7 +1759,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537422,
@@ -1781,21 +1781,21 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537421,
       "utcDate": "2026-07-02T00:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "United States",
-        "shortName": "USA",
-        "tla": "USA"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
-        "name": "Bosnia-Herzegovina",
-        "shortName": "Bosnia-H.",
-        "tla": "BIH"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "score": {
         "fullTime": {
@@ -1803,7 +1803,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537420,
@@ -1825,7 +1825,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537419,
@@ -1847,16 +1847,16 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537429,
       "utcDate": "2026-07-03T03:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "Switzerland",
-        "shortName": "Switzerland",
-        "tla": "SUI"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
         "name": null,
@@ -1869,16 +1869,16 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537428,
       "utcDate": "2026-07-03T18:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "Australia",
-        "shortName": "Australia",
-        "tla": "AUS"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
         "name": null,
@@ -1891,16 +1891,16 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537427,
       "utcDate": "2026-07-03T22:00:00Z",
       "status": "TIMED",
       "homeTeam": {
-        "name": "Argentina",
-        "shortName": "Argentina",
-        "tla": "ARG"
+        "name": null,
+        "shortName": null,
+        "tla": null
       },
       "awayTeam": {
         "name": null,
@@ -1913,7 +1913,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537430,
@@ -1935,7 +1935,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537376,
@@ -1957,7 +1957,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537375,
@@ -1979,7 +1979,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537377,
@@ -2001,7 +2001,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537378,
@@ -2023,7 +2023,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537379,
@@ -2045,7 +2045,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537380,
@@ -2067,7 +2067,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537381,
@@ -2089,7 +2089,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537382,
@@ -2111,7 +2111,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537383,
@@ -2133,7 +2133,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537384,
@@ -2155,7 +2155,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537385,
@@ -2177,7 +2177,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537386,
@@ -2199,7 +2199,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537387,
@@ -2221,7 +2221,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537388,
@@ -2243,7 +2243,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537389,
@@ -2265,7 +2265,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537390,
@@ -2287,7 +2287,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     }
   ]
 }
