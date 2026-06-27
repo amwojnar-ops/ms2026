@@ -10,6 +10,7 @@ const activeWindowMs = 4 * 60 * 60 * 1000;
 const preStartWindowMs = 30 * 60 * 1000;
 const tournamentMonitoringStart = Date.UTC(2026, 5, 11, 0, 0);
 const tournamentMonitoringEnd = Date.UTC(2026, 6, 20, 23, 59);
+const knockoutMonitoringStart = Date.UTC(2026, 5, 19, 0, 0);
 
 let previousMatches = [];
 try {
@@ -94,19 +95,8 @@ const schedule = [...page.matchAll(/\{g:'[^']+',date:'(\d{2}\.\d{2})',time:'(\d{
 const scheduledActiveMatches = schedule.filter(match =>
   now >= match.kickoff && now < match.kickoff + activeWindowMs
 );
-const nextScheduledMatch = schedule
+const nextMatch = schedule
   .filter(match => match.kickoff > now)
-  .sort((a, b) => a.kickoff - b.kickoff)[0];
-const nextApiMatch = previousMatches
-  .map(match => ({
-    kickoff: Date.parse(match.utcDate),
-    home: match.homeTeam?.shortName || match.homeTeam?.name || 'unknown team',
-    away: match.awayTeam?.shortName || match.awayTeam?.name || 'unknown team'
-  }))
-  .filter(match => Number.isFinite(match.kickoff) && match.kickoff > now)
-  .sort((a, b) => a.kickoff - b.kickoff)[0];
-const nextMatch = [nextScheduledMatch, nextApiMatch]
-  .filter(Boolean)
   .sort((a, b) => a.kickoff - b.kickoff)[0];
 const activeApiMatches = previousMatches.filter(match => {
   const kickoff = Date.parse(match.utcDate);
@@ -114,23 +104,21 @@ const activeApiMatches = previousMatches.filter(match => {
     && now >= kickoff
     && now < kickoff + activeWindowMs;
 });
-const matchInProgress = activeApiMatches.some(match => match.status !== 'FINISHED')
-  || (
-    scheduledActiveMatches.length > 0
-    && (
+const matchInProgress = scheduledActiveMatches.length > 0
+  && (
     activeApiMatches.length === 0
     || activeApiMatches.some(match => match.status !== 'FINISHED')
-    )
   );
 const matchApproaching = nextMatch
   && nextMatch.kickoff - now <= preStartWindowMs;
 const fiveMinuteCheck = Math.floor(now / 60000) % 5 === 0;
 const thirtyMinuteCheck = Math.floor(now / 60000) % 30 === 0;
-const backgroundMonitoring = now >= tournamentMonitoringStart
+const tournamentMonitoring = now >= tournamentMonitoringStart
   && now <= tournamentMonitoringEnd
-  && thirtyMinuteCheck;
+  && fiveMinuteCheck;
+const knockoutMonitoring = now >= knockoutMonitoringStart && thirtyMinuteCheck;
 
-if (!matchInProgress && (!matchApproaching || !fiveMinuteCheck) && !backgroundMonitoring) {
+if (!matchInProgress && (!matchApproaching || !fiveMinuteCheck) && !knockoutMonitoring && !tournamentMonitoring) {
   await rm(pollingMarkerPath, { force: true });
   await rm(waitingMarkerPath, { force: true });
   console.log('No API request needed in this minute.');
@@ -142,20 +130,19 @@ if (matchInProgress) {
   await writeFile(pollingMarkerPath, 'active\n', 'utf8');
   await rm(waitingMarkerPath, { force: true });
   console.log('Active match: checking football-data.org.');
-} else if (backgroundMonitoring) {
+} else if (tournamentMonitoring) {
   await rm(pollingMarkerPath, { force: true });
   await rm(waitingMarkerPath, { force: true });
-  console.log('Background monitoring: checking football-data.org (30-minute interval).');
+  console.log('Tournament monitoring: checking football-data.org.');
+} else if (knockoutMonitoring) {
+  await rm(pollingMarkerPath, { force: true });
+  await rm(waitingMarkerPath, { force: true });
+  console.log('Knockout monitoring: checking football-data.org for new fixture pairs.');
 } else {
   const waitSeconds = Math.max(1, Math.ceil((nextMatch.kickoff - now) / 1000));
   await rm(pollingMarkerPath, { force: true });
   await writeFile(waitingMarkerPath, `${waitSeconds}\n`, 'utf8');
   console.log(`Next match starts in ${waitSeconds} seconds: checking pre-match status.`);
-}
-
-if (process.env.TEST_SCHEDULER_ONLY === '1') {
-  console.log('Scheduler test only: API request skipped.');
-  process.exit(0);
 }
 
 const token = process.env.FOOTBALL_DATA_TOKEN;
@@ -245,7 +232,7 @@ if (!payload) {
 }
 const freshMatches = (payload.matches || []).map(mapApiMatch);
 
-if (matchInProgress || backgroundMonitoring) {
+if (matchInProgress || tournamentMonitoring) {
   let livePayload = null;
   try {
     livePayload = await fetchFootballData(liveUrl, 'live');
