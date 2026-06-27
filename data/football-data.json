@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T22:05:19.671Z",
+  "updatedAt": "2026-06-27T22:11:13.642Z",
   "matches": [
     {
       "id": 537327,
@@ -1456,7 +1456,7 @@
     {
       "id": 537413,
       "utcDate": "2026-06-27T21:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Panama",
         "shortName": "Panama",
@@ -1473,7 +1473,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-06-27T21:56:24Z"
+      "lastUpdated": "2026-06-27T22:11:01Z"
     },
     {
       "id": 537414,
