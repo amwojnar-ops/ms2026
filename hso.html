@@ -320,6 +320,29 @@ header::after {
 .subtab:hover { color: var(--text); border-color: rgba(255,255,255,.2); }
 .subtab.active { background: var(--card); color: #fff; border-color: rgba(232,184,75,.4); }
 .subtab-muted { opacity: .85; }
+.mobile-section-back {
+  display: inline-flex;
+  position: fixed;
+  right: max(18px, calc((100vw - 780px) / 2 + 18px));
+  bottom: 24px;
+  z-index: 80;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border: 1px solid rgba(232,184,75,.55);
+  border-radius: 99px;
+  color: #fff;
+  background: rgba(18,28,49,.94);
+  box-shadow: 0 8px 24px rgba(0,0,0,.42);
+  font: 600 12px 'Barlow', sans-serif;
+  letter-spacing: .02em;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  backdrop-filter: blur(8px);
+}
+.mobile-section-back.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .group-standings-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -912,6 +935,10 @@ header::after {
 
 /* responsive */
 @media (max-width: 540px) {
+  .mobile-section-back {
+    right: 14px;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+  }
   .players-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .pdp-stats { grid-template-columns: repeat(2, 1fr); }
   .pdp-stat:nth-child(2) { border-right: none; }
@@ -1151,6 +1178,10 @@ header::after {
   </div>
 </div>
 
+<button class="mobile-section-back" id="mobileSectionBack" type="button" onclick="backToPageTop()" aria-label="Wróć na górę strony">
+  <span aria-hidden="true">↑</span><span id="mobileSectionBackLabel">Wróć</span>
+</button>
+
 </div>
 <script>
 const TRANSLATIONS = {
@@ -1260,6 +1291,8 @@ function applyLanguage(){
   setText('playedLabel','played'); setText('nextMatchLabel','nextMatch');
   setText('tabPlayersBtn','players'); setText('tabMatchesBtn','matches'); setText('tabRankingBtn','ranking');
   setText('tabKnockoutBtn','knockout');
+  const backLabel=document.getElementById('mobileSectionBackLabel');
+  if(backLabel)backLabel.textContent=LANG==='en'?'Back':'Wróć';
   document.getElementById('tabKnockoutBtn').title=tr('knockout');
   setText('subtab-grupy','byGroups'); setText('subtab-daty','byDates'); setText('subtab-tabele','groupTables');
   setText('pdpChampLabel','championPick'); setText('spChampLabel','championPick');
@@ -2173,7 +2206,25 @@ function switchMatchView(view, el){
   el.classList.add('active');
   renderMatches();
   if(view==='daty')scrollToRelevantMatch();
+  requestAnimationFrame(updateMobileSectionBack);
 }
+
+function updateMobileSectionBack(){
+  const button=document.getElementById('mobileSectionBack');
+  const tab=document.getElementById('tab-mecze');
+  const anchor=tab?.querySelector('.subtabs');
+  const longView=['daty','grupy','tabele','zakonczone','nadchodzace'].includes(_matchView);
+  const tabVisible=tab&&tab.style.display!=='none';
+  const pastAnchor=anchor&&(window.scrollY>anchor.getBoundingClientRect().top+window.scrollY+260);
+  button?.classList.toggle('visible',Boolean(tabVisible&&longView&&pastAnchor));
+}
+
+function backToPageTop(){
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+window.addEventListener('scroll',updateMobileSectionBack,{passive:true});
+window.addEventListener('resize',updateMobileSectionBack);
 
 function setMatchSubtabState(){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
@@ -2925,6 +2976,7 @@ function switchTab(tab,el){
     renderMatches();
   }
   if(tab==='pucharowa')renderKnockout();
+  requestAnimationFrame(updateMobileSectionBack);
 }
 if(DEMO_MODE)applyApiResults();
 renderPlayerCards();renderMatches();renderRanking();renderKnockout();
