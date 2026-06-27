@@ -2792,6 +2792,17 @@ function knockoutMatches(){
 function knockoutRoundName(round){
   return LANG==='en' ? round.en : round.pl;
 }
+function knockoutMatchCountLabel(count){
+  if(LANG==='en')return `${count} ${count===1?'match':'matches'}`;
+  const mod10=count%10;
+  const mod100=count%100;
+  const word=count===1
+    ? 'mecz'
+    : mod10>=2&&mod10<=4&&!(mod100>=12&&mod100<=14)
+      ? 'mecze'
+      : 'meczów';
+  return `${count} ${word}`;
+}
 function knockoutDate(utcDate){
   if(!utcDate)return '—';
   return new Intl.DateTimeFormat(LANG==='en'?'en-GB':'pl-PL',{
@@ -2910,7 +2921,7 @@ function renderKnockout(){
     const done=matches.length===round.count&&matches.every(match=>match.status==='FINISHED');
     const meta=done
       ? (LANG==='en'?'completed':'zakończone')
-      : `${round.count} ${LANG==='en'?(round.count===1?'match':'matches'):(round.count===1?'mecz':'meczów')}`;
+      : knockoutMatchCountLabel(round.count);
     return `<button class="ko-stage${index===selectedKnockoutRound?' active':''}${done?' done':''}" type="button" data-ko-round="${index}">
       <span class="ko-stage-name">${knockoutRoundName(round)}</span><span class="ko-stage-meta">${meta}</span>
     </button>`;

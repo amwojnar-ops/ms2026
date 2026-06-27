@@ -38,6 +38,7 @@ const I18N = {
     thirdPlace: "Mecz o 3. miejsce",
     final: "Finał",
     matchSingular: "mecz",
+    matchFew: "mecze",
     matchPlural: "meczów",
     history: "Historia ↓",
     noHistory: "Brak zakończonych meczów tej drużyny.",
@@ -81,6 +82,7 @@ const I18N = {
     thirdPlace: "Third-place match",
     final: "Final",
     matchSingular: "match",
+    matchFew: "matches",
     matchPlural: "matches",
     history: "History ↓",
     noHistory: "No finished matches for this team.",
@@ -697,7 +699,16 @@ function applyLanguage() {
   document.getElementById("round-title").textContent = roundTitle();
   document.getElementById("round-dates").textContent = roundDates();
   document.getElementById("match-count").textContent = config.count;
-  document.getElementById("match-word").textContent = config.count === 1 ? tr("matchSingular") : tr("matchPlural");
+  const mod10 = config.count % 10;
+  const mod100 = config.count % 100;
+  const matchWord = LANG === "en"
+    ? (config.count === 1 ? tr("matchSingular") : tr("matchPlural"))
+    : config.count === 1
+      ? tr("matchSingular")
+      : mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14)
+        ? tr("matchFew")
+        : tr("matchPlural");
+  document.getElementById("match-word").textContent = matchWord;
   const instruction = document.getElementById("sendInstruction");
   if (instruction) instruction.innerHTML = `<h2>${tr("instructionTitle")}</h2><p>${tr("instructionHtml")}</p>`;
   if (roundMatches.length) {
