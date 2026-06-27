@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T00:04:14.653Z",
+  "updatedAt": "2026-06-27T00:05:17.029Z",
   "matches": [
     {
       "id": 537327,
@@ -1372,7 +1372,7 @@
       "homeTeam": {
         "name": "Uruguay",
         "shortName": "Uruguay",
-        "tla": "URY"
+        "tla": "URU"
       },
       "awayTeam": {
         "name": "Spain",
@@ -1385,7 +1385,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537374,
@@ -1407,7 +1407,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537367,
@@ -1429,7 +1429,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537368,
@@ -1451,7 +1451,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537413,
@@ -1473,7 +1473,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537414,
@@ -1495,7 +1495,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537407,
@@ -1517,7 +1517,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537408,
@@ -1539,7 +1539,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-09T10:20:22Z"
+      "lastUpdated": "2026-06-20T15:20:13Z"
     },
     {
       "id": 537401,
