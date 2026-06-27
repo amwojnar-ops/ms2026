@@ -115,7 +115,7 @@ const I18N = {
 const API_TO_PL = {
   "Mexico":"Meksyk", "South Africa":"RPA", "Korea Republic":"Korea Płd.",
   "South Korea":"Korea Płd.", "Czechia":"Czechy", "Canada":"Kanada",
-  "Bosnia-H.":"Bośnia", "Bosnia-Herzegovina":"Bośnia", "United States":"USA",
+  "Bosnia-H.":"Bośnia i Herc.", "Bosnia-Herzegovina":"Bośnia i Herc.", "United States":"USA",
   "Paraguay":"Paragwaj", "Qatar":"Katar", "Switzerland":"Szwajcaria",
   "Brazil":"Brazylia", "Morocco":"Maroko", "Scotland":"Szkocja",
   "Turkey":"Turcja", "Germany":"Niemcy", "Ivory Coast":"WKS",
@@ -211,6 +211,8 @@ function withKnownKnockoutTeams(matches) {
 function teamName(team) {
   const source = team?.shortName || team?.name;
   if (!source) return tr("unknownTeam");
+  if (LANG === "pl" && ["Bosnia-H.", "Bosnia-Herzegovina"].includes(source)
+      && window.matchMedia("(max-width: 620px)").matches) return "BiH";
   return LANG === "en" ? source : (API_TO_PL[source] || source);
 }
 
