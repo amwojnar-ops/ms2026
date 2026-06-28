@@ -33,6 +33,8 @@ for (const [file, html, mode] of [
   check(html.includes(`window.HSO_CONFIG={mode:'${mode}'}`), `${file}: zly tryb`);
   check(html.includes('href="hso.css?v='), `${file}: brak hso.css`);
   check(html.includes('src="hso-core.js?v='), `${file}: brak hso-core.js`);
+  check(html.includes('href="Raport_typow_MS_2026.html"'), `${file}: brak statycznego raportu fazy grupowej`);
+  check(!html.includes('id="tab-mecze"'), `${file}: pozostawiono dynamiczny widok fazy grupowej`);
   check(!html.includes("<style>"), `${file}: pozostawiono osadzony CSS`);
 
   for (const match of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
@@ -74,7 +76,7 @@ for (const [id, sides] of matchIds) {
 }
 
 check(
-  core.includes("if(!soon.length)return nextKnockoutMatch();"),
+  core.includes("function nextMatch(){return nextKnockoutMatch();}"),
   "Kafel nastepnego meczu nie przechodzi do fazy pucharowej"
 );
 check(
@@ -85,6 +87,21 @@ check(
   !/delete\s+data\.scores\s*\[/.test(formCore),
   "Formularz usuwa zapisany typ z localStorage"
 );
+
+const baselineEntries = [...core.matchAll(
+  /\{name:'([^']+)',champ:'([^']+)',group:\{pts:(\d+),ex:(\d+),en:(\d+)\}\}/g
+)].map(match => ({ name: match[1], pts: Number(match[3]), ex: Number(match[4]), en: Number(match[5]) }));
+check(baselineEntries.length === 24, `Baza grupowa: znaleziono ${baselineEntries.length}/24 graczy`);
+check(new Set(baselineEntries.map(player => player.name)).size === 24, "Baza grupowa: powtorzony gracz");
+baselineEntries.forEach(player => check(
+  player.pts === player.ex * 3 + player.en,
+  `Baza grupowa ${player.name}: punkty nie zgadzaja sie z trafieniami`
+));
+check(baselineEntries.reduce((sum, player) => sum + player.pts, 0) === 1234, "Baza grupowa: zmienila sie suma punktow");
+check(baselineEntries.reduce((sum, player) => sum + player.ex, 0) === 139, "Baza grupowa: zmienila sie suma trafien za 3");
+check(baselineEntries.reduce((sum, player) => sum + player.en, 0) === 817, "Baza grupowa: zmienila sie suma trafien za 1");
+check(!core.includes("tips:["), "Szczegolowe typy grupowe pozostaly w aktywnym HSO");
+check(!core.includes("const MATCHES=["), "Terminarz grupowy pozostal w aktywnym HSO");
 
 for (const file of [
   "hso-typowanie16.html",
@@ -110,3 +127,4 @@ console.log("- skladnia JavaScript");
 console.log("- 16 kompletnych i unikalnych par 1/16 finalu");
 console.log("- zasoby lokalne i formularze pucharowe");
 console.log("- klucz zapisu typow i kafel nastepnego meczu");
+console.log("- zamrozona baza punktow po fazie grupowej");

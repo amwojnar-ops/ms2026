@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="img/hso-icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/hso-icon-32.png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="hso.css?v=20260628-1">
+<link rel="stylesheet" href="hso.css?v=20260628-3">
 </head>
 <body class="intro-active">
 <div class="site-intro" id="siteIntro" aria-label="Loża Ekspertów, MŚ 2026">
@@ -63,7 +63,7 @@
 
 <div class="tabs">
   <button class="tab active" id="tabPlayersBtn" onclick="switchTab('gracze',this)">Gracze</button>
-  <button class="tab" id="tabMatchesBtn" onclick="switchTab('mecze',this)">Faza grupowa</button>
+  <a class="tab" id="tabMatchesBtn" href="Raport_typow_MS_2026.html" target="_blank" rel="noopener noreferrer">Raport fazy grupowej</a>
   <button class="tab" id="tabKnockoutBtn" type="button" onclick="switchTab('pucharowa',this)">Faza pucharowa</button>
   <button class="tab" id="tabRankingBtn" onclick="switchTab('ranking',this)">Ranking</button>
 </div>
@@ -82,18 +82,6 @@
     <div class="pdp-stats" id="pdpStats"></div>
     <div id="pdpMatches"></div>
   </div>
-</div>
-
-<div id="tab-mecze" style="display:none">
-  <div class="subtabs">
-    <button class="subtab active" id="subtab-skrot" onclick="switchMatchView('skrot',this)">Skrót</button>
-    <button class="subtab subtab-muted" id="subtab-daty" onclick="switchMatchView('daty',this)">Wg dat</button>
-    <button class="subtab subtab-muted" id="subtab-grupy" onclick="switchMatchView('grupy',this)">Wg grup</button>
-    <button class="subtab subtab-muted" id="subtab-tabele" onclick="switchMatchView('tabele',this)">Tabele</button>
-    <button class="subtab subtab-muted" id="subtab-zakonczone" onclick="switchMatchView('zakonczone',this)">Zakończone</button>
-    <button class="subtab subtab-muted" id="subtab-nadchodzace" onclick="switchMatchView('nadchodzace',this)">Nadchodzące</button>
-  </div>
-  <div id="matches-content"></div>
 </div>
 
 <div id="tab-ranking" style="display:none">
@@ -180,7 +168,7 @@
 
 </div>
 <script>window.HSO_CONFIG={mode:'production'};</script>
-<script src="hso-core.js?v=20260628-1"></script>
+<script src="hso-core.js?v=20260628-3"></script>
 </body>
 </html>
 
