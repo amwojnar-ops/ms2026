@@ -13,6 +13,7 @@ const production = read("hso.html");
 const test = read("hso-test.html");
 const core = read("hso-core.js");
 const formCore = read("formularz-pucharowy.js");
+const groupReport = read("Raport_typow_MS_2026.html");
 
 try {
   new Function(core);
@@ -33,7 +34,7 @@ for (const [file, html, mode] of [
   check(html.includes(`window.HSO_CONFIG={mode:'${mode}'}`), `${file}: zly tryb`);
   check(html.includes('href="hso.css?v='), `${file}: brak hso.css`);
   check(html.includes('src="hso-core.js?v='), `${file}: brak hso-core.js`);
-  check(html.includes('href="Raport_typow_MS_2026.html"'), `${file}: brak statycznego raportu fazy grupowej`);
+  check(html.includes('href="Raport_typow_MS_2026.html?v='), `${file}: brak statycznego raportu fazy grupowej`);
   check(!html.includes('id="tab-mecze"'), `${file}: pozostawiono dynamiczny widok fazy grupowej`);
   check(!html.includes("<style>"), `${file}: pozostawiono osadzony CSS`);
 
@@ -103,6 +104,34 @@ check(baselineEntries.reduce((sum, player) => sum + player.en, 0) === 817, "Baza
 check(!core.includes("tips:["), "Szczegolowe typy grupowe pozostaly w aktywnym HSO");
 check(!core.includes("const MATCHES=["), "Terminarz grupowy pozostal w aktywnym HSO");
 
+check(groupReport.includes('data-report-version="2"'), "Raport fazy grupowej ma stary format");
+const reportSourceMatch = groupReport.match(/<script id="report-source" type="application\/json">([\s\S]*?)<\/script>/);
+let reportSource;
+try {
+  reportSource = JSON.parse(reportSourceMatch?.[1] || "");
+} catch (error) {
+  errors.push(`Raport fazy grupowej: nieprawidlowe dane (${error.message})`);
+}
+if (reportSource) {
+  check(reportSource.matches?.length === 72, `Raport fazy grupowej: ${reportSource.matches?.length || 0}/72 meczow`);
+  check(reportSource.players?.length === 24, `Raport fazy grupowej: ${reportSource.players?.length || 0}/24 graczy`);
+  const reportBaseline = new Map(baselineEntries.map(player => [player.name, player]));
+  const score = (tip, result) => {
+    if (tip === result) return 3;
+    const [th, ta] = tip.split("-").map(Number);
+    const [rh, ra] = result.split("-").map(Number);
+    return Math.sign(th - ta) === Math.sign(rh - ra) ? 1 : 0;
+  };
+  reportSource.players.forEach(player => {
+    const points = player.tips.map((tip, index) => score(tip, reportSource.matches[index].result));
+    const expected = reportBaseline.get(player.name);
+    check(points.reduce((sum, value) => sum + value, 0) === expected?.pts, `Raport ${player.name}: zla suma punktow`);
+    check(points.filter(value => value === 3).length === expected?.ex, `Raport ${player.name}: zla liczba trafien za 3`);
+    check(points.filter(value => value === 1).length === expected?.en, `Raport ${player.name}: zla liczba trafien za 1`);
+  });
+}
+check((groupReport.match(/class="points p[013]"/g) || []).length === 1728, "Raport nie zawiera 1728 wpisow punktowych");
+
 for (const file of [
   "hso-typowanie16.html",
   "hso-typowanie8.html",
@@ -128,3 +157,4 @@ console.log("- 16 kompletnych i unikalnych par 1/16 finalu");
 console.log("- zasoby lokalne i formularze pucharowe");
 console.log("- klucz zapisu typow i kafel nastepnego meczu");
 console.log("- zamrozona baza punktow po fazie grupowej");
+console.log("- historia 1728 punktacji w statycznym raporcie");
