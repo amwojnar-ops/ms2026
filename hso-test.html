@@ -1957,6 +1957,7 @@ let _countdownMatch = null;
 
 // Parsuje datę meczu (DD.MM, HH:MM) do obiektu Date w CEST (UTC+2)
 function matchDateTime(m){
+  if(m.utcDate)return new Date(m.utcDate);
   const [d, mo] = m.date.split('.').map(Number);
   const [h, mi] = m.time.split(':').map(Number);
   // CEST = UTC+2 → odejmujemy 2h żeby dostać UTC
@@ -2022,6 +2023,57 @@ function nextMatchHTML(m){
        + (countdown ? `<span id="countdown-tick" style="display:block;font-size:11px;font-weight:500;margin-top:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px">⏱ ${countdown}</span>` : '');
 }
 
+function knockoutSummaryStatus(match){
+  if(match?.status==='FINISHED')return 'done';
+  if(match?.status==='PAUSED')return 'paused';
+  if(['IN_PLAY','LIVE'].includes(match?.status))return 'live';
+  const diff=Date.now()-Date.parse(match?.utcDate);
+  if(diff<0)return 'soon';
+  return diff<=4*60*60*1000?'live':'waiting';
+}
+function knockoutSummaryTeam(team){
+  const name=knockoutTeamName(team);
+  const code=KNOCKOUT_FLAG_BY_TLA[team?.tla]||ISO[name];
+  const image=code?`<img src="img/flags/${code}.png" width="16" height="12" alt="${name}" style="vertical-align:middle;border-radius:2px;margin:0 2px">`:'';
+  return {name,image};
+}
+function nextKnockoutMatchHTML(match){
+  const status=knockoutSummaryStatus(match);
+  const home=knockoutSummaryTeam(match.homeTeam);
+  const away=knockoutSummaryTeam(match.awayTeam);
+  if(['live','paused'].includes(status)){
+    const score=apiLiveScore(match);
+    return `<span class="live-summary">
+      <span class="live-summary-status"><span class="dot dot-live"></span>${tr(status)}</span>
+      <span class="live-summary-team"><span class="live-summary-name">${home.image} ${home.name}</span><span class="live-summary-score">${score.home}</span></span>
+      <span class="live-summary-team"><span class="live-summary-name">${away.image} ${away.name}</span><span class="live-summary-score">${score.away}</span></span>
+    </span>`;
+  }
+  const dt=new Date(match.utcDate);
+  const date=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit'}).format(dt);
+  const time=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',hour:'2-digit',minute:'2-digit'}).format(dt);
+  const countdown=formatCountdown(dt-Date.now());
+  return `<span style="display:block;font-size:13px;font-weight:500;color:#fff;line-height:1.3">${date} · ${time}</span>`
+    + `<span style="display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3">${home.image} ${home.name} – ${away.name} ${away.image}</span>`
+    + (countdown?`<span id="countdown-tick" style="display:block;font-size:11px;font-weight:500;margin-top:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px">⏱ ${countdown}</span>`:'');
+}
+function nextKnockoutMatch(){
+  const matches=knockoutMatches().slice(0,16)
+    .filter(match=>hasKnockoutTeam(match.homeTeam)&&hasKnockoutTeam(match.awayTeam));
+  const live=matches.find(match=>['live','paused'].includes(knockoutSummaryStatus(match)));
+  if(live){
+    document.getElementById('nextMatchLabel').textContent=LANG==='pl'?'Mecz trwa':'Match live';
+    stopRotation();stopCountdown();_countdownMatch=null;
+    return nextKnockoutMatchHTML(live);
+  }
+  const upcoming=matches.filter(match=>knockoutSummaryStatus(match)==='soon')
+    .sort((a,b)=>Date.parse(a.utcDate)-Date.parse(b.utcDate))[0];
+  if(!upcoming){stopRotation();stopCountdown();_countdownMatch=null;return '—';}
+  document.getElementById('nextMatchLabel').textContent=tr('nextMatch');
+  stopRotation();_countdownMatch=upcoming;startCountdown();
+  return nextKnockoutMatchHTML(upcoming);
+}
+
 function tickCountdown(){
   const el = document.getElementById('countdown-tick');
   if(!el || !_countdownMatch) return;
@@ -2047,7 +2099,7 @@ function nextMatch(){
   }
   document.getElementById('nextMatchLabel').textContent=tr('nextMatch');
   const soon = indexed.filter(m=>m.status==='soon').sort((a,b)=>matchDateTime(a)-matchDateTime(b));
-  if(!soon.length){ stopRotation(); stopCountdown(); return '—'; }
+  if(!soon.length)return nextKnockoutMatch();
   // Grupuj po dacie+godzinie — weź pierwsze (najwcześniejsze)
   const firstTime = soon[0].date + soon[0].time;
   const group = soon.filter(m=> m.date+m.time === firstTime);
