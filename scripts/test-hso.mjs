@@ -210,6 +210,10 @@ r32PlayerTips.forEach(player => {
 });
 
 check(groupReport.includes('data-report-version="2"'), "Raport fazy grupowej ma stary format");
+check(
+  groupReport.includes('class="report-back" href="hso.html"') && groupReport.includes('.toolbar,.report-back{display:none}'),
+  "Raport fazy grupowej nie ma stalego powrotu do HSO"
+);
 const reportSourceMatch = groupReport.match(/<script id="report-source" type="application\/json">([\s\S]*?)<\/script>/);
 let reportSource;
 try {

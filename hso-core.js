@@ -412,7 +412,7 @@ function playerKnockoutPhaseRows(p){
 }
 
 function groupReportLink(){
-  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260628-2">${LANG==='en'?'Open the static group-stage report':'Otwórz statyczny raport fazy grupowej'}</a>`;
+  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260628-3">${LANG==='en'?'Open the static group-stage report':'Otwórz statyczny raport fazy grupowej'}</a>`;
 }
 
 function buildPlayerPhases(p){
