@@ -38,9 +38,12 @@ wykonujemy w `hso.css`, a zmiany funkcji w `hso-core.js`.
    pierwszenstwo, gdy operator je opublikuje.
 5. Wynik `FINISHED` jest traktowany jako ostateczny i nie powinien cofac sie do
    starszego statusu.
-6. `hso.html` i `hso-test.html` powinny roznic sie tylko wartoscia trybu.
-7. Po zmianie `hso.css` lub `hso-core.js` zwiekszyc identyczny parametr `?v=`
+6. Statusy `PAUSED`, `IN_PLAY` i `LIVE` sa prezentowane jednakowo jako `Trwa`.
+7. `hso.html` i `hso-test.html` powinny roznic sie tylko wartoscia trybu.
+8. Po zmianie `hso.css` lub `hso-core.js` zwiekszyc identyczny parametr `?v=`
    w obu plikach HTML, aby telefony nie uzyly starej kopii z cache.
+9. Migawka API zachowuje `fullTime`, `regularTime`, `halfTime` i `extraTime`;
+   punktacja pucharowa po zakonczeniu korzysta z wyniku po 90 minutach.
 
 ## Test przed publikacja
 
@@ -73,4 +76,3 @@ historii GitHub Desktop.
 > repozytorium i uruchom `sprawdz-hso.bat`. Zachowaj identyfikatory meczow oraz
 > klucze localStorage. Zmiany funkcji wykonuj we wspolnym `hso-core.js`, a wyglad
 > w `hso.css`.
-

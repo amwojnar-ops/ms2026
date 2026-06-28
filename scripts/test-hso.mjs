@@ -14,11 +14,46 @@ const test = read("hso-test.html");
 const core = read("hso-core.js");
 const formCore = read("formularz-pucharowy.js");
 const groupReport = read("Raport_typow_MS_2026.html");
+const footballData = JSON.parse(read("data/football-data.json"));
+const footballDataUpdater = read("scripts/update-football-data.mjs");
 
 try {
   new Function(core);
 } catch (error) {
   errors.push(`hso-core.js: ${error.message}`);
+}
+
+let scoreHelpers;
+try {
+  const start = core.indexOf("function validApiScore(");
+  const end = core.indexOf("async function refreshApiData(");
+  scoreHelpers = new Function(
+    `${core.slice(start, end)}; return {apiResult,apiLiveScore,knockoutDisplayScore};`
+  )();
+} catch (error) {
+  errors.push(`Funkcje wyniku live: ${error.message}`);
+}
+
+if (scoreHelpers) {
+  const delayedFullTime = {
+    status: "IN_PLAY",
+    score: {
+      fullTime: { home: 0, away: 0 },
+      regularTime: { home: 3, away: 1 },
+      halfTime: { home: 1, away: 0 }
+    }
+  };
+  const liveScore = scoreHelpers.knockoutDisplayScore(delayedFullTime);
+  check(liveScore.home === 3 && liveScore.away === 1, "Wynik live pozostaje 0-0 mimo regularTime 3-1");
+
+  const extraTime = {
+    status: "FINISHED",
+    score: {
+      fullTime: { home: 4, away: 2 },
+      regularTime: { home: 2, away: 2 }
+    }
+  };
+  check(scoreHelpers.apiResult(extraTime) === "2-2", "Punktacja nie uzywa wyniku po 90 minutach");
 }
 
 try {
@@ -83,6 +118,36 @@ check(
 check(core.includes("function knockoutMatchDetails("), "Kafle pucharowe nie maja szczegolow typow");
 check(core.includes('class="ko-match-back"'), "Kafle pucharowe nie maja przycisku Wroc");
 check(core.includes("groups[value].push"), "Kafle pucharowe nie dziela punktow na 3/1/0");
+const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
+check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
+check(
+  southAfricaCanada?.score?.fullTime?.home === 0 && southAfricaCanada?.score?.fullTime?.away === 1,
+  "RPA-Kanada: nieprawidlowy wynik"
+);
+check(
+  core.includes("['IN_PLAY','LIVE','PAUSED'].includes(match?.status)"),
+  "Aktywne statusy nie sa wspolnie oznaczane jako Trwa"
+);
+check(
+  footballDataUpdater.includes("const authoritativeLiveMatches = new Map()"),
+  "Endpoint LIVE nie ma ochrony przed starsza migawka"
+);
+check(
+  footballDataUpdater.includes("merged.status !== 'FINISHED' ? liveMatch : merged"),
+  "Status FINISHED nie ma pierwszenstwa przed LIVE"
+);
+for (const period of ["regularTime", "halfTime", "extraTime", "penalties"]) {
+  check(
+    footballDataUpdater.includes(`mapScore('${period}')`),
+    `Migawka API pomija score.${period}`
+  );
+}
+check(core.includes("function apiRegulationScore("), "Brak wyniku po 90 minutach");
+check(core.includes("function knockoutDisplayScore("), "Kafel meczu nie wybiera aktualnego wyniku");
+check(
+  core.includes("const score=knockoutDisplayScore(match)"),
+  "Kafel meczu nadal uzywa tylko score.fullTime"
+);
 check(
   formCore.includes("ms2026_${config.key}_typy"),
   "Zmieniono klucz localStorage formularzy pucharowych"

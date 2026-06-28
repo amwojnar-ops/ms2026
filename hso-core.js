@@ -13,7 +13,7 @@ const TRANSLATIONS = {
     player:'Gracz', team:'Zespół', champion:'Mistrz', total:'Razem', date:'Data', match:'Mecz',
     result:'Wynik', predictionPoints:'Typ / pkt', group:'Grupa',
     playedShort:'M', pointsShort:'Pkt', goalsForAgainst:'Bramki',
-    finished:'Zakończony', live:'Trwa', paused:'Przerwa', waiting:'Oczekuje na wynik', soon:'Wkrótce',
+    finished:'Zakończony', live:'Trwa', paused:'Trwa', waiting:'Oczekuje na wynik', soon:'Wkrótce',
     predictions:'typów', playerPredictions:'Typy graczy',
     efficiency:'skuteczność', pointsPerMatch:'pkt / mecz',
     bestGroup:'najlepsza grupa', currentStreak:'aktualna seria',
@@ -32,7 +32,7 @@ const TRANSLATIONS = {
     player:'Player', team:'Team', champion:'Champion', total:'Total', date:'Date', match:'Match',
     result:'Result', predictionPoints:'Prediction / pts', group:'Group',
     playedShort:'P', pointsShort:'Pts', goalsForAgainst:'Goals',
-    finished:'Finished', live:'Live', paused:'Half-time', waiting:'Waiting for result', soon:'Coming up',
+    finished:'Finished', live:'Live', paused:'Live', waiting:'Waiting for result', soon:'Coming up',
     predictions:'predictions', playerPredictions:'Player predictions',
     efficiency:'accuracy', pointsPerMatch:'pts / match',
     bestGroup:'best group', currentStreak:'current streak',
@@ -142,21 +142,41 @@ let API_REFRESH_SEQUENCE = 0;
 let API_FINISHED_COUNT = 0;
 const KNOCKOUT_START_UTC = Date.parse('2026-06-28T19:00:00Z');
 
+function validApiScore(score){
+  return Number.isInteger(score?.home)&&Number.isInteger(score?.away);
+}
+
+function apiRegulationScore(api){
+  const regular=api?.score?.regularTime;
+  if(validApiScore(regular))return regular;
+  const full=api?.score?.fullTime;
+  return validApiScore(full)?full:null;
+}
+
 function apiResult(api){
   if(!api||api.status!=='FINISHED')return null;
-  const score=api.score?.fullTime;
+  const score=apiRegulationScore(api);
   return Number.isInteger(score?.home)&&Number.isInteger(score?.away)
     ? `${score.home}-${score.away}` : null;
 }
 
 function apiLiveScore(api){
   const candidates=[
-    api?.score?.fullTime,
+    api?.score?.extraTime,
     api?.score?.regularTime,
+    api?.score?.fullTime,
     api?.score?.halfTime
-  ];
-  const score=candidates.find(s=>Number.isInteger(s?.home)&&Number.isInteger(s?.away));
-  return score||{home:0,away:0};
+  ].filter(validApiScore);
+  return candidates.reduce((best,score)=>
+    score.home+score.away>best.home+best.away?score:best,
+    {home:0,away:0}
+  );
+}
+
+function knockoutDisplayScore(match){
+  if(match?.status==='FINISHED')return apiRegulationScore(match)||{home:null,away:null};
+  if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return apiLiveScore(match);
+  return validApiScore(match?.score?.fullTime)?match.score.fullTime:{home:null,away:null};
 }
 
 async function refreshApiData(){
@@ -449,7 +469,7 @@ function sc(t,r){
 }
 function knockoutMatchResult(match){
   if(/^\d+-\d+$/.test(match?.result||''))return match.result;
-  const direct=match?.score?.fullTime;
+  const direct=apiRegulationScore(match);
   if(Number.isInteger(direct?.home)&&Number.isInteger(direct?.away))return `${direct.home}-${direct.away}`;
   const apiId=Number(match?.apiId??match?.id);
   return Number.isFinite(apiId)?apiResult(API_MATCHES.find(item=>item.id===apiId)):null;
@@ -530,8 +550,7 @@ function formatCountdown(ms){
 
 function knockoutSummaryStatus(match){
   if(match?.status==='FINISHED')return 'done';
-  if(match?.status==='PAUSED')return 'paused';
-  if(['IN_PLAY','LIVE'].includes(match?.status))return 'live';
+  if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return 'live';
   const diff=Date.now()-Date.parse(match?.utcDate);
   if(diff<0)return 'soon';
   return diff<=4*60*60*1000?'live':'waiting';
@@ -1116,8 +1135,7 @@ function knockoutTeamFlag(team){
 }
 function knockoutStatus(match){
   if(match?.status==='FINISHED')return {cls:'finished',label:LANG==='en'?'Finished':'Zakończony'};
-  if(match?.status==='PAUSED')return {cls:'live',label:LANG==='en'?'Half-time':'Przerwa'};
-  if(['IN_PLAY','LIVE'].includes(match?.status))return {cls:'live',label:LANG==='en'?'Live':'Trwa'};
+  if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return {cls:'live',label:LANG==='en'?'Live':'Trwa'};
   return {cls:'',label:LANG==='en'?'Scheduled':'Zaplanowany'};
 }
 function currentKnockoutRoundIndex(allMatches){
@@ -1194,7 +1212,7 @@ function renderKnockout(){
     const homeKnown=Boolean(match.homeTeam?.name);
     const awayKnown=Boolean(match.awayTeam?.name);
     const status=knockoutStatus(match);
-    const score=match.score?.fullTime||{};
+    const score=knockoutDisplayScore(match);
     const matchId=String(match.id);
     const expanded=expandedKnockoutMatchId===matchId;
     return `<article class="ko-match${expanded?' expanded':''}" data-ko-match-id="${matchId}" role="button" tabindex="0" aria-expanded="${expanded}">

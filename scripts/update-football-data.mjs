@@ -30,8 +30,10 @@ const statusRank = {
 };
 
 function hasScore(match) {
-  return Number.isInteger(match?.score?.fullTime?.home)
-    && Number.isInteger(match?.score?.fullTime?.away);
+  return ['fullTime', 'regularTime', 'halfTime', 'extraTime'].some(period =>
+    Number.isInteger(match?.score?.[period]?.home)
+      && Number.isInteger(match?.score?.[period]?.away)
+  );
 }
 
 function betterMatch(current, candidate, options = {}) {
@@ -221,6 +223,10 @@ async function fetchFootballData(url, label, maxAttempts = 3) {
 }
 
 function mapApiMatch(match) {
+  const mapScore = period => ({
+    home: match.score?.[period]?.home ?? null,
+    away: match.score?.[period]?.away ?? null
+  });
   return {
     id: match.id,
     utcDate: match.utcDate,
@@ -236,10 +242,13 @@ function mapApiMatch(match) {
       tla: match.awayTeam?.tla || null
     },
     score: {
-      fullTime: {
-        home: match.score?.fullTime?.home ?? null,
-        away: match.score?.fullTime?.away ?? null
-      }
+      winner: match.score?.winner || null,
+      duration: match.score?.duration || null,
+      fullTime: mapScore('fullTime'),
+      regularTime: mapScore('regularTime'),
+      halfTime: mapScore('halfTime'),
+      extraTime: mapScore('extraTime'),
+      penalties: mapScore('penalties')
     },
     lastUpdated: match.lastUpdated
   };
@@ -251,6 +260,7 @@ if (!payload) {
   process.exit(0);
 }
 const freshMatches = (payload.matches || []).map(mapApiMatch);
+const authoritativeLiveMatches = new Map();
 
 if (matchInProgress || backgroundMonitoring) {
   let livePayload = null;
@@ -265,7 +275,8 @@ if (matchInProgress || backgroundMonitoring) {
     for (const liveMatch of (livePayload.matches || []).map(mapApiMatch)) {
       const competitionMatch = byId.get(liveMatch.id);
       if (!competitionMatch) continue;
-      const merged = betterMatch(competitionMatch, liveMatch, { preferFreshLive: true });
+      const merged = competitionMatch.status === 'FINISHED' ? competitionMatch : liveMatch;
+      authoritativeLiveMatches.set(liveMatch.id, merged);
       if (JSON.stringify(merged) !== JSON.stringify(competitionMatch)) {
         liveOverrides += 1;
         byId.set(liveMatch.id, merged);
@@ -303,6 +314,7 @@ if (matchInProgress) {
     const index = freshMatches.findIndex(match => match.id === activeMatch.id);
     if (index < 0) continue;
     const exactMatch = mapApiMatch(exactPayload);
+    if (authoritativeLiveMatches.has(activeMatch.id) && exactMatch.status !== 'FINISHED') continue;
     const merged = betterMatch(freshMatches[index], exactMatch, { preferFreshLive: true });
     if (JSON.stringify(merged) !== JSON.stringify(freshMatches[index])) {
       freshMatches[index] = merged;
@@ -313,9 +325,11 @@ if (matchInProgress) {
 }
 
 const historicalMatches = historicalBestMatches();
-const matches = freshMatches.map(match =>
-  betterMatch(historicalMatches.get(match.id), match, { preferFreshLive: true })
-);
+const matches = freshMatches.map(match => {
+  const merged = betterMatch(historicalMatches.get(match.id), match, { preferFreshLive: true });
+  const liveMatch = authoritativeLiveMatches.get(match.id);
+  return liveMatch && merged.status !== 'FINISHED' ? liveMatch : merged;
+});
 
 const apiHasUnfinishedActiveMatch = matches.some(match => {
   const kickoff = Date.parse(match.utcDate);
