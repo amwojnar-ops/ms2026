@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-28T04:03:13.371Z",
+  "updatedAt": "2026-06-28T04:04:14.346Z",
   "matches": [
     {
       "id": 537327,
@@ -1561,12 +1561,12 @@
           "away": 3
         }
       },
-      "lastUpdated": "2026-06-28T04:03:09Z"
+      "lastUpdated": "2026-06-28T04:03:45Z"
     },
     {
       "id": 537402,
       "utcDate": "2026-06-28T02:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Algeria",
         "shortName": "Algeria",
@@ -1583,7 +1583,7 @@
           "away": 3
         }
       },
-      "lastUpdated": "2026-06-28T04:03:07Z"
+      "lastUpdated": "2026-06-28T04:04:07Z"
     },
     {
       "id": 537417,
