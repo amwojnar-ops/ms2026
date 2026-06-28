@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-28T21:14:03.703Z",
+  "updatedAt": "2026-06-28T21:30:32.490Z",
   "matches": [
     {
       "id": 537327,
@@ -16,9 +16,27 @@
         "tla": "RSA"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -38,9 +56,27 @@
         "tla": "CZE"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -60,9 +96,27 @@
         "tla": "BIH"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -82,9 +136,27 @@
         "tla": "PAR"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 4,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 3,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -104,9 +176,27 @@
         "tla": "SUI"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -126,9 +216,27 @@
         "tla": "MAR"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -148,9 +256,27 @@
         "tla": "SCO"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -170,9 +296,27 @@
         "tla": "TUR"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -192,9 +336,27 @@
         "tla": "CUW"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 7,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 3,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -214,9 +376,27 @@
         "tla": "JPN"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -236,9 +416,27 @@
         "tla": "ECU"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -258,9 +456,27 @@
         "tla": "TUN"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 5,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -280,9 +496,27 @@
         "tla": "CPV"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -302,9 +536,27 @@
         "tla": "EGY"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -324,9 +576,27 @@
         "tla": "URU"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -346,9 +616,27 @@
         "tla": "NZL"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -368,9 +656,27 @@
         "tla": "SEN"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -390,9 +696,27 @@
         "tla": "NOR"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 4
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 2
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -412,9 +736,27 @@
         "tla": "ALG"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -434,9 +776,27 @@
         "tla": "JOR"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -456,9 +816,27 @@
         "tla": "COD"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -478,9 +856,27 @@
         "tla": "CRO"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 4,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 2
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -500,9 +896,27 @@
         "tla": "PAN"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -522,9 +936,27 @@
         "tla": "COL"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 3
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -544,9 +976,27 @@
         "tla": "RSA"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -566,9 +1016,27 @@
         "tla": "BIH"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 4,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -588,9 +1056,27 @@
         "tla": "QAT"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 6,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 3,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -610,9 +1096,27 @@
         "tla": "KOR"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -632,9 +1136,27 @@
         "tla": "AUS"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -654,9 +1176,27 @@
         "tla": "MAR"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -676,9 +1216,27 @@
         "tla": "HAI"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 3,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -698,9 +1256,27 @@
         "tla": "PAR"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -720,9 +1296,27 @@
         "tla": "SWE"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 5,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -742,9 +1336,27 @@
         "tla": "CIV"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -764,9 +1376,27 @@
         "tla": "CUW"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -786,9 +1416,27 @@
         "tla": "JPN"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 4
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 2
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -808,9 +1456,27 @@
         "tla": "KSA"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 4,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 3,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -830,9 +1496,27 @@
         "tla": "IRN"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -852,9 +1536,27 @@
         "tla": "CPV"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -874,9 +1576,27 @@
         "tla": "EGY"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 3
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -896,9 +1616,27 @@
         "tla": "AUT"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -918,9 +1656,27 @@
         "tla": "IRQ"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -940,9 +1696,27 @@
         "tla": "SEN"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -962,9 +1736,27 @@
         "tla": "ALG"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -984,9 +1776,27 @@
         "tla": "UZB"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 5,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 3,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1006,9 +1816,27 @@
         "tla": "GHA"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1028,9 +1856,27 @@
         "tla": "CRO"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1050,9 +1896,27 @@
         "tla": "COD"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1072,9 +1936,27 @@
         "tla": "CAN"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1094,9 +1976,27 @@
         "tla": "QAT"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1116,9 +2016,27 @@
         "tla": "HAI"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 4,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 2
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1138,9 +2056,27 @@
         "tla": "BRA"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 3
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 2
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1160,9 +2096,27 @@
         "tla": "MEX"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 3
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1182,9 +2136,27 @@
         "tla": "KOR"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1204,9 +2176,27 @@
         "tla": "GER"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1226,9 +2216,27 @@
         "tla": "CIV"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1248,9 +2256,27 @@
         "tla": "NED"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 3
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 2
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1270,9 +2296,27 @@
         "tla": "SWE"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1292,9 +2336,27 @@
         "tla": "USA"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 2,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1314,9 +2376,27 @@
         "tla": "AUS"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1336,9 +2416,27 @@
         "tla": "FRA"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 4
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 3
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1358,9 +2456,27 @@
         "tla": "IRQ"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 5,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1380,9 +2496,27 @@
         "tla": "ESP"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1402,9 +2536,27 @@
         "tla": "KSA"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1424,9 +2576,27 @@
         "tla": "BEL"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 5
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1446,9 +2616,27 @@
         "tla": "IRN"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1468,9 +2656,27 @@
         "tla": "ENG"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 2
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1490,9 +2696,27 @@
         "tla": "GHA"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1512,9 +2736,27 @@
         "tla": "POR"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 0
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1534,9 +2776,27 @@
         "tla": "UZB"
       },
       "score": {
+        "winner": "HOME_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1556,9 +2816,27 @@
         "tla": "ARG"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 1,
           "away": 3
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 2
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T08:25:01Z"
@@ -1578,9 +2856,27 @@
         "tla": "AUT"
       },
       "score": {
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 3,
           "away": 3
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 1,
+          "away": 1
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
       "lastUpdated": "2026-06-28T06:02:40Z"
@@ -1622,7 +2918,25 @@
         "tla": "JPN"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1644,7 +2958,25 @@
         "tla": "PAR"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1666,7 +2998,25 @@
         "tla": "MAR"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1688,7 +3038,25 @@
         "tla": "NOR"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1710,7 +3078,25 @@
         "tla": "SWE"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1732,7 +3118,25 @@
         "tla": "ECU"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1754,7 +3158,25 @@
         "tla": "COD"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1776,7 +3198,25 @@
         "tla": "SEN"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1798,7 +3238,25 @@
         "tla": "BIH"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1820,7 +3278,25 @@
         "tla": "AUT"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1842,7 +3318,25 @@
         "tla": "CRO"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1864,7 +3358,25 @@
         "tla": "ALG"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1886,7 +3398,25 @@
         "tla": "EGY"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1908,7 +3438,25 @@
         "tla": "CPV"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1930,7 +3478,25 @@
         "tla": "GHA"
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1952,7 +3518,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1974,7 +3558,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -1996,7 +3598,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2018,7 +3638,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2040,7 +3678,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2062,7 +3718,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2084,7 +3758,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2106,7 +3798,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2128,7 +3838,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2150,7 +3878,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2172,7 +3918,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2194,7 +3958,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2216,7 +3998,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2238,7 +4038,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2260,7 +4078,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
@@ -2282,7 +4118,25 @@
         "tla": null
       },
       "score": {
+        "winner": null,
+        "duration": "REGULAR",
         "fullTime": {
+          "home": null,
+          "away": null
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": null,
+          "away": null
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
           "home": null,
           "away": null
         }
