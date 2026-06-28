@@ -105,6 +105,7 @@ function applyLanguage(){
   setHeaderBadge(tr('locked'),'locked');
   setText('playedLabel','played'); setText('nextMatchLabel','nextMatch');
   setText('tabPlayersBtn','players'); setText('tabMatchesBtn','matches'); setText('tabRankingBtn','ranking');
+  document.getElementById('tabMatchesBtn').title=LANG==='en'?'Open the archived group-stage report':'Otwórz archiwalny raport fazy grupowej';
   setText('tabKnockoutBtn','knockout');
   const backLabel=document.getElementById('mobileSectionBackLabel');
   if(backLabel)backLabel.textContent=LANG==='en'?'Back':'Wróć';
@@ -411,7 +412,7 @@ function playerKnockoutPhaseRows(p){
 }
 
 function groupReportLink(){
-  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260628-2" target="_blank" rel="noopener noreferrer">${LANG==='en'?'Open the static group-stage report':'Otwórz statyczny raport fazy grupowej'}</a>`;
+  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260628-2">${LANG==='en'?'Open the static group-stage report':'Otwórz statyczny raport fazy grupowej'}</a>`;
 }
 
 function buildPlayerPhases(p){

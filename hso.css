@@ -268,6 +268,14 @@ header::after {
 }
 .tab:hover { color: var(--text); background: rgba(255,255,255,.04); }
 .tab.active { background: var(--card); color: #fff; }
+.tab-archive { color: rgba(122,138,160,.68); font-size: 14px; font-weight: 500; }
+.tab-archive::after {
+  content: 'ARCHIWUM'; display: inline-block; margin-left: 6px; padding: 1px 5px;
+  border: 1px solid rgba(122,138,160,.2); border-radius: 99px;
+  color: rgba(150,163,183,.62); font: 600 7px 'Barlow',sans-serif;
+  letter-spacing: .05em; vertical-align: 2px;
+}
+.tab-archive:hover { color: #c3ccda; background: rgba(255,255,255,.025); }
 .tab.disabled {
   position: relative; color: rgba(122,138,160,.5); cursor: not-allowed;
 }
