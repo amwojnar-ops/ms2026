@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-28T03:21:16.164Z",
+  "updatedAt": "2026-06-28T03:22:16.114Z",
   "matches": [
     {
       "id": 537327,
@@ -1557,11 +1557,11 @@
       },
       "score": {
         "fullTime": {
-          "home": 0,
+          "home": 1,
           "away": 2
         }
       },
-      "lastUpdated": "2026-06-28T03:21:06Z"
+      "lastUpdated": "2026-06-28T03:22:06Z"
     },
     {
       "id": 537402,
@@ -1580,10 +1580,10 @@
       "score": {
         "fullTime": {
           "home": 1,
-          "away": 1
+          "away": 2
         }
       },
-      "lastUpdated": "2026-06-28T03:21:06Z"
+      "lastUpdated": "2026-06-28T03:22:06Z"
     },
     {
       "id": 537417,
