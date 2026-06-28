@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-28T21:30:32.490Z",
+  "updatedAt": "2026-06-28T22:30:35.980Z",
   "matches": [
     {
       "id": 537327,
@@ -2896,12 +2896,30 @@
         "tla": "CAN"
       },
       "score": {
+        "winner": "AWAY_TEAM",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 0,
           "away": 1
+        },
+        "regularTime": {
+          "home": null,
+          "away": null
+        },
+        "halfTime": {
+          "home": 0,
+          "away": 0
+        },
+        "extraTime": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
         }
       },
-      "lastUpdated": "2026-06-28T21:14:03Z"
+      "lastUpdated": "2026-06-28T22:25:00Z"
     },
     {
       "id": 537423,
