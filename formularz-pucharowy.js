@@ -347,12 +347,22 @@ function scoreSelect(index, slotId, side, locked) {
   select.dataset.slotId = slotId;
   select.dataset.side = side;
   select.disabled = locked;
+  select.setAttribute("aria-label", `${roundLabel(index)} · ${side === "home" ? "gospodarze" : "goście"}`);
   select.innerHTML = '<option value="">–</option>' +
     Array.from({ length: 10 }, (_, value) => `<option value="${value}">${value}</option>`).join("");
   select.addEventListener("change", () => {
     select.classList.toggle("set", select.value !== "");
     updateRows();
     saveState();
+  });
+  select.addEventListener("keydown", event => {
+    if (event.key !== "Tab") return;
+    const enabled = selects.flatMap(item => [item.home, item.away]).filter(field => !field.disabled);
+    const current = enabled.indexOf(select);
+    const target = enabled[current + (event.shiftKey ? -1 : 1)];
+    if (!target) return;
+    event.preventDefault();
+    target.focus();
   });
   return select;
 }

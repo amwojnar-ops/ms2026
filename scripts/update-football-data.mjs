@@ -167,7 +167,7 @@ if (!token) {
 }
 
 const competitionUrl = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026';
-const liveUrl = 'https://api.football-data.org/v4/matches';
+const liveUrl = 'https://api.football-data.org/v4/matches?status=LIVE';
 const retryDelaysMs = [3000, 7000];
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -177,7 +177,11 @@ async function fetchFootballData(url, label, maxAttempts = 3) {
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     try {
       const response = await fetch(url, {
-        headers: { 'X-Auth-Token': token }
+        headers: {
+          'X-Auth-Token': token,
+          'Cache-Control': 'no-cache, no-store',
+          'Pragma': 'no-cache'
+        }
       });
 
       if (response.ok) {
