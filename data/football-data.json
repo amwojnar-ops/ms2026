@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-28T08:30:35.029Z",
+  "updatedAt": "2026-06-28T19:06:15.299Z",
   "matches": [
     {
       "id": 537327,
@@ -1588,7 +1588,7 @@
     {
       "id": 537417,
       "utcDate": "2026-06-28T19:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "South Africa",
         "shortName": "South Africa",
@@ -1601,11 +1601,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-28T06:02:40Z"
+      "lastUpdated": "2026-06-28T19:05:39Z"
     },
     {
       "id": 537423,
