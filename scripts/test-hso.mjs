@@ -107,6 +107,18 @@ check(baselineEntries.reduce((sum, player) => sum + player.en, 0) === 817, "Baza
 check(!core.includes("tips:["), "Szczegolowe typy grupowe pozostaly w aktywnym HSO");
 check(!core.includes("const MATCHES=["), "Terminarz grupowy pozostal w aktywnym HSO");
 
+const knockoutTipsBlock = core.match(/const KNOCKOUT_TIP_ROUNDS = \[([\s\S]*?)\n\];/)?.[1] || "";
+const r32PlayerTips = [...knockoutTipsBlock.matchAll(/^\s*'([^']+)':\{([^}]*)\}/gm)].map(match => ({
+  name: match[1],
+  scores: [...match[2].matchAll(/'\d+':'(\d+-\d+)'/g)].map(score => score[1])
+}));
+const baselineNames = new Set(baselineEntries.map(player => player.name));
+check(new Set(r32PlayerTips.map(player => player.name)).size === r32PlayerTips.length, "Typy 1/16: powtorzony gracz");
+r32PlayerTips.forEach(player => {
+  check(baselineNames.has(player.name), `Typy 1/16: nieznany gracz ${player.name}`);
+  check(player.scores.length === 16, `Typy 1/16 ${player.name}: ${player.scores.length}/16 meczow`);
+});
+
 check(groupReport.includes('data-report-version="2"'), "Raport fazy grupowej ma stary format");
 const reportSourceMatch = groupReport.match(/<script id="report-source" type="application\/json">([\s\S]*?)<\/script>/);
 let reportSource;
@@ -161,3 +173,4 @@ console.log("- zasoby lokalne i formularze pucharowe");
 console.log("- klucz zapisu typow i kafel nastepnego meczu");
 console.log("- zamrozona baza punktow po fazie grupowej");
 console.log("- historia 1728 punktacji w statycznym raporcie");
+console.log(`- przygotowane typy 1/16 finalu: ${r32PlayerTips.length}/24 graczy`);

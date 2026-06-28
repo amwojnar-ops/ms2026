@@ -235,11 +235,53 @@ const PLAYERS=[
 // z wpisanymi obiema drużynami. Kropka oznacza komplet typów gracza.
 // Gdy komplet mają wszyscy gracze, wszystkie kropki są ukrywane.
 const KNOCKOUT_TIP_ROUNDS = [
-  // {
-  //   id: '1/16',
-  //   matches: [{id:'r16-1', home:'Drużyna A', away:'Drużyna B'}],
-  //   tipsByPlayer: {'Agnieszka': {'r16-1':'2-1'}}
-  // }
+  {
+    id:'r32',
+    matches:[
+      {id:537417,apiId:537417,home:'RPA',away:'Kanada'},
+      {id:537423,apiId:537423,home:'Brazylia',away:'Japonia'},
+      {id:537415,apiId:537415,home:'Niemcy',away:'Paragwaj'},
+      {id:537418,apiId:537418,home:'Holandia',away:'Maroko'},
+      {id:537424,apiId:537424,home:'WKS',away:'Norwegia'},
+      {id:537416,apiId:537416,home:'Francja',away:'Szwecja'},
+      {id:537425,apiId:537425,home:'Meksyk',away:'Ekwador'},
+      {id:537426,apiId:537426,home:'Anglia',away:'DR Konga'},
+      {id:537422,apiId:537422,home:'Belgia',away:'Senegal'},
+      {id:537421,apiId:537421,home:'USA',away:'BiH'},
+      {id:537420,apiId:537420,home:'Hiszpania',away:'Austria'},
+      {id:537419,apiId:537419,home:'Portugalia',away:'Chorwacja'},
+      {id:537429,apiId:537429,home:'Szwajcaria',away:'Algieria'},
+      {id:537428,apiId:537428,home:'Australia',away:'Egipt'},
+      {id:537427,apiId:537427,home:'Argentyna',away:'RZP'},
+      {id:537430,apiId:537430,home:'Kolumbia',away:'Ghana'}
+    ],
+    tipsByPlayer:{
+      'Tomek':{'537417':'0-1','537423':'2-0','537415':'1-1','537418':'2-2','537424':'1-2','537416':'2-0','537425':'1-1','537426':'2-1','537422':'1-1','537421':'3-1','537420':'3-1','537419':'2-1','537429':'1-1','537428':'1-1','537427':'3-0','537430':'2-1'},
+      'Iwona':{'537417':'1-1','537423':'3-0','537415':'2-1','537418':'1-1','537424':'1-2','537416':'3-1','537425':'2-2','537426':'2-0','537422':'1-1','537421':'1-1','537420':'2-1','537419':'1-1','537429':'1-1','537428':'2-1','537427':'3-0','537430':'2-2'},
+      'Waldemar':{'537417':'2-2','537423':'2-2','537415':'4-0','537418':'3-1','537424':'2-1','537416':'3-1','537425':'2-1','537426':'1-1','537422':'2-1','537421':'1-1','537420':'2-1','537419':'3-2','537429':'0-0','537428':'1-1','537427':'3-1','537430':'1-2'},
+      'Leszek':{'537417':'0-2','537423':'2-0','537415':'2-0','537418':'2-1','537424':'0-2','537416':'3-0','537425':'2-2','537426':'2-0','537422':'1-1','537421':'2-0','537420':'2-0','537419':'2-2','537429':'1-0','537428':'0-0','537427':'3-0','537430':'1-1'},
+      'Lucas':{'537417':'1-2','537423':'3-2','537415':'4-1','537418':'2-1','537424':'1-3','537416':'4-1','537425':'2-2','537426':'3-1','537422':'3-2','537421':'2-2','537420':'3-1','537419':'3-2','537429':'1-1','537428':'1-2','537427':'5-0','537430':'2-2'},
+      'Agnieszka':{'537417':'2-1','537423':'3-1','537415':'3-0','537418':'3-2','537424':'1-2','537416':'4-1','537425':'2-0','537426':'4-0','537422':'2-2','537421':'2-1','537420':'2-1','537419':'3-2','537429':'2-0','537428':'1-1','537427':'4-0','537430':'2-1'},
+      'Ola':{'537417':'0-1','537423':'3-1','537415':'2-0','537418':'2-1','537424':'1-2','537416':'2-0','537425':'1-1','537426':'1-0','537422':'2-2','537421':'2-1','537420':'2-0','537419':'1-1','537429':'3-2','537428':'2-1','537427':'3-1','537430':'0-1'},
+      'Łukasz':{'537417':'1-2','537423':'2-1','537415':'2-0','537418':'2-1','537424':'1-1','537416':'3-0','537425':'2-0','537426':'2-1','537422':'2-1','537421':'2-0','537420':'2-1','537419':'1-1','537429':'2-1','537428':'1-1','537427':'2-0','537430':'2-0'},
+      'Justyna':{'537417':'1-1','537423':'2-0','537415':'3-0','537418':'0-1','537424':'2-0','537416':'3-1','537425':'3-0','537426':'2-0','537422':'2-1','537421':'2-1','537420':'2-0','537419':'2-2','537429':'1-1','537428':'1-1','537427':'3-0','537430':'2-1'},
+      'Mariusz':{'537417':'1-2','537423':'3-2','537415':'4-1','537418':'1-1','537424':'1-2','537416':'3-0','537425':'0-0','537426':'4-1','537422':'1-1','537421':'2-0','537420':'3-1','537419':'2-1','537429':'2-1','537428':'1-1','537427':'3-0','537430':'0-0'},
+      'Izunia':{'537417':'1-2','537423':'3-1','537415':'3-0','537418':'1-1','537424':'1-1','537416':'2-0','537425':'2-1','537426':'3-0','537422':'2-1','537421':'2-0','537420':'2-1','537419':'2-1','537429':'1-1','537428':'1-2','537427':'3-1','537430':'2-1'},
+      'Kacper':{'537417':'1-2','537423':'3-1','537415':'2-0','537418':'2-1','537424':'1-2','537416':'2-0','537425':'2-1','537426':'3-0','537422':'1-2','537421':'2-1','537420':'2-1','537419':'1-1','537429':'1-0','537428':'1-2','537427':'3-0','537430':'2-1'},
+      'Mateusz':{'537417':'1-2','537423':'1-2','537415':'2-0','537418':'1-1','537424':'2-1','537416':'3-0','537425':'1-1','537426':'2-0','537422':'1-2','537421':'2-0','537420':'2-1','537419':'1-1','537429':'1-1','537428':'1-1','537427':'2-0','537430':'2-1'},
+      'Magda':{'537417':'1-2','537423':'2-2','537415':'4-0','537418':'3-1','537424':'1-3','537416':'3-1','537425':'3-0','537426':'3-1','537422':'1-3','537421':'2-2','537420':'3-2','537419':'3-2','537429':'2-2','537428':'0-1','537427':'3-0','537430':'3-1'},
+      'Paweł':{'537417':'1-2','537423':'1-2','537415':'2-1','537418':'3-0','537424':'1-2','537416':'2-0','537425':'1-0','537426':'3-1','537422':'1-1','537421':'2-1','537420':'2-0','537419':'1-1','537429':'2-0','537428':'1-1','537427':'3-0','537430':'2-1'},
+      'Maria':{'537417':'0-1','537423':'2-1','537415':'3-1','537418':'2-1','537424':'1-2','537416':'2-1','537425':'1-1','537426':'3-1','537422':'1-2','537421':'1-2','537420':'2-0','537419':'2-1','537429':'2-1','537428':'2-1','537427':'3-0','537430':'1-2'},
+      'Michał':{'537417':'1-3','537423':'3-2','537415':'4-1','537418':'3-2','537424':'1-3','537416':'4-2','537425':'3-1','537426':'4-1','537422':'1-2','537421':'2-1','537420':'3-2','537419':'2-2','537429':'3-2','537428':'1-2','537427':'4-0','537430':'2-1'},
+      'Andrzej W.':{'537417':'1-2','537423':'2-1','537415':'2-0','537418':'2-2','537424':'1-2','537416':'3-0','537425':'1-1','537426':'2-0','537422':'1-2','537421':'2-1','537420':'3-1','537419':'1-1','537429':'2-1','537428':'1-1','537427':'3-0','537430':'2-1'},
+      'Aldona':{'537417':'1-2','537423':'2-1','537415':'2-0','537418':'2-1','537424':'1-2','537416':'3-1','537425':'2-1','537426':'3-0','537422':'1-1','537421':'2-1','537420':'2-0','537419':'2-1','537429':'2-1','537428':'1-1','537427':'3-0','537430':'1-1'},
+      'Alex':{'537417':'0-1','537423':'2-1','537415':'3-1','537418':'2-0','537424':'0-2','537416':'4-0','537425':'1-1','537426':'2-0','537422':'1-1','537421':'1-0','537420':'2-0','537419':'1-2','537429':'1-1','537428':'1-2','537427':'5-0','537430':'2-2'},
+      'Borys':{'537417':'1-3','537423':'3-1','537415':'2-0','537418':'1-1','537424':'1-2','537416':'3-0','537425':'1-2','537426':'2-0','537422':'1-1','537421':'2-1','537420':'2-0','537419':'2-1','537429':'2-1','537428':'1-0','537427':'3-1','537430':'2-0'},
+      'Jacek':{'537417':'1-1','537423':'2-1','537415':'2-0','537418':'2-1','537424':'1-1','537416':'3-1','537425':'1-1','537426':'2-0','537422':'0-0','537421':'2-1','537420':'3-1','537419':'1-1','537429':'2-1','537428':'1-1','537427':'2-0','537430':'2-1'},
+      'Robert':{'537417':'2-2','537423':'2-0','537415':'3-0','537418':'2-2','537424':'1-3','537416':'4-0','537425':'1-1','537426':'3-1','537422':'1-2','537421':'2-2','537420':'2-0','537419':'1-1','537429':'1-1','537428':'0-2','537427':'3-0','537430':'1-1'},
+      'Andrzej G.':{'537417':'1-2','537423':'3-1','537415':'0-0','537418':'2-0','537424':'1-2','537416':'3-0','537425':'2-1','537426':'3-1','537422':'0-0','537421':'1-0','537420':'2-1','537419':'1-1','537429':'2-0','537428':'2-0','537427':'3-0','537430':'0-0'}
+    }
+  }
 ];
 
 function knockoutTipDotPlayers(){
@@ -337,6 +379,14 @@ function buildPlayerPhases(p){
   const ranked=calcAll().find(player=>player.name===p.name)||p;
   return `<section class="pdp-phase open">
       <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
+        <span class="pdp-phase-title">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</span>
+        <span class="pdp-phase-summary">${LANG==='en'?'rounds':'rundy'}</span>
+        <span class="pdp-phase-chevron">⌄</span>
+      </button>
+      <div class="pdp-phase-body">${playerKnockoutPhaseRows(p)}</div>
+    </section>
+    <section class="pdp-phase">
+      <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
         <span class="pdp-phase-title">${LANG==='en'?'Group stage':'Faza grupowa'}</span>
         <span class="pdp-phase-summary">${ranked.group.pts} ${pointsLabel(ranked.group.pts)}</span>
         <span class="pdp-phase-chevron">⌄</span>
@@ -349,14 +399,6 @@ function buildPlayerPhases(p){
         </div>
         ${groupReportLink()}
       </div>
-    </section>
-    <section class="pdp-phase">
-      <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
-        <span class="pdp-phase-title">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</span>
-        <span class="pdp-phase-summary">${LANG==='en'?'rounds':'rundy'}</span>
-        <span class="pdp-phase-chevron">⌄</span>
-      </button>
-      <div class="pdp-phase-body">${playerKnockoutPhaseRows(p)}</div>
     </section>`;
 }
 
@@ -573,11 +615,7 @@ function playerOverview(p){
 }
 
 function buildSpRows(p){
-  return `<div class="phase-baseline compact">
-      <span><strong>${p.group.pts}</strong>${LANG==='en'?'group points':'pkt po grupach'}</span>
-      <span><strong>${p.group.ex}</strong>${LANG==='en'?'exact scores':'trafień za 3'}</span>
-      <span><strong>${p.group.en}</strong>${LANG==='en'?'outcomes':'trafień za 1'}</span>
-    </div>${groupReportLink()}`;
+  return buildPlayerPhases(p);
 }
 
 function buildExpRows(p){return buildSpRows(p);}
@@ -667,9 +705,11 @@ function updateMobileSectionBack(){
   const button=document.getElementById('mobileSectionBack');
   const playersTab=document.getElementById('tab-gracze');
   const rankingTab=document.getElementById('tab-ranking');
+  const knockoutTab=document.getElementById('tab-pucharowa');
   const playersVisible=playersTab&&playersTab.style.display!=='none';
   const rankingVisible=rankingTab&&rankingTab.style.display!=='none';
-  const anchor=playersVisible?playersTab:rankingVisible?rankingTab:null;
+  const knockoutVisible=knockoutTab&&knockoutTab.style.display!=='none';
+  const anchor=playersVisible?playersTab:rankingVisible?rankingTab:knockoutVisible?knockoutTab:null;
   const pastAnchor=anchor&&(window.scrollY>anchor.getBoundingClientRect().top+window.scrollY+260);
   button?.classList.toggle('visible',Boolean(anchor&&pastAnchor));
 }
@@ -1125,20 +1165,6 @@ function renderKnockout(){
     headerKnownPairs>0?'available':'waiting'
   );
 
-  document.getElementById('koEyebrow').textContent=LANG==='en'?'Road to the final':'Droga do finału';
-  document.getElementById('koTitle').textContent=LANG==='en'?'Knockout stage':'Faza pucharowa';
-  document.getElementById('koCopy').textContent=LANG==='en'
-    ? 'Fixtures come from football-data.org. Teams will appear automatically after the group stage is decided.'
-    : 'Terminy pochodzą z football-data.org. Pary pojawią się automatycznie po rozstrzygnięciu fazy grupowej.';
-  document.getElementById('koCurrentLabel').textContent=LANG==='en'?'Current stage':'Aktualny etap';
-  document.getElementById('koFirstLabel').textContent=LANG==='en'?'First match':'Pierwszy mecz';
-  document.getElementById('koTeamsLabel').textContent=LANG==='en'?'Known fixtures':'Znane pary';
-  document.getElementById('koCurrentStage').textContent=knockoutRoundName(KNOCKOUT_ROUNDS[currentIndex]);
-  document.getElementById('koFirstMatch').textContent=allMatches[0]?knockoutDate(allMatches[0].utcDate):'28.06 · 21:00';
-  const firstRound=KNOCKOUT_ROUNDS[0];
-  const firstRoundMatches=allMatches.slice(0,firstRound.count);
-  document.getElementById('koKnownPairs').textContent=`${firstRoundMatches.filter(m=>m.homeTeam?.name&&m.awayTeam?.name).length} / ${firstRound.count}`;
-
   const nav=document.getElementById('koStageNav');
   nav.innerHTML=KNOCKOUT_ROUNDS.map((round,index)=>{
     const matches=allMatches.slice(round.start,round.start+round.count);
@@ -1226,6 +1252,7 @@ function renderKnockout(){
         : 'Formularz rundy zostanie udostępniony po poznaniu pierwszej pary tego etapu.');
   document.getElementById('koDeadline').textContent=(LANG==='en'?'Deadline: ':'Termin typowania: ')+knockoutDeadlineLabel(deadline);
   const actionBtn=document.getElementById('koActionBtn');
+  actionBtn.closest('.ko-action')?.classList.toggle('deadline-closed',!beforeDeadline);
   actionBtn.textContent=!beforeDeadline
     ? (LANG==='en'?'Predictions closed':'Typowanie zamknięte')
     : formKnownPairs>0
