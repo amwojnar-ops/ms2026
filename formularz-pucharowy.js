@@ -155,6 +155,7 @@ const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537416, side: "awayTeam", team: { name: "Sweden", shortName: "Sweden", tla: "SWE" } },
   { matchId: 537424, side: "awayTeam", team: { name: "Norway", shortName: "Norway", tla: "NOR" } },
   { matchId: 537422, side: "homeTeam", team: { name: "Belgium", shortName: "Belgium", tla: "BEL" } },
+  { matchId: 537422, side: "awayTeam", team: { name: "Senegal", shortName: "Senegal", tla: "SEN" } },
   { matchId: 537420, side: "homeTeam", team: { name: "Spain", shortName: "Spain", tla: "ESP" } },
   { matchId: 537421, side: "awayTeam", team: { name: "Bosnia-Herzegovina", shortName: "Bosnia-H.", tla: "BIH" } },
   { matchId: 537428, side: "homeTeam", team: { name: "Australia", shortName: "Australia", tla: "AUS" } },
