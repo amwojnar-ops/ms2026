@@ -80,6 +80,9 @@ check(
   core.includes("function nextMatch(){return nextKnockoutMatch();}"),
   "Kafel nastepnego meczu nie przechodzi do fazy pucharowej"
 );
+check(core.includes("function knockoutMatchDetails("), "Kafle pucharowe nie maja szczegolow typow");
+check(core.includes('class="ko-match-back"'), "Kafle pucharowe nie maja przycisku Wroc");
+check(core.includes("groups[value].push"), "Kafle pucharowe nie dziela punktow na 3/1/0");
 check(
   formCore.includes("ms2026_${config.key}_typy"),
   "Zmieniono klucz localStorage formularzy pucharowych"

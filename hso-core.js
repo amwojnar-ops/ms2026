@@ -914,6 +914,65 @@ const KNOWN_KNOCKOUT_TEAMS = [
   {matchId:537430, side:'awayTeam', team:{name:'Ghana',shortName:'Ghana',tla:'GHA'}}
 ];
 let selectedKnockoutRound = 0;
+let expandedKnockoutMatchId = null;
+
+function knockoutTipsForRound(round){
+  const aliases={r32:['r32','1/16'],r16:['r16','1/8'],qf:['qf','1/4'],sf:['sf','1/2'],third:['third','medale'],final:['final','medale']};
+  return KNOCKOUT_TIP_ROUNDS.find(item=>(aliases[round.id]||[round.id]).includes(item.id))||null;
+}
+
+function knockoutTipMatch(tipRound,apiMatch,index){
+  const matches=tipRound?.matches||[];
+  const declared=matches.find(match=>Number(match.apiId??match.id)===apiMatch.id)||matches[index];
+  if(!declared)return null;
+  return {match:declared,key:declared.id||String(index)};
+}
+
+function knockoutRoundProgress(round,roundMatches){
+  const tipRound=knockoutTipsForRound(round);
+  if(!tipRound)return {tipRound:null,completePlayers:[],complete:false};
+  const required=roundMatches.map((match,index)=>knockoutTipMatch(tipRound,match,index)).filter(Boolean);
+  const completePlayers=PLAYERS.filter(player=>required.length===round.count&&required.every(({key})=>{
+    const tip=tipRound.tipsByPlayer?.[player.name]?.[key];
+    return typeof tip==='string'&&tip.trim()!=='';
+  }));
+  return {tipRound,completePlayers,complete:completePlayers.length===PLAYERS.length};
+}
+
+function knockoutMatchDetails(round,match,index,roundMatches,beforeDeadline){
+  const progress=knockoutRoundProgress(round,roundMatches);
+  const tipData=knockoutTipMatch(progress.tipRound,match,index);
+  const finishedResult=apiResult(match);
+  const reveal=Boolean(tipData&&progress.complete&&(!beforeDeadline||finishedResult));
+  const back=`<button class="ko-match-back" type="button">← ${LANG==='en'?'Back':'Wróć'}</button>`;
+  if(!reveal){
+    const message=!progress.tipRound
+      ? (LANG==='en'?'Predictions have not been entered yet.':'Typy nie zostały jeszcze wprowadzone.')
+      : !progress.complete
+        ? (LANG==='en'?`Predictions entered: ${progress.completePlayers.length}/${PLAYERS.length}.`:`Wprowadzone komplety: ${progress.completePlayers.length}/${PLAYERS.length}.`)
+        : (LANG==='en'?'Predictions remain hidden until the deadline.':'Typy pozostają ukryte do końca terminu typowania.');
+    return `<div class="ko-match-details" hidden>${back}<div class="ko-details-empty">${message}</div></div>`;
+  }
+  if(finishedResult){
+    const groups={3:[],1:[],0:[]};
+    PLAYERS.forEach(player=>{
+      const tip=progress.tipRound.tipsByPlayer?.[player.name]?.[tipData.key]||'—';
+      const value=sc(tip,finishedResult)??0;
+      groups[value].push({name:player.name,tip});
+    });
+    const sections=[
+      {value:3,label:`3 ${pointsLabel(3)}`,cls:'lbl-g',chip:'chip-g'},
+      {value:1,label:`1 ${pointsLabel(1)}`,cls:'lbl-a',chip:'chip-a'},
+      {value:0,label:`0 ${pointsLabel(0)}`,cls:'lbl-r',chip:'chip-r'}
+    ].map(section=>`<div class="exp-section"><div class="exp-lbl ${section.cls}">${section.label} · ${groups[section.value].length}</div><div class="chips">${groups[section.value].map(item=>`<span class="chip ${section.chip}"><span class="chip-pname">${item.name}</span><span class="chip-tip">${item.tip}</span></span>`).join('')}</div></div>`).join('');
+    return `<div class="ko-match-details" hidden>${back}${sections}</div>`;
+  }
+  const chips=PLAYERS.map(player=>{
+    const tip=progress.tipRound.tipsByPlayer?.[player.name]?.[tipData.key]||'—';
+    return `<span class="chip chip-tip-pre"><span class="chip-pname">${player.name}</span><span class="chip-tip">${tip}</span></span>`;
+  }).join('');
+  return `<div class="ko-match-details" hidden>${back}<div class="exp-section"><div class="exp-lbl">${LANG==='en'?'Player predictions':'Typy graczy'} · ${PLAYERS.length}</div><div class="chips">${chips}</div></div></div>`;
+}
 
 function knockoutPlaceholderMatch(utcDate,index){
   return {
@@ -1093,6 +1152,7 @@ function renderKnockout(){
   }).join('');
   nav.querySelectorAll('[data-ko-round]').forEach(button=>button.addEventListener('click',()=>{
     selectedKnockoutRound=Number(button.dataset.koRound);
+    expandedKnockoutMatchId=null;
     renderKnockout();
   }));
 
@@ -1109,13 +1169,48 @@ function renderKnockout(){
     const awayKnown=Boolean(match.awayTeam?.name);
     const status=knockoutStatus(match);
     const score=match.score?.fullTime||{};
-    return `<article class="ko-match">
+    const matchId=String(match.id);
+    const expanded=expandedKnockoutMatchId===matchId;
+    return `<article class="ko-match${expanded?' expanded':''}" data-ko-match-id="${matchId}" role="button" tabindex="0" aria-expanded="${expanded}">
       <div class="ko-match-top"><span>${LANG==='en'?'Match':'Mecz'} ${index+1}</span><span>${knockoutDate(match.utcDate)}</span></div>
       <div class="ko-team${homeKnown?'':' unknown'}">${knockoutTeamFlag(match.homeTeam)}<span class="ko-team-name">${knockoutTeamName(match.homeTeam)}</span><span class="ko-team-score">${Number.isInteger(score.home)?score.home:'–'}</span></div>
       <div class="ko-team${awayKnown?'':' unknown'}">${knockoutTeamFlag(match.awayTeam)}<span class="ko-team-name">${knockoutTeamName(match.awayTeam)}</span><span class="ko-team-score">${Number.isInteger(score.away)?score.away:'–'}</span></div>
       <div class="ko-match-status ${status.cls}"><span class="ko-status-dot"></span>${status.label}</div>
+      <div class="ko-match-hint">${LANG==='en'?'Click for predictions':'Kliknij, aby zobaczyć typy'} ↓</div>
+      ${knockoutMatchDetails(activeRound,match,index,roundMatches,beforeDeadline)}
     </article>`;
   }).join('') : `<div class="ko-match">${LANG==='en'?'No fixture data.':'Brak danych o meczach.'}</div>`;
+
+  matchesEl.querySelectorAll('[data-ko-match-id]').forEach(tile=>{
+    const setExpanded=open=>{
+      expandedKnockoutMatchId=open?tile.dataset.koMatchId:null;
+      matchesEl.querySelectorAll('[data-ko-match-id]').forEach(item=>{
+        const active=item===tile&&open;
+        item.classList.toggle('expanded',active);
+        item.setAttribute('aria-expanded',String(active));
+        const details=item.querySelector('.ko-match-details');
+        if(details)details.hidden=!active;
+      });
+      if(!open)tile.scrollIntoView({behavior:'smooth',block:'nearest'});
+    };
+    tile.addEventListener('click',event=>{
+      if(event.target.closest('.ko-match-back'))return;
+      setExpanded(!tile.classList.contains('expanded'));
+    });
+    tile.addEventListener('keydown',event=>{
+      if(!['Enter',' '].includes(event.key))return;
+      event.preventDefault();
+      setExpanded(!tile.classList.contains('expanded'));
+    });
+    tile.querySelector('.ko-match-back')?.addEventListener('click',event=>{
+      event.stopPropagation();
+      setExpanded(false);
+    });
+    if(tile.classList.contains('expanded')){
+      const details=tile.querySelector('.ko-match-details');
+      if(details)details.hidden=false;
+    }
+  });
 
   document.getElementById('koActionTitle').textContent=LANG==='en'?'Round predictions':'Typowanie rundy';
   document.getElementById('koActionCopy').textContent=!beforeDeadline
@@ -1142,9 +1237,11 @@ function renderKnockout(){
   actionBtn.classList.toggle('ready',formReady);
   actionBtn.setAttribute('aria-disabled',String(!formReady));
   actionBtn.onclick=formReady?null:event=>event.preventDefault();
+  const tipProgress=knockoutRoundProgress(activeRound,roundMatches);
+  const completedTips=tipProgress.completePlayers.length;
   document.getElementById('koProgressLabel').textContent=LANG==='en'?'Predictions submitted':'Oddane typy';
-  document.getElementById('koProgressValue').textContent=`0 / ${PLAYERS.length}`;
-  document.getElementById('koProgressFill').style.width='0%';
+  document.getElementById('koProgressValue').textContent=`${completedTips} / ${PLAYERS.length}`;
+  document.getElementById('koProgressFill').style.width=`${completedTips/PLAYERS.length*100}%`;
   document.getElementById('koProgressNote').textContent=LANG==='en'
     ? 'Once the stage opens, player prediction progress will appear here.'
     : 'Po uruchomieniu rundy zobaczysz tutaj postęp typowania graczy.';

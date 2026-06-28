@@ -762,7 +762,10 @@ header::after {
 .ko-panel-head h3 { margin:0; font-size:15px; }
 .ko-round-state { color:var(--gold); font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
 .ko-matches { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:12px; }
-.ko-match { min-width:0; padding:12px; border:1px solid var(--border); border-radius:9px; background:#0d1628; }
+.ko-match { min-width:0; padding:12px; border:1px solid var(--border); border-radius:9px; background:#0d1628; cursor:pointer; transition:border-color .2s,box-shadow .2s; }
+.ko-match:hover { border-color:rgba(232,200,74,.42); }
+.ko-match:focus-visible { outline:2px solid var(--gold); outline-offset:2px; }
+.ko-match.expanded { grid-column:1 / -1; border-color:rgba(232,200,74,.62); box-shadow:0 10px 28px rgba(0,0,0,.3); }
 .ko-match-top { display:flex; justify-content:space-between; gap:8px; margin-bottom:10px; color:var(--muted); font-size:9px; }
 .ko-team { display:grid; grid-template-columns:24px minmax(0,1fr) 24px; align-items:center; min-height:29px; gap:7px; border-top:1px solid rgba(255,255,255,.045); }
 .ko-team:first-of-type { border-top:0; }
@@ -777,6 +780,17 @@ header::after {
 .ko-match-status.live .ko-status-dot { background:var(--green); box-shadow:0 0 7px var(--green); animation:livePulse 1.4s infinite; }
 .ko-match-status.finished { color:var(--red); }
 .ko-match-status.finished .ko-status-dot { background:var(--red); }
+.ko-match-hint { margin-top:8px; color:var(--muted); font-size:9px; text-align:right; }
+.ko-match.expanded .ko-match-hint { display:none; }
+.ko-match-details { margin-top:12px; padding-top:12px; border-top:1px solid var(--border); cursor:default; }
+.ko-match-details[hidden] { display:none; }
+.ko-match-back {
+  margin:0 0 12px; padding:7px 12px; border:1px solid rgba(232,200,74,.38);
+  border-radius:7px; background:rgba(232,200,74,.08); color:var(--gold);
+  font:600 11px 'Barlow',sans-serif; cursor:pointer;
+}
+.ko-match-back:hover { background:rgba(232,200,74,.16); }
+.ko-details-empty { padding:12px; border:1px dashed var(--border); border-radius:8px; color:var(--muted); font-size:11px; text-align:center; }
 .ko-side { grid-column:2; grid-row:2; display:grid; gap:12px; }
 .ko-action { padding:16px; border:1px solid rgba(232,200,74,.25); border-radius:var(--r); background:linear-gradient(145deg,rgba(232,200,74,.11),rgba(13,22,40,.85)); }
 .ko-main > .ko-action { grid-column:2; grid-row:1; }
