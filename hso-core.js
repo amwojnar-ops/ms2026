@@ -454,6 +454,7 @@ const ISO = {
   'Rep. Ziel. Przył.':'cv','RPA':'za','Senegal':'sn','Szwajcaria':'ch',
   'Szwecja':'se','Szkocja':'gb-sct','Tunezja':'tn','Turcja':'tr',
   'Urugwaj':'uy','USA':'us','Uzbekistan':'uz','Wybrzeże K.Sł.':'ci',
+  'BiH':'ba','WKS':'ci','RZP':'cv',
 };
 const SHORT = {
   'Hiszpania':        'ESP',

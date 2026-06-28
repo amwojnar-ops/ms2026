@@ -127,6 +127,10 @@ check(
 );
 check(core.includes("function knockoutMatchDetails("), "Kafle pucharowe nie maja szczegolow typow");
 check(core.includes("function playerKnockoutTeams("), "Historia gracza nie ma flag druzyn");
+check(
+  ["'BiH':'ba'", "'WKS':'ci'", "'RZP':'cv'"].every(mapping => core.includes(mapping)),
+  "Brak flag dla skrotow BiH, WKS lub RZP"
+);
 check(core.includes("pdp-tip-card"), "Historia gracza nie ma kolorowej karty punktow");
 check(!core.includes('class="ko-match-back"'), "Kafle pucharowe nadal maja przycisk Wroc");
 check(core.includes("setExpanded(!tile.classList.contains('expanded'))"), "Ponowne klikniecie kafla nie zamyka szczegolow");
