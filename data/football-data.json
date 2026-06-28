@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-28T02:04:16.156Z",
+  "updatedAt": "2026-06-28T02:06:15.174Z",
   "matches": [
     {
       "id": 537327,
@@ -1544,7 +1544,7 @@
     {
       "id": 537401,
       "utcDate": "2026-06-28T02:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Jordan",
         "shortName": "Jordan",
@@ -1557,11 +1557,11 @@
       },
       "score": {
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-06-26T15:20:14Z"
+      "lastUpdated": "2026-06-28T02:06:06Z"
     },
     {
       "id": 537402,
