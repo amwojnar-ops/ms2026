@@ -504,28 +504,10 @@ function saveState() {
   try { localStorage.setItem(storageKey, JSON.stringify(data)); } catch (_) {}
 }
 
-function migrateSavedScores(data) {
-  if (pageKey !== "index16" || !data?.scores || Array.isArray(data.scores)) return data;
-  const oldSlot = "index16-6";
-  const correctSlot = "index16-5";
-  const oldScore = data.scores[oldSlot];
-  const correctScore = data.scores[correctSlot];
-  const hasValue = score => score && (score.home !== "" || score.away !== "");
-  if (hasValue(oldScore) && !hasValue(correctScore)) {
-    data.scores[correctSlot] = oldScore;
-  }
-  if (oldScore) {
-    delete data.scores[oldSlot];
-    try { localStorage.setItem(storageKey, JSON.stringify(data)); } catch (_) {}
-  }
-  return data;
-}
-
 function loadState() {
   let data;
   try { data = JSON.parse(localStorage.getItem(storageKey)); } catch (_) {}
   if (!data) return;
-  data = migrateSavedScores(data);
   document.getElementById("player").value = PLAYERS.includes(data.player) ? data.player : "";
   selects.forEach(({ slotId, home, away }, index) => {
     // Obsługa starszego zapisu tablicowego oraz nowego zapisu po stałym ID meczu.

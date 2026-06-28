@@ -81,6 +81,10 @@ check(
   formCore.includes("ms2026_${config.key}_typy"),
   "Zmieniono klucz localStorage formularzy pucharowych"
 );
+check(
+  !/delete\s+data\.scores\s*\[/.test(formCore),
+  "Formularz usuwa zapisany typ z localStorage"
+);
 
 for (const file of [
   "hso-typowanie16.html",
@@ -106,4 +110,3 @@ console.log("- skladnia JavaScript");
 console.log("- 16 kompletnych i unikalnych par 1/16 finalu");
 console.log("- zasoby lokalne i formularze pucharowe");
 console.log("- klucz zapisu typow i kafel nastepnego meczu");
-
