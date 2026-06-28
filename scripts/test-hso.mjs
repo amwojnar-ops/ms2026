@@ -98,14 +98,24 @@ const entries = [...knownBlock.matchAll(
   /matchId:\s*(\d+),\s*side:\s*['"](homeTeam|awayTeam)['"][\s\S]*?name:\s*['"]([^'"]+)['"]/g
 )].map(match => ({ id: Number(match[1]), side: match[2], team: match[3] }));
 
-check(entries.length === 32, `Pary pucharowe: znaleziono ${entries.length}/32 druzyn`);
-check(new Set(entries.map(entry => entry.team)).size === 32, "Powtorzona druzyna w 1/16 finalu");
+const r32Ids = new Set(footballData.matches
+  .filter(match => Date.parse(match.utcDate) >= Date.parse("2026-06-28T19:00:00Z"))
+  .sort((a, b) => Date.parse(a.utcDate) - Date.parse(b.utcDate))
+  .slice(0, 16)
+  .map(match => match.id));
+const r32Entries = entries.filter(entry => r32Ids.has(entry.id));
+check(r32Entries.length === 32, `Pary pucharowe: znaleziono ${r32Entries.length}/32 druzyn`);
+check(new Set(r32Entries.map(entry => entry.team)).size === 32, "Powtorzona druzyna w 1/16 finalu");
 
 const matchIds = new Map();
-for (const entry of entries) {
+for (const entry of r32Entries) {
   if (!matchIds.has(entry.id)) matchIds.set(entry.id, new Set());
   matchIds.get(entry.id).add(entry.side);
 }
+check(
+  entries.some(entry => entry.id === 537376 && entry.side === "homeTeam" && entry.team === "Canada"),
+  "Kanada nie zostala przeniesiona do meczu 1/8 finalu"
+);
 check(matchIds.size === 16, `Pary pucharowe: znaleziono ${matchIds.size}/16 meczow`);
 for (const [id, sides] of matchIds) {
   check(sides.size === 2, `Mecz ${id}: brak gospodarza lub goscia`);
@@ -116,7 +126,10 @@ check(
   "Kafel nastepnego meczu nie przechodzi do fazy pucharowej"
 );
 check(core.includes("function knockoutMatchDetails("), "Kafle pucharowe nie maja szczegolow typow");
-check(core.includes('class="ko-match-back"'), "Kafle pucharowe nie maja przycisku Wroc");
+check(core.includes("function playerKnockoutTeams("), "Historia gracza nie ma flag druzyn");
+check(core.includes("pdp-tip-card"), "Historia gracza nie ma kolorowej karty punktow");
+check(!core.includes('class="ko-match-back"'), "Kafle pucharowe nadal maja przycisk Wroc");
+check(core.includes("setExpanded(!tile.classList.contains('expanded'))"), "Ponowne klikniecie kafla nie zamyka szczegolow");
 check(core.includes("groups[value].push"), "Kafle pucharowe nie dziela punktow na 3/1/0");
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
@@ -147,6 +160,10 @@ check(core.includes("function knockoutDisplayScore("), "Kafel meczu nie wybiera 
 check(
   core.includes("const score=knockoutDisplayScore(match)"),
   "Kafel meczu nadal uzywa tylko score.fullTime"
+);
+check(
+  core.includes("document.body.classList.toggle('ranking-active'"),
+  "Ranking nie rozszerza przestrzeni dla historii gracza"
 );
 check(
   formCore.includes("ms2026_${config.key}_typy"),

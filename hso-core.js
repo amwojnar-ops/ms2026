@@ -366,8 +366,19 @@ function playerSubsectionLabel(title){
   return `<div class="pdp-subsection-lbl">
     <span class="pdp-subsection-lbl-title">${title}</span>
     <span class="pdp-subsection-col">${LANG==='en'?'Result':'Wynik'}</span>
-    <span class="pdp-subsection-col">${LANG==='en'?'Tip':'Typ'}</span>
+    <span class="pdp-subsection-col">${LANG==='en'?'Tip / pts':'Typ / pkt'}</span>
   </div>`;
+}
+
+function playerKnockoutMatchMeta(match){
+  const apiId=Number(match?.apiId??match?.id);
+  const apiMatch=Number.isFinite(apiId)?API_MATCHES.find(item=>item.id===apiId):null;
+  return apiMatch?.utcDate?knockoutDate(apiMatch.utcDate):(match?.date||'—');
+}
+
+function playerKnockoutTeams(match){
+  return `<span class="pdp-team-line">${flag(match.home)}<span>${teamName(match.home)}</span></span>
+    <span class="pdp-team-line">${flag(match.away)}<span>${teamName(match.away)}</span></span>`;
 }
 
 function playerKnockoutPhaseRows(p){
@@ -380,13 +391,21 @@ function playerKnockoutPhaseRows(p){
     if(!data.visible){
       return `<div class="pdp-round"><span>${name}</span><span class="pdp-round-status">${data.tips}/${data.matches.length} · ${LANG==='en'?'predictions hidden':'typy ukryte'}</span></div>`;
     }
-    return `<div class="pdp-section-lbl">${name}</div>${data.matches.map(({round,match,key})=>`
-      <div class="pdp-match">
-        <span class="pdp-date">${match.date||'—'}</span>
-        <span class="pdp-teams">${match.home} – ${match.away}</span>
-        <span class="pdp-result">${knockoutMatchResult(match)||'—'}</span>
-        <span class="pdp-tip">${round.tipsByPlayer?.[p.name]?.[key]||'—'}</span>
-      </div>`).join('')}`;
+    return `<div class="pdp-section-lbl">${name}</div>${data.matches.map(({round,match,key})=>{
+      const tip=round.tipsByPlayer?.[p.name]?.[key]||'—';
+      const result=knockoutMatchResult(match);
+      const points=result&&tip!=='—'?sc(tip,result):null;
+      const resultClass=points===null?'rq':`r${points}`;
+      const pointsText=points===null?'—':`${points} ${pointsLabel(points)}`;
+      return `<div class="pdp-match ${resultClass}">
+        <span class="pdp-fixture">
+          <span class="pdp-kickoff">${playerKnockoutMatchMeta(match)}</span>
+          ${playerKnockoutTeams(match)}
+        </span>
+        <span class="pdp-result">${result||'—'}</span>
+        <span class="pdp-tip-card"><strong>${tip}</strong><small>${pointsText}</small></span>
+      </div>`;
+    }).join('')}`;
   }).join('');
   return `${playerSubsectionLabel(LANG==='en'?'Knockout matches':'Mecze pucharowe')}${content}`;
 }
@@ -939,6 +958,7 @@ const KNOCKOUT_FALLBACK_DATES = [
   '2026-07-14T19:00:00Z','2026-07-15T19:00:00Z','2026-07-18T21:00:00Z','2026-07-19T19:00:00Z'
 ];
 const KNOWN_KNOCKOUT_TEAMS = [
+  {matchId:537376, side:'homeTeam', team:{name:'Canada',shortName:'Canada',tla:'CAN'}},
   {matchId:537425, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537425, side:'awayTeam', team:{name:'Ecuador',shortName:'Ecuador',tla:'ECU'}},
   {matchId:537421, side:'homeTeam', team:{name:'United States',shortName:'United States',tla:'USA'}},
@@ -1003,14 +1023,13 @@ function knockoutMatchDetails(round,match,index,roundMatches,beforeDeadline){
   const tipData=knockoutTipMatch(progress.tipRound,match,index);
   const finishedResult=apiResult(match);
   const reveal=Boolean(tipData&&progress.complete&&(!beforeDeadline||finishedResult));
-  const back=`<button class="ko-match-back" type="button">← ${LANG==='en'?'Back':'Wróć'}</button>`;
   if(!reveal){
     const message=!progress.tipRound
       ? (LANG==='en'?'Predictions have not been entered yet.':'Typy nie zostały jeszcze wprowadzone.')
       : !progress.complete
         ? (LANG==='en'?`Predictions entered: ${progress.completePlayers.length}/${PLAYERS.length}.`:`Wprowadzone komplety: ${progress.completePlayers.length}/${PLAYERS.length}.`)
         : (LANG==='en'?'Predictions remain hidden until the deadline.':'Typy pozostają ukryte do końca terminu typowania.');
-    return `<div class="ko-match-details" hidden>${back}<div class="ko-details-empty">${message}</div></div>`;
+    return `<div class="ko-match-details" hidden><div class="ko-details-empty">${message}</div></div>`;
   }
   if(finishedResult){
     const groups={3:[],1:[],0:[]};
@@ -1024,13 +1043,13 @@ function knockoutMatchDetails(round,match,index,roundMatches,beforeDeadline){
       {value:1,label:`1 ${pointsLabel(1)}`,cls:'lbl-a',chip:'chip-a'},
       {value:0,label:`0 ${pointsLabel(0)}`,cls:'lbl-r',chip:'chip-r'}
     ].map(section=>`<div class="exp-section"><div class="exp-lbl ${section.cls}">${section.label} · ${groups[section.value].length}</div><div class="chips">${groups[section.value].map(item=>`<span class="chip ${section.chip}"><span class="chip-pname">${item.name}</span><span class="chip-tip">${item.tip}</span></span>`).join('')}</div></div>`).join('');
-    return `<div class="ko-match-details" hidden>${back}${sections}</div>`;
+    return `<div class="ko-match-details" hidden>${sections}</div>`;
   }
   const chips=PLAYERS.map(player=>{
     const tip=progress.tipRound.tipsByPlayer?.[player.name]?.[tipData.key]||'—';
     return `<span class="chip chip-tip-pre"><span class="chip-pname">${player.name}</span><span class="chip-tip">${tip}</span></span>`;
   }).join('');
-  return `<div class="ko-match-details" hidden>${back}<div class="exp-section"><div class="exp-lbl">${LANG==='en'?'Player predictions':'Typy graczy'} · ${PLAYERS.length}</div><div class="chips">${chips}</div></div></div>`;
+  return `<div class="ko-match-details" hidden><div class="exp-section"><div class="exp-lbl">${LANG==='en'?'Player predictions':'Typy graczy'} · ${PLAYERS.length}</div><div class="chips">${chips}</div></div></div>`;
 }
 
 function knockoutPlaceholderMatch(utcDate,index){
@@ -1238,17 +1257,12 @@ function renderKnockout(){
       if(!open)tile.scrollIntoView({behavior:'smooth',block:'nearest'});
     };
     tile.addEventListener('click',event=>{
-      if(event.target.closest('.ko-match-back'))return;
       setExpanded(!tile.classList.contains('expanded'));
     });
     tile.addEventListener('keydown',event=>{
       if(!['Enter',' '].includes(event.key))return;
       event.preventDefault();
       setExpanded(!tile.classList.contains('expanded'));
-    });
-    tile.querySelector('.ko-match-back')?.addEventListener('click',event=>{
-      event.stopPropagation();
-      setExpanded(false);
     });
     if(tile.classList.contains('expanded')){
       const details=tile.querySelector('.ko-match-details');
@@ -1299,6 +1313,7 @@ function renderKnockout(){
 function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   ['gracze','ranking','pucharowa'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
+  document.body.classList.toggle('ranking-active',tab==='ranking');
   if(tab==='pucharowa')renderKnockout();
   requestAnimationFrame(updateMobileSectionBack);
 }
