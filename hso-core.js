@@ -85,13 +85,23 @@ function setText(id,key){
   const el=document.getElementById(id);
   if(el)el.textContent=tr(key);
 }
-function setHeaderBadge(text,state='locked'){
+function setHeaderBadge(text,state='locked',detail=''){
   const badge=document.getElementById('lockBadge');
   const badgeText=document.getElementById('lockBadgeText');
   if(!badge||!badgeText)return;
   badge.classList.remove('available','waiting');
   if(state)badge.classList.add(state);
-  badgeText.textContent=text;
+  badgeText.replaceChildren();
+  const main=document.createElement('span');
+  main.className='lock-badge-main';
+  main.textContent=text;
+  badgeText.appendChild(main);
+  if(detail){
+    const secondary=document.createElement('span');
+    secondary.className='lock-badge-detail';
+    secondary.textContent=detail;
+    badgeText.appendChild(secondary);
+  }
 }
 function applyLanguage(){
   document.documentElement.lang=LANG;
@@ -1208,9 +1218,12 @@ function renderKnockout(){
   const headerDeadline=knockoutDeadline(headerFormMatches[0]?.utcDate,headerRound.id);
   setHeaderBadge(
     LANG==='en'
-      ? `${headerIsFinalForm?'Final stage':knockoutRoundName(headerRound)} · available fixtures: ${headerKnownPairs}/${headerRound.count} · deadline ${knockoutDeadlineLabel(headerDeadline)}`
-      : `${headerIsFinalForm?'Faza finałowa':knockoutRoundName(headerRound)} · dostępne pary: ${headerKnownPairs}/${headerRound.count} · termin ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (potem idziemy z Magdą na imprezę)':''}`,
-    headerKnownPairs>0?'available':'waiting'
+      ? `${headerIsFinalForm?'Final stage':knockoutRoundName(headerRound)} · available fixtures: ${headerKnownPairs}/${headerRound.count}`
+      : `${headerIsFinalForm?'Faza finałowa':knockoutRoundName(headerRound)} · dostępne pary: ${headerKnownPairs}/${headerRound.count}`,
+    headerKnownPairs>0?'available':'waiting',
+    LANG==='en'
+      ? `deadline ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (then Magda and I are going to a party)':''}`
+      : `termin ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (potem idziemy z Magdą na imprezę)':''}`
   );
 
   const nav=document.getElementById('koStageNav');

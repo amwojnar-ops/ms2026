@@ -188,14 +188,17 @@ header::after {
 .header-title p { font-size: 13px; color: var(--muted); font-weight: 300; margin-top: 6px; }
 .lock-badge {
   position: relative; z-index: 1;
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: flex-start; gap: 7px;
   font-size: 12px; font-weight: 500;
   color: var(--red); background: var(--red-dim);
   padding: 6px 12px; border-radius: var(--r);
   border: 1px solid rgba(232,86,86,.3);
-  white-space: nowrap;
-  flex-shrink: 0;
+  max-width: min(430px, 58vw);
+  flex-shrink: 1;
 }
+.lock-badge #lockBadgeText { display:flex; min-width:0; flex-direction:column; gap:2px; line-height:1.2; }
+.lock-badge-main { font-weight:700; }
+.lock-badge-detail { font-size:11px; font-weight:500; overflow-wrap:anywhere; }
 .lock-badge.available {
   color: var(--green);
   background: var(--green-dim);
@@ -207,6 +210,8 @@ header::after {
   border-color: rgba(240,160,48,.32);
 }
 .lock-dot {
+  flex: 0 0 auto;
+  margin-top: 3px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -1024,6 +1029,7 @@ body.ranking-active .wrap { max-width: 1180px; }
   .ranking-wrap.panel-open { grid-template-columns: 1fr !important; }
   .side-panel { display: none !important; }
   header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .lock-badge { width:100%; max-width:none; }
   .admin-row { grid-template-columns: 1fr 60px 76px; }
 }
 @media (prefers-reduced-motion: reduce) {

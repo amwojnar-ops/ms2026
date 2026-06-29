@@ -147,7 +147,9 @@ check(
   core.includes("r16:'2026-07-04T13:00:00Z'") &&
     core.includes("nextDeadlineIndex") &&
     core.includes("dostępne pary: ${headerKnownPairs}/${headerRound.count}") &&
-    core.includes("(potem idziemy z Magdą na imprezę)"),
+    core.includes("(potem idziemy z Magdą na imprezę)") &&
+    core.includes("lock-badge-detail") &&
+    core.includes("headerKnownPairs>0?'available':'waiting'"),
   "Baner i termin typowania 1/8 finalu nie sa ustawione"
 );
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
