@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T23:22:15.983Z",
+  "updatedAt": "2026-06-29T23:30:41.244Z",
   "matches": [
     {
       "id": 537327,
@@ -2976,30 +2976,30 @@
         "tla": "PAR"
       },
       "score": {
-        "winner": "HOME_TEAM",
-        "duration": "REGULAR",
+        "winner": null,
+        "duration": "PENALTY_SHOOTOUT",
         "fullTime": {
-          "home": 2,
-          "away": 1
+          "home": 5,
+          "away": 6
         },
         "regularTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "halfTime": {
           "home": 0,
           "away": 1
         },
         "extraTime": {
-          "home": 1,
+          "home": 0,
           "away": 0
         },
         "penalties": {
-          "home": null,
-          "away": null
+          "home": 4,
+          "away": 4
         }
       },
-      "lastUpdated": "2026-06-29T23:22:09Z"
+      "lastUpdated": "2026-06-29T23:30:29Z"
     },
     {
       "id": 537418,
