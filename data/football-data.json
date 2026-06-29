@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T17:55:24.424Z",
+  "updatedAt": "2026-06-29T18:14:14.555Z",
   "matches": [
     {
       "id": 537327,
@@ -2924,7 +2924,7 @@
     {
       "id": 537423,
       "utcDate": "2026-06-29T17:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Brazil",
         "shortName": "Brazil",
@@ -2959,7 +2959,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T17:55:18Z"
+      "lastUpdated": "2026-06-29T18:13:54Z"
     },
     {
       "id": 537415,
