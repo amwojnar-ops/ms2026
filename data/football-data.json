@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T22:51:14.960Z",
+  "updatedAt": "2026-06-29T22:52:16.609Z",
   "matches": [
     {
       "id": 537327,
@@ -2991,7 +2991,7 @@
           "away": 1
         },
         "extraTime": {
-          "home": 0,
+          "home": 1,
           "away": 0
         },
         "penalties": {
@@ -2999,7 +2999,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T22:50:34Z"
+      "lastUpdated": "2026-06-29T22:51:34Z"
     },
     {
       "id": 537418,
