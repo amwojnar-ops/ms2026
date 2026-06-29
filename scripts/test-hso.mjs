@@ -108,6 +108,13 @@ check(
   production.includes('class="tab tab-archive"') && !production.match(/id="tabMatchesBtn"[^>]*target="_blank"/),
   "Archiwalny raport fazy grupowej nadal otwiera nowe okno"
 );
+check(
+  production.includes('id="mainTabs" data-label="MENU GŁÓWNE"') &&
+    production.includes('id="koStageNav" data-label="WYBIERZ RUNDĘ"') &&
+    css.includes('.ko-stage-nav { grid-template-columns: repeat(3,minmax(0,1fr)); gap:5px; }') &&
+    css.includes('.ko-stage { min-height:44px; padding:6px 4px;'),
+  "Menu główne lub mobilne kafle rund nie mają nowej hierarchii"
+);
 
 const knownBlock = core.match(/const KNOWN_KNOCKOUT_TEAMS = \[([\s\S]*?)\n\];/)?.[1] || "";
 const entries = [...knownBlock.matchAll(

@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="img/hso-icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/hso-icon-32.png">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="hso.css?v=20260629-35">
+  <link rel="stylesheet" href="hso.css?v=20260629-36">
 </head>
 <body class="intro-active">
 <div class="site-intro" id="siteIntro" aria-label="Loża Ekspertów, MŚ 2026">
@@ -61,11 +61,11 @@
   </div>
 </div>
 
-<div class="tabs">
-  <button class="tab active" id="tabPlayersBtn" onclick="switchTab('gracze',this)">Gracze</button>
-  <button class="tab" id="tabKnockoutBtn" type="button" onclick="switchTab('pucharowa',this)">Faza pucharowa</button>
-  <a class="tab tab-archive" id="tabMatchesBtn" href="Raport_typow_MS_2026.html?v=20260629-4">Raport fazy grupowej</a>
-  <button class="tab" id="tabRankingBtn" onclick="switchTab('ranking',this)">Ranking</button>
+<div class="tabs" id="mainTabs" data-label="MENU GŁÓWNE">
+  <button class="tab active" id="tabPlayersBtn" data-icon="●" onclick="switchTab('gracze',this)">Gracze</button>
+  <button class="tab" id="tabKnockoutBtn" data-icon="◆" type="button" onclick="switchTab('pucharowa',this)">Faza pucharowa</button>
+  <a class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" href="Raport_typow_MS_2026.html?v=20260629-4">Raport fazy grupowej</a>
+  <button class="tab" id="tabRankingBtn" data-icon="★" onclick="switchTab('ranking',this)">Ranking</button>
 </div>
 
 <div id="tab-gracze">
@@ -117,7 +117,7 @@
 
 <div id="tab-pucharowa" style="display:none">
   <div class="knockout-shell">
-    <nav class="ko-stage-nav" id="koStageNav" aria-label="Etapy fazy pucharowej"></nav>
+    <nav class="ko-stage-nav" id="koStageNav" data-label="WYBIERZ RUNDĘ" aria-label="Etapy fazy pucharowej"></nav>
 
     <div class="ko-main">
       <section class="ko-action">
@@ -157,7 +157,7 @@
 
 </div>
 <script>window.HSO_CONFIG={mode:'test'};</script>
-  <script src="hso-core.js?v=20260629-35"></script>
+  <script src="hso-core.js?v=20260629-36"></script>
 </body>
 </html>
 

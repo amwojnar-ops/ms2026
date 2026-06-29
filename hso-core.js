@@ -115,6 +115,12 @@ function applyLanguage(){
   setHeaderBadge(tr('locked'),'locked');
   setText('playedLabel','played'); setText('nextMatchLabel','nextMatch');
   setText('tabPlayersBtn','players'); setText('tabMatchesBtn','matches'); setText('tabRankingBtn','ranking');
+  document.getElementById('tabPlayersBtn').setAttribute('aria-label',tr('players'));
+  document.getElementById('tabKnockoutBtn').setAttribute('aria-label',tr('knockout'));
+  document.getElementById('tabMatchesBtn').setAttribute('aria-label',tr('matches'));
+  document.getElementById('tabRankingBtn').setAttribute('aria-label',tr('ranking'));
+  document.getElementById('mainTabs').dataset.label=LANG==='en'?'MAIN MENU':'MENU GŁÓWNE';
+  document.getElementById('koStageNav').dataset.label=LANG==='en'?'SELECT ROUND':'WYBIERZ RUNDĘ';
   document.getElementById('tabMatchesBtn').title=LANG==='en'?'Open the archived group-stage report':'Otwórz archiwalny raport fazy grupowej';
   setText('tabKnockoutBtn','knockout');
   const backLabel=document.getElementById('mobileSectionBackLabel');
