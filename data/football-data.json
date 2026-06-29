@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T22:35:19.739Z",
+  "updatedAt": "2026-06-29T22:39:12.107Z",
   "matches": [
     {
       "id": 537327,
@@ -2964,7 +2964,7 @@
     {
       "id": 537415,
       "utcDate": "2026-06-29T20:30:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Germany",
         "shortName": "Germany",
@@ -2977,7 +2977,7 @@
       },
       "score": {
         "winner": "DRAW",
-        "duration": "REGULAR",
+        "duration": "EXTRA_TIME",
         "fullTime": {
           "home": 1,
           "away": 1
@@ -2991,15 +2991,15 @@
           "away": 1
         },
         "extraTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "penalties": {
           "home": null,
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T22:34:45Z"
+      "lastUpdated": "2026-06-29T22:38:57Z"
     },
     {
       "id": 537418,
