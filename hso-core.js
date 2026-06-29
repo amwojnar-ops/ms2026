@@ -974,6 +974,7 @@ const KNOCKOUT_FALLBACK_DATES = [
 ];
 const KNOWN_KNOCKOUT_TEAMS = [
   {matchId:537376, side:'homeTeam', team:{name:'Canada',shortName:'Canada',tla:'CAN'}},
+  {matchId:537377, side:'homeTeam', team:{name:'Brazil',shortName:'Brazil',tla:'BRA'}},
   {matchId:537425, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537425, side:'awayTeam', team:{name:'Ecuador',shortName:'Ecuador',tla:'ECU'}},
   {matchId:537421, side:'homeTeam', team:{name:'United States',shortName:'United States',tla:'USA'}},

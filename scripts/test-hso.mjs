@@ -121,6 +121,11 @@ check(
   entries.some(entry => entry.id === 537376 && entry.side === "homeTeam" && entry.team === "Canada"),
   "Kanada nie zostala przeniesiona do meczu 1/8 finalu"
 );
+check(
+  entries.some(entry => entry.id === 537377 && entry.side === "homeTeam" && entry.team === "Brazil") &&
+    formCore.includes('{ matchId: 537377, side: "homeTeam", team: { name: "Brazil"'),
+  "Brazylia nie zostala przeniesiona do meczu 1/8 finalu lub formularza"
+);
 check(matchIds.size === 16, `Pary pucharowe: znaleziono ${matchIds.size}/16 meczow`);
 for (const [id, sides] of matchIds) {
   check(sides.size === 2, `Mecz ${id}: brak gospodarza lub goscia`);
