@@ -98,6 +98,9 @@ check(
     css.includes('.stats .stat-card:not(.next-match-card) { display:none; }') &&
     css.includes('.next-match-card #countdown-tick { font-size:10px') &&
     core.includes('class="live-summary-scoreboard"') &&
+    core.includes('function fitLiveSummaryNames()') &&
+    core.includes('requestAnimationFrame(fitLiveSummaryNames)') &&
+    css.includes('.live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:15px;') &&
     core.includes("classList.add('is-live')"),
   "Mobilne statystyki nie zostaly zredukowane do kafla nastepnego meczu"
 );

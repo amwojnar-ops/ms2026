@@ -1074,8 +1074,8 @@ body.ranking-active .wrap { max-width: 1180px; }
     display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
     align-items:center; gap:10px; min-height:42px;
   }
-  .live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:12px; font-weight:600; }
-  .live-summary-side span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:15px; font-weight:600; }
+  .live-summary-team-name { min-width:0; overflow:hidden; white-space:nowrap; line-height:1.15; }
   .live-summary-side img { flex:0 0 auto; margin:0 !important; }
   .live-summary-side.away { justify-content:flex-end; text-align:right; }
   .live-summary-result { color:#fff; font:700 23px 'Barlow Condensed',sans-serif; white-space:nowrap; }

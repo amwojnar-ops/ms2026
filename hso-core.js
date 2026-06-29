@@ -608,9 +608,9 @@ function nextKnockoutMatchHTML(match){
         <span class="live-summary-team"><span class="live-summary-name">${away.image} ${away.name}</span><span class="live-summary-score">${score.away}</span></span>
       </span>
       <span class="live-summary-scoreboard">
-        <span class="live-summary-side home">${home.image}<span>${home.name}</span></span>
+        <span class="live-summary-side home">${home.image}<span class="live-summary-team-name">${home.name}</span></span>
         <strong class="live-summary-result">${score.home}–${score.away}</strong>
-        <span class="live-summary-side away"><span>${away.name}</span>${away.image}</span>
+        <span class="live-summary-side away"><span class="live-summary-team-name">${away.name}</span>${away.image}</span>
       </span>
     </span>`;
   }
@@ -651,6 +651,20 @@ function tickCountdown(){
 }
 
 function nextMatch(){return nextKnockoutMatch();}
+
+function fitLiveSummaryNames(){
+  if(!window.matchMedia('(max-width:640px)').matches)return;
+  document.querySelectorAll('.live-summary-team-name').forEach(name=>{
+    let size=15;
+    name.style.fontSize=`${size}px`;
+    while(name.scrollWidth>name.clientWidth&&size>10){
+      size-=0.5;
+      name.style.fontSize=`${size}px`;
+    }
+  });
+}
+
+window.addEventListener('resize',()=>requestAnimationFrame(fitLiveSummaryNames));
 
 function startCountdown(){
   stopCountdown();
@@ -727,6 +741,8 @@ function renderRanking(){
   leaderEl.classList.toggle('leaders',manyLeaders);
   document.getElementById('s-leadpts').textContent=played>0?leaderPts:'—';
   document.getElementById('s-next').innerHTML=nextMatch();
+  requestAnimationFrame(fitLiveSummaryNames);
+  document.fonts?.ready.then(fitLiveSummaryNames);
 
   const tbody=document.getElementById('rankingBody');tbody.innerHTML='';
   ranked.forEach((p,i)=>{
