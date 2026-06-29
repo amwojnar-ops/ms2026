@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T08:30:37.164Z",
+  "updatedAt": "2026-06-29T17:06:15.020Z",
   "matches": [
     {
       "id": 537327,
@@ -2924,7 +2924,7 @@
     {
       "id": 537423,
       "utcDate": "2026-06-29T17:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Brazil",
         "shortName": "Brazil",
@@ -2936,11 +2936,11 @@
         "tla": "JPN"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -2959,7 +2959,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T05:20:12Z"
+      "lastUpdated": "2026-06-29T17:05:18Z"
     },
     {
       "id": 537415,
