@@ -797,6 +797,30 @@ body.ranking-active .wrap { max-width: 1180px; }
 .ko-action-btn { display:block; width:100%; padding:10px; border:1px solid rgba(232,200,74,.25); border-radius:7px; background:rgba(232,200,74,.08); color:#a89a69; font-size:11px; font-weight:700; text-align:center; text-decoration:none; cursor:not-allowed; }
 .ko-action-btn.ready { border-color:var(--gold); background:var(--gold); color:#17120a; cursor:pointer; }
 .ko-action-btn.ready:hover { filter:brightness(1.07); }
+.ko-final-view .ko-action { display:none; }
+.ko-final-view .ko-side { grid-row:1; }
+.ko-final-view .ko-matches { grid-template-columns:1fr; padding:18px; }
+.ko-final-view .ko-match {
+  position:relative; overflow:hidden; padding:22px;
+  border-color:rgba(232,200,74,.72);
+  background:
+    radial-gradient(circle at 85% 15%,rgba(232,200,74,.2),transparent 34%),
+    linear-gradient(145deg,#17213a,#0d1628 58%,#211a0c);
+  box-shadow:0 14px 34px rgba(0,0,0,.36), inset 0 0 30px rgba(232,200,74,.06);
+}
+.ko-final-view .ko-match::before {
+  content:'🏆  MECZ O MISTRZOSTWO'; display:block; margin-bottom:14px;
+  color:var(--gold); font:700 10px 'Barlow',sans-serif;
+  letter-spacing:.12em; text-align:center;
+}
+.ko-final-view .ko-match::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.06) 48%,transparent 66%);
+}
+.ko-final-view .ko-team { min-height:48px; grid-template-columns:38px minmax(0,1fr) 40px; }
+.ko-final-view .ko-team-flag { width:34px; height:24px; }
+.ko-final-view .ko-team-name { font-size:16px; }
+.ko-final-view .ko-team-score { color:var(--gold); font-size:25px; }
 .ko-progress { padding:15px; }
 .ko-progress-title { display:flex; justify-content:space-between; gap:8px; margin-bottom:11px; font-size:11px; font-weight:700; }
 .ko-progress-title span:last-child { color:var(--muted); }

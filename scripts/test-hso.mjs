@@ -12,6 +12,7 @@ const check = (condition, message) => {
 const production = read("hso.html");
 const test = read("hso-test.html");
 const core = read("hso-core.js");
+const css = read("hso.css");
 const formCore = read("formularz-pucharowy.js");
 const groupReport = read("Raport_typow_MS_2026.html");
 const footballData = JSON.parse(read("data/football-data.json"));
@@ -142,6 +143,13 @@ check(core.includes("groups[value].push"), "Kafle pucharowe nie dziela punktow n
 check(
   core.includes("playersAlphabetically") && core.includes("localeCompare(b.name,'pl'"),
   "Typy w kaflach pucharowych nie sa sortowane alfabetycznie"
+);
+check(
+  formCore.includes('index1:  { key: "index1",  title: "Mecze o medale", count: 2, start: 30') &&
+    core.includes("actionPanel.hidden=activeRound.id==='final'") &&
+    core.includes("Jeden wspólny formularz obejmuje mecz o 3. miejsce oraz finał.") &&
+    css.includes(".ko-final-view .ko-match::before"),
+  "Formularz medalowy lub specjalny kafel finalu sa nieprawidlowe"
 );
 check(
   core.includes("r16:'2026-07-04T13:00:00Z'") &&

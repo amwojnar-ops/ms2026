@@ -1190,6 +1190,7 @@ function renderKnockout(){
   const allMatches=knockoutMatches();
   const currentIndex=currentKnockoutRoundIndex(allMatches);
   const activeRound=KNOCKOUT_ROUNDS[selectedKnockoutRound]||KNOCKOUT_ROUNDS[0];
+  root.classList.toggle('ko-final-view',activeRound.id==='final');
   const roundMatches=allMatches.slice(activeRound.start,activeRound.start+activeRound.count);
   const knownPairs=roundMatches.filter(match=>match.homeTeam?.name&&match.awayTeam?.name).length;
   const allKnown=roundMatches.length===activeRound.count&&knownPairs===activeRound.count;
@@ -1294,11 +1295,18 @@ function renderKnockout(){
     }
   });
 
-  document.getElementById('koActionTitle').textContent=LANG==='en'?'Round predictions':'Typowanie rundy';
+  const medalForm=activeRound.form==='hso-typowanie1.html';
+  document.getElementById('koActionTitle').textContent=medalForm
+    ? (LANG==='en'?'Medal-match predictions':'Typowanie meczów o medale')
+    : (LANG==='en'?'Round predictions':'Typowanie rundy');
   document.getElementById('koActionCopy').textContent=!beforeDeadline
     ? (LANG==='en'
       ? 'The prediction deadline for this stage has passed.'
       : 'Termin typowania tej rundy minął.')
+    : medalForm
+      ? (LANG==='en'
+        ? 'One shared form covers both the third-place match and the final.'
+        : 'Jeden wspólny formularz obejmuje mecz o 3. miejsce oraz finał.')
     : formKnownPairs>0
       ? (LANG==='en'
       ? 'You can start with the confirmed fixtures. Earlier predictions stay saved when more fixtures are added.'
@@ -1308,11 +1316,15 @@ function renderKnockout(){
         : 'Formularz rundy zostanie udostępniony po poznaniu pierwszej pary tego etapu.');
   document.getElementById('koDeadline').textContent=(LANG==='en'?'Deadline: ':'Termin typowania: ')+knockoutDeadlineLabel(deadline);
   const actionBtn=document.getElementById('koActionBtn');
-  actionBtn.closest('.ko-action')?.classList.toggle('deadline-closed',!beforeDeadline);
+  const actionPanel=actionBtn.closest('.ko-action');
+  actionPanel.hidden=activeRound.id==='final';
+  actionPanel.classList.toggle('deadline-closed',!beforeDeadline);
   actionBtn.textContent=!beforeDeadline
     ? (LANG==='en'?'Predictions closed':'Typowanie zamknięte')
     : formKnownPairs>0
-    ? (LANG==='en'?'Open prediction form':'Otwórz formularz typowania')
+    ? medalForm
+      ? (LANG==='en'?'Open medal-match form':'Otwórz typowanie meczów o medale')
+      : (LANG==='en'?'Open prediction form':'Otwórz formularz typowania')
     : (LANG==='en'?'Waiting for teams':'Oczekiwanie na drużyny');
   actionBtn.href=formReady?activeRound.form:'#';
   actionBtn.target=formReady?'_blank':'';
