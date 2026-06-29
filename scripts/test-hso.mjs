@@ -139,6 +139,10 @@ check(core.includes("pdp-tip-card"), "Historia gracza nie ma kolorowej karty pun
 check(!core.includes('class="ko-match-back"'), "Kafle pucharowe nadal maja przycisk Wroc");
 check(core.includes("setExpanded(!tile.classList.contains('expanded'))"), "Ponowne klikniecie kafla nie zamyka szczegolow");
 check(core.includes("groups[value].push"), "Kafle pucharowe nie dziela punktow na 3/1/0");
+check(
+  core.includes("playersAlphabetically") && core.includes("localeCompare(b.name,'pl'"),
+  "Typy w kaflach pucharowych nie sa sortowane alfabetycznie"
+);
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
 check(
@@ -211,7 +215,9 @@ r32PlayerTips.forEach(player => {
 
 check(groupReport.includes('data-report-version="2"'), "Raport fazy grupowej ma stary format");
 check(
-  groupReport.includes('class="report-back" href="hso.html"') && groupReport.includes('.toolbar,.report-back{display:none}'),
+  groupReport.includes('class="report-back" href="hso.html" aria-label="Wróć do strony głównej">← WRÓĆ</a>') &&
+    groupReport.includes('grid-template-columns:1fr auto 1fr') &&
+    groupReport.includes('.toolbar,.report-back{display:none}'),
   "Raport fazy grupowej nie ma stalego powrotu do HSO"
 );
 const reportSourceMatch = groupReport.match(/<script id="report-source" type="application\/json">([\s\S]*?)<\/script>/);

@@ -412,7 +412,7 @@ function playerKnockoutPhaseRows(p){
 }
 
 function groupReportLink(){
-  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260628-3">${LANG==='en'?'Open the static group-stage report':'Otwórz statyczny raport fazy grupowej'}</a>`;
+  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260629-4">${LANG==='en'?'Open the static group-stage report':'Otwórz statyczny raport fazy grupowej'}</a>`;
 }
 
 function buildPlayerPhases(p){
@@ -1025,6 +1025,7 @@ function knockoutMatchDetails(round,match,index,roundMatches,beforeDeadline){
   const tipData=knockoutTipMatch(progress.tipRound,match,index);
   const finishedResult=apiResult(match);
   const reveal=Boolean(tipData&&progress.complete&&(!beforeDeadline||finishedResult));
+  const playersAlphabetically=[...PLAYERS].sort((a,b)=>a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
   if(!reveal){
     const message=!progress.tipRound
       ? (LANG==='en'?'Predictions have not been entered yet.':'Typy nie zostały jeszcze wprowadzone.')
@@ -1035,7 +1036,7 @@ function knockoutMatchDetails(round,match,index,roundMatches,beforeDeadline){
   }
   if(finishedResult){
     const groups={3:[],1:[],0:[]};
-    PLAYERS.forEach(player=>{
+    playersAlphabetically.forEach(player=>{
       const tip=progress.tipRound.tipsByPlayer?.[player.name]?.[tipData.key]||'—';
       const value=sc(tip,finishedResult)??0;
       groups[value].push({name:player.name,tip});
@@ -1047,7 +1048,7 @@ function knockoutMatchDetails(round,match,index,roundMatches,beforeDeadline){
     ].map(section=>`<div class="exp-section"><div class="exp-lbl ${section.cls}">${section.label} · ${groups[section.value].length}</div><div class="chips">${groups[section.value].map(item=>`<span class="chip ${section.chip}"><span class="chip-pname">${item.name}</span><span class="chip-tip">${item.tip}</span></span>`).join('')}</div></div>`).join('');
     return `<div class="ko-match-details" hidden>${sections}</div>`;
   }
-  const chips=PLAYERS.map(player=>{
+  const chips=playersAlphabetically.map(player=>{
     const tip=progress.tipRound.tipsByPlayer?.[player.name]?.[tipData.key]||'—';
     return `<span class="chip chip-tip-pre"><span class="chip-pname">${player.name}</span><span class="chip-tip">${tip}</span></span>`;
   }).join('');
