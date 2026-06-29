@@ -96,7 +96,9 @@ check(productionVersion === testVersion, "Rozne wersje cache hso-core.js");
 check(
   production.includes('class="stat-card next-match-card"') &&
     css.includes('.stats .stat-card:not(.next-match-card) { display:none; }') &&
-    css.includes('.next-match-card #countdown-tick { font-size:10px'),
+    css.includes('.next-match-card #countdown-tick { font-size:10px') &&
+    core.includes('class="live-summary-scoreboard"') &&
+    core.includes("classList.add('is-live')"),
   "Mobilne statystyki nie zostaly zredukowane do kafla nastepnego meczu"
 );
 check(

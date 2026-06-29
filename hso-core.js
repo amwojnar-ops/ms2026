@@ -600,12 +600,21 @@ function nextKnockoutMatchHTML(match){
   const away=knockoutSummaryTeam(match.awayTeam);
   if(['live','paused'].includes(status)){
     const score=apiLiveScore(match);
+    document.querySelector('.next-match-card')?.classList.add('is-live');
     return `<span class="live-summary">
-      <span class="live-summary-status"><span class="dot dot-live"></span>${tr(status)}</span>
-      <span class="live-summary-team"><span class="live-summary-name">${home.image} ${home.name}</span><span class="live-summary-score">${score.home}</span></span>
-      <span class="live-summary-team"><span class="live-summary-name">${away.image} ${away.name}</span><span class="live-summary-score">${score.away}</span></span>
+      <span class="live-summary-status"><span class="dot dot-live"></span><span class="live-summary-status-text">${tr(status)}</span></span>
+      <span class="live-summary-vertical">
+        <span class="live-summary-team"><span class="live-summary-name">${home.image} ${home.name}</span><span class="live-summary-score">${score.home}</span></span>
+        <span class="live-summary-team"><span class="live-summary-name">${away.image} ${away.name}</span><span class="live-summary-score">${score.away}</span></span>
+      </span>
+      <span class="live-summary-scoreboard">
+        <span class="live-summary-side home">${home.image}<span>${home.name}</span></span>
+        <strong class="live-summary-result">${score.home}–${score.away}</strong>
+        <span class="live-summary-side away"><span>${away.name}</span>${away.image}</span>
+      </span>
     </span>`;
   }
+  document.querySelector('.next-match-card')?.classList.remove('is-live');
   const dt=new Date(match.utcDate);
   const date=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit'}).format(dt);
   const time=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',hour:'2-digit',minute:'2-digit'}).format(dt);
@@ -626,7 +635,7 @@ function nextKnockoutMatch(){
   }
   const upcoming=matches.filter(match=>knockoutSummaryStatus(match)==='soon')
     .sort((a,b)=>Date.parse(a.utcDate)-Date.parse(b.utcDate))[0];
-  if(!upcoming){stopCountdown();_countdownMatch=null;return '—';}
+  if(!upcoming){document.querySelector('.next-match-card')?.classList.remove('is-live');stopCountdown();_countdownMatch=null;return '—';}
   document.getElementById('nextMatchLabel').textContent=tr('nextMatch');
   _countdownMatch=upcoming;startCountdown();
   return nextKnockoutMatchHTML(upcoming);

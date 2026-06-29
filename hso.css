@@ -252,6 +252,7 @@ header::after {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 18px; font-weight: 700; line-height: 1;
 }
+.live-summary-scoreboard { display:none; }
 
 /* ── tabs ── */
 .tabs {
@@ -1052,15 +1053,32 @@ body.ranking-active .wrap { max-width: 1180px; }
   .stats .stat-card:not(.next-match-card) { display:none; }
   .next-match-card {
     display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center;
-    gap:12px; width:100%; min-height:58px; padding:9px 12px;
+    gap:12px; width:100%; min-height:76px; padding:11px 13px;
   }
   .next-match-card .lbl { margin:0; font-size:10px; white-space:nowrap; }
   .next-match-card #s-next { margin-top:0 !important; text-align:right; }
-  .next-match-card .live-summary-status { display:none !important; }
   .next-match-card #countdown-tick { font-size:10px !important; margin-top:2px !important; }
   .next-match-card .live-summary { margin-top:0; }
   .next-match-card .live-summary-team { min-height:18px; font-size:11px; }
   .next-match-card .live-summary-score { font-size:17px; }
+  .next-match-card.is-live { position:relative; display:block; padding:20px 13px 12px; }
+  .next-match-card.is-live .lbl,
+  .next-match-card.is-live .live-summary-vertical { display:none; }
+  .next-match-card.is-live .live-summary-status {
+    position:absolute; top:9px; left:11px; display:block; margin:0;
+    line-height:1; font-size:0;
+  }
+  .next-match-card.is-live .live-summary-status-text { display:none; }
+  .next-match-card.is-live .live-summary-status .dot { display:block; width:8px; height:8px; }
+  .next-match-card.is-live .live-summary-scoreboard {
+    display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+    align-items:center; gap:10px; min-height:42px;
+  }
+  .live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:12px; font-weight:600; }
+  .live-summary-side span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .live-summary-side img { flex:0 0 auto; margin:0 !important; }
+  .live-summary-side.away { justify-content:flex-end; text-align:right; }
+  .live-summary-result { color:#fff; font:700 23px 'Barlow Condensed',sans-serif; white-space:nowrap; }
   .tiles-grid { grid-template-columns: 1fr; }
   .ranking-wrap.panel-open { grid-template-columns: 1fr !important; }
   .side-panel { display: none !important; }
