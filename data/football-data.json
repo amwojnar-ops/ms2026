@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T18:21:19.452Z",
+  "updatedAt": "2026-06-29T18:22:15.461Z",
   "matches": [
     {
       "id": 537327,
@@ -2936,10 +2936,10 @@
         "tla": "JPN"
       },
       "score": {
-        "winner": "AWAY_TEAM",
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": 0,
+          "home": 1,
           "away": 1
         },
         "regularTime": {
@@ -2959,7 +2959,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T18:20:49Z"
+      "lastUpdated": "2026-06-29T18:22:13Z"
     },
     {
       "id": 537415,
