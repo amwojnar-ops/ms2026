@@ -587,8 +587,8 @@ function formatCountdown(ms){
 
 function knockoutSummaryStatus(match){
   if(match?.status==='FINISHED')return 'done';
-  if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return 'live';
   const diff=Date.now()-Date.parse(match?.utcDate);
+  if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return diff<=4*60*60*1000?'live':'waiting';
   if(diff<0)return 'soon';
   return diff<=4*60*60*1000?'live':'waiting';
 }
@@ -631,17 +631,19 @@ function nextKnockoutMatchHTML(match){
 }
 
 function nextKnockoutMatch(){
-  const matches=knockoutMatches().slice(0,16)
+  const matches=knockoutMatches()
     .filter(match=>hasKnockoutTeam(match.homeTeam)&&hasKnockoutTeam(match.awayTeam));
   const live=matches.find(match=>['live','paused'].includes(knockoutSummaryStatus(match)));
   if(live){
+    setFeaturedKnockoutMatch(live);
     document.getElementById('nextMatchLabel').textContent=LANG==='pl'?'Mecz trwa':'Match live';
     stopCountdown();_countdownMatch=null;
     return nextKnockoutMatchHTML(live);
   }
   const upcoming=matches.filter(match=>knockoutSummaryStatus(match)==='soon')
     .sort((a,b)=>Date.parse(a.utcDate)-Date.parse(b.utcDate))[0];
-  if(!upcoming){document.querySelector('.next-match-card')?.classList.remove('is-live');stopCountdown();_countdownMatch=null;return '—';}
+  if(!upcoming){setFeaturedKnockoutMatch(null);document.querySelector('.next-match-card')?.classList.remove('is-live');stopCountdown();_countdownMatch=null;return '—';}
+  setFeaturedKnockoutMatch(upcoming);
   document.getElementById('nextMatchLabel').textContent=tr('nextMatch');
   _countdownMatch=upcoming;startCountdown();
   return nextKnockoutMatchHTML(upcoming);
@@ -657,6 +659,52 @@ function tickCountdown(){
 }
 
 function nextMatch(){return nextKnockoutMatch();}
+
+function setFeaturedKnockoutMatch(match){
+  featuredKnockoutMatchId=match?String(match.id):null;
+  const card=document.querySelector('.next-match-card');
+  if(!card)return;
+  card.classList.toggle('has-match-link',Boolean(match));
+  if(match){
+    const home=knockoutTeamName(match.homeTeam);
+    const away=knockoutTeamName(match.awayTeam);
+    card.setAttribute('role','button');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('aria-label',LANG==='en'?`Open predictions for ${home} versus ${away}`:`Otwórz typy meczu ${home} – ${away}`);
+  }else{
+    card.removeAttribute('role');
+    card.removeAttribute('tabindex');
+    card.removeAttribute('aria-label');
+  }
+}
+
+function openFeaturedKnockoutMatch(){
+  if(!featuredKnockoutMatchId)return;
+  const allMatches=knockoutMatches();
+  const matchIndex=allMatches.findIndex(match=>String(match.id)===featuredKnockoutMatchId);
+  if(matchIndex<0)return;
+  const roundIndex=KNOCKOUT_ROUNDS.findIndex(round=>matchIndex>=round.start&&matchIndex<round.start+round.count);
+  if(roundIndex<0)return;
+  selectedKnockoutRound=roundIndex;
+  expandedKnockoutMatchId=featuredKnockoutMatchId;
+  switchTab('pucharowa',document.getElementById('tabKnockoutBtn'));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const tile=document.querySelector(`[data-ko-match-id="${featuredKnockoutMatchId}"]`);
+    tile?.scrollIntoView({behavior:'smooth',block:'start'});
+    tile?.focus({preventScroll:true});
+  }));
+}
+
+function initFeaturedKnockoutLink(){
+  const card=document.querySelector('.next-match-card');
+  if(!card)return;
+  card.addEventListener('click',openFeaturedKnockoutMatch);
+  card.addEventListener('keydown',event=>{
+    if(!['Enter',' '].includes(event.key)||!featuredKnockoutMatchId)return;
+    event.preventDefault();
+    openFeaturedKnockoutMatch();
+  });
+}
 
 function fitLiveSummaryNames(){
   if(!window.matchMedia('(max-width:640px)').matches)return;
@@ -1041,6 +1089,7 @@ const KNOWN_KNOCKOUT_TEAMS = [
 ];
 let selectedKnockoutRound = 0;
 let expandedKnockoutMatchId = null;
+let featuredKnockoutMatchId = null;
 
 function knockoutTipsForRound(round){
   const aliases={r32:['r32','1/16'],r16:['r16','1/8'],qf:['qf','1/4'],sf:['sf','1/2'],third:['third','medale'],final:['final','medale']};
@@ -1065,11 +1114,11 @@ function knockoutRoundProgress(round,roundMatches){
   return {tipRound,completePlayers,complete:completePlayers.length===PLAYERS.length};
 }
 
-function knockoutMatchDetails(round,match,index,roundMatches,beforeDeadline){
+function knockoutMatchDetails(round,match,index,roundMatches){
   const progress=knockoutRoundProgress(round,roundMatches);
   const tipData=knockoutTipMatch(progress.tipRound,match,index);
   const finishedResult=apiResult(match);
-  const reveal=Boolean(tipData&&progress.complete&&(!beforeDeadline||finishedResult));
+  const reveal=Boolean(tipData&&progress.complete);
   const playersAlphabetically=[...PLAYERS].sort((a,b)=>a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
   if(!reveal){
     const message=!progress.tipRound
@@ -1297,7 +1346,7 @@ function renderKnockout(){
       <div class="ko-team${awayKnown?'':' unknown'}">${knockoutTeamFlag(match.awayTeam)}<span class="ko-team-name">${knockoutTeamName(match.awayTeam)}</span><span class="ko-team-score">${Number.isInteger(score.away)?score.away:'–'}</span></div>
       <div class="ko-match-status ${status.cls}"><span class="ko-status-dot"></span>${status.label}</div>
       <div class="ko-match-hint">${LANG==='en'?'Click for predictions':'Kliknij, aby zobaczyć typy'} ↓</div>
-      ${knockoutMatchDetails(activeRound,match,index,roundMatches,beforeDeadline)}
+      ${knockoutMatchDetails(activeRound,match,index,roundMatches)}
     </article>`;
   }).join('') : `<div class="ko-match">${LANG==='en'?'No fixture data.':'Brak danych o meczach.'}</div>`;
 
@@ -1385,6 +1434,7 @@ function switchTab(tab,el){
   if(tab==='pucharowa')renderKnockout();
   requestAnimationFrame(updateMobileSectionBack);
 }
+initFeaturedKnockoutLink();
 refreshApiData().then(loaded=>{
   if(!loaded)renderPlayerCards(),renderRanking(),renderKnockout();
 });

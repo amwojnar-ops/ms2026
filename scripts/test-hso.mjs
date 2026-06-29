@@ -100,6 +100,13 @@ check(
     core.includes('class="live-summary-scoreboard"') &&
     core.includes('function fitLiveSummaryNames()') &&
     core.includes('requestAnimationFrame(fitLiveSummaryNames)') &&
+    core.includes('function openFeaturedKnockoutMatch()') &&
+    core.includes('expandedKnockoutMatchId=featuredKnockoutMatchId') &&
+    core.includes("switchTab('pucharowa',document.getElementById('tabKnockoutBtn'))") &&
+    core.includes("return diff<=4*60*60*1000?'live':'waiting'") &&
+    !core.includes('knockoutMatches().slice(0,16)') &&
+    core.includes('const reveal=Boolean(tipData&&progress.complete)') &&
+    css.includes('.next-match-card.has-match-link') &&
     css.includes('.live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:15px;') &&
     core.includes("classList.add('is-live')"),
   "Mobilne statystyki nie zostaly zredukowane do kafla nastepnego meczu"

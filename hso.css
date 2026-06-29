@@ -253,6 +253,16 @@ header::after {
   font-size: 18px; font-weight: 700; line-height: 1;
 }
 .live-summary-scoreboard { display:none; }
+.next-match-card.has-match-link {
+  position:relative; cursor:pointer;
+  transition:border-color .2s,box-shadow .2s,transform .2s;
+}
+.next-match-card.has-match-link::after {
+  content:'↗'; position:absolute; top:8px; right:10px;
+  color:rgba(232,184,75,.72); font:700 12px 'Barlow',sans-serif;
+}
+.next-match-card.has-match-link:hover { border-color:rgba(232,184,75,.55); box-shadow:0 8px 24px rgba(0,0,0,.2); }
+.next-match-card.has-match-link:focus-visible { outline:2px solid var(--gold); outline-offset:2px; }
 
 /* ── tabs ── */
 .tabs {
