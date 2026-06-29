@@ -949,6 +949,9 @@ const KNOCKOUT_ROUNDS = [
   {id:'third', pl:'3. miejsce', en:'Third place', count:1, start:30, form:'hso-typowanie1.html'},
   {id:'final', pl:'Finał', en:'Final', count:1, start:31, form:'hso-typowanie1.html'}
 ];
+const KNOCKOUT_DEADLINE_OVERRIDES = {
+  r16:'2026-07-04T13:00:00Z'
+};
 const KNOCKOUT_FALLBACK_DATES = [
   '2026-06-28T19:00:00Z','2026-06-29T17:00:00Z','2026-06-29T20:30:00Z','2026-06-30T01:00:00Z',
   '2026-06-30T17:00:00Z','2026-06-30T21:00:00Z','2026-07-01T01:00:00Z','2026-07-01T16:00:00Z',
@@ -1112,7 +1115,9 @@ function knockoutDate(utcDate){
     timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'
   }).format(new Date(utcDate)).replace(',',' ·');
 }
-function knockoutDeadline(firstMatchUtc){
+function knockoutDeadline(firstMatchUtc,roundId){
+  const override=KNOCKOUT_DEADLINE_OVERRIDES[roundId];
+  if(override)return new Date(override);
   if(!firstMatchUtc)return null;
   return new Date(Date.parse(firstMatchUtc)-120*60*1000);
 }
@@ -1183,25 +1188,28 @@ function renderKnockout(){
     ? allMatches.slice(30,32)
     : roundMatches;
   const formKnownPairs=formMatches.filter(match=>match.homeTeam?.name&&match.awayTeam?.name).length;
-  const deadline=knockoutDeadline(formMatches[0]?.utcDate);
+  const deadline=knockoutDeadline(formMatches[0]?.utcDate,activeRound.id);
   const beforeDeadline=!deadline||Date.now()<=deadline.getTime();
   const formReady=formKnownPairs>0&&beforeDeadline;
-  const headerRound=KNOCKOUT_ROUNDS[currentIndex]||KNOCKOUT_ROUNDS[0];
+  const nextDeadlineIndex=KNOCKOUT_ROUNDS.findIndex(round=>{
+    const matches=round.form==='hso-typowanie1.html'
+      ? allMatches.slice(30,32)
+      : allMatches.slice(round.start,round.start+round.count);
+    const roundDeadline=knockoutDeadline(matches[0]?.utcDate,round.id);
+    return !roundDeadline||Date.now()<=roundDeadline.getTime();
+  });
+  const headerRound=KNOCKOUT_ROUNDS[nextDeadlineIndex>=0?nextDeadlineIndex:currentIndex]||KNOCKOUT_ROUNDS[0];
   const headerMatches=allMatches.slice(headerRound.start,headerRound.start+headerRound.count);
   const headerFormMatches=headerRound.form==='hso-typowanie1.html'
     ? allMatches.slice(30,32)
     : headerMatches;
   const headerKnownPairs=headerFormMatches.filter(match=>match.homeTeam?.name&&match.awayTeam?.name).length;
   const headerIsFinalForm=headerRound.form==='hso-typowanie1.html';
-  const headerDeadline=knockoutDeadline(headerFormMatches[0]?.utcDate);
+  const headerDeadline=knockoutDeadline(headerFormMatches[0]?.utcDate,headerRound.id);
   setHeaderBadge(
-    headerKnownPairs>0
-      ? (LANG==='en'
-        ? `${headerIsFinalForm?'Final-stage predictions available':`Available fixtures: ${headerKnownPairs}/${headerRound.count}`} · deadline ${knockoutDeadlineLabel(headerDeadline)}`
-        : `${headerIsFinalForm?'Typowanie finałów dostępne':`Dostępne pary: ${headerKnownPairs}/${headerRound.count}`} · termin ${knockoutDeadlineLabel(headerDeadline)}`)
-      : (LANG==='en'
-        ? `${headerIsFinalForm?'Waiting for finals':'Waiting for fixtures'} · deadline ${knockoutDeadlineLabel(headerDeadline)}`
-        : `${headerIsFinalForm?'Oczekiwanie na finały':'Oczekiwanie na pary'} · termin ${knockoutDeadlineLabel(headerDeadline)}`),
+    LANG==='en'
+      ? `${headerIsFinalForm?'Final stage':knockoutRoundName(headerRound)} · available fixtures: ${headerKnownPairs}/${headerRound.count} · deadline ${knockoutDeadlineLabel(headerDeadline)}`
+      : `${headerIsFinalForm?'Faza finałowa':knockoutRoundName(headerRound)} · dostępne pary: ${headerKnownPairs}/${headerRound.count} · termin ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (potem idziemy z Magdą na imprezę)':''}`,
     headerKnownPairs>0?'available':'waiting'
   );
 

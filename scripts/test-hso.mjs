@@ -143,6 +143,13 @@ check(
   core.includes("playersAlphabetically") && core.includes("localeCompare(b.name,'pl'"),
   "Typy w kaflach pucharowych nie sa sortowane alfabetycznie"
 );
+check(
+  core.includes("r16:'2026-07-04T13:00:00Z'") &&
+    core.includes("nextDeadlineIndex") &&
+    core.includes("dostępne pary: ${headerKnownPairs}/${headerRound.count}") &&
+    core.includes("(potem idziemy z Magdą na imprezę)"),
+  "Baner i termin typowania 1/8 finalu nie sa ustawione"
+);
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
 check(
