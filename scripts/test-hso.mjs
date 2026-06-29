@@ -94,6 +94,12 @@ const productionVersion = production.match(/hso-core\.js\?v=([^"']+)/)?.[1];
 const testVersion = test.match(/hso-core\.js\?v=([^"']+)/)?.[1];
 check(productionVersion === testVersion, "Rozne wersje cache hso-core.js");
 check(
+  production.includes('class="stat-card next-match-card"') &&
+    css.includes('.stats .stat-card:not(.next-match-card) { display:none; }') &&
+    css.includes('.next-match-card #countdown-tick { font-size:10px'),
+  "Mobilne statystyki nie zostaly zredukowane do kafla nastepnego meczu"
+);
+check(
   production.includes('class="tab tab-archive"') && !production.match(/id="tabMatchesBtn"[^>]*target="_blank"/),
   "Archiwalny raport fazy grupowej nadal otwiera nowe okno"
 );

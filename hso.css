@@ -1048,7 +1048,19 @@ body.ranking-active .wrap { max-width: 1180px; }
   }
 }
 @media (max-width: 540px) {
-  .stats { grid-template-columns: repeat(2,1fr); }
+  .stats { grid-template-columns: 1fr; gap:0; margin-bottom:16px; }
+  .stats .stat-card:not(.next-match-card) { display:none; }
+  .next-match-card {
+    display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center;
+    gap:12px; width:100%; min-height:58px; padding:9px 12px;
+  }
+  .next-match-card .lbl { margin:0; font-size:10px; white-space:nowrap; }
+  .next-match-card #s-next { margin-top:0 !important; text-align:right; }
+  .next-match-card .live-summary-status { display:none !important; }
+  .next-match-card #countdown-tick { font-size:10px !important; margin-top:2px !important; }
+  .next-match-card .live-summary { margin-top:0; }
+  .next-match-card .live-summary-team { min-height:18px; font-size:11px; }
+  .next-match-card .live-summary-score { font-size:17px; }
   .tiles-grid { grid-template-columns: 1fr; }
   .ranking-wrap.panel-open { grid-template-columns: 1fr !important; }
   .side-panel { display: none !important; }
