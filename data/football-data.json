@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T21:27:14.111Z",
+  "updatedAt": "2026-06-29T21:44:13.702Z",
   "matches": [
     {
       "id": 537327,
@@ -2964,7 +2964,7 @@
     {
       "id": 537415,
       "utcDate": "2026-06-29T20:30:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Germany",
         "shortName": "Germany",
@@ -2999,7 +2999,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T21:26:57Z"
+      "lastUpdated": "2026-06-29T21:44:11Z"
     },
     {
       "id": 537418,
