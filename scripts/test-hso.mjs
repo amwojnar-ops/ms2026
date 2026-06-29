@@ -105,8 +105,14 @@ check(
   "Mobilne statystyki nie zostaly zredukowane do kafla nastepnego meczu"
 );
 check(
-  production.includes('class="tab tab-archive"') && !production.match(/id="tabMatchesBtn"[^>]*target="_blank"/),
-  "Archiwalny raport fazy grupowej nadal otwiera nowe okno"
+  production.includes('id="tabPlayersBtn" data-icon="★"') &&
+    production.includes('id="tabKnockoutBtn" data-icon="★"') &&
+    production.includes('id="tabRankingBtn" data-icon="★"') &&
+    production.includes('id="tabMatchesBtn" data-icon="▤"') &&
+    production.indexOf('id="tabRankingBtn"') < production.indexOf('id="tabMatchesBtn"') &&
+    !css.includes("content: 'ARCHIWUM'") &&
+    !production.match(/id="tabMatchesBtn"[^>]*target="_blank"/),
+  "Ikony, kolejność lub działanie menu głównego są nieprawidłowe"
 );
 check(
   production.includes('id="mainTabs" data-label="MENU GŁÓWNE"') &&

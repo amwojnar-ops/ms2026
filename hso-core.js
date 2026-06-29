@@ -121,7 +121,7 @@ function applyLanguage(){
   document.getElementById('tabRankingBtn').setAttribute('aria-label',tr('ranking'));
   document.getElementById('mainTabs').dataset.label=LANG==='en'?'MAIN MENU':'MENU GŁÓWNE';
   document.getElementById('koStageNav').dataset.label=LANG==='en'?'SELECT ROUND':'WYBIERZ RUNDĘ';
-  document.getElementById('tabMatchesBtn').title=LANG==='en'?'Open the archived group-stage report':'Otwórz archiwalny raport fazy grupowej';
+  document.getElementById('tabMatchesBtn').title=LANG==='en'?'Open the group-stage report':'Otwórz raport fazy grupowej';
   setText('tabKnockoutBtn','knockout');
   const backLabel=document.getElementById('mobileSectionBackLabel');
   if(backLabel)backLabel.textContent=LANG==='en'?'Back':'Wróć';
