@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T21:51:13.193Z",
+  "updatedAt": "2026-06-29T21:52:16.743Z",
   "matches": [
     {
       "id": 537327,
@@ -2976,10 +2976,10 @@
         "tla": "PAR"
       },
       "score": {
-        "winner": "AWAY_TEAM",
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": 0,
+          "home": 1,
           "away": 1
         },
         "regularTime": {
@@ -2999,7 +2999,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T21:51:11Z"
+      "lastUpdated": "2026-06-29T21:52:11Z"
     },
     {
       "id": 537418,
