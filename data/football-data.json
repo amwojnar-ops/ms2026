@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T03:24:14.500Z",
+  "updatedAt": "2026-06-30T03:25:19.226Z",
   "matches": [
     {
       "id": 537327,
@@ -3004,7 +3004,7 @@
     {
       "id": 537418,
       "utcDate": "2026-06-30T01:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Netherlands",
         "shortName": "Netherlands",
@@ -3039,7 +3039,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-30T03:23:40Z"
+      "lastUpdated": "2026-06-30T03:25:09Z"
     },
     {
       "id": 537424,
