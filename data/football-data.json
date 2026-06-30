@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T03:09:16.762Z",
+  "updatedAt": "2026-06-30T03:10:21.817Z",
   "matches": [
     {
       "id": 537327,
@@ -3004,7 +3004,7 @@
     {
       "id": 537418,
       "utcDate": "2026-06-30T01:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Netherlands",
         "shortName": "Netherlands",
@@ -3017,7 +3017,7 @@
       },
       "score": {
         "winner": "DRAW",
-        "duration": "REGULAR",
+        "duration": "EXTRA_TIME",
         "fullTime": {
           "home": 1,
           "away": 1
@@ -3031,15 +3031,15 @@
           "away": 0
         },
         "extraTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "penalties": {
           "home": null,
           "away": null
         }
       },
-      "lastUpdated": "2026-06-30T03:08:48Z"
+      "lastUpdated": "2026-06-30T03:10:09Z"
     },
     {
       "id": 537424,
