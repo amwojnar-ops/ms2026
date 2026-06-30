@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T03:50:22.434Z",
+  "updatedAt": "2026-06-30T04:00:49.076Z",
   "matches": [
     {
       "id": 537327,
@@ -3016,15 +3016,15 @@
         "tla": "MAR"
       },
       "score": {
-        "winner": "DRAW",
-        "duration": "EXTRA_TIME",
+        "winner": null,
+        "duration": "PENALTY_SHOOTOUT",
         "fullTime": {
-          "home": 1,
-          "away": 1
+          "home": 3,
+          "away": 4
         },
         "regularTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "halfTime": {
           "home": 0,
@@ -3035,11 +3035,11 @@
           "away": 0
         },
         "penalties": {
-          "home": null,
-          "away": null
+          "home": 3,
+          "away": 3
         }
       },
-      "lastUpdated": "2026-06-30T03:49:25Z"
+      "lastUpdated": "2026-06-30T04:00:25Z"
     },
     {
       "id": 537424,
