@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T08:30:36.769Z",
+  "updatedAt": "2026-06-30T17:06:14.345Z",
   "matches": [
     {
       "id": 537327,
@@ -3044,7 +3044,7 @@
     {
       "id": 537424,
       "utcDate": "2026-06-30T17:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Ivory Coast",
         "shortName": "Ivory Coast",
@@ -3056,11 +3056,11 @@
         "tla": "NOR"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3079,7 +3079,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T15:20:12Z"
+      "lastUpdated": "2026-06-30T17:05:46Z"
     },
     {
       "id": 537416,
