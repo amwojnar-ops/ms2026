@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T00:00:48.021Z",
+  "updatedAt": "2026-06-30T00:30:34.106Z",
   "matches": [
     {
       "id": 537327,
@@ -2979,8 +2979,8 @@
         "winner": null,
         "duration": "PENALTY_SHOOTOUT",
         "fullTime": {
-          "home": 5,
-          "away": 6
+          "home": 4,
+          "away": 5
         },
         "regularTime": {
           "home": 1,
@@ -2995,11 +2995,11 @@
           "away": 0
         },
         "penalties": {
-          "home": 5,
-          "away": 5
+          "home": 4,
+          "away": 4
         }
       },
-      "lastUpdated": "2026-06-29T23:34:57Z"
+      "lastUpdated": "2026-06-30T00:27:13Z"
     },
     {
       "id": 537418,
