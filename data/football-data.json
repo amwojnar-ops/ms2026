@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T21:54:13.409Z",
+  "updatedAt": "2026-06-30T21:55:19.150Z",
   "matches": [
     {
       "id": 537327,
@@ -3084,7 +3084,7 @@
     {
       "id": 537416,
       "utcDate": "2026-06-30T21:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "France",
         "shortName": "France",
@@ -3107,8 +3107,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -3119,7 +3119,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-30T21:54:08Z"
+      "lastUpdated": "2026-06-30T21:54:54Z"
     },
     {
       "id": 537425,
