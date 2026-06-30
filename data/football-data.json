@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T17:54:15.990Z",
+  "updatedAt": "2026-06-30T17:55:22.629Z",
   "matches": [
     {
       "id": 537327,
@@ -3044,7 +3044,7 @@
     {
       "id": 537424,
       "utcDate": "2026-06-30T17:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Ivory Coast",
         "shortName": "Ivory Coast",
@@ -3067,8 +3067,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "extraTime": {
           "home": null,
@@ -3079,7 +3079,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-30T17:54:06Z"
+      "lastUpdated": "2026-06-30T17:55:18Z"
     },
     {
       "id": 537416,
