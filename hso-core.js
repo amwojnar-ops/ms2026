@@ -606,7 +606,9 @@ function nextKnockoutMatchHTML(match){
   const away=knockoutSummaryTeam(match.awayTeam);
   if(['live','paused'].includes(status)){
     const score=apiLiveScore(match);
-    document.querySelector('.next-match-card')?.classList.add('is-live');
+    const card=document.querySelector('.next-match-card');
+    card?.classList.add('is-live');
+    card?.classList.remove('is-upcoming');
     return `<span class="live-summary">
       <span class="live-summary-status"><span class="dot dot-live"></span><span class="live-summary-status-text">${tr(status)}</span></span>
       <span class="live-summary-vertical">
@@ -620,14 +622,27 @@ function nextKnockoutMatchHTML(match){
       </span>
     </span>`;
   }
-  document.querySelector('.next-match-card')?.classList.remove('is-live');
+  const card=document.querySelector('.next-match-card');
+  card?.classList.remove('is-live');
+  card?.classList.add('is-upcoming');
   const dt=new Date(match.utcDate);
   const date=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit'}).format(dt);
   const time=new Intl.DateTimeFormat('pl-PL',{timeZone:'Europe/Warsaw',hour:'2-digit',minute:'2-digit'}).format(dt);
   const countdown=formatCountdown(dt-Date.now());
-  return `<span style="display:block;font-size:13px;font-weight:500;color:#fff;line-height:1.3">${date} · ${time}</span>`
-    +`<span style="display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3">${home.image} ${home.name} – ${away.name} ${away.image}</span>`
-    +(countdown?`<span id="countdown-tick" style="display:block;font-size:11px;font-weight:500;margin-top:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px">⏱ ${countdown}</span>`:'');
+  const countdownHtml=countdown?`⏱ ${countdown}`:'';
+  return `<span class="upcoming-summary">
+    <span class="upcoming-summary-status"><span class="dot dot-soon"></span></span>
+    <span class="upcoming-summary-vertical">
+      <span style="display:block;font-size:13px;font-weight:500;color:#fff;line-height:1.3">${date} · ${time}</span>
+      <span style="display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3">${home.image} ${home.name} – ${away.name} ${away.image}</span>
+      ${countdown?`<span class="countdown-tick" style="display:block;font-size:11px;font-weight:500;margin-top:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px">${countdownHtml}</span>`:''}
+    </span>
+    <span class="upcoming-summary-scoreboard">
+      <span class="live-summary-side home">${home.image}<span class="live-summary-team-name">${home.name}</span></span>
+      <span class="upcoming-summary-center"><strong>${date} · ${time}</strong>${countdown?`<span class="countdown-tick">${countdownHtml}</span>`:''}</span>
+      <span class="live-summary-side away"><span class="live-summary-team-name">${away.name}</span>${away.image}</span>
+    </span>
+  </span>`;
 }
 
 function nextKnockoutMatch(){
@@ -642,7 +657,12 @@ function nextKnockoutMatch(){
   }
   const upcoming=matches.filter(match=>knockoutSummaryStatus(match)==='soon')
     .sort((a,b)=>Date.parse(a.utcDate)-Date.parse(b.utcDate))[0];
-  if(!upcoming){setFeaturedKnockoutMatch(null);document.querySelector('.next-match-card')?.classList.remove('is-live');stopCountdown();_countdownMatch=null;return '—';}
+  if(!upcoming){
+    setFeaturedKnockoutMatch(null);
+    const card=document.querySelector('.next-match-card');
+    card?.classList.remove('is-live','is-upcoming');
+    stopCountdown();_countdownMatch=null;return '—';
+  }
   setFeaturedKnockoutMatch(upcoming);
   document.getElementById('nextMatchLabel').textContent=tr('nextMatch');
   _countdownMatch=upcoming;startCountdown();
@@ -650,12 +670,12 @@ function nextKnockoutMatch(){
 }
 
 function tickCountdown(){
-  const el=document.getElementById('countdown-tick');
-  if(!el||!_countdownMatch)return;
+  const elements=document.querySelectorAll('.countdown-tick');
+  if(!elements.length||!_countdownMatch)return;
   const diff=Date.parse(_countdownMatch.utcDate)-Date.now();
   const countdown=diff>0?formatCountdown(diff):null;
-  if(countdown)el.innerHTML=`⏱ ${countdown}`;
-  else el.remove();
+  if(countdown)elements.forEach(el=>el.innerHTML=`⏱ ${countdown}`);
+  else elements.forEach(el=>el.remove());
 }
 
 function nextMatch(){return nextKnockoutMatch();}

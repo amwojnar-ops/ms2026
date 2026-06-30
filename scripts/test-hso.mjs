@@ -96,8 +96,11 @@ check(productionVersion === testVersion, "Rozne wersje cache hso-core.js");
 check(
   production.includes('class="stat-card next-match-card"') &&
     css.includes('.stats .stat-card:not(.next-match-card) { display:none; }') &&
-    css.includes('.next-match-card #countdown-tick { font-size:10px') &&
+    css.includes('.next-match-card .countdown-tick { font-size:10px') &&
     core.includes('class="live-summary-scoreboard"') &&
+    core.includes('class="upcoming-summary-scoreboard"') &&
+    core.includes("card?.classList.add('is-upcoming')") &&
+    core.includes("document.querySelectorAll('.countdown-tick')") &&
     core.includes('function fitLiveSummaryNames()') &&
     core.includes('requestAnimationFrame(fitLiveSummaryNames)') &&
     core.includes('function openFeaturedKnockoutMatch()') &&
