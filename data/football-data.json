@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T22:09:13.480Z",
+  "updatedAt": "2026-06-30T04:30:37.771Z",
   "matches": [
     {
       "id": 537327,
@@ -2964,7 +2964,7 @@
     {
       "id": 537415,
       "utcDate": "2026-06-29T20:30:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Germany",
         "shortName": "Germany",
@@ -2976,35 +2976,35 @@
         "tla": "PAR"
       },
       "score": {
-        "winner": "DRAW",
-        "duration": "REGULAR",
+        "winner": null,
+        "duration": "PENALTY_SHOOTOUT",
         "fullTime": {
-          "home": 1,
-          "away": 1
+          "home": 4,
+          "away": 5
         },
         "regularTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "halfTime": {
           "home": 0,
           "away": 1
         },
         "extraTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "penalties": {
-          "home": null,
-          "away": null
+          "home": 4,
+          "away": 4
         }
       },
-      "lastUpdated": "2026-06-29T22:09:11Z"
+      "lastUpdated": "2026-06-30T00:27:13Z"
     },
     {
       "id": 537418,
       "utcDate": "2026-06-30T01:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Netherlands",
         "shortName": "Netherlands",
@@ -3017,29 +3017,29 @@
       },
       "score": {
         "winner": null,
-        "duration": "REGULAR",
+        "duration": "PENALTY_SHOOTOUT",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 3,
+          "away": 4
         },
         "regularTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "extraTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "penalties": {
-          "home": null,
-          "away": null
+          "home": 3,
+          "away": 3
         }
       },
-      "lastUpdated": "2026-06-29T05:20:12Z"
+      "lastUpdated": "2026-06-30T04:08:17Z"
     },
     {
       "id": 537424,
