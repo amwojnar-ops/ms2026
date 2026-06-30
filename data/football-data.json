@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T20:50:22.706Z",
+  "updatedAt": "2026-06-30T21:06:23.734Z",
   "matches": [
     {
       "id": 537327,
@@ -3084,7 +3084,7 @@
     {
       "id": 537416,
       "utcDate": "2026-06-30T21:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "France",
         "shortName": "France",
@@ -3096,11 +3096,11 @@
         "tla": "SWE"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3119,7 +3119,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T15:20:12Z"
+      "lastUpdated": "2026-06-30T21:06:08Z"
     },
     {
       "id": 537425,
