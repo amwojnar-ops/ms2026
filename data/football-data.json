@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-01T20:55:20.319Z",
+  "updatedAt": "2026-07-01T20:56:16.873Z",
   "matches": [
     {
       "id": 537327,
@@ -3204,7 +3204,7 @@
     {
       "id": 537422,
       "utcDate": "2026-07-01T20:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Belgium",
         "shortName": "Belgium",
@@ -3227,8 +3227,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "extraTime": {
           "home": null,
@@ -3239,7 +3239,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-01T20:54:45Z"
+      "lastUpdated": "2026-07-01T20:56:12Z"
     },
     {
       "id": 537421,
