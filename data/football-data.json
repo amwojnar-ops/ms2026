@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-01T08:30:41.286Z",
+  "updatedAt": "2026-07-01T16:57:12.943Z",
   "matches": [
     {
       "id": 537327,
@@ -3164,7 +3164,7 @@
     {
       "id": 537426,
       "utcDate": "2026-07-01T16:00:00Z",
-      "status": "TIMED",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "England",
         "shortName": "England",
@@ -3176,19 +3176,19 @@
         "tla": "COD"
       },
       "score": {
-        "winner": null,
+        "winner": "AWAY_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "regularTime": {
           "home": null,
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "extraTime": {
           "home": null,
@@ -3199,7 +3199,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-30T15:20:13Z"
+      "lastUpdated": "2026-07-01T16:56:48Z"
     },
     {
       "id": 537422,
