@@ -181,6 +181,11 @@ check(
   "Meksyk nie zostal dodany do meczu 06.07 o 02:00"
 );
 check(
+  entries.some(entry => entry.id === 537378 && entry.side === "awayTeam" && entry.team === "England") &&
+    formCore.includes('{ matchId: 537378, side: "awayTeam", team: { name: "England"'),
+  "Anglia nie zostala dodana do pary z Meksykiem"
+);
+check(
   entries.some(entry => entry.id === 537376 && entry.side === "awayTeam" && entry.team === "Morocco") &&
     formCore.includes('{ matchId: 537376, side: "awayTeam", team: { name: "Morocco"'),
   "Maroko nie zostalo przeniesione do meczu 1/8 finalu lub formularza"
