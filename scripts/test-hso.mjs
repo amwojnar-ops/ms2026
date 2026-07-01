@@ -28,8 +28,9 @@ let scoreHelpers;
 try {
   const start = core.indexOf("function validApiScore(");
   const end = core.indexOf("async function refreshApiData(");
+  const manualResults = core.match(/const MANUAL_REGULATION_RESULTS = \{[\s\S]*?\n\};/)?.[0] || "";
   scoreHelpers = new Function(
-    `${core.slice(start, end)}; return {apiResult,apiLiveScore,knockoutDisplayScore};`
+    `${manualResults}\n${core.slice(start, end)}; return {apiResult,apiLiveScore,knockoutDisplayScore};`
   )();
 } catch (error) {
   errors.push(`Funkcje wyniku live: ${error.message}`);
@@ -55,6 +56,19 @@ if (scoreHelpers) {
     }
   };
   check(scoreHelpers.apiResult(extraTime) === "2-2", "Punktacja nie uzywa wyniku po 90 minutach");
+
+  const belgiumSenegalLive = {
+    id: 537422,
+    status: "IN_PLAY",
+    score: { fullTime: { home: 2, away: 2 } }
+  };
+  const belgiumSenegalFinished = {
+    ...belgiumSenegalLive,
+    status: "FINISHED",
+    score: { fullTime: { home: 3, away: 2 }, regularTime: { home: 2, away: 2 } }
+  };
+  check(scoreHelpers.apiResult(belgiumSenegalLive) === "2-2", "Belgia-Senegal nie jest rozliczany podczas dogrywki");
+  check(scoreHelpers.apiResult(belgiumSenegalFinished) === "2-2", "Belgia-Senegal zmienia wynik punktacji po zakonczeniu");
 }
 
 try {
@@ -130,6 +144,20 @@ check(
     css.includes('.ko-stage-nav { grid-template-columns: repeat(3,minmax(0,1fr)); gap:5px; }') &&
     css.includes('.ko-stage { min-height:44px; padding:6px 4px;'),
   "Menu główne lub mobilne kafle rund nie mają nowej hierarchii"
+);
+check(
+  !css.includes('body.ranking-active .wrap { max-width: 1180px; }') &&
+    css.includes('body.ranking-panel-open .wrap { max-width: 1180px; }') &&
+    core.includes("document.body.classList.add('ranking-panel-open')") &&
+    core.includes("document.body.classList.remove('ranking-panel-open')"),
+  "Ranking bez otwartego panelu nadal jest szerszy od pozostałych zakładek"
+);
+check(
+  core.includes("537422:'2-2'") &&
+    core.includes('const manual=MANUAL_REGULATION_RESULTS[api.id]') &&
+    core.indexOf('const manual=MANUAL_REGULATION_RESULTS[api.id]') < core.indexOf("if(api.status!=='FINISHED')return null") &&
+    core.includes('let pts=p.group.pts,ex=p.group.ex,en=p.group.en;'),
+  "Wynik Belgia-Senegal po 90 minutach nie jest rozliczany jednokrotnie jako 2-2"
 );
 
 const knownBlock = core.match(/const KNOWN_KNOCKOUT_TEAMS = \[([\s\S]*?)\n\];/)?.[1] || "";

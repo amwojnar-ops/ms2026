@@ -158,6 +158,9 @@ let API_DATA_READY = false;
 let API_REFRESH_SEQUENCE = 0;
 let API_FINISHED_COUNT = 0;
 const KNOCKOUT_START_UTC = Date.parse('2026-06-28T19:00:00Z');
+const MANUAL_REGULATION_RESULTS = {
+  537422:'2-2'
+};
 
 function validApiScore(score){
   return Number.isInteger(score?.home)&&Number.isInteger(score?.away);
@@ -171,7 +174,10 @@ function apiRegulationScore(api){
 }
 
 function apiResult(api){
-  if(!api||api.status!=='FINISHED')return null;
+  if(!api)return null;
+  const manual=MANUAL_REGULATION_RESULTS[api.id];
+  if(/^\d+-\d+$/.test(manual||''))return manual;
+  if(api.status!=='FINISHED')return null;
   const score=apiRegulationScore(api);
   return Number.isInteger(score?.home)&&Number.isInteger(score?.away)
     ? `${score.home}-${score.away}` : null;
@@ -771,6 +777,7 @@ function openPanel(name,ranked){
   const p=ranked.find(x=>x.name===name);
   activePlayer=name;
   if(isMobile()){
+    document.body.classList.remove('ranking-panel-open');
     document.querySelectorAll('.expand-tr.open').forEach(r=>r.classList.remove('open'));
     const exp=document.getElementById('exp-'+name);
     if(exp){
@@ -780,6 +787,7 @@ function openPanel(name,ranked){
         +buildExpRows(p);
     }
   } else {
+    document.body.classList.add('ranking-panel-open');
     document.getElementById('spName').textContent=name;
     document.getElementById('spSub').textContent=`${p.pts} ${pointsLabel(p.pts)} · ${p.ex}× 3 ${pointsLabel(3)} + ${p.en}× 1 ${pointsLabel(1)}`;
     document.getElementById('spChamp').textContent=p.champ?teamName(p.champ):'—';
@@ -793,6 +801,7 @@ function openPanel(name,ranked){
 }
 function closePanel(){
   activePlayer=null;
+  document.body.classList.remove('ranking-panel-open');
   document.getElementById('sidePanel').classList.remove('open');
   document.getElementById('rankingWrap').classList.remove('panel-open');
   document.querySelectorAll('.expand-tr.open').forEach(r=>r.classList.remove('open'));
@@ -1457,6 +1466,7 @@ function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   ['gracze','ranking','pucharowa'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
   document.body.classList.toggle('ranking-active',tab==='ranking');
+  document.body.classList.toggle('ranking-panel-open',tab==='ranking'&&document.getElementById('sidePanel').classList.contains('open'));
   if(tab==='pucharowa')renderKnockout();
   requestAnimationFrame(updateMobileSectionBack);
 }

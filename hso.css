@@ -498,7 +498,7 @@ header::after {
 .chip-r { background: rgba(255,255,255,.05); color: var(--muted); border: 1px solid var(--border); }
 
 /* ── ranking ── */
-body.ranking-active .wrap { max-width: 1180px; }
+body.ranking-panel-open .wrap { max-width: 1180px; }
 .ranking-wrap { display: grid; grid-template-columns: 1fr; gap: 0; }
 .ranking-wrap.panel-open { grid-template-columns: minmax(0,1fr) 390px; gap: 18px; }
 
@@ -1131,7 +1131,7 @@ body.ranking-active .wrap { max-width: 1180px; }
   body.intro-active { overflow: auto; }
 }
 @media (min-width: 541px) and (max-width: 980px) {
-  body.ranking-active .wrap { max-width: 940px; }
+  body.ranking-panel-open .wrap { max-width: 940px; }
   .ranking-wrap.panel-open { grid-template-columns: minmax(0,1fr) 340px; gap:12px; }
 }
 @media (min-width: 821px) {
