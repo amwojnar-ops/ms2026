@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-01T01:01:12.317Z",
+  "updatedAt": "2026-07-01T01:06:16.540Z",
   "matches": [
     {
       "id": 537327,
@@ -3124,7 +3124,7 @@
     {
       "id": 537425,
       "utcDate": "2026-07-01T01:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Mexico",
         "shortName": "Mexico",
@@ -3136,11 +3136,11 @@
         "tla": "ECU"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3159,7 +3159,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-06-29T15:20:12Z"
+      "lastUpdated": "2026-07-01T01:05:45Z"
     },
     {
       "id": 537426,
