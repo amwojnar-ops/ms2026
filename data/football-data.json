@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-01T22:10:26.325Z",
+  "updatedAt": "2026-07-01T22:11:13.847Z",
   "matches": [
     {
       "id": 537327,
@@ -3204,7 +3204,7 @@
     {
       "id": 537422,
       "utcDate": "2026-07-01T20:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Belgium",
         "shortName": "Belgium",
@@ -3217,7 +3217,7 @@
       },
       "score": {
         "winner": "DRAW",
-        "duration": "REGULAR",
+        "duration": "EXTRA_TIME",
         "fullTime": {
           "home": 2,
           "away": 2
@@ -3231,15 +3231,15 @@
           "away": 1
         },
         "extraTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "penalties": {
           "home": null,
           "away": null
         }
       },
-      "lastUpdated": "2026-07-01T22:10:13Z"
+      "lastUpdated": "2026-07-01T22:11:09Z"
     },
     {
       "id": 537421,
