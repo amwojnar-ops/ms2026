@@ -1074,8 +1074,10 @@ const KNOCKOUT_FALLBACK_DATES = [
 const KNOWN_KNOCKOUT_TEAMS = [
   {matchId:537376, side:'homeTeam', team:{name:'Canada',shortName:'Canada',tla:'CAN'}},
   {matchId:537375, side:'homeTeam', team:{name:'Paraguay',shortName:'Paraguay',tla:'PAR'}},
+  {matchId:537375, side:'awayTeam', team:{name:'France',shortName:'France',tla:'FRA'}},
   {matchId:537377, side:'homeTeam', team:{name:'Brazil',shortName:'Brazil',tla:'BRA'}},
   {matchId:537377, side:'awayTeam', team:{name:'Norway',shortName:'Norway',tla:'NOR'}},
+  {matchId:537378, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537376, side:'awayTeam', team:{name:'Morocco',shortName:'Morocco',tla:'MAR'}},
   {matchId:537425, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537425, side:'awayTeam', team:{name:'Ecuador',shortName:'Ecuador',tla:'ECU'}},

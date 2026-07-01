@@ -171,6 +171,16 @@ check(
   "Paragwaj nie zostal przeniesiony do meczu 1/8 finalu lub formularza"
 );
 check(
+  entries.some(entry => entry.id === 537375 && entry.side === "awayTeam" && entry.team === "France") &&
+    formCore.includes('{ matchId: 537375, side: "awayTeam", team: { name: "France"'),
+  "Francja nie zostala dodana do pary z Paragwajem"
+);
+check(
+  entries.some(entry => entry.id === 537378 && entry.side === "homeTeam" && entry.team === "Mexico") &&
+    formCore.includes('{ matchId: 537378, side: "homeTeam", team: { name: "Mexico"'),
+  "Meksyk nie zostal dodany do meczu 06.07 o 02:00"
+);
+check(
   entries.some(entry => entry.id === 537376 && entry.side === "awayTeam" && entry.team === "Morocco") &&
     formCore.includes('{ matchId: 537376, side: "awayTeam", team: { name: "Morocco"'),
   "Maroko nie zostalo przeniesione do meczu 1/8 finalu lub formularza"
