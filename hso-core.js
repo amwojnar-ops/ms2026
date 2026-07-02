@@ -1089,6 +1089,8 @@ const KNOWN_KNOCKOUT_TEAMS = [
   {matchId:537378, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537378, side:'awayTeam', team:{name:'England',shortName:'England',tla:'ENG'}},
   {matchId:537376, side:'awayTeam', team:{name:'Morocco',shortName:'Morocco',tla:'MAR'}},
+  {matchId:537380, side:'homeTeam', team:{name:'United States',shortName:'United States',tla:'USA'}},
+  {matchId:537380, side:'awayTeam', team:{name:'Belgium',shortName:'Belgium',tla:'BEL'}},
   {matchId:537425, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537425, side:'awayTeam', team:{name:'Ecuador',shortName:'Ecuador',tla:'ECU'}},
   {matchId:537421, side:'homeTeam', team:{name:'United States',shortName:'United States',tla:'USA'}},
