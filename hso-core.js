@@ -197,6 +197,11 @@ function apiLiveScore(api){
 }
 
 function knockoutDisplayScore(match){
+  const manual=MANUAL_REGULATION_RESULTS[match?.id];
+  if(/^\d+-\d+$/.test(manual||'')){
+    const [home,away]=manual.split('-').map(Number);
+    return {home,away};
+  }
   if(match?.status==='FINISHED')return apiRegulationScore(match)||{home:null,away:null};
   if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return apiLiveScore(match);
   return validApiScore(match?.score?.fullTime)?match.score.fullTime:{home:null,away:null};

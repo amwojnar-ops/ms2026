@@ -69,6 +69,8 @@ if (scoreHelpers) {
   };
   check(scoreHelpers.apiResult(belgiumSenegalLive) === "2-2", "Belgia-Senegal nie jest rozliczany podczas dogrywki");
   check(scoreHelpers.apiResult(belgiumSenegalFinished) === "2-2", "Belgia-Senegal zmienia wynik punktacji po zakonczeniu");
+  const displayedBelgiumSenegal = scoreHelpers.knockoutDisplayScore(belgiumSenegalFinished);
+  check(displayedBelgiumSenegal.home === 2 && displayedBelgiumSenegal.away === 2, "Kafel Belgia-Senegal nie pokazuje wyniku 2-2");
 }
 
 try {
