@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02T00:59:12.595Z",
+  "updatedAt": "2026-07-02T01:00:50.208Z",
   "matches": [
     {
       "id": 537327,
@@ -3244,7 +3244,7 @@
     {
       "id": 537421,
       "utcDate": "2026-07-02T00:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "United States",
         "shortName": "USA",
@@ -3267,7 +3267,7 @@
           "away": null
         },
         "halfTime": {
-          "home": 0,
+          "home": 1,
           "away": 0
         },
         "extraTime": {
@@ -3279,7 +3279,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-02T00:59:07Z"
+      "lastUpdated": "2026-07-02T01:00:45Z"
     },
     {
       "id": 537420,
