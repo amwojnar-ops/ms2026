@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02T23:54:15.592Z",
+  "updatedAt": "2026-07-02T23:55:21.087Z",
   "matches": [
     {
       "id": 537327,
@@ -3324,7 +3324,7 @@
     {
       "id": 537419,
       "utcDate": "2026-07-02T23:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Portugal",
         "shortName": "Portugal",
@@ -3347,8 +3347,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -3359,7 +3359,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-02T23:54:07Z"
+      "lastUpdated": "2026-07-02T23:55:03Z"
     },
     {
       "id": 537429,
