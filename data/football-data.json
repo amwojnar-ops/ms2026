@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02T21:30:44.900Z",
+  "updatedAt": "2026-07-02T23:06:15.060Z",
   "matches": [
     {
       "id": 537327,
@@ -3324,7 +3324,7 @@
     {
       "id": 537419,
       "utcDate": "2026-07-02T23:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Portugal",
         "shortName": "Portugal",
@@ -3336,11 +3336,11 @@
         "tla": "CRO"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3359,7 +3359,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-02T05:20:12Z"
+      "lastUpdated": "2026-07-02T23:06:08Z"
     },
     {
       "id": 537429,
