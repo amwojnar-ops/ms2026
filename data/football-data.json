@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-03T20:44:17.187Z",
+  "updatedAt": "2026-07-03T20:49:11.285Z",
   "matches": [
     {
       "id": 537327,
@@ -3404,7 +3404,7 @@
     {
       "id": 537428,
       "utcDate": "2026-07-03T18:00:00Z",
-      "status": "PAUSED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Australia",
         "shortName": "Australia",
@@ -3439,7 +3439,7 @@
           "away": 0
         }
       },
-      "lastUpdated": "2026-07-03T20:43:16Z"
+      "lastUpdated": "2026-07-03T20:48:19Z"
     },
     {
       "id": 537427,
