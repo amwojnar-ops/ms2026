@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-03T03:56:15.939Z",
+  "updatedAt": "2026-07-03T04:12:14.018Z",
   "matches": [
     {
       "id": 537327,
@@ -3364,7 +3364,7 @@
     {
       "id": 537429,
       "utcDate": "2026-07-03T03:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Switzerland",
         "shortName": "Switzerland",
@@ -3379,7 +3379,7 @@
         "winner": "HOME_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": 1,
+          "home": 2,
           "away": 0
         },
         "regularTime": {
@@ -3399,7 +3399,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-03T03:56:12Z"
+      "lastUpdated": "2026-07-03T04:12:01Z"
     },
     {
       "id": 537428,
