@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02T23:56:15.640Z",
+  "updatedAt": "2026-07-03T00:12:14.885Z",
   "matches": [
     {
       "id": 537327,
@@ -3324,7 +3324,7 @@
     {
       "id": 537419,
       "utcDate": "2026-07-02T23:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Portugal",
         "shortName": "Portugal",
@@ -3359,7 +3359,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-02T23:55:39Z"
+      "lastUpdated": "2026-07-03T00:11:51Z"
     },
     {
       "id": 537429,
