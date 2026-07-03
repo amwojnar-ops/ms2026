@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-03T18:55:18.667Z",
+  "updatedAt": "2026-07-03T18:56:15.502Z",
   "matches": [
     {
       "id": 537327,
@@ -3404,7 +3404,7 @@
     {
       "id": 537428,
       "utcDate": "2026-07-03T18:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Australia",
         "shortName": "Australia",
@@ -3427,8 +3427,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "extraTime": {
           "home": null,
@@ -3439,7 +3439,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-03T18:55:07Z"
+      "lastUpdated": "2026-07-03T18:55:42Z"
     },
     {
       "id": 537427,
