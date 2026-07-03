@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-03T02:00:57.610Z",
+  "updatedAt": "2026-07-03T03:06:15.399Z",
   "matches": [
     {
       "id": 537327,
@@ -3364,7 +3364,7 @@
     {
       "id": 537429,
       "utcDate": "2026-07-03T03:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Switzerland",
         "shortName": "Switzerland",
@@ -3376,11 +3376,11 @@
         "tla": "ALG"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3399,7 +3399,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-02T05:20:12Z"
+      "lastUpdated": "2026-07-03T03:05:48Z"
     },
     {
       "id": 537428,
