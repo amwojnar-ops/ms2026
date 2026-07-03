@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-03T20:43:12.739Z",
+  "updatedAt": "2026-07-03T20:44:17.187Z",
   "matches": [
     {
       "id": 537327,
@@ -3416,15 +3416,15 @@
         "tla": "EGY"
       },
       "score": {
-        "winner": "DRAW",
-        "duration": "EXTRA_TIME",
+        "winner": null,
+        "duration": "PENALTY_SHOOTOUT",
         "fullTime": {
           "home": 1,
           "away": 1
         },
         "regularTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "halfTime": {
           "home": 0,
@@ -3435,11 +3435,11 @@
           "away": 0
         },
         "penalties": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         }
       },
-      "lastUpdated": "2026-07-03T20:42:54Z"
+      "lastUpdated": "2026-07-03T20:43:16Z"
     },
     {
       "id": 537427,
