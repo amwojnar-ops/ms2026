@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-03T20:05:20.287Z",
+  "updatedAt": "2026-07-03T20:09:15.581Z",
   "matches": [
     {
       "id": 537327,
@@ -3404,7 +3404,7 @@
     {
       "id": 537428,
       "utcDate": "2026-07-03T18:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Australia",
         "shortName": "Australia",
@@ -3417,7 +3417,7 @@
       },
       "score": {
         "winner": "DRAW",
-        "duration": "REGULAR",
+        "duration": "EXTRA_TIME",
         "fullTime": {
           "home": 1,
           "away": 1
@@ -3431,15 +3431,15 @@
           "away": 1
         },
         "extraTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "penalties": {
           "home": null,
           "away": null
         }
       },
-      "lastUpdated": "2026-07-03T20:04:24Z"
+      "lastUpdated": "2026-07-03T20:09:12Z"
     },
     {
       "id": 537427,
