@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02T21:30:44.900Z",
+  "updatedAt": "2026-07-03T04:47:15.450Z",
   "matches": [
     {
       "id": 537327,
@@ -3324,7 +3324,7 @@
     {
       "id": 537419,
       "utcDate": "2026-07-02T23:00:00Z",
-      "status": "TIMED",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Portugal",
         "shortName": "Portugal",
@@ -3336,19 +3336,19 @@
         "tla": "CRO"
       },
       "score": {
-        "winner": null,
+        "winner": "HOME_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 2,
+          "away": 1
         },
         "regularTime": {
           "home": null,
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -3359,12 +3359,12 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-02T05:20:12Z"
+      "lastUpdated": "2026-07-03T01:26:11Z"
     },
     {
       "id": 537429,
       "utcDate": "2026-07-03T03:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Switzerland",
         "shortName": "Switzerland",
@@ -3376,19 +3376,19 @@
         "tla": "ALG"
       },
       "score": {
-        "winner": null,
+        "winner": "HOME_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 2,
+          "away": 0
         },
         "regularTime": {
           "home": null,
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -3399,7 +3399,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-02T05:20:12Z"
+      "lastUpdated": "2026-07-03T04:47:12Z"
     },
     {
       "id": 537428,
