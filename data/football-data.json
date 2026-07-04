@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T23:09:13.975Z",
+  "updatedAt": "2026-07-04T23:10:36.447Z",
   "matches": [
     {
       "id": 537327,
@@ -3564,7 +3564,7 @@
     {
       "id": 537375,
       "utcDate": "2026-07-04T21:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Paraguay",
         "shortName": "Paraguay",
@@ -3599,7 +3599,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-04T23:09:05Z"
+      "lastUpdated": "2026-07-04T23:09:45Z"
     },
     {
       "id": 537377,
