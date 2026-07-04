@@ -312,6 +312,12 @@ check(
   "Baner i termin typowania 1/8 finalu nie sa ustawione"
 );
 check(
+  core.includes("? (LANG==='en'?'Predictions closed':'Typowanie zakończone')") &&
+    core.includes("actionPanel.classList.toggle('deadline-closed',!beforeDeadline)") &&
+    css.includes('.ko-main > .ko-action.deadline-closed { order:4; }'),
+  "Zamkniete typowanie nie ma poprawnego naglowka lub pozycji mobilnej"
+);
+check(
   core.includes('const KNOCKOUT_PROGRESS_OVERRIDES = {') &&
     core.includes('r16:R16_SUBMITTED_PLAYERS.size') &&
     core.includes('Math.max(tipProgress.completePlayers.length,KNOCKOUT_PROGRESS_OVERRIDES[activeRound.id]||0)'),
@@ -364,6 +370,12 @@ check(
 check(
   formCore.includes("ms2026_${config.key}_typy"),
   "Zmieniono klucz localStorage formularzy pucharowych"
+);
+check(
+  formCore.includes('index8: "2026-07-04T13:00:00Z"') &&
+    formCore.includes('const override = ROUND_DEADLINE_OVERRIDES[pageKey];') &&
+    formCore.includes('if (override) return new Date(override);'),
+  "Formularz 1/8 finalu nie zamyka typowania o 15:00"
 );
 check(
   !/delete\s+data\.scores\s*\[/.test(formCore),

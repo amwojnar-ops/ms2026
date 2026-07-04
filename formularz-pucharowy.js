@@ -137,6 +137,9 @@ const config = ROUND_CONFIG[pageKey];
 const storageKey = `ms2026_${config.key}_typy`;
 const langStorageKey = "ms2026_knockout_lang";
 const PREDICTION_LOCK_MINUTES = 120;
+const ROUND_DEADLINE_OVERRIDES = {
+  index8: "2026-07-04T13:00:00Z"
+};
 const KNOWN_KNOCKOUT_TEAMS = [
   { matchId: 537376, side: "homeTeam", team: { name: "Canada", shortName: "Canada", tla: "CAN" } },
   { matchId: 537375, side: "homeTeam", team: { name: "Paraguay", shortName: "Paraguay", tla: "PAR" } },
@@ -342,6 +345,8 @@ function formatDate(utcDate) {
 }
 
 function deadlineFromFirstMatch(utcDate) {
+  const override = ROUND_DEADLINE_OVERRIDES[pageKey];
+  if (override) return new Date(override);
   if (!utcDate) return null;
   return new Date(Date.parse(utcDate) - PREDICTION_LOCK_MINUTES * 60 * 1000);
 }

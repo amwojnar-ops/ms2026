@@ -1500,9 +1500,11 @@ function renderKnockout(){
   });
 
   const medalForm=activeRound.form==='hso-typowanie1.html';
-  document.getElementById('koActionTitle').textContent=medalForm
-    ? (LANG==='en'?'Medal-match predictions':'Typowanie meczów o medale')
-    : (LANG==='en'?'Round predictions':'Typowanie rundy');
+  document.getElementById('koActionTitle').textContent=!beforeDeadline
+    ? (LANG==='en'?'Predictions closed':'Typowanie zakończone')
+    : medalForm
+      ? (LANG==='en'?'Medal-match predictions':'Typowanie meczów o medale')
+      : (LANG==='en'?'Round predictions':'Typowanie rundy');
   document.getElementById('koActionCopy').textContent=!beforeDeadline
     ? (LANG==='en'
       ? 'The prediction deadline for this stage has passed.'
