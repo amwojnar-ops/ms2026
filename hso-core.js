@@ -277,7 +277,7 @@ const PLAYERS=[
 // Lista potwierdzonych zgłoszeń 1/8 finału. Nie zawiera treści typów.
 const R16_SUBMITTED_PLAYERS = new Set([
   'Andrzej W.','Paweł','Iwona','Tomek','Łukasz',
-  'Michał','Leszek','Lucas','Ola','Magda'
+  'Michał','Leszek','Lucas','Ola','Magda','Aldona','Jacek'
 ]);
 
 // Status typowania fazy pucharowej.
