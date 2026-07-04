@@ -159,7 +159,8 @@ let API_REFRESH_SEQUENCE = 0;
 let API_FINISHED_COUNT = 0;
 const KNOCKOUT_START_UTC = Date.parse('2026-06-28T19:00:00Z');
 const MANUAL_REGULATION_RESULTS = {
-  537422:'2-2'
+  537422:'2-2',
+  537427:'1-1'
 };
 
 function validApiScore(score){
@@ -1099,7 +1100,9 @@ const KNOWN_KNOCKOUT_TEAMS = [
   {matchId:537379, side:'homeTeam', team:{name:'Portugal',shortName:'Portugal',tla:'POR'}},
   {matchId:537379, side:'awayTeam', team:{name:'Spain',shortName:'Spain',tla:'ESP'}},
   {matchId:537382, side:'homeTeam', team:{name:'Switzerland',shortName:'Switzerland',tla:'SUI'}},
+  {matchId:537381, side:'homeTeam', team:{name:'Argentina',shortName:'Argentina',tla:'ARG'}},
   {matchId:537381, side:'awayTeam', team:{name:'Egypt',shortName:'Egypt',tla:'EGY'}},
+  {matchId:537382, side:'awayTeam', team:{name:'Colombia',shortName:'Colombia',tla:'COL'}},
   {matchId:537425, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537425, side:'awayTeam', team:{name:'Ecuador',shortName:'Ecuador',tla:'ECU'}},
   {matchId:537421, side:'homeTeam', team:{name:'United States',shortName:'United States',tla:'USA'}},

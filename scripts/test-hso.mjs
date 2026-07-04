@@ -71,6 +71,15 @@ if (scoreHelpers) {
   check(scoreHelpers.apiResult(belgiumSenegalFinished) === "2-2", "Belgia-Senegal zmienia wynik punktacji po zakonczeniu");
   const displayedBelgiumSenegal = scoreHelpers.knockoutDisplayScore(belgiumSenegalFinished);
   check(displayedBelgiumSenegal.home === 2 && displayedBelgiumSenegal.away === 2, "Kafel Belgia-Senegal nie pokazuje wyniku 2-2");
+
+  const argentinaCapeVerde = {
+    id: 537427,
+    status: "FINISHED",
+    score: { fullTime: { home: 2, away: 1 }, regularTime: { home: 1, away: 1 } }
+  };
+  check(scoreHelpers.apiResult(argentinaCapeVerde) === "1-1", "Argentyna-RZP nie jest rozliczana jako 1-1 po 90 minutach");
+  const displayedArgentinaCapeVerde = scoreHelpers.knockoutDisplayScore(argentinaCapeVerde);
+  check(displayedArgentinaCapeVerde.home === 1 && displayedArgentinaCapeVerde.away === 1, "Kafel Argentyna-RZP nie pokazuje wyniku 1-1");
 }
 
 try {
