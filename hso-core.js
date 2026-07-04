@@ -274,13 +274,6 @@ const PLAYERS=[
   {name:'Iwona',champ:'Brazylia',group:{pts:35,ex:0,en:35}}
 ];
 
-// Lista potwierdzonych zgłoszeń 1/8 finału. Nie zawiera treści typów.
-const R16_SUBMITTED_PLAYERS = new Set([
-  'Andrzej W.','Paweł','Iwona','Tomek','Łukasz',
-  'Michał','Leszek','Lucas','Ola','Magda','Aldona','Jacek','Justyna','Mariusz','Waldemar','Alex','Maria','Andrzej G.',
-  'Robert','Kacper','Agnieszka','Mateusz','Borys','Izunia'
-]);
-
 // Status typowania fazy pucharowej.
 // Runda staje się aktywna automatycznie, gdy ma przynajmniej jeden mecz
 // z wpisanymi obiema drużynami. Kropka oznacza komplet typów gracza.
@@ -1014,10 +1007,9 @@ function renderPlayerCards(){
     if(!p) return;
     const card = document.createElement('div');
     const hasTips = true;
-    const submittedTips = R16_SUBMITTED_PLAYERS.has(p.name);
     const showTipDot = tipDotPlayers.has(p.name);
     const isLeader = hasResults && rp._pos === 1;
-    card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '') + (submittedTips ? ' tips-submitted' : '');
+    card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '');
     card.dataset.name = p.name;
 
     const pts = rp.pts;
@@ -1176,9 +1168,6 @@ const KNOCKOUT_ROUNDS = [
 ];
 const KNOCKOUT_DEADLINE_OVERRIDES = {
   r16:'2026-07-04T13:00:00Z'
-};
-const KNOCKOUT_PROGRESS_OVERRIDES = {
-  r16:R16_SUBMITTED_PLAYERS.size
 };
 const KNOCKOUT_FALLBACK_DATES = [
   '2026-06-28T19:00:00Z','2026-06-29T17:00:00Z','2026-06-29T20:30:00Z','2026-06-30T01:00:00Z',
@@ -1579,7 +1568,7 @@ function renderKnockout(){
   actionBtn.setAttribute('aria-disabled',String(!formReady));
   actionBtn.onclick=formReady?null:event=>event.preventDefault();
   const tipProgress=knockoutRoundProgress(activeRound,roundMatches);
-  const completedTips=Math.max(tipProgress.completePlayers.length,KNOCKOUT_PROGRESS_OVERRIDES[activeRound.id]||0);
+  const completedTips=tipProgress.completePlayers.length;
   document.getElementById('koProgressLabel').textContent=LANG==='en'?'Predictions submitted':'Oddane typy';
   document.getElementById('koProgressValue').textContent=`${completedTips} / ${PLAYERS.length}`;
   document.getElementById('koProgressFill').style.width=`${completedTips/PLAYERS.length*100}%`;

@@ -318,20 +318,12 @@ check(
   "Zamkniete typowanie nie ma poprawnego naglowka lub pozycji mobilnej"
 );
 check(
-  core.includes('const KNOCKOUT_PROGRESS_OVERRIDES = {') &&
-    core.includes('r16:R16_SUBMITTED_PLAYERS.size') &&
-    core.includes('Math.max(tipProgress.completePlayers.length,KNOCKOUT_PROGRESS_OVERRIDES[activeRound.id]||0)'),
-  "Postep typowania 1/8 finalu nie wynosi co najmniej 10/24"
-);
-const submittedR16Block = core.match(/const R16_SUBMITTED_PLAYERS = new Set\(\[([\s\S]*?)\n\]\);/)?.[1] || "";
-const submittedR16Players = [...submittedR16Block.matchAll(/'([^']+)'/g)].map(match => match[1]);
-check(submittedR16Players.length === 24, `Obwodka 1/8: znaleziono ${submittedR16Players.length}/24 graczy`);
-check(
   core.includes('const hasTips = true;') &&
-    core.includes('const submittedTips = R16_SUBMITTED_PLAYERS.has(p.name);') &&
-    core.includes("(submittedTips ? ' tips-submitted' : '')") &&
+    !core.includes('R16_SUBMITTED_PLAYERS') &&
+    !core.includes("(submittedTips ? ' tips-submitted' : '')") &&
+    core.includes('const completedTips=tipProgress.completePlayers.length;') &&
     css.includes('.fifa-card.tips-submitted { box-shadow:'),
-  "Obwodka wszystkich kart lub podswietlenie graczy z typami 1/8 jest nieprawidlowe"
+  "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
