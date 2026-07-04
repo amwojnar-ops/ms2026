@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T12:30:46.233Z",
+  "updatedAt": "2026-07-04T17:09:13.660Z",
   "matches": [
     {
       "id": 537327,
@@ -3479,7 +3479,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-04T12:15:33Z"
+      "lastUpdated": "2026-07-04T13:25:01Z"
     },
     {
       "id": 537430,
@@ -3524,7 +3524,7 @@
     {
       "id": 537376,
       "utcDate": "2026-07-04T17:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Canada",
         "shortName": "Canada",
@@ -3536,11 +3536,11 @@
         "tla": "MAR"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3559,7 +3559,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-03T15:20:13Z"
+      "lastUpdated": "2026-07-04T17:08:48Z"
     },
     {
       "id": 537375,
