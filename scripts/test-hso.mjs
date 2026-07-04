@@ -28,9 +28,8 @@ let scoreHelpers;
 try {
   const start = core.indexOf("function validApiScore(");
   const end = core.indexOf("async function refreshApiData(");
-  const manualResults = core.match(/const MANUAL_REGULATION_RESULTS = \{[\s\S]*?\n\};/)?.[0] || "";
   scoreHelpers = new Function(
-    `${manualResults}\n${core.slice(start, end)}; return {apiResult,apiLiveScore,knockoutDisplayScore};`
+    `${core.slice(start, end)}; return {apiResult,apiLiveScore,knockoutDisplayScore};`
   )();
 } catch (error) {
   errors.push(`Funkcje wyniku live: ${error.message}`);
@@ -60,14 +59,14 @@ if (scoreHelpers) {
   const belgiumSenegalLive = {
     id: 537422,
     status: "IN_PLAY",
-    score: { fullTime: { home: 2, away: 2 } }
+    score: { duration: "EXTRA_TIME", fullTime: { home: 2, away: 2 }, regularTime: { home: 2, away: 2 } }
   };
   const belgiumSenegalFinished = {
     ...belgiumSenegalLive,
     status: "FINISHED",
-    score: { fullTime: { home: 3, away: 2 }, regularTime: { home: 2, away: 2 } }
+    score: { duration: "EXTRA_TIME", fullTime: { home: 3, away: 2 }, regularTime: { home: 2, away: 2 }, extraTime: { home: 1, away: 0 } }
   };
-  check(scoreHelpers.apiResult(belgiumSenegalLive) === "2-2", "Belgia-Senegal nie jest rozliczany podczas dogrywki");
+  check(scoreHelpers.apiResult(belgiumSenegalLive) === null, "Belgia-Senegal jest rozliczany przed zakonczeniem meczu");
   check(scoreHelpers.apiResult(belgiumSenegalFinished) === "2-2", "Belgia-Senegal zmienia wynik punktacji po zakonczeniu");
   const displayedBelgiumSenegal = scoreHelpers.knockoutDisplayScore(belgiumSenegalFinished);
   check(displayedBelgiumSenegal.home === 2 && displayedBelgiumSenegal.away === 2, "Kafel Belgia-Senegal nie pokazuje wyniku 2-2");
@@ -75,7 +74,7 @@ if (scoreHelpers) {
   const argentinaCapeVerde = {
     id: 537427,
     status: "FINISHED",
-    score: { fullTime: { home: 2, away: 1 }, regularTime: { home: 1, away: 1 } }
+    score: { duration: "EXTRA_TIME", fullTime: { home: 3, away: 2 }, regularTime: { home: null, away: null }, extraTime: { home: 2, away: 1 } }
   };
   check(scoreHelpers.apiResult(argentinaCapeVerde) === "1-1", "Argentyna-RZP nie jest rozliczana jako 1-1 po 90 minutach");
   const displayedArgentinaCapeVerde = scoreHelpers.knockoutDisplayScore(argentinaCapeVerde);
@@ -164,11 +163,11 @@ check(
   "Ranking bez otwartego panelu nadal jest szerszy od pozostałych zakładek"
 );
 check(
-  core.includes("537422:'2-2'") &&
-    core.includes('const manual=MANUAL_REGULATION_RESULTS[api.id]') &&
-    core.indexOf('const manual=MANUAL_REGULATION_RESULTS[api.id]') < core.indexOf("if(api.status!=='FINISHED')return null") &&
+  !core.includes('MANUAL_REGULATION_RESULTS') &&
+    core.includes("['EXTRA_TIME','PENALTY_SHOOTOUT'].includes(duration)") &&
+    core.includes('const derived={home:full.home-extra.home,away:full.away-extra.away};') &&
     core.includes('let pts=p.group.pts,ex=p.group.ex,en=p.group.en;'),
-  "Wynik Belgia-Senegal po 90 minutach nie jest rozliczany jednokrotnie jako 2-2"
+  "Wynik po 90 minutach nie jest automatycznie wyliczany po dogrywce"
 );
 
 const knownBlock = core.match(/const KNOWN_KNOCKOUT_TEAMS = \[([\s\S]*?)\n\];/)?.[1] || "";

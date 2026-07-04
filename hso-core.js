@@ -158,10 +158,6 @@ let API_DATA_READY = false;
 let API_REFRESH_SEQUENCE = 0;
 let API_FINISHED_COUNT = 0;
 const KNOCKOUT_START_UTC = Date.parse('2026-06-28T19:00:00Z');
-const MANUAL_REGULATION_RESULTS = {
-  537422:'2-2',
-  537427:'1-1'
-};
 
 function validApiScore(score){
   return Number.isInteger(score?.home)&&Number.isInteger(score?.away);
@@ -171,13 +167,17 @@ function apiRegulationScore(api){
   const regular=api?.score?.regularTime;
   if(validApiScore(regular))return regular;
   const full=api?.score?.fullTime;
+  const extra=api?.score?.extraTime;
+  const duration=api?.score?.duration;
+  if(['EXTRA_TIME','PENALTY_SHOOTOUT'].includes(duration)&&validApiScore(full)&&validApiScore(extra)){
+    const derived={home:full.home-extra.home,away:full.away-extra.away};
+    if(derived.home>=0&&derived.away>=0)return derived;
+  }
   return validApiScore(full)?full:null;
 }
 
 function apiResult(api){
   if(!api)return null;
-  const manual=MANUAL_REGULATION_RESULTS[api.id];
-  if(/^\d+-\d+$/.test(manual||''))return manual;
   if(api.status!=='FINISHED')return null;
   const score=apiRegulationScore(api);
   return Number.isInteger(score?.home)&&Number.isInteger(score?.away)
@@ -198,11 +198,6 @@ function apiLiveScore(api){
 }
 
 function knockoutDisplayScore(match){
-  const manual=MANUAL_REGULATION_RESULTS[match?.id];
-  if(/^\d+-\d+$/.test(manual||'')){
-    const [home,away]=manual.split('-').map(Number);
-    return {home,away};
-  }
   if(match?.status==='FINISHED')return apiRegulationScore(match)||{home:null,away:null};
   if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return apiLiveScore(match);
   return validApiScore(match?.score?.fullTime)?match.score.fullTime:{home:null,away:null};
