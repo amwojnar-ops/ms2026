@@ -319,7 +319,7 @@ check(
 );
 const submittedR16Block = core.match(/const R16_SUBMITTED_PLAYERS = new Set\(\[([\s\S]*?)\n\]\);/)?.[1] || "";
 const submittedR16Players = [...submittedR16Block.matchAll(/'([^']+)'/g)].map(match => match[1]);
-check(submittedR16Players.length === 12, `Obwodka 1/8: znaleziono ${submittedR16Players.length}/12 graczy`);
+check(submittedR16Players.length === 14, `Obwodka 1/8: znaleziono ${submittedR16Players.length}/14 graczy`);
 check(
   core.includes('const hasTips = true;') &&
     core.includes('const submittedTips = R16_SUBMITTED_PLAYERS.has(p.name);') &&
