@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T21:06:15.492Z",
+  "updatedAt": "2026-07-04T21:57:14.472Z",
   "matches": [
     {
       "id": 537327,
@@ -3564,7 +3564,7 @@
     {
       "id": 537375,
       "utcDate": "2026-07-04T21:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Paraguay",
         "shortName": "Paraguay",
@@ -3587,8 +3587,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -3599,7 +3599,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-04T21:06:12Z"
+      "lastUpdated": "2026-07-04T21:57:10Z"
     },
     {
       "id": 537377,
