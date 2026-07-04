@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T19:09:12.824Z",
+  "updatedAt": "2026-07-04T19:10:36.126Z",
   "matches": [
     {
       "id": 537327,
@@ -3524,7 +3524,7 @@
     {
       "id": 537376,
       "utcDate": "2026-07-04T17:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Canada",
         "shortName": "Canada",
@@ -3559,7 +3559,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-04T19:08:39Z"
+      "lastUpdated": "2026-07-04T19:09:21Z"
     },
     {
       "id": 537375,
