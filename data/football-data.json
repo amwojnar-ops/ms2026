@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T17:58:13.985Z",
+  "updatedAt": "2026-07-04T17:59:14.771Z",
   "matches": [
     {
       "id": 537327,
@@ -3524,7 +3524,7 @@
     {
       "id": 537376,
       "utcDate": "2026-07-04T17:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Canada",
         "shortName": "Canada",
@@ -3547,8 +3547,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -3559,7 +3559,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-04T17:57:54Z"
+      "lastUpdated": "2026-07-04T17:58:30Z"
     },
     {
       "id": 537375,
