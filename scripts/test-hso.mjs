@@ -431,6 +431,14 @@ check(
     groupReport.includes('.toolbar,.report-back{display:none}'),
   "Raport fazy grupowej nie ma stalego powrotu do HSO"
 );
+check(
+  core.includes("if(HSO_MODE!=='test')return base;") &&
+    core.includes("&from=test&lang=${LANG}") &&
+    groupReport.includes("params.get('from') === 'test'") &&
+    groupReport.includes("fromTest ? 'hso-test.html' : 'hso.html'") &&
+    groupReport.includes("['en', 'it'].includes(language)"),
+  "Raport grupowy nie wraca do wlasciwej wersji lub nie zachowuje jezyka"
+);
 const reportSourceMatch = groupReport.match(/<script id="report-source" type="application\/json">([\s\S]*?)<\/script>/);
 let reportSource;
 try {

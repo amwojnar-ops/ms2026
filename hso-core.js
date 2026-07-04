@@ -116,6 +116,11 @@ function setText(id,key){
   const el=document.getElementById(id);
   if(el)el.textContent=tr(key);
 }
+function groupReportHref(){
+  const base='Raport_typow_MS_2026.html?v=20260704-5';
+  if(HSO_MODE!=='test')return base;
+  return `${base}&from=test&lang=${LANG}`;
+}
 function setHeaderBadge(text,state='locked',detail=''){
   const badge=document.getElementById('lockBadge');
   const badgeText=document.getElementById('lockBadgeText');
@@ -153,6 +158,7 @@ function applyLanguage(){
   document.getElementById('mainTabs').dataset.label=lt('MENU GŁÓWNE','MAIN MENU','MENU PRINCIPALE');
   document.getElementById('koStageNav').dataset.label=lt('WYBIERZ RUNDĘ','SELECT ROUND','SELEZIONA TURNO');
   document.getElementById('tabMatchesBtn').title=lt('Otwórz raport fazy grupowej','Open the group-stage report','Apri il report della fase a gironi');
+  document.getElementById('tabMatchesBtn').href=groupReportHref();
   setText('tabKnockoutBtn','knockout');
   const backLabel=document.getElementById('mobileSectionBackLabel');
   if(backLabel)backLabel.textContent=lt('Wróć','Back','Indietro');
@@ -562,7 +568,7 @@ function playerKnockoutPhaseRows(p){
 }
 
 function groupReportLink(){
-  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260629-4">${lt('Otwórz statyczny raport fazy grupowej','Open the static group-stage report','Apri il report statico della fase a gironi')}</a>`;
+  return `<a class="phase-report-link" href="${groupReportHref()}">${lt('Otwórz statyczny raport fazy grupowej','Open the static group-stage report','Apri il report statico della fase a gironi')}</a>`;
 }
 
 function buildPlayerPhases(p){
