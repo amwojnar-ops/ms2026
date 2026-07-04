@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T03:36:13.869Z",
+  "updatedAt": "2026-07-04T03:37:12.681Z",
   "matches": [
     {
       "id": 537327,
@@ -3484,7 +3484,7 @@
     {
       "id": 537430,
       "utcDate": "2026-07-04T01:30:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Colombia",
         "shortName": "Colombia",
@@ -3519,7 +3519,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-04T03:35:50Z"
+      "lastUpdated": "2026-07-04T03:36:40Z"
     },
     {
       "id": 537376,
