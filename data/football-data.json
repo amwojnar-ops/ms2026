@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T00:22:16.988Z",
+  "updatedAt": "2026-07-04T00:23:12.858Z",
   "matches": [
     {
       "id": 537327,
@@ -3456,11 +3456,11 @@
         "tla": "CPV"
       },
       "score": {
-        "winner": "HOME_TEAM",
-        "duration": "EXTRA_TIME",
+        "winner": "DRAW",
+        "duration": "REGULAR",
         "fullTime": {
           "home": 2,
-          "away": 1
+          "away": 2
         },
         "regularTime": {
           "home": null,
@@ -3479,7 +3479,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-04T00:21:46Z"
+      "lastUpdated": "2026-07-04T00:23:06Z"
     },
     {
       "id": 537430,
