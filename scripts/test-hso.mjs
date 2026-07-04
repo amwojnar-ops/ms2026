@@ -325,7 +325,7 @@ check(
 );
 const submittedR16Block = core.match(/const R16_SUBMITTED_PLAYERS = new Set\(\[([\s\S]*?)\n\]\);/)?.[1] || "";
 const submittedR16Players = [...submittedR16Block.matchAll(/'([^']+)'/g)].map(match => match[1]);
-check(submittedR16Players.length === 21, `Obwodka 1/8: znaleziono ${submittedR16Players.length}/21 graczy`);
+check(submittedR16Players.length === 24, `Obwodka 1/8: znaleziono ${submittedR16Players.length}/24 graczy`);
 check(
   core.includes('const hasTips = true;') &&
     core.includes('const submittedTips = R16_SUBMITTED_PLAYERS.has(p.name);') &&
@@ -397,17 +397,31 @@ check(baselineEntries.reduce((sum, player) => sum + player.en, 0) === 817, "Baza
 check(!core.includes("tips:["), "Szczegolowe typy grupowe pozostaly w aktywnym HSO");
 check(!core.includes("const MATCHES=["), "Terminarz grupowy pozostal w aktywnym HSO");
 
-const knockoutTipsBlock = core.match(/const KNOCKOUT_TIP_ROUNDS = \[([\s\S]*?)\n\];/)?.[1] || "";
-const r32PlayerTips = [...knockoutTipsBlock.matchAll(/^\s*'([^']+)':\{([^}]*)\}/gm)].map(match => ({
+const knockoutTipsStart = core.indexOf("const KNOCKOUT_TIP_ROUNDS = [");
+const r16TipsStart = core.indexOf("    id:'r16',", knockoutTipsStart);
+const knockoutTipsEnd = core.indexOf("const PLAYER_KNOCKOUT_STAGES", r16TipsStart);
+const r32TipsBlock = core.slice(knockoutTipsStart, r16TipsStart);
+const r16TipsBlock = core.slice(r16TipsStart, knockoutTipsEnd);
+const parseRoundTips = block => [...block.matchAll(/^\s*'([^']+)':\{([^}]*)\}/gm)].map(match => ({
   name: match[1],
   scores: [...match[2].matchAll(/'\d+':'(\d+-\d+)'/g)].map(score => score[1])
 }));
+const r32PlayerTips = parseRoundTips(r32TipsBlock);
+const r16PlayerTips = parseRoundTips(r16TipsBlock);
 const baselineNames = new Set(baselineEntries.map(player => player.name));
+check(r32PlayerTips.length === 24, `Typy 1/16: ${r32PlayerTips.length}/24 graczy`);
 check(new Set(r32PlayerTips.map(player => player.name)).size === r32PlayerTips.length, "Typy 1/16: powtorzony gracz");
 r32PlayerTips.forEach(player => {
   check(baselineNames.has(player.name), `Typy 1/16: nieznany gracz ${player.name}`);
   check(player.scores.length === 16, `Typy 1/16 ${player.name}: ${player.scores.length}/16 meczow`);
 });
+check(r16PlayerTips.length === 24, `Typy 1/8: ${r16PlayerTips.length}/24 graczy`);
+check(new Set(r16PlayerTips.map(player => player.name)).size === 24, "Typy 1/8: powtorzony gracz");
+r16PlayerTips.forEach(player => {
+  check(baselineNames.has(player.name), `Typy 1/8: nieznany gracz ${player.name}`);
+  check(player.scores.length === 8, `Typy 1/8 ${player.name}: ${player.scores.length}/8 meczow`);
+});
+check(fs.existsSync(path.join(root, "output", "pdf", "typy-1-8-zestawienie.pdf")), "Brak PDF zestawienia 1/8 finalu");
 
 check(groupReport.includes('data-report-version="2"'), "Raport fazy grupowej ma stary format");
 check(
@@ -470,3 +484,4 @@ console.log("- klucz zapisu typow i kafel nastepnego meczu");
 console.log("- zamrozona baza punktow po fazie grupowej");
 console.log("- historia 1728 punktacji w statycznym raporcie");
 console.log(`- przygotowane typy 1/16 finalu: ${r32PlayerTips.length}/24 graczy`);
+console.log(`- przygotowane typy 1/8 finalu: ${r16PlayerTips.length}/24 graczy`);

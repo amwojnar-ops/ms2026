@@ -1,3 +1,4 @@
 # Local secrets
 token*.txt
 *token*.txt
+tmp/
