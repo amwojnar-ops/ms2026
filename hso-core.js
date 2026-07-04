@@ -274,6 +274,12 @@ const PLAYERS=[
   {name:'Iwona',champ:'Brazylia',group:{pts:35,ex:0,en:35}}
 ];
 
+// Lista potwierdzonych zgłoszeń 1/8 finału. Nie zawiera treści typów.
+const R16_SUBMITTED_PLAYERS = new Set([
+  'Andrzej W.','Paweł','Iwona','Tomek','Łukasz',
+  'Michał','Leszek','Lucas','Ola','Magda'
+]);
+
 // Status typowania fazy pucharowej.
 // Runda staje się aktywna automatycznie, gdy ma przynajmniej jeden mecz
 // z wpisanymi obiema drużynami. Kropka oznacza komplet typów gracza.
@@ -367,6 +373,28 @@ function togglePlayerPhase(button){
 
 function togglePlayerRound(button){
   button.closest('.pdp-knockout-round')?.classList.toggle('open');
+}
+
+function capturePlayerAccordionState(root){
+  if(!root)return null;
+  return {
+    phases:[...root.querySelectorAll('.pdp-phase')].map(element=>element.classList.contains('open')),
+    rounds:Object.fromEntries([...root.querySelectorAll('[data-player-round]')].map(element=>[
+      element.dataset.playerRound,
+      element.classList.contains('open')
+    ]))
+  };
+}
+
+function restorePlayerAccordionState(root,state){
+  if(!root||!state)return;
+  root.querySelectorAll('.pdp-phase').forEach((element,index)=>{
+    if(index<state.phases.length)element.classList.toggle('open',state.phases[index]);
+  });
+  root.querySelectorAll('[data-player-round]').forEach(element=>{
+    const open=state.rounds[element.dataset.playerRound];
+    if(typeof open==='boolean')element.classList.toggle('open',open);
+  });
 }
 
 function knockoutRoundComplete(round){
@@ -809,7 +837,7 @@ function buildSpRows(p){
 
 function buildExpRows(p){return buildSpRows(p);}
 
-function openPanel(name,ranked){
+function openPanel(name,ranked,accordionState=null){
   const p=ranked.find(x=>x.name===name);
   activePlayer=name;
   if(isMobile()){
@@ -821,6 +849,7 @@ function openPanel(name,ranked){
       document.getElementById('exp-in-'+name).innerHTML=
         `<div class="exp-champ-line">${tr('champion')}: <strong>${p.champ?teamName(p.champ):'—'}</strong> &nbsp;·&nbsp; ${p.pts} ${pointsLabel(p.pts)} (${p.ex}×3 + ${p.en}×1)</div>`
         +buildExpRows(p);
+      restorePlayerAccordionState(document.getElementById('exp-in-'+name),accordionState);
     }
   } else {
     document.body.classList.add('ranking-panel-open');
@@ -829,6 +858,7 @@ function openPanel(name,ranked){
     document.getElementById('spChamp').textContent=p.champ?teamName(p.champ):'—';
     document.getElementById('spOverview').innerHTML=playerOverview(p);
     document.getElementById('spMatches').innerHTML=buildSpRows(p);
+    restorePlayerAccordionState(document.getElementById('spMatches'),accordionState);
     document.getElementById('sidePanel').classList.add('open');
     document.getElementById('rankingWrap').classList.add('panel-open');
   }
@@ -845,6 +875,10 @@ function closePanel(){
 }
 
 function renderRanking(){
+  const rankingAccordionRoot=activePlayer
+    ? (isMobile()?document.getElementById('exp-in-'+activePlayer):document.getElementById('spMatches'))
+    : null;
+  const rankingAccordionState=capturePlayerAccordionState(rankingAccordionRoot);
   const ranked=assignPositions(calcAll());
   const previousPositions=rankingMovement();
   const played=72+completedKnockoutEntries().length;
@@ -888,7 +922,7 @@ function renderRanking(){
   });
   if(activePlayer){
     if(ranked.some(p=>p.name===activePlayer)){
-      openPanel(activePlayer,ranked);
+      openPanel(activePlayer,ranked,rankingAccordionState);
     }else{
       closePanel();
     }
@@ -939,7 +973,7 @@ function renderPlayerCards(){
     const p = PLAYERS.find(x => x.name === rp.name);
     if(!p) return;
     const card = document.createElement('div');
-    const hasTips = true;
+    const hasTips = R16_SUBMITTED_PLAYERS.has(p.name);
     const showTipDot = tipDotPlayers.has(p.name);
     const isLeader = hasResults && rp._pos === 1;
     card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '');
@@ -1014,8 +1048,7 @@ function renderPlayerCards(){
 
 function openPlayerPanel(p, scroll=true){
   const panel = document.getElementById('playerDetailPanel');
-  const phaseStates = !scroll ? [...panel.querySelectorAll('.pdp-phase')].map(el=>el.classList.contains('open')) : null;
-  const subsectionStates = !scroll ? [...panel.querySelectorAll('.pdp-subsection')].map(el=>el.classList.contains('open')) : null;
+  const accordionState = !scroll ? capturePlayerAccordionState(document.getElementById('pdpMatches')) : null;
   activePlayerCard = p.name;
   document.getElementById('pdpName').textContent = p.name;
   document.getElementById('pdpSub').textContent = '';
@@ -1029,10 +1062,7 @@ function openPlayerPanel(p, scroll=true){
 
   const cont = document.getElementById('pdpMatches');
   cont.innerHTML = buildPlayerPhases(p);
-  if(!scroll){
-    document.querySelectorAll('#pdpMatches .pdp-phase').forEach((el,i)=>el.classList.toggle('open', phaseStates?.[i] ?? el.classList.contains('open')));
-    document.querySelectorAll('#pdpMatches .pdp-subsection').forEach((el,i)=>el.classList.toggle('open', subsectionStates?.[i] ?? el.classList.contains('open')));
-  }
+  restorePlayerAccordionState(cont,accordionState);
 
   panel.classList.add('open');
   if(scroll)panel.scrollIntoView({behavior:'smooth', block:'nearest'});
@@ -1105,6 +1135,9 @@ const KNOCKOUT_ROUNDS = [
 ];
 const KNOCKOUT_DEADLINE_OVERRIDES = {
   r16:'2026-07-04T13:00:00Z'
+};
+const KNOCKOUT_PROGRESS_OVERRIDES = {
+  r16:R16_SUBMITTED_PLAYERS.size
 };
 const KNOCKOUT_FALLBACK_DATES = [
   '2026-06-28T19:00:00Z','2026-06-29T17:00:00Z','2026-06-29T20:30:00Z','2026-06-30T01:00:00Z',
@@ -1503,7 +1536,7 @@ function renderKnockout(){
   actionBtn.setAttribute('aria-disabled',String(!formReady));
   actionBtn.onclick=formReady?null:event=>event.preventDefault();
   const tipProgress=knockoutRoundProgress(activeRound,roundMatches);
-  const completedTips=tipProgress.completePlayers.length;
+  const completedTips=Math.max(tipProgress.completePlayers.length,KNOCKOUT_PROGRESS_OVERRIDES[activeRound.id]||0);
   document.getElementById('koProgressLabel').textContent=LANG==='en'?'Predictions submitted':'Oddane typy';
   document.getElementById('koProgressValue').textContent=`${completedTips} / ${PLAYERS.length}`;
   document.getElementById('koProgressFill').style.width=`${completedTips/PLAYERS.length*100}%`;

@@ -205,6 +205,14 @@ check(
     css.includes('.pdp-knockout-round.open .pdp-round-body { display:block; }'),
   "Gracze, ranking lub faza pucharowa nie podazaja za aktualna runda"
 );
+check(
+  core.includes('function capturePlayerAccordionState(root)') &&
+    core.includes('function restorePlayerAccordionState(root,state)') &&
+    core.includes('rounds:Object.fromEntries') &&
+    core.includes('openPanel(activePlayer,ranked,rankingAccordionState)') &&
+    core.includes('restorePlayerAccordionState(cont,accordionState)'),
+  "Odświeżenie zamyka harmonijki graczy lub rankingu"
+);
 
 const knownBlock = core.match(/const KNOWN_KNOCKOUT_TEAMS = \[([\s\S]*?)\n\];/)?.[1] || "";
 const entries = [...knownBlock.matchAll(
@@ -302,6 +310,20 @@ check(
     core.includes("lock-badge-detail") &&
     core.includes("headerKnownPairs>0?'available':'waiting'"),
   "Baner i termin typowania 1/8 finalu nie sa ustawione"
+);
+check(
+  core.includes('const KNOCKOUT_PROGRESS_OVERRIDES = {') &&
+    core.includes('r16:R16_SUBMITTED_PLAYERS.size') &&
+    core.includes('Math.max(tipProgress.completePlayers.length,KNOCKOUT_PROGRESS_OVERRIDES[activeRound.id]||0)'),
+  "Postep typowania 1/8 finalu nie wynosi co najmniej 10/24"
+);
+const submittedR16Block = core.match(/const R16_SUBMITTED_PLAYERS = new Set\(\[([\s\S]*?)\n\]\);/)?.[1] || "";
+const submittedR16Players = [...submittedR16Block.matchAll(/'([^']+)'/g)].map(match => match[1]);
+check(submittedR16Players.length === 10, `Obwodka 1/8: znaleziono ${submittedR16Players.length}/10 graczy`);
+check(
+  core.includes('const hasTips = R16_SUBMITTED_PLAYERS.has(p.name);') &&
+    !core.includes('const hasTips = true;'),
+  "Zielona obwodka nie jest ograniczona do graczy z typami 1/8"
 );
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
