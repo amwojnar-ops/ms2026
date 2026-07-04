@@ -37,6 +37,24 @@ const TRANSLATIONS = {
     efficiency:'accuracy', pointsPerMatch:'pts / match',
     bestGroup:'best group', currentStreak:'current streak',
     place:'place', point:'pt', points:'pts', toLeader:'behind leader'
+  },
+  it: {
+    pageTitle:'Salotto degli Esperti · Mondiali 2026',
+    introTitle:'SALOTTO', introName:'DEGLI ESPERTI', worldCup:'MONDIALI 2026', skipIntro:'Salta intro',
+    headerTitle:'SALOTTO <span>DEGLI ESPERTI</span>',
+    headerSubtitle:'Mondiali 2026 &nbsp;·&nbsp; Canada · Messico · USA &nbsp;·&nbsp; 11 giugno – 19 luglio',
+    locked:'Pronostici della fase a gironi chiusi', played:'Giocate', leader:'Leader', leaders:'Leader',
+    leaderPoints:'Punti leader', leadersPoints:'Punti leader', nextMatch:'Prossima partita',
+    players:'Giocatori', matches:'Report fase a gironi', ranking:'Classifica', knockout:'Fase a eliminazione',
+    knockoutTitle:'La fase a eliminazione sarà disponibile più tardi', coming:'a breve',
+    byGroups:'Per girone', byDates:'Per data', groupTables:'Classifiche', championPick:'Pronostico campione',
+    player:'Giocatore', team:'Squadra', champion:'Campione', total:'Totale', date:'Data', match:'Partita',
+    result:'Risultato', predictionPoints:'Pronostico / pt', group:'Girone',
+    playedShort:'G', pointsShort:'Pt', goalsForAgainst:'Gol',
+    finished:'Terminata', live:'In corso', paused:'In corso', waiting:'In attesa del risultato', soon:'A breve',
+    predictions:'pronostici', playerPredictions:'Pronostici dei giocatori',
+    efficiency:'precisione', pointsPerMatch:'pt / partita', bestGroup:'miglior girone', currentStreak:'serie attuale',
+    place:'posto', point:'pt', points:'pt', toLeader:'dal leader'
   }
 };
 const TEAM_EN = {
@@ -53,14 +71,27 @@ const TEAM_EN = {
   'Szwecja':'Sweden','Szkocja':'Scotland','Tunezja':'Tunisia','Turcja':'Turkey',
   'Urugwaj':'Uruguay','USA':'USA','Uzbekistan':'Uzbekistan','Wybrzeże K.Sł.':'Ivory Coast'
 };
+const TEAM_IT = {
+  'Algieria':'Algeria','Anglia':'Inghilterra','Arabia Saudyjska':'Arabia Saudita','Argentyna':'Argentina',
+  'Australia':'Australia','Austria':'Austria','Belgia':'Belgio','Bośnia i Herc.':'Bosnia ed Erzegovina',
+  'Brazylia':'Brasile','Chorwacja':'Croazia','Curaçao':'Curaçao','Czechy':'Cechia','DR Konga':'RD Congo',
+  'Egipt':'Egitto','Ekwador':'Ecuador','Francja':'Francia','Ghana':'Ghana','Haiti':'Haiti','Hiszpania':'Spagna',
+  'Holandia':'Paesi Bassi','Irak':'Iraq','Iran':'Iran','Japonia':'Giappone','Jordania':'Giordania',
+  'Kanada':'Canada','Katar':'Qatar','Kolumbia':'Colombia','Korea Płd.':'Corea del Sud','Maroko':'Marocco',
+  'Meksyk':'Messico','Niemcy':'Germania','Norwegia':'Norvegia','Nowa Zelandia':'Nuova Zelanda',
+  'Panama':'Panama','Paragwaj':'Paraguay','Portugalia':'Portogallo','Rep. Ziel. Przył.':'Capo Verde',
+  'RPA':'Sudafrica','Senegal':'Senegal','Szwajcaria':'Svizzera','Szwecja':'Svezia','Szkocja':'Scozia',
+  'Tunezja':'Tunisia','Turcja':'Turchia','Urugwaj':'Uruguay','USA':'USA','Uzbekistan':'Uzbekistan',
+  'Wybrzeże K.Sł.':"Costa d'Avorio"
+};
+const AVAILABLE_LANGUAGES=HSO_MODE==='test'?['pl','en','it']:['pl','en'];
 const queryLanguage=new URLSearchParams(location.search).get('lang');
 let savedLanguage='pl';
-try{savedLanguage=localStorage.getItem('hso_lang')==='en'?'en':'pl';}catch(e){}
-let LANG=queryLanguage==='en'||queryLanguage==='pl'
-  ? queryLanguage
-  : savedLanguage;
+try{const saved=localStorage.getItem('hso_lang');savedLanguage=AVAILABLE_LANGUAGES.includes(saved)?saved:'pl';}catch(e){}
+let LANG=AVAILABLE_LANGUAGES.includes(queryLanguage)?queryLanguage:savedLanguage;
 function tr(key){ return TRANSLATIONS[LANG][key] ?? key; }
-function teamName(name){ return LANG==='en' ? (TEAM_EN[name]||name) : name; }
+function teamName(name){ return LANG==='en'?(TEAM_EN[name]||name):LANG==='it'?(TEAM_IT[name]||TEAM_EN[name]||name):name; }
+function lt(pl,en,it){return LANG==='pl'?pl:LANG==='it'?it:en;}
 function pointsLabel(value){ return value===1 ? tr('point') : tr('points'); }
 
 const INTRO_SESSION_KEY='loza_ekspertow_intro_seen';
@@ -107,7 +138,7 @@ function applyLanguage(){
   document.documentElement.lang=LANG;
   document.title=tr('pageTitle');
   const intro=document.getElementById('siteIntro');
-  if(intro)intro.setAttribute('aria-label',LANG==='en'?"Experts' Lounge, World Cup 2026":'Loża Ekspertów, MŚ 2026');
+  if(intro)intro.setAttribute('aria-label',lt('Loża Ekspertów, MŚ 2026',"Experts' Lounge, World Cup 2026",'Salotto degli Esperti, Mondiali 2026'));
   setText('introTitle','introTitle'); setText('introName','introName'); setText('introYear','worldCup');
   setText('introSkip','skipIntro');
   document.getElementById('headerTitle').innerHTML=tr('headerTitle');
@@ -119,12 +150,12 @@ function applyLanguage(){
   document.getElementById('tabKnockoutBtn').setAttribute('aria-label',tr('knockout'));
   document.getElementById('tabMatchesBtn').setAttribute('aria-label',tr('matches'));
   document.getElementById('tabRankingBtn').setAttribute('aria-label',tr('ranking'));
-  document.getElementById('mainTabs').dataset.label=LANG==='en'?'MAIN MENU':'MENU GŁÓWNE';
-  document.getElementById('koStageNav').dataset.label=LANG==='en'?'SELECT ROUND':'WYBIERZ RUNDĘ';
-  document.getElementById('tabMatchesBtn').title=LANG==='en'?'Open the group-stage report':'Otwórz raport fazy grupowej';
+  document.getElementById('mainTabs').dataset.label=lt('MENU GŁÓWNE','MAIN MENU','MENU PRINCIPALE');
+  document.getElementById('koStageNav').dataset.label=lt('WYBIERZ RUNDĘ','SELECT ROUND','SELEZIONA TURNO');
+  document.getElementById('tabMatchesBtn').title=lt('Otwórz raport fazy grupowej','Open the group-stage report','Apri il report della fase a gironi');
   setText('tabKnockoutBtn','knockout');
   const backLabel=document.getElementById('mobileSectionBackLabel');
-  if(backLabel)backLabel.textContent=LANG==='en'?'Back':'Wróć';
+  if(backLabel)backLabel.textContent=lt('Wróć','Back','Indietro');
   document.getElementById('tabKnockoutBtn').title=tr('knockout');
   setText('subtab-grupy','byGroups'); setText('subtab-daty','byDates'); setText('subtab-tabele','groupTables');
   setText('pdpChampLabel','championPick'); setText('spChampLabel','championPick');
@@ -133,14 +164,15 @@ function applyLanguage(){
   document.getElementById('rankOutcome').textContent=`1 ${pointsLabel(1)}`;
   setText('spDateLabel','date'); setText('spMatchLabel','match');
   setText('spResultLabel','result'); setText('spPredictionLabel','predictionPoints');
-  document.getElementById('langSwitch').textContent=LANG==='pl'?'EN':'PL';
-  document.getElementById('langSwitch').title=LANG==='pl'?'English':'Polski';
+  const nextLanguage=AVAILABLE_LANGUAGES[(AVAILABLE_LANGUAGES.indexOf(LANG)+1)%AVAILABLE_LANGUAGES.length];
+  document.getElementById('langSwitch').textContent=nextLanguage.toUpperCase();
+  document.getElementById('langSwitch').title=nextLanguage==='pl'?'Polski':nextLanguage==='it'?'Italiano':'English';
 }
 function switchLanguage(){
-  LANG=LANG==='pl'?'en':'pl';
+  LANG=AVAILABLE_LANGUAGES[(AVAILABLE_LANGUAGES.indexOf(LANG)+1)%AVAILABLE_LANGUAGES.length];
   try{localStorage.setItem('hso_lang',LANG);}catch(e){}
   const url=new URL(location.href);
-  if(LANG==='en')url.searchParams.set('lang','en'); else url.searchParams.delete('lang');
+  if(LANG==='pl')url.searchParams.delete('lang'); else url.searchParams.set('lang',LANG);
   history.replaceState(null,'',url);
   closePanel();
   closePlayerPanel();
@@ -465,8 +497,8 @@ function playerKnockoutStageData(stage,p){
 function playerSubsectionLabel(title){
   return `<div class="pdp-subsection-lbl">
     <span class="pdp-subsection-lbl-title">${title}</span>
-    <span class="pdp-subsection-col">${LANG==='en'?'Result':'Wynik'}</span>
-    <span class="pdp-subsection-col">${LANG==='en'?'Tip / pts':'Typ / pkt'}</span>
+    <span class="pdp-subsection-col">${lt('Wynik','Result','Risultato')}</span>
+    <span class="pdp-subsection-col">${lt('Typ / pkt','Tip / pts','Pronostico / pt')}</span>
   </div>`;
 }
 
@@ -491,14 +523,14 @@ function playerKnockoutPhaseRows(p){
   });
   const content=orderedStages.map(stage=>{
     const data=playerKnockoutStageData(stage,p);
-    const name=LANG==='en'?stage.en:stage.pl;
+    const name=knockoutRoundName(KNOCKOUT_ROUNDS.find(round=>round.id===stage.id)||stage);
     let body;
     if(!data.matches.length){
-      body=`<div class="pdp-round-empty">${LANG==='en'?'Waiting for predictions and fixtures.':'Oczekiwanie na typy i pary.'}</div>`;
+      body=`<div class="pdp-round-empty">${lt('Oczekiwanie na typy i pary.','Waiting for predictions and fixtures.','In attesa di pronostici e abbinamenti.')}</div>`;
     }else if(!data.visible){
-      body=`<div class="pdp-round-empty">${data.tips}/${data.matches.length} · ${LANG==='en'?'predictions hidden':'typy ukryte'}</div>`;
+      body=`<div class="pdp-round-empty">${data.tips}/${data.matches.length} · ${lt('typy ukryte','predictions hidden','pronostici nascosti')}</div>`;
     }else{
-      body=`${playerSubsectionLabel(LANG==='en'?'Knockout matches':'Mecze pucharowe')}${data.matches.map(({round,match,key})=>{
+      body=`${playerSubsectionLabel(lt('Mecze pucharowe','Knockout matches','Partite a eliminazione'))}${data.matches.map(({round,match,key})=>{
         const tip=round.tipsByPlayer?.[p.name]?.[key]||'—';
         const result=knockoutMatchResult(match);
         const points=result&&tip!=='—'?sc(tip,result):null;
@@ -515,10 +547,10 @@ function playerKnockoutPhaseRows(p){
       }).join('')}`;
     }
     const status=data.complete
-      ? (LANG==='en'?'completed':'zakończona')
+      ? lt('zakończona','completed','terminata')
       : stage.id===currentId
-        ? (LANG==='en'?'current':'aktualna')
-        : (LANG==='en'?'waiting':'oczekiwanie');
+        ? lt('aktualna','current','attuale')
+        : lt('oczekiwanie','waiting','in attesa');
     return `<section class="pdp-knockout-round${stage.id===currentId?' open':''}${data.complete?' done':''}" data-player-round="${stage.id}">
       <button class="pdp-round-toggle" type="button" onclick="togglePlayerRound(this)">
         <span>${name}</span><span class="pdp-round-status">${status}</span><span class="pdp-round-chevron">⌄</span>
@@ -530,30 +562,30 @@ function playerKnockoutPhaseRows(p){
 }
 
 function groupReportLink(){
-  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260629-4">${LANG==='en'?'Open the static group-stage report':'Otwórz statyczny raport fazy grupowej'}</a>`;
+  return `<a class="phase-report-link" href="Raport_typow_MS_2026.html?v=20260629-4">${lt('Otwórz statyczny raport fazy grupowej','Open the static group-stage report','Apri il report statico della fase a gironi')}</a>`;
 }
 
 function buildPlayerPhases(p){
   const ranked=calcAll().find(player=>player.name===p.name)||p;
   return `<section class="pdp-phase open">
       <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
-        <span class="pdp-phase-title">${LANG==='en'?'Knockout stage':'Faza pucharowa'}</span>
-        <span class="pdp-phase-summary">${LANG==='en'?'rounds':'rundy'}</span>
+        <span class="pdp-phase-title">${lt('Faza pucharowa','Knockout stage','Fase a eliminazione')}</span>
+        <span class="pdp-phase-summary">${lt('rundy','rounds','turni')}</span>
         <span class="pdp-phase-chevron">⌄</span>
       </button>
       <div class="pdp-phase-body">${playerKnockoutPhaseRows(p)}</div>
     </section>
     <section class="pdp-phase">
       <button class="pdp-phase-toggle" type="button" onclick="togglePlayerPhase(this)">
-        <span class="pdp-phase-title">${LANG==='en'?'Group stage':'Faza grupowa'}</span>
+        <span class="pdp-phase-title">${lt('Faza grupowa','Group stage','Fase a gironi')}</span>
         <span class="pdp-phase-summary">${ranked.group.pts} ${pointsLabel(ranked.group.pts)}</span>
         <span class="pdp-phase-chevron">⌄</span>
       </button>
       <div class="pdp-phase-body">
         <div class="phase-baseline">
-          <span><strong>${ranked.group.pts}</strong>${LANG==='en'?'points':'punktów'}</span>
-          <span><strong>${ranked.group.ex}</strong>${LANG==='en'?'exact scores':'trafień za 3'}</span>
-          <span><strong>${ranked.group.en}</strong>${LANG==='en'?'outcomes':'trafień za 1'}</span>
+          <span><strong>${ranked.group.pts}</strong>${lt('punktów','points','punti')}</span>
+          <span><strong>${ranked.group.ex}</strong>${lt('trafień za 3','exact scores','risultati esatti')}</span>
+          <span><strong>${ranked.group.en}</strong>${lt('trafień za 1','outcomes','esiti corretti')}</span>
         </div>
         ${groupReportLink()}
       </div>
@@ -592,7 +624,7 @@ function flag(t){
   if(!code)return '';
   return `<img src="img/flags/${code}.png" width="16" height="12" alt="${teamName(t)}" style="vertical-align:middle;border-radius:2px;margin:0 2px">`;
 }
-function disp(t){ return LANG==='en' ? teamName(t) : (MATCH_SHORT[t]||t); }
+function disp(t){ return LANG==='pl' ? (MATCH_SHORT[t]||t) : teamName(t); }
 function teamHTML(t, side='home'){
   const f=flag(t), d=disp(t);
   return side==='home'
@@ -667,7 +699,7 @@ function playerStats(p){
     ...ranked,
     played,
     efficiency:played?Math.round((ranked.ex+ranked.en)/played*100):0,
-    average:played?(ranked.pts/played).toFixed(2).replace('.',LANG==='pl'?',':'.'):(LANG==='pl'?'0,00':'0.00')
+    average:played?(ranked.pts/played).toFixed(2).replace('.',LANG==='en'?'.':','):(LANG==='en'?'0.00':'0,00')
   };
 }
 
@@ -753,7 +785,7 @@ function nextKnockoutMatch(){
   const live=matches.find(match=>['live','paused'].includes(knockoutSummaryStatus(match)));
   if(live){
     setFeaturedKnockoutMatch(live);
-    document.getElementById('nextMatchLabel').textContent=LANG==='pl'?'Mecz trwa':'Match live';
+    document.getElementById('nextMatchLabel').textContent=lt('Mecz trwa','Match live','Partita in corso');
     stopCountdown();_countdownMatch=null;
     return nextKnockoutMatchHTML(live);
   }
@@ -792,7 +824,7 @@ function setFeaturedKnockoutMatch(match){
     const away=knockoutTeamName(match.awayTeam);
     card.setAttribute('role','button');
     card.setAttribute('tabindex','0');
-    card.setAttribute('aria-label',LANG==='en'?`Open predictions for ${home} versus ${away}`:`Otwórz typy meczu ${home} – ${away}`);
+    card.setAttribute('aria-label',lt(`Otwórz typy meczu ${home} – ${away}`,`Open predictions for ${home} versus ${away}`,`Apri i pronostici di ${home} - ${away}`));
   }else{
     card.removeAttribute('role');
     card.removeAttribute('tabindex');
@@ -858,10 +890,10 @@ let activePlayer=null;
 
 function playerOverview(p){
   const played=72+completedKnockoutEntries().length;
-  const average=played?(p.pts/played).toFixed(2).replace('.',LANG==='pl'?',':'.'):'0';
-  return `<div class="sp-overview-item"><span>${LANG==='en'?'played':'rozegrane'}</span><strong>${played}</strong></div>
-    <div class="sp-overview-item"><span>${LANG==='en'?'points':'punkty'}</span><strong>${p.pts}</strong></div>
-    <div class="sp-overview-item"><span>${LANG==='en'?'average':'średnia'}</span><strong>${average}</strong></div>`;
+  const average=played?(p.pts/played).toFixed(2).replace('.',LANG==='en'?'.':','):'0';
+  return `<div class="sp-overview-item"><span>${lt('rozegrane','played','giocate')}</span><strong>${played}</strong></div>
+    <div class="sp-overview-item"><span>${lt('punkty','points','punti')}</span><strong>${p.pts}</strong></div>
+    <div class="sp-overview-item"><span>${lt('średnia','average','media')}</span><strong>${average}</strong></div>`;
 }
 
 function buildSpRows(p){
@@ -1036,7 +1068,7 @@ function renderPlayerCards(){
       <div class="card-ribbon"></div>
       <div class="card-border"></div>
       <div class="card-top">
-        <div class="card-hso">${LANG==='en'?'WC':'MŚ'}</div>
+        <div class="card-hso">${lt('MŚ','WC','CM')}</div>
         <div class="card-year">2026</div>
       </div>
       <div class="card-badge">
@@ -1159,12 +1191,12 @@ if(false){
   });
 }
 const KNOCKOUT_ROUNDS = [
-  {id:'r32', pl:'1/16 finału', en:'Round of 32', count:16, start:0, form:'hso-typowanie16.html'},
-  {id:'r16', pl:'1/8 finału', en:'Round of 16', count:8, start:16, form:'hso-typowanie8.html'},
-  {id:'qf', pl:'Ćwierćfinały', en:'Quarter-finals', count:4, start:24, form:'hso-typowanie4.html'},
-  {id:'sf', pl:'Półfinały', en:'Semi-finals', count:2, start:28, form:'hso-typowanie2.html'},
-  {id:'third', pl:'3. miejsce', en:'Third place', count:1, start:30, form:'hso-typowanie1.html'},
-  {id:'final', pl:'Finał', en:'Final', count:1, start:31, form:'hso-typowanie1.html'}
+  {id:'r32', pl:'1/16 finału', en:'Round of 32', it:'Sedicesimi', count:16, start:0, form:'hso-typowanie16.html'},
+  {id:'r16', pl:'1/8 finału', en:'Round of 16', it:'Ottavi', count:8, start:16, form:'hso-typowanie8.html'},
+  {id:'qf', pl:'Ćwierćfinały', en:'Quarter-finals', it:'Quarti', count:4, start:24, form:'hso-typowanie4.html'},
+  {id:'sf', pl:'Półfinały', en:'Semi-finals', it:'Semifinali', count:2, start:28, form:'hso-typowanie2.html'},
+  {id:'third', pl:'3. miejsce', en:'Third place', it:'3° posto', count:1, start:30, form:'hso-typowanie1.html'},
+  {id:'final', pl:'Finał', en:'Final', it:'Finale', count:1, start:31, form:'hso-typowanie1.html'}
 ];
 const KNOCKOUT_DEADLINE_OVERRIDES = {
   r16:'2026-07-04T13:00:00Z'
@@ -1265,10 +1297,10 @@ function knockoutMatchDetails(round,match,index,roundMatches){
   const playersAlphabetically=[...PLAYERS].sort((a,b)=>a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
   if(!reveal){
     const message=!progress.tipRound
-      ? (LANG==='en'?'Predictions have not been entered yet.':'Typy nie zostały jeszcze wprowadzone.')
+      ? lt('Typy nie zostały jeszcze wprowadzone.','Predictions have not been entered yet.','I pronostici non sono ancora stati inseriti.')
       : !progress.complete
-        ? (LANG==='en'?`Predictions entered: ${progress.completePlayers.length}/${PLAYERS.length}.`:`Wprowadzone komplety: ${progress.completePlayers.length}/${PLAYERS.length}.`)
-        : (LANG==='en'?'Predictions remain hidden until the deadline.':'Typy pozostają ukryte do końca terminu typowania.');
+        ? lt(`Wprowadzone komplety: ${progress.completePlayers.length}/${PLAYERS.length}.`,`Predictions entered: ${progress.completePlayers.length}/${PLAYERS.length}.`,`Pronostici inseriti: ${progress.completePlayers.length}/${PLAYERS.length}.`)
+        : lt('Typy pozostają ukryte do końca terminu typowania.','Predictions remain hidden until the deadline.','I pronostici restano nascosti fino alla scadenza.');
     return `<div class="ko-match-details" hidden><div class="ko-details-empty">${message}</div></div>`;
   }
   if(finishedResult){
@@ -1289,7 +1321,7 @@ function knockoutMatchDetails(round,match,index,roundMatches){
     const tip=progress.tipRound.tipsByPlayer?.[player.name]?.[tipData.key]||'—';
     return `<span class="chip chip-tip-pre"><span class="chip-pname">${player.name}</span><span class="chip-tip">${tip}</span></span>`;
   }).join('');
-  return `<div class="ko-match-details" hidden><div class="exp-section"><div class="exp-lbl">${LANG==='en'?'Player predictions':'Typy graczy'} · ${PLAYERS.length}</div><div class="chips">${chips}</div></div></div>`;
+  return `<div class="ko-match-details" hidden><div class="exp-section"><div class="exp-lbl">${lt('Typy graczy','Player predictions','Pronostici dei giocatori')} · ${PLAYERS.length}</div><div class="chips">${chips}</div></div></div>`;
 }
 
 function knockoutPlaceholderMatch(utcDate,index){
@@ -1330,10 +1362,11 @@ function knockoutMatches(){
   return withKnownKnockoutTeams(source);
 }
 function knockoutRoundName(round){
-  return LANG==='en' ? round.en : round.pl;
+  return LANG==='it'?(round.it||round.en):LANG==='en'?round.en:round.pl;
 }
 function knockoutMatchCountLabel(count){
   if(LANG==='en')return `${count} ${count===1?'match':'matches'}`;
+  if(LANG==='it')return `${count} ${count===1?'partita':'partite'}`;
   const mod10=count%10;
   const mod100=count%100;
   const word=count===1
@@ -1345,7 +1378,7 @@ function knockoutMatchCountLabel(count){
 }
 function knockoutDate(utcDate){
   if(!utcDate)return '—';
-  return new Intl.DateTimeFormat(LANG==='en'?'en-GB':'pl-PL',{
+  return new Intl.DateTimeFormat(LANG==='en'?'en-GB':LANG==='it'?'it-IT':'pl-PL',{
     timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'
   }).format(new Date(utcDate)).replace(',',' ·');
 }
@@ -1356,15 +1389,15 @@ function knockoutDeadline(firstMatchUtc,roundId){
   return new Date(Date.parse(firstMatchUtc)-120*60*1000);
 }
 function knockoutDeadlineLabel(deadline){
-  if(!deadline)return LANG==='en'?'Deadline will appear when the schedule is known.':'Termin pojawi się po ustaleniu terminarza.';
-  return new Intl.DateTimeFormat(LANG==='en'?'en-GB':'pl-PL',{
+  if(!deadline)return lt('Termin pojawi się po ustaleniu terminarza.','Deadline will appear when the schedule is known.','La scadenza apparirà quando sarà noto il calendario.');
+  return new Intl.DateTimeFormat(LANG==='en'?'en-GB':LANG==='it'?'it-IT':'pl-PL',{
     timeZone:'Europe/Warsaw',day:'2-digit',month:'2-digit',year:'numeric',
     hour:'2-digit',minute:'2-digit'
   }).format(deadline).replace(',',' ·');
 }
 function knockoutTeamName(team){
   const name=team?.shortName||team?.name;
-  if(!name)return LANG==='en'?'Team not known yet':'Drużyna jeszcze nieznana';
+  if(!name)return lt('Drużyna jeszcze nieznana','Team not known yet','Squadra non ancora nota');
   if(LANG==='en')return name;
   if(['Bosnia-H.','Bosnia-Herzegovina'].includes(name)&&window.matchMedia('(max-width: 560px)').matches)return 'BiH';
   const apiToPl={
@@ -1379,7 +1412,8 @@ function knockoutTeamName(team){
     'Austria':'Austria','Jordan':'Jordania','Portugal':'Portugalia','Congo DR':'DR Konga',
     'England':'Anglia','Croatia':'Chorwacja','Colombia':'Kolumbia','Ecuador':'Ekwador'
   };
-  return apiToPl[name]||name;
+  const polish=apiToPl[name]||name;
+  return LANG==='it'?(TEAM_IT[polish]||name):polish;
 }
 const KNOCKOUT_FLAG_BY_TLA = {
   ALG:'dz', ARG:'ar', AUS:'au', AUT:'at', BEL:'be', BIH:'ba', BRA:'br', CAN:'ca',
@@ -1395,9 +1429,9 @@ function knockoutTeamFlag(team){
   return `<img class="ko-team-flag" src="img/flags/${code}.png" alt="${knockoutTeamName(team)}">`;
 }
 function knockoutStatus(match){
-  if(match?.status==='FINISHED')return {cls:'finished',label:LANG==='en'?'Finished':'Zakończony'};
-  if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return {cls:'live',label:LANG==='en'?'Live':'Trwa'};
-  return {cls:'',label:LANG==='en'?'Scheduled':'Zaplanowany'};
+  if(match?.status==='FINISHED')return {cls:'finished',label:lt('Zakończony','Finished','Terminata')};
+  if(['IN_PLAY','LIVE','PAUSED'].includes(match?.status))return {cls:'live',label:lt('Trwa','Live','In corso')};
+  return {cls:'',label:lt('Zaplanowany','Scheduled','Programmata')};
 }
 function currentKnockoutRoundIndex(allMatches){
   if(!allMatches.length)return 0;
@@ -1453,18 +1487,22 @@ function renderKnockout(){
   setHeaderBadge(
     LANG==='en'
       ? `${headerIsFinalForm?'Final stage':knockoutRoundName(headerRound)} · available fixtures: ${headerKnownPairs}/${headerRound.count}`
-      : `${headerIsFinalForm?'Faza finałowa':knockoutRoundName(headerRound)} · dostępne pary: ${headerKnownPairs}/${headerRound.count}`,
+      : LANG==='it'
+        ? `${headerIsFinalForm?'Fase finale':knockoutRoundName(headerRound)} · abbinamenti disponibili: ${headerKnownPairs}/${headerRound.count}`
+        : `${headerIsFinalForm?'Faza finałowa':knockoutRoundName(headerRound)} · dostępne pary: ${headerKnownPairs}/${headerRound.count}`,
     headerKnownPairs>0?'available':'waiting',
     LANG==='en'
       ? `deadline ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (then Magda and I are going to a party)':''}`
-      : `termin ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (potem idziemy z Magdą na imprezę)':''}`
+      : LANG==='it'
+        ? `scadenza ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (poi io e Magda andiamo a una festa)':''}`
+        : `termin ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (potem idziemy z Magdą na imprezę)':''}`
   );
 
   const nav=document.getElementById('koStageNav');
   nav.innerHTML=orderedKnockoutRounds(allMatches).map(({round,index,done})=>{
     const matches=allMatches.slice(round.start,round.start+round.count);
     const meta=done
-      ? (LANG==='en'?'completed':'zakończone')
+      ? lt('zakończone','completed','terminato')
       : knockoutMatchCountLabel(round.count);
     return `<button class="ko-stage${index===selectedKnockoutRound?' active':''}${done?' done':''}" type="button" data-ko-round="${index}">
       <span class="ko-stage-name">${knockoutRoundName(round)}</span><span class="ko-stage-meta">${meta}</span>
@@ -1477,12 +1515,12 @@ function renderKnockout(){
     renderKnockout();
   }));
 
-  document.getElementById('koRoundTitle').textContent=(LANG==='en'?'Matches · ':'Mecze · ')+knockoutRoundName(activeRound);
+  document.getElementById('koRoundTitle').textContent=lt('Mecze · ','Matches · ','Partite · ')+knockoutRoundName(activeRound);
   document.getElementById('koRoundState').textContent=allFinished
-    ? (LANG==='en'?'Completed':'Zakończone')
+    ? lt('Zakończone','Completed','Terminato')
     : allKnown
-      ? (LANG==='en'?'Fixtures confirmed':'Pary potwierdzone')
-      : (LANG==='en'?'Waiting for teams':'Oczekiwanie na pary');
+      ? lt('Pary potwierdzone','Fixtures confirmed','Abbinamenti confermati')
+      : lt('Oczekiwanie na pary','Waiting for teams','In attesa delle squadre');
 
   const matchesEl=document.getElementById('koMatches');
   matchesEl.innerHTML=roundMatches.length ? roundMatches.map((match,index)=>{
@@ -1493,14 +1531,14 @@ function renderKnockout(){
     const matchId=String(match.id);
     const expanded=expandedKnockoutMatchId===matchId;
     return `<article class="ko-match${expanded?' expanded':''}" data-ko-match-id="${matchId}" role="button" tabindex="0" aria-expanded="${expanded}">
-      <div class="ko-match-top"><span>${LANG==='en'?'Match':'Mecz'} ${index+1}</span><span>${knockoutDate(match.utcDate)}</span></div>
+      <div class="ko-match-top"><span>${lt('Mecz','Match','Partita')} ${index+1}</span><span>${knockoutDate(match.utcDate)}</span></div>
       <div class="ko-team${homeKnown?'':' unknown'}">${knockoutTeamFlag(match.homeTeam)}<span class="ko-team-name">${knockoutTeamName(match.homeTeam)}</span><span class="ko-team-score">${Number.isInteger(score.home)?score.home:'–'}</span></div>
       <div class="ko-team${awayKnown?'':' unknown'}">${knockoutTeamFlag(match.awayTeam)}<span class="ko-team-name">${knockoutTeamName(match.awayTeam)}</span><span class="ko-team-score">${Number.isInteger(score.away)?score.away:'–'}</span></div>
       <div class="ko-match-status ${status.cls}"><span class="ko-status-dot"></span>${status.label}</div>
-      <div class="ko-match-hint">${LANG==='en'?'Click for predictions':'Kliknij, aby zobaczyć typy'} ↓</div>
+      <div class="ko-match-hint">${lt('Kliknij, aby zobaczyć typy','Click for predictions','Clicca per vedere i pronostici')} ↓</div>
       ${knockoutMatchDetails(activeRound,match,index,roundMatches)}
     </article>`;
-  }).join('') : `<div class="ko-match">${LANG==='en'?'No fixture data.':'Brak danych o meczach.'}</div>`;
+  }).join('') : `<div class="ko-match">${lt('Brak danych o meczach.','No fixture data.','Nessun dato sulle partite.')}</div>`;
 
   matchesEl.querySelectorAll('[data-ko-match-id]').forEach(tile=>{
     const setExpanded=open=>{
@@ -1530,37 +1568,29 @@ function renderKnockout(){
 
   const medalForm=activeRound.form==='hso-typowanie1.html';
   document.getElementById('koActionTitle').textContent=!beforeDeadline
-    ? (LANG==='en'?'Predictions closed':'Typowanie zakończone')
+    ? lt('Typowanie zakończone','Predictions closed','Pronostici chiusi')
     : medalForm
-      ? (LANG==='en'?'Medal-match predictions':'Typowanie meczów o medale')
-      : (LANG==='en'?'Round predictions':'Typowanie rundy');
+      ? lt('Typowanie meczów o medale','Medal-match predictions','Pronostici delle partite per le medaglie')
+      : lt('Typowanie rundy','Round predictions','Pronostici del turno');
   document.getElementById('koActionCopy').textContent=!beforeDeadline
-    ? (LANG==='en'
-      ? 'The prediction deadline for this stage has passed.'
-      : 'Termin typowania tej rundy minął.')
+    ? lt('Termin typowania tej rundy minął.','The prediction deadline for this stage has passed.','La scadenza dei pronostici per questo turno è trascorsa.')
     : medalForm
-      ? (LANG==='en'
-        ? 'One shared form covers both the third-place match and the final.'
-        : 'Jeden wspólny formularz obejmuje mecz o 3. miejsce oraz finał.')
+      ? lt('Jeden wspólny formularz obejmuje mecz o 3. miejsce oraz finał.','One shared form covers both the third-place match and the final.','Un unico modulo comprende la finale per il 3° posto e la finale.')
     : formKnownPairs>0
-      ? (LANG==='en'
-      ? 'You can start with the confirmed fixtures. Earlier predictions stay saved when more fixtures are added.'
-      : 'Możesz rozpocząć od potwierdzonych par. Wcześniejsze typy pozostaną zapisane po dodaniu kolejnych meczów.')
-      : (LANG==='en'
-        ? 'The round form will become available as soon as the first fixture is known.'
-        : 'Formularz rundy zostanie udostępniony po poznaniu pierwszej pary tego etapu.');
-  document.getElementById('koDeadline').textContent=(LANG==='en'?'Deadline: ':'Termin typowania: ')+knockoutDeadlineLabel(deadline);
+      ? lt('Możesz rozpocząć od potwierdzonych par. Wcześniejsze typy pozostaną zapisane po dodaniu kolejnych meczów.','You can start with the confirmed fixtures. Earlier predictions stay saved when more fixtures are added.','Puoi iniziare dagli abbinamenti confermati. I pronostici precedenti resteranno salvati quando verranno aggiunte altre partite.')
+      : lt('Formularz rundy zostanie udostępniony po poznaniu pierwszej pary tego etapu.','The round form will become available as soon as the first fixture is known.','Il modulo del turno sarà disponibile non appena sarà noto il primo abbinamento.');
+  document.getElementById('koDeadline').textContent=lt('Termin typowania: ','Deadline: ','Scadenza: ')+knockoutDeadlineLabel(deadline);
   const actionBtn=document.getElementById('koActionBtn');
   const actionPanel=actionBtn.closest('.ko-action');
   actionPanel.hidden=activeRound.id==='final';
   actionPanel.classList.toggle('deadline-closed',!beforeDeadline);
   actionBtn.textContent=!beforeDeadline
-    ? (LANG==='en'?'Predictions closed':'Typowanie zamknięte')
+    ? lt('Typowanie zamknięte','Predictions closed','Pronostici chiusi')
     : formKnownPairs>0
     ? medalForm
-      ? (LANG==='en'?'Open medal-match form':'Otwórz typowanie meczów o medale')
-      : (LANG==='en'?'Open prediction form':'Otwórz formularz typowania')
-    : (LANG==='en'?'Waiting for teams':'Oczekiwanie na drużyny');
+      ? lt('Otwórz typowanie meczów o medale','Open medal-match form','Apri i pronostici delle partite per le medaglie')
+      : lt('Otwórz formularz typowania','Open prediction form','Apri il modulo dei pronostici')
+    : lt('Oczekiwanie na drużyny','Waiting for teams','In attesa delle squadre');
   actionBtn.href=formReady?activeRound.form:'#';
   actionBtn.target=formReady?'_blank':'';
   actionBtn.rel=formReady?'noopener noreferrer':'';
@@ -1569,13 +1599,11 @@ function renderKnockout(){
   actionBtn.onclick=formReady?null:event=>event.preventDefault();
   const tipProgress=knockoutRoundProgress(activeRound,roundMatches);
   const completedTips=tipProgress.completePlayers.length;
-  document.getElementById('koProgressLabel').textContent=LANG==='en'?'Predictions submitted':'Oddane typy';
+  document.getElementById('koProgressLabel').textContent=lt('Oddane typy','Predictions submitted','Pronostici inviati');
   document.getElementById('koProgressValue').textContent=`${completedTips} / ${PLAYERS.length}`;
   document.getElementById('koProgressFill').style.width=`${completedTips/PLAYERS.length*100}%`;
-  document.getElementById('koProgressNote').textContent=LANG==='en'
-    ? 'Once the stage opens, player prediction progress will appear here.'
-    : 'Po uruchomieniu rundy zobaczysz tutaj postęp typowania graczy.';
-  document.getElementById('koRoadLabel').textContent=LANG==='en'?'Road to the final':'Droga do finału';
+  document.getElementById('koProgressNote').textContent=lt('Po uruchomieniu rundy zobaczysz tutaj postęp typowania graczy.','Once the stage opens, player prediction progress will appear here.','Quando il turno sarà aperto, qui vedrai l’avanzamento dei pronostici.');
+  document.getElementById('koRoadLabel').textContent=lt('Droga do finału','Road to the final','Cammino verso la finale');
   document.getElementById('koRoadList').innerHTML=KNOCKOUT_ROUNDS.map((round,index)=>
     `<div class="ko-road-item${index===currentIndex?' current':''}"><span class="ko-road-dot"></span><span>${knockoutRoundName(round)}</span><span class="ko-road-count">${round.count}</span></div>`
   ).join('');

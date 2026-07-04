@@ -118,7 +118,7 @@ for (const [file, html, mode] of [
   ["hso.html", production, "production"],
   ["hso-test.html", test, "test"]
 ]) {
-  check(html.includes(`window.HSO_CONFIG={mode:'${mode}'}`), `${file}: zly tryb`);
+  check(html.includes(`window.HSO_CONFIG={mode:'${mode}'`), `${file}: zly tryb`);
   check(html.includes('href="hso.css?v='), `${file}: brak hso.css`);
   check(html.includes('src="hso-core.js?v='), `${file}: brak hso-core.js`);
   check(html.includes('href="Raport_typow_MS_2026.html?v='), `${file}: brak statycznego raportu fazy grupowej`);
@@ -133,8 +133,8 @@ for (const [file, html, mode] of [
 }
 
 const normalizeWrapper = html => html
-  .replace("mode:'production'", "mode:'MODE'")
-  .replace("mode:'test'", "mode:'MODE'")
+  .replace(/window\.HSO_CONFIG=\{mode:'production'\}/, "window.HSO_CONFIG={mode:'MODE'}")
+  .replace(/window\.HSO_CONFIG=\{mode:'test',languages:\['pl','en','it'\]\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/\r\n/g, "\n");
 check(
   normalizeWrapper(production) === normalizeWrapper(test),
@@ -144,6 +144,15 @@ check(
 const productionVersion = production.match(/hso-core\.js\?v=([^"']+)/)?.[1];
 const testVersion = test.match(/hso-core\.js\?v=([^"']+)/)?.[1];
 check(productionVersion === testVersion, "Rozne wersje cache hso-core.js");
+check(
+  test.includes("window.HSO_CONFIG={mode:'test',languages:['pl','en','it']}") &&
+    !production.includes("languages:['pl','en','it']") &&
+    core.includes("const AVAILABLE_LANGUAGES=HSO_MODE==='test'?['pl','en','it']:['pl','en'];") &&
+    core.includes("pageTitle:'Salotto degli Esperti · Mondiali 2026'") &&
+    core.includes("it:'Ottavi'") &&
+    core.includes("LANG==='it'?(TEAM_IT[name]||TEAM_EN[name]||name)"),
+  "Wloska wersja nie jest kompletna lub zostala wlaczona w produkcji"
+);
 check(
   production.includes('class="stat-card next-match-card"') &&
     css.includes('.stats .stat-card:not(.next-match-card) { display:none; }') &&
@@ -312,7 +321,7 @@ check(
   "Baner i termin typowania 1/8 finalu nie sa ustawione"
 );
 check(
-  core.includes("? (LANG==='en'?'Predictions closed':'Typowanie zakończone')") &&
+  core.includes("? lt('Typowanie zakończone','Predictions closed','Pronostici chiusi')") &&
     core.includes("actionPanel.classList.toggle('deadline-closed',!beforeDeadline)") &&
     css.includes('.ko-main > .ko-action.deadline-closed { order:4; }'),
   "Zamkniete typowanie nie ma poprawnego naglowka lub pozycji mobilnej"
