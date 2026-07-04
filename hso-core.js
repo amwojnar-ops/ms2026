@@ -353,15 +353,20 @@ function knockoutTipDotPlayers(){
 }
 
 const PLAYER_KNOCKOUT_STAGES = [
-  {ids:['1/16','r32'], pl:'1/16 finału', en:'Round of 32'},
-  {ids:['1/8','r16'], pl:'1/8 finału', en:'Round of 16'},
-  {ids:['1/4','qf'], pl:'Ćwierćfinały', en:'Quarter-finals'},
-  {ids:['1/2','sf'], pl:'Półfinały', en:'Semi-finals'},
-  {ids:['medale','third','final'], pl:'Mecze o medale', en:'Medal matches'}
+  {id:'r32', ids:['1/16','r32'], count:16, pl:'1/16 finału', en:'Round of 32'},
+  {id:'r16', ids:['1/8','r16'], count:8, pl:'1/8 finału', en:'Round of 16'},
+  {id:'qf', ids:['1/4','qf'], count:4, pl:'Ćwierćfinały', en:'Quarter-finals'},
+  {id:'sf', ids:['1/2','sf'], count:2, pl:'Półfinały', en:'Semi-finals'},
+  {id:'third', ids:['third'], count:1, medalIndex:0, pl:'3. miejsce', en:'Third place'},
+  {id:'final', ids:['final'], count:1, medalIndex:1, pl:'Finał', en:'Final'}
 ];
 
 function togglePlayerPhase(button){
   button.closest('.pdp-phase')?.classList.toggle('open');
+}
+
+function togglePlayerRound(button){
+  button.closest('.pdp-knockout-round')?.classList.toggle('open');
 }
 
 function knockoutRoundComplete(round){
@@ -374,16 +379,26 @@ function knockoutRoundComplete(round){
 }
 
 function playerKnockoutStageData(stage,p){
-  const rounds=KNOCKOUT_TIP_ROUNDS.filter(round=>stage.ids.includes(round.id));
-  const matches=rounds.flatMap(round=>(round.matches||[])
+  let rounds=KNOCKOUT_TIP_ROUNDS.filter(round=>stage.ids.includes(round.id));
+  let matches=rounds.flatMap(round=>(round.matches||[])
     .filter(match=>match.home&&match.away)
     .map((match,index)=>({round,match,key:match.id||String(index)})));
+  if(!matches.length&&Number.isInteger(stage.medalIndex)){
+    const medalRound=KNOCKOUT_TIP_ROUNDS.find(round=>round.id==='medale');
+    const medalMatch=medalRound?.matches?.[stage.medalIndex];
+    if(medalRound&&medalMatch?.home&&medalMatch?.away){
+      rounds=[medalRound];
+      matches=[{round:medalRound,match:medalMatch,key:medalMatch.id||String(stage.medalIndex)}];
+    }
+  }
   const visible=rounds.length>0&&rounds.every(knockoutRoundComplete);
   const tips=matches.filter(({round,key})=>{
     const tip=round.tipsByPlayer?.[p.name]?.[key];
     return typeof tip==='string'&&tip.trim()!=='';
   }).length;
-  return {rounds,matches,visible,tips};
+  const uiRound=KNOCKOUT_ROUNDS.find(round=>round.id===stage.id);
+  const complete=uiRound?knockoutUiRoundComplete(uiRound,knockoutMatches()):false;
+  return {rounds,matches,visible,tips,complete};
 }
 
 function playerSubsectionLabel(title){
@@ -406,32 +421,51 @@ function playerKnockoutTeams(match){
 }
 
 function playerKnockoutPhaseRows(p){
-  const content=PLAYER_KNOCKOUT_STAGES.map(stage=>{
+  const allMatches=knockoutMatches();
+  const currentId=KNOCKOUT_ROUNDS[currentKnockoutRoundIndex(allMatches)]?.id||'r32';
+  const orderedStages=[...PLAYER_KNOCKOUT_STAGES].sort((a,b)=>{
+    const aRound=KNOCKOUT_ROUNDS.find(round=>round.id===a.id);
+    const bRound=KNOCKOUT_ROUNDS.find(round=>round.id===b.id);
+    return Number(knockoutUiRoundComplete(aRound,allMatches))-Number(knockoutUiRoundComplete(bRound,allMatches));
+  });
+  const content=orderedStages.map(stage=>{
     const data=playerKnockoutStageData(stage,p);
     const name=LANG==='en'?stage.en:stage.pl;
+    let body;
     if(!data.matches.length){
-      return `<div class="pdp-round"><span>${name}</span><span class="pdp-round-status">${LANG==='en'?'waiting':'oczekiwanie'}</span></div>`;
+      body=`<div class="pdp-round-empty">${LANG==='en'?'Waiting for predictions and fixtures.':'Oczekiwanie na typy i pary.'}</div>`;
+    }else if(!data.visible){
+      body=`<div class="pdp-round-empty">${data.tips}/${data.matches.length} · ${LANG==='en'?'predictions hidden':'typy ukryte'}</div>`;
+    }else{
+      body=`${playerSubsectionLabel(LANG==='en'?'Knockout matches':'Mecze pucharowe')}${data.matches.map(({round,match,key})=>{
+        const tip=round.tipsByPlayer?.[p.name]?.[key]||'—';
+        const result=knockoutMatchResult(match);
+        const points=result&&tip!=='—'?sc(tip,result):null;
+        const resultClass=points===null?'rq':`r${points}`;
+        const pointsText=points===null?'—':`${points} ${pointsLabel(points)}`;
+        return `<div class="pdp-match ${resultClass}">
+          <span class="pdp-fixture">
+            <span class="pdp-kickoff">${playerKnockoutMatchMeta(match)}</span>
+            ${playerKnockoutTeams(match)}
+          </span>
+          <span class="pdp-result">${result||'—'}</span>
+          <span class="pdp-tip-card"><strong>${tip}</strong><small>${pointsText}</small></span>
+        </div>`;
+      }).join('')}`;
     }
-    if(!data.visible){
-      return `<div class="pdp-round"><span>${name}</span><span class="pdp-round-status">${data.tips}/${data.matches.length} · ${LANG==='en'?'predictions hidden':'typy ukryte'}</span></div>`;
-    }
-    return `<div class="pdp-section-lbl">${name}</div>${data.matches.map(({round,match,key})=>{
-      const tip=round.tipsByPlayer?.[p.name]?.[key]||'—';
-      const result=knockoutMatchResult(match);
-      const points=result&&tip!=='—'?sc(tip,result):null;
-      const resultClass=points===null?'rq':`r${points}`;
-      const pointsText=points===null?'—':`${points} ${pointsLabel(points)}`;
-      return `<div class="pdp-match ${resultClass}">
-        <span class="pdp-fixture">
-          <span class="pdp-kickoff">${playerKnockoutMatchMeta(match)}</span>
-          ${playerKnockoutTeams(match)}
-        </span>
-        <span class="pdp-result">${result||'—'}</span>
-        <span class="pdp-tip-card"><strong>${tip}</strong><small>${pointsText}</small></span>
-      </div>`;
-    }).join('')}`;
+    const status=data.complete
+      ? (LANG==='en'?'completed':'zakończona')
+      : stage.id===currentId
+        ? (LANG==='en'?'current':'aktualna')
+        : (LANG==='en'?'waiting':'oczekiwanie');
+    return `<section class="pdp-knockout-round${stage.id===currentId?' open':''}${data.complete?' done':''}" data-player-round="${stage.id}">
+      <button class="pdp-round-toggle" type="button" onclick="togglePlayerRound(this)">
+        <span>${name}</span><span class="pdp-round-status">${status}</span><span class="pdp-round-chevron">⌄</span>
+      </button>
+      <div class="pdp-round-body">${body}</div>
+    </section>`;
   }).join('');
-  return `${playerSubsectionLabel(LANG==='en'?'Knockout matches':'Mecze pucharowe')}${content}`;
+  return content;
 }
 
 function groupReportLink(){
@@ -513,7 +547,7 @@ function sc(t,r){
 }
 function knockoutMatchResult(match){
   if(/^\d+-\d+$/.test(match?.result||''))return match.result;
-  const direct=apiRegulationScore(match);
+  const direct=match?.status==='FINISHED'?apiRegulationScore(match):null;
   if(Number.isInteger(direct?.home)&&Number.isInteger(direct?.away))return `${direct.home}-${direct.away}`;
   const apiId=Number(match?.apiId??match?.id);
   return Number.isFinite(apiId)?apiResult(API_MATCHES.find(item=>item.id===apiId)):null;
@@ -713,6 +747,7 @@ function openFeaturedKnockoutMatch(){
   const roundIndex=KNOCKOUT_ROUNDS.findIndex(round=>matchIndex>=round.start&&matchIndex<round.start+round.count);
   if(roundIndex<0)return;
   selectedKnockoutRound=roundIndex;
+  knockoutRoundSelectionManual=true;
   expandedKnockoutMatchId=featuredKnockoutMatchId;
   switchTab('pucharowa',document.getElementById('tabKnockoutBtn'));
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -1131,7 +1166,8 @@ const KNOWN_KNOCKOUT_TEAMS = [
   {matchId:537430, side:'homeTeam', team:{name:'Colombia',shortName:'Colombia',tla:'COL'}},
   {matchId:537430, side:'awayTeam', team:{name:'Ghana',shortName:'Ghana',tla:'GHA'}}
 ];
-let selectedKnockoutRound = 0;
+let selectedKnockoutRound = null;
+let knockoutRoundSelectionManual = false;
 let expandedKnockoutMatchId = null;
 let featuredKnockoutMatchId = null;
 
@@ -1304,16 +1340,25 @@ function currentKnockoutRoundIndex(allMatches){
   if(!allMatches.length)return 0;
   for(let i=0;i<KNOCKOUT_ROUNDS.length;i++){
     const round=KNOCKOUT_ROUNDS[i];
-    const matches=allMatches.slice(round.start,round.start+round.count);
-    if(!matches.length||matches.some(match=>match.status!=='FINISHED'))return i;
+    if(!knockoutUiRoundComplete(round,allMatches))return i;
   }
   return KNOCKOUT_ROUNDS.length-1;
+}
+function knockoutUiRoundComplete(round,allMatches){
+  if(!round)return false;
+  const matches=(allMatches||[]).slice(round.start,round.start+round.count);
+  return matches.length===round.count&&matches.every(match=>Boolean(knockoutMatchResult(match)));
+}
+function orderedKnockoutRounds(allMatches){
+  return KNOCKOUT_ROUNDS.map((round,index)=>({round,index,done:knockoutUiRoundComplete(round,allMatches)}))
+    .sort((a,b)=>Number(a.done)-Number(b.done));
 }
 function renderKnockout(){
   const root=document.getElementById('tab-pucharowa');
   if(!root)return;
   const allMatches=knockoutMatches();
   const currentIndex=currentKnockoutRoundIndex(allMatches);
+  if(!knockoutRoundSelectionManual)selectedKnockoutRound=currentIndex;
   const activeRound=KNOCKOUT_ROUNDS[selectedKnockoutRound]||KNOCKOUT_ROUNDS[0];
   root.classList.toggle('ko-final-view',activeRound.id==='final');
   const roundMatches=allMatches.slice(activeRound.start,activeRound.start+activeRound.count);
@@ -1353,9 +1398,8 @@ function renderKnockout(){
   );
 
   const nav=document.getElementById('koStageNav');
-  nav.innerHTML=KNOCKOUT_ROUNDS.map((round,index)=>{
+  nav.innerHTML=orderedKnockoutRounds(allMatches).map(({round,index,done})=>{
     const matches=allMatches.slice(round.start,round.start+round.count);
-    const done=matches.length===round.count&&matches.every(match=>match.status==='FINISHED');
     const meta=done
       ? (LANG==='en'?'completed':'zakończone')
       : knockoutMatchCountLabel(round.count);
@@ -1365,6 +1409,7 @@ function renderKnockout(){
   }).join('');
   nav.querySelectorAll('[data-ko-round]').forEach(button=>button.addEventListener('click',()=>{
     selectedKnockoutRound=Number(button.dataset.koRound);
+    knockoutRoundSelectionManual=true;
     expandedKnockoutMatchId=null;
     renderKnockout();
   }));

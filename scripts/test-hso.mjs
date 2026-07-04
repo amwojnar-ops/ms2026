@@ -81,6 +81,33 @@ if (scoreHelpers) {
   check(displayedArgentinaCapeVerde.home === 1 && displayedArgentinaCapeVerde.away === 1, "Kafel Argentyna-RZP nie pokazuje wyniku 1-1");
 }
 
+let roundHelpers;
+try {
+  const roundsSource = core.match(/const KNOCKOUT_ROUNDS = \[[\s\S]*?\n\];/)?.[0] || "";
+  const stateStart = core.indexOf("function currentKnockoutRoundIndex(");
+  const stateEnd = core.indexOf("function renderKnockout(");
+  roundHelpers = new Function(
+    `${roundsSource}\nconst knockoutMatchResult=match=>match.result||null;\n${core.slice(stateStart, stateEnd)}; return {KNOCKOUT_ROUNDS,currentKnockoutRoundIndex,orderedKnockoutRounds};`
+  )();
+} catch (error) {
+  errors.push(`Automatyczne rundy pucharowe: ${error.message}`);
+}
+
+if (roundHelpers) {
+  const afterRoundOf32 = Array.from({ length: 32 }, (_, index) => ({ result: index < 16 ? "1-0" : null }));
+  check(roundHelpers.currentKnockoutRoundIndex(afterRoundOf32) === 1, "Po 1/16 nie otwiera sie domyslnie 1/8 finalu");
+  check(
+    roundHelpers.orderedKnockoutRounds(afterRoundOf32).map(item => item.round.id).join(",") === "r16,qf,sf,third,final,r32",
+    "Zakonczona 1/16 finalu nie jest przenoszona na dol"
+  );
+  const afterFinal = Array.from({ length: 32 }, () => ({ result: "1-0" }));
+  check(roundHelpers.currentKnockoutRoundIndex(afterFinal) === 5, "Po finale nie pozostaje otwarty widok finalu");
+  check(
+    roundHelpers.orderedKnockoutRounds(afterFinal).map(item => item.round.id).join(",") === "r32,r16,qf,sf,third,final",
+    "Po mistrzostwach final nie znajduje sie na dole rund"
+  );
+}
+
 try {
   new Function(formCore);
 } catch (error) {
@@ -168,6 +195,15 @@ check(
     core.includes('const derived={home:full.home-extra.home,away:full.away-extra.away};') &&
     core.includes('let pts=p.group.pts,ex=p.group.ex,en=p.group.en;'),
   "Wynik po 90 minutach nie jest automatycznie wyliczany po dogrywce"
+);
+check(
+  core.includes("let selectedKnockoutRound = null;") &&
+    core.includes("if(!knockoutRoundSelectionManual)selectedKnockoutRound=currentIndex;") &&
+    core.includes("orderedKnockoutRounds(allMatches).map") &&
+    core.includes("class=\"pdp-knockout-round${stage.id===currentId?' open':''}") &&
+    core.includes("const direct=match?.status==='FINISHED'?apiRegulationScore(match):null;") &&
+    css.includes('.pdp-knockout-round.open .pdp-round-body { display:block; }'),
+  "Gracze, ranking lub faza pucharowa nie podazaja za aktualna runda"
 );
 
 const knownBlock = core.match(/const KNOWN_KNOCKOUT_TEAMS = \[([\s\S]*?)\n\];/)?.[1] || "";
