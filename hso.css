@@ -1087,6 +1087,11 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
   }
 }
 @media (max-width: 540px) {
+  html[data-hso-mode="test"][lang="it"] .header-title h1 {
+    font-size:clamp(23px,7.3vw,30px);
+    letter-spacing:.2px;
+    white-space:nowrap;
+  }
   .stats { grid-template-columns: 1fr; gap:0; margin-bottom:16px; }
   .stats .stat-card:not(.next-match-card) { display:none; }
   .next-match-card {

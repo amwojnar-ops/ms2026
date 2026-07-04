@@ -1,4 +1,5 @@
 const HSO_MODE = window.HSO_CONFIG?.mode === 'test' ? 'test' : 'production';
+document.documentElement.dataset.hsoMode=HSO_MODE;
 const TRANSLATIONS = {
   pl: {
     pageTitle:'Loża Ekspertów · MŚ 2026',

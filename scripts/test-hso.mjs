@@ -154,6 +154,12 @@ check(
   "Wloska wersja nie jest kompletna lub zostala wlaczona w produkcji"
 );
 check(
+  core.includes('document.documentElement.dataset.hsoMode=HSO_MODE;') &&
+    css.includes('html[data-hso-mode="test"][lang="it"] .header-title h1') &&
+    css.includes('white-space:nowrap;'),
+  "Wloski naglowek testowy nie miesci sie w jednym wierszu na telefonie"
+);
+check(
   production.includes('class="stat-card next-match-card"') &&
     css.includes('.stats .stat-card:not(.next-match-card) { display:none; }') &&
     css.includes('.next-match-card .countdown-tick { font-size:10px') &&
