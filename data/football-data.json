@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T19:10:36.126Z",
+  "updatedAt": "2026-07-04T21:06:15.492Z",
   "matches": [
     {
       "id": 537327,
@@ -3564,7 +3564,7 @@
     {
       "id": 537375,
       "utcDate": "2026-07-04T21:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Paraguay",
         "shortName": "Paraguay",
@@ -3576,11 +3576,11 @@
         "tla": "FRA"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3599,7 +3599,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-03T15:20:13Z"
+      "lastUpdated": "2026-07-04T21:06:12Z"
     },
     {
       "id": 537377,
