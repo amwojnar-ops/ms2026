@@ -746,6 +746,8 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
 /* karta z wpisanymi typami — zielona obwódka */
 .fifa-card.has-tips { box-shadow: 0 0 0 2px rgba(62,207,110,.5), 0 4px 16px rgba(0,0,0,.5); }
 .fifa-card.has-tips.leader { box-shadow: 0 0 0 2px rgba(62,207,110,.75), 0 8px 28px rgba(0,0,0,.6); }
+.fifa-card.tips-submitted { box-shadow:0 0 0 3px rgba(62,207,110,.95), 0 0 22px rgba(62,207,110,.48), 0 8px 24px rgba(0,0,0,.6); }
+.fifa-card.tips-submitted.leader { box-shadow:0 0 0 3px #64ef91, 0 0 26px rgba(62,207,110,.58), 0 8px 28px rgba(0,0,0,.65); }
 .card-check { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); z-index: 4; width: 10px; height: 10px; background: var(--green); border-radius: 50%; box-shadow: 0 0 6px rgba(62,207,110,.7); }
 .fifa-card.leader { box-shadow: 0 0 0 3px #1a3a6e, 0 8px 28px rgba(0,0,0,.6); }
 .fifa-card.leader .card-bg { background: linear-gradient(160deg, #3a2000 0%, #7a4a00 35%, #c8860a 65%, #f5d060 100%); }

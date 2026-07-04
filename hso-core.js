@@ -973,10 +973,11 @@ function renderPlayerCards(){
     const p = PLAYERS.find(x => x.name === rp.name);
     if(!p) return;
     const card = document.createElement('div');
-    const hasTips = R16_SUBMITTED_PLAYERS.has(p.name);
+    const hasTips = true;
+    const submittedTips = R16_SUBMITTED_PLAYERS.has(p.name);
     const showTipDot = tipDotPlayers.has(p.name);
     const isLeader = hasResults && rp._pos === 1;
-    card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '');
+    card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '') + (submittedTips ? ' tips-submitted' : '');
     card.dataset.name = p.name;
 
     const pts = rp.pts;

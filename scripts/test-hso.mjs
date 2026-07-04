@@ -321,9 +321,11 @@ const submittedR16Block = core.match(/const R16_SUBMITTED_PLAYERS = new Set\(\[(
 const submittedR16Players = [...submittedR16Block.matchAll(/'([^']+)'/g)].map(match => match[1]);
 check(submittedR16Players.length === 10, `Obwodka 1/8: znaleziono ${submittedR16Players.length}/10 graczy`);
 check(
-  core.includes('const hasTips = R16_SUBMITTED_PLAYERS.has(p.name);') &&
-    !core.includes('const hasTips = true;'),
-  "Zielona obwodka nie jest ograniczona do graczy z typami 1/8"
+  core.includes('const hasTips = true;') &&
+    core.includes('const submittedTips = R16_SUBMITTED_PLAYERS.has(p.name);') &&
+    core.includes("(submittedTips ? ' tips-submitted' : '')") &&
+    css.includes('.fifa-card.tips-submitted { box-shadow:'),
+  "Obwodka wszystkich kart lub podswietlenie graczy z typami 1/8 jest nieprawidlowe"
 );
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
