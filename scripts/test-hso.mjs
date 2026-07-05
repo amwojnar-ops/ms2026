@@ -358,12 +358,15 @@ check(
   "Aktywne statusy nie sa wspolnie oznaczane jako Trwa"
 );
 check(
-  footballDataUpdater.includes("const authoritativeLiveMatches = new Map()"),
-  "Endpoint LIVE nie ma ochrony przed starsza migawka"
+  footballDataUpdater.includes(
+    "betterMatch(competitionMatch, liveMatch, { preferFreshLive: true })"
+  ),
+  "Endpoint LIVE bezwarunkowo nadpisuje nowszy wynik z endpointu rozgrywek"
 );
 check(
-  footballDataUpdater.includes("merged.status !== 'FINISHED' ? liveMatch : merged"),
-  "Status FINISHED nie ma pierwszenstwa przed LIVE"
+  !footballDataUpdater.includes("authoritativeLiveMatches.has(activeMatch.id)") &&
+    !footballDataUpdater.includes("merged.status !== 'FINISHED' ? liveMatch : merged"),
+  "Starszy endpoint LIVE blokuje wynik szczegolowy lub koncowy"
 );
 for (const period of ["regularTime", "halfTime", "extraTime", "penalties"]) {
   check(

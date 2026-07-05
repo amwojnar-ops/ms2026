@@ -260,7 +260,6 @@ if (!payload) {
   process.exit(0);
 }
 const freshMatches = (payload.matches || []).map(mapApiMatch);
-const authoritativeLiveMatches = new Map();
 
 if (matchInProgress || backgroundMonitoring) {
   let livePayload = null;
@@ -275,8 +274,7 @@ if (matchInProgress || backgroundMonitoring) {
     for (const liveMatch of (livePayload.matches || []).map(mapApiMatch)) {
       const competitionMatch = byId.get(liveMatch.id);
       if (!competitionMatch) continue;
-      const merged = competitionMatch.status === 'FINISHED' ? competitionMatch : liveMatch;
-      authoritativeLiveMatches.set(liveMatch.id, merged);
+      const merged = betterMatch(competitionMatch, liveMatch, { preferFreshLive: true });
       if (JSON.stringify(merged) !== JSON.stringify(competitionMatch)) {
         liveOverrides += 1;
         byId.set(liveMatch.id, merged);
@@ -314,7 +312,6 @@ if (matchInProgress) {
     const index = freshMatches.findIndex(match => match.id === activeMatch.id);
     if (index < 0) continue;
     const exactMatch = mapApiMatch(exactPayload);
-    if (authoritativeLiveMatches.has(activeMatch.id) && exactMatch.status !== 'FINISHED') continue;
     const merged = betterMatch(freshMatches[index], exactMatch, { preferFreshLive: true });
     if (JSON.stringify(merged) !== JSON.stringify(freshMatches[index])) {
       freshMatches[index] = merged;
@@ -326,9 +323,7 @@ if (matchInProgress) {
 
 const historicalMatches = historicalBestMatches();
 const matches = freshMatches.map(match => {
-  const merged = betterMatch(historicalMatches.get(match.id), match, { preferFreshLive: true });
-  const liveMatch = authoritativeLiveMatches.get(match.id);
-  return liveMatch && merged.status !== 'FINISHED' ? liveMatch : merged;
+  return betterMatch(historicalMatches.get(match.id), match, { preferFreshLive: true });
 });
 
 const apiHasUnfinishedActiveMatch = matches.some(match => {
