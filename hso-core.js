@@ -87,9 +87,11 @@ const TEAM_IT = {
 };
 const AVAILABLE_LANGUAGES=HSO_MODE==='test'?['pl','en','it']:['pl','en'];
 const queryLanguage=new URLSearchParams(location.search).get('lang');
-let savedLanguage='pl';
-try{const saved=localStorage.getItem('hso_lang');savedLanguage=AVAILABLE_LANGUAGES.includes(saved)?saved:'pl';}catch(e){}
-let LANG=AVAILABLE_LANGUAGES.includes(queryLanguage)?queryLanguage:savedLanguage;
+let savedLanguage=null;
+try{const saved=localStorage.getItem('hso_lang');savedLanguage=AVAILABLE_LANGUAGES.includes(saved)?saved:null;}catch(e){}
+const browserLanguages=[...(navigator.languages||[]),navigator.language].filter(Boolean);
+const detectedLanguage=HSO_MODE==='test'&&browserLanguages.some(language=>/^it(?:-|$)/i.test(language))?'it':'pl';
+let LANG=AVAILABLE_LANGUAGES.includes(queryLanguage)?queryLanguage:(savedLanguage||detectedLanguage);
 function tr(key){ return TRANSLATIONS[LANG][key] ?? key; }
 function teamName(name){ return LANG==='en'?(TEAM_EN[name]||name):LANG==='it'?(TEAM_IT[name]||TEAM_EN[name]||name):name; }
 function lt(pl,en,it){return LANG==='pl'?pl:LANG==='it'?it:en;}

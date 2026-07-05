@@ -154,6 +154,13 @@ check(
   "Wloska wersja nie jest kompletna lub zostala wlaczona w produkcji"
 );
 check(
+  core.includes("const browserLanguages=[...(navigator.languages||[]),navigator.language].filter(Boolean);") &&
+    core.includes("/^it(?:-|$)/i.test(language)") &&
+    core.includes("HSO_MODE==='test'&&browserLanguages.some") &&
+    core.includes("savedLanguage||detectedLanguage"),
+  "hso-test nie wykrywa automatycznie wloskiego jezyka telefonu"
+);
+check(
   core.includes('document.documentElement.dataset.hsoMode=HSO_MODE;') &&
     css.includes('html[data-hso-mode="test"][lang="it"] .header-title h1') &&
     css.includes('white-space:nowrap;'),
