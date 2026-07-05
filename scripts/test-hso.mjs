@@ -308,6 +308,11 @@ check(
   "Norwegia nie zostala przeniesiona do meczu 1/8 finalu lub formularza"
 );
 check(
+  entries.some(entry => entry.id === 537385 && entry.side === "homeTeam" && entry.team === "Norway") &&
+    formCore.includes('{ matchId: 537385, side: "homeTeam", team: { name: "Norway"'),
+  "Norwegia nie zostala przeniesiona do cwiercfinalu 11.07 o 23:00 lub formularza"
+);
+check(
   entries.some(entry => entry.id === 537375 && entry.side === "homeTeam" && entry.team === "Paraguay") &&
     formCore.includes('{ matchId: 537375, side: "homeTeam", team: { name: "Paraguay"'),
   "Paragwaj nie zostal przeniesiony do meczu 1/8 finalu lub formularza"
