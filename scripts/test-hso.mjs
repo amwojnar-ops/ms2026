@@ -18,6 +18,44 @@ const groupReport = read("Raport_typow_MS_2026.html");
 const footballData = JSON.parse(read("data/football-data.json"));
 const footballDataUpdater = read("scripts/update-football-data.mjs");
 
+let espnFallbackHelpers;
+try {
+  const mapStart = footballDataUpdater.indexOf("function mapEspnMatch(");
+  const mapEnd = footballDataUpdater.indexOf("async function applyEspnFallback(");
+  espnFallbackHelpers = new Function(
+    `const statusRank={SCHEDULED:1,TIMED:1,POSTPONED:1,SUSPENDED:2,IN_PLAY:3,PAUSED:3,FINISHED:4};\n${footballDataUpdater.slice(mapStart, mapEnd)}; return {mapEspnMatch,preferScoreProgress};`
+  )();
+} catch (error) {
+  errors.push(`Awaryjne wyniki ESPN: ${error.message}`);
+}
+
+if (espnFallbackHelpers) {
+  const apiMatch = {
+    id: 537377,
+    status: "PAUSED",
+    homeTeam: { tla: "BRA" },
+    awayTeam: { tla: "NOR" },
+    score: { fullTime: { home: 0, away: 0 }, regularTime: { home: null, away: null } }
+  };
+  const event = {
+    status: { period: 2, type: { state: "post", completed: true, description: "Full Time" } },
+    competitions: [{ competitors: [
+      { homeAway: "home", score: "1", team: { abbreviation: "BRA" } },
+      { homeAway: "away", score: "2", team: { abbreviation: "NOR" } }
+    ] }]
+  };
+  const fallback = espnFallbackHelpers.mapEspnMatch(event, apiMatch);
+  check(
+    fallback?.status === "FINISHED" && fallback.score.regularTime.home === 1
+      && fallback.score.regularTime.away === 2,
+    "Awaryjne zrodlo nie mapuje wyniku Brazylia-Norwegia"
+  );
+  check(
+    espnFallbackHelpers.preferScoreProgress(apiMatch, fallback) === fallback,
+    "Awaryjny wynik nie zastepuje zatrzymanego wyniku football-data.org"
+  );
+}
+
 try {
   new Function(core);
 } catch (error) {

@@ -254,6 +254,102 @@ function mapApiMatch(match) {
   };
 }
 
+function mapEspnMatch(event, apiMatch) {
+  const competition = event?.competitions?.[0];
+  const competitors = competition?.competitors || [];
+  const home = competitors.find(team => team.homeAway === 'home');
+  const away = competitors.find(team => team.homeAway === 'away');
+  if (!home || !away) return null;
+  if (home.team?.abbreviation !== apiMatch.homeTeam?.tla
+    || away.team?.abbreviation !== apiMatch.awayTeam?.tla) return null;
+
+  const homeScore = Number.parseInt(home.score, 10);
+  const awayScore = Number.parseInt(away.score, 10);
+  if (!Number.isInteger(homeScore) || !Number.isInteger(awayScore)) return null;
+
+  const type = event.status?.type || {};
+  if (type.state === 'pre') return null;
+  const period = Number(event.status?.period) || 0;
+  const paused = /half/i.test(`${type.name || ''} ${type.description || ''} ${type.detail || ''}`);
+  const status = type.completed || type.state === 'post'
+    ? 'FINISHED'
+    : paused ? 'PAUSED' : 'IN_PLAY';
+  const score = { home: homeScore, away: awayScore };
+
+  return {
+    ...apiMatch,
+    status,
+    score: {
+      ...apiMatch.score,
+      winner: homeScore === awayScore ? 'DRAW' : homeScore > awayScore ? 'HOME_TEAM' : 'AWAY_TEAM',
+      duration: period > 2 ? 'EXTRA_TIME' : 'REGULAR',
+      fullTime: score,
+      regularTime: status === 'FINISHED' && period <= 2 ? score : apiMatch.score?.regularTime,
+      halfTime: apiMatch.score?.halfTime || { home: null, away: null },
+      extraTime: apiMatch.score?.extraTime || { home: null, away: null },
+      penalties: apiMatch.score?.penalties || { home: null, away: null }
+    },
+    lastUpdated: new Date().toISOString()
+  };
+}
+
+function preferScoreProgress(current, candidate) {
+  if (!candidate) return current;
+  const currentRank = statusRank[current?.status] || 0;
+  const candidateRank = statusRank[candidate.status] || 0;
+  if (candidateRank !== currentRank) return candidateRank > currentRank ? candidate : current;
+  const total = match => {
+    const score = match?.score?.fullTime;
+    return Number.isInteger(score?.home) && Number.isInteger(score?.away)
+      ? score.home + score.away
+      : -1;
+  };
+  return total(candidate) > total(current) ? candidate : current;
+}
+
+async function applyEspnFallback(matches) {
+  const activeMatches = matches.filter(match => {
+    const kickoff = Date.parse(match.utcDate);
+    return Number.isFinite(kickoff)
+      && now >= kickoff
+      && now < kickoff + activeWindowMs
+      && match.status !== 'FINISHED';
+  });
+  if (!activeMatches.length) return 0;
+
+  const dates = [...new Set(activeMatches.map(match => match.utcDate.slice(0, 10).replaceAll('-', '')))];
+  const events = [];
+  for (const date of dates) {
+    try {
+      const response = await fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${date}`,
+        { headers: { 'Cache-Control': 'no-cache, no-store', 'Pragma': 'no-cache' } }
+      );
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      events.push(...(payload.events || []));
+    } catch (error) {
+      console.warn(`ESPN fallback ${date} skipped: ${error?.message || error}`);
+    }
+  }
+
+  let overrides = 0;
+  for (const activeMatch of activeMatches) {
+    for (const event of events) {
+      const candidate = mapEspnMatch(event, activeMatch);
+      if (!candidate) continue;
+      const index = matches.findIndex(match => match.id === activeMatch.id);
+      const preferred = preferScoreProgress(matches[index], candidate);
+      if (preferred !== matches[index]) {
+        matches[index] = preferred;
+        overrides += 1;
+      }
+      break;
+    }
+  }
+  return overrides;
+}
+
 const payload = await fetchFootballData(competitionUrl, 'competition');
 if (!payload) {
   console.log('Keeping the last saved match data. The next workflow run will try again.');
@@ -319,6 +415,11 @@ if (matchInProgress) {
     }
   }
   console.log(`Exact endpoint checked ${activeMatches.length} active match(es); refreshed ${exactOverrides}.`);
+}
+
+if (matchInProgress || backgroundMonitoring) {
+  const espnOverrides = await applyEspnFallback(freshMatches);
+  console.log(`ESPN fallback refreshed ${espnOverrides} World Cup match(es).`);
 }
 
 const historicalMatches = historicalBestMatches();
