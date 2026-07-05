@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-05T06:30:53.956Z",
+  "updatedAt": "2026-07-05T20:06:13.140Z",
   "matches": [
     {
       "id": 537327,
@@ -3604,7 +3604,7 @@
     {
       "id": 537377,
       "utcDate": "2026-07-05T20:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Brazil",
         "shortName": "Brazil",
@@ -3616,11 +3616,11 @@
         "tla": "NOR"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3639,7 +3639,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-05T05:20:12Z"
+      "lastUpdated": "2026-07-05T20:05:51Z"
     },
     {
       "id": 537378,
