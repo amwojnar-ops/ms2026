@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-06T06:30:57.015Z",
+  "updatedAt": "2026-07-06T19:01:08.840Z",
   "matches": [
     {
       "id": 537327,
@@ -3684,7 +3684,7 @@
     {
       "id": 537379,
       "utcDate": "2026-07-06T19:00:00Z",
-      "status": "TIMED",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Portugal",
         "shortName": "Portugal",
@@ -3696,11 +3696,11 @@
         "tla": "ESP"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3719,7 +3719,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-06T05:20:12Z"
+      "lastUpdated": "2026-07-06T19:01:08.824Z"
     },
     {
       "id": 537380,
