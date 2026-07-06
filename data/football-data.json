@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-06T03:09:12.978Z",
+  "updatedAt": "2026-07-06T03:10:36.636Z",
   "matches": [
     {
       "id": 537327,
@@ -3644,7 +3644,7 @@
     {
       "id": 537378,
       "utcDate": "2026-07-06T01:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Mexico",
         "shortName": "Mexico",
@@ -3679,7 +3679,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-06T03:09:00Z"
+      "lastUpdated": "2026-07-06T03:10:12Z"
     },
     {
       "id": 537379,
