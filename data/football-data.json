@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-06T02:35:17.115Z",
+  "updatedAt": "2026-07-06T02:36:13.177Z",
   "matches": [
     {
       "id": 537327,
@@ -3659,7 +3659,7 @@
         "winner": "AWAY_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": 1,
+          "home": 2,
           "away": 3
         },
         "regularTime": {
@@ -3679,7 +3679,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-06T02:34:48Z"
+      "lastUpdated": "2026-07-06T02:36:12Z"
     },
     {
       "id": 537379,
