@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-06T01:55:21.176Z",
+  "updatedAt": "2026-07-06T01:56:14.765Z",
   "matches": [
     {
       "id": 537327,
@@ -3644,7 +3644,7 @@
     {
       "id": 537378,
       "utcDate": "2026-07-06T01:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Mexico",
         "shortName": "Mexico",
@@ -3667,8 +3667,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 2
         },
         "extraTime": {
           "home": null,
@@ -3679,7 +3679,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-06T01:55:12Z"
+      "lastUpdated": "2026-07-06T01:55:51Z"
     },
     {
       "id": 537379,
