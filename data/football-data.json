@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T18:06:17.459Z",
+  "updatedAt": "2026-07-07T18:31:00.457Z",
   "matches": [
     {
       "id": 537327,
@@ -3783,8 +3783,8 @@
           "away": 2
         },
         "regularTime": {
-          "home": 3,
-          "away": 2
+          "home": null,
+          "away": null
         },
         "halfTime": {
           "home": 0,
@@ -3799,7 +3799,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-07T18:06:17.436Z"
+      "lastUpdated": "2026-07-07T18:15:15Z"
     },
     {
       "id": 537382,
