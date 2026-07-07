@@ -326,6 +326,11 @@ check(
   "Para Hiszpania-Belgia nie zostala przeniesiona do cwiercfinalu 10.07 o 21:00 lub formularza"
 );
 check(
+  entries.some(entry => entry.id === 537386 && entry.side === "homeTeam" && entry.team === "Argentina") &&
+    formCore.includes('{ matchId: 537386, side: "homeTeam", team: { name: "Argentina"'),
+  "Argentyna nie zostala przeniesiona do cwiercfinalu 12.07 o 03:00 lub formularza"
+);
+check(
   entries.some(entry => entry.id === 537375 && entry.side === "homeTeam" && entry.team === "Paraguay") &&
     formCore.includes('{ matchId: 537375, side: "homeTeam", team: { name: "Paraguay"'),
   "Paragwaj nie zostal przeniesiony do meczu 1/8 finalu lub formularza"
