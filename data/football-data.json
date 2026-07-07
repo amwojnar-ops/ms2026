@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T17:43:14.085Z",
+  "updatedAt": "2026-07-07T17:44:18.400Z",
   "matches": [
     {
       "id": 537327,
@@ -3764,7 +3764,7 @@
     {
       "id": 537381,
       "utcDate": "2026-07-07T16:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Argentina",
         "shortName": "Argentina",
@@ -3779,7 +3779,7 @@
         "winner": "AWAY_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": 0,
+          "home": 1,
           "away": 2
         },
         "regularTime": {
@@ -3799,7 +3799,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-07T17:42:59Z"
+      "lastUpdated": "2026-07-07T17:44:18.379Z"
     },
     {
       "id": 537382,
