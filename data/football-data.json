@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T21:59:13.916Z",
+  "updatedAt": "2026-07-07T22:01:13.629Z",
   "matches": [
     {
       "id": 537327,
@@ -3804,7 +3804,7 @@
     {
       "id": 537382,
       "utcDate": "2026-07-07T20:00:00Z",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "homeTeam": {
         "name": "Switzerland",
         "shortName": "Switzerland",
@@ -3839,7 +3839,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-07T21:58:36Z"
+      "lastUpdated": "2026-07-07T22:01:00Z"
     },
     {
       "id": 537383,
