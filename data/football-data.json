@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T20:53:16.546Z",
+  "updatedAt": "2026-07-07T20:54:14.867Z",
   "matches": [
     {
       "id": 537327,
@@ -3804,7 +3804,7 @@
     {
       "id": 537382,
       "utcDate": "2026-07-07T20:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Switzerland",
         "shortName": "Switzerland",
@@ -3827,8 +3827,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -3839,7 +3839,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-07T20:52:36Z"
+      "lastUpdated": "2026-07-07T20:53:48Z"
     },
     {
       "id": 537383,
