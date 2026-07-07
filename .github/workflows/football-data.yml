@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: football-data-live-monitor
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   update-results:

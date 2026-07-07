@@ -17,6 +17,12 @@ const formCore = read("formularz-pucharowy.js");
 const groupReport = read("Raport_typow_MS_2026.html");
 const footballData = JSON.parse(read("data/football-data.json"));
 const footballDataUpdater = read("scripts/update-football-data.mjs");
+const footballDataWorkflow = read(".github/workflows/football-data.yml");
+check(
+  footballDataWorkflow.includes("group: football-data-live-monitor") &&
+    footballDataWorkflow.includes("cancel-in-progress: false"),
+  "Automat wynikow anuluje poprzednie uruchomienie i moze powodowac konflikt zapisu"
+);
 
 let espnFallbackHelpers;
 try {
