@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T17:51:13.829Z",
+  "updatedAt": "2026-07-07T17:52:16.055Z",
   "matches": [
     {
       "id": 537327,
@@ -3764,7 +3764,7 @@
     {
       "id": 537381,
       "utcDate": "2026-07-07T16:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Argentina",
         "shortName": "Argentina",
@@ -3799,7 +3799,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-07T17:51:13.810Z"
+      "lastUpdated": "2026-07-07T17:52:13Z"
     },
     {
       "id": 537382,
