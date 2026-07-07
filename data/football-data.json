@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T06:30:57.423Z",
+  "updatedAt": "2026-07-07T16:03:14.500Z",
   "matches": [
     {
       "id": 537327,
@@ -3764,7 +3764,7 @@
     {
       "id": 537381,
       "utcDate": "2026-07-07T16:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Argentina",
         "shortName": "Argentina",
@@ -3776,11 +3776,11 @@
         "tla": "EGY"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3799,7 +3799,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-07T05:20:11Z"
+      "lastUpdated": "2026-07-07T16:03:14.482Z"
     },
     {
       "id": 537382,
