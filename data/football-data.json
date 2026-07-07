@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-06T21:30:56.247Z",
+  "updatedAt": "2026-07-07T00:06:14.948Z",
   "matches": [
     {
       "id": 537327,
@@ -3724,7 +3724,7 @@
     {
       "id": 537380,
       "utcDate": "2026-07-07T00:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "United States",
         "shortName": "USA",
@@ -3736,11 +3736,11 @@
         "tla": "BEL"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3759,7 +3759,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-06T05:20:12Z"
+      "lastUpdated": "2026-07-07T00:06:06Z"
     },
     {
       "id": 537381,
