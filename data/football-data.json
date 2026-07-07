@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T17:47:18.009Z",
+  "updatedAt": "2026-07-07T17:48:16.015Z",
   "matches": [
     {
       "id": 537327,
@@ -3776,10 +3776,10 @@
         "tla": "EGY"
       },
       "score": {
-        "winner": "AWAY_TEAM",
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": 1,
+          "home": 2,
           "away": 2
         },
         "regularTime": {
@@ -3799,7 +3799,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-07T17:47:17.992Z"
+      "lastUpdated": "2026-07-07T17:48:15.995Z"
     },
     {
       "id": 537382,
