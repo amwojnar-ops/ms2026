@@ -1090,15 +1090,13 @@ function renderGroupArchive(){
         </tbody>
       </table>
     </div>
-    <details class="group-archive-frame-box">
-      <summary>${lt('Pokaż pełny statyczny raport w tej zakładce','Show the full static report in this tab','Mostra il report statico completo in questa scheda')}</summary>
-      <iframe class="group-archive-frame" data-src="${groupReportHref()}" title="${lt('Raport fazy grupowej','Group-stage report','Report fase a gironi')}"></iframe>
-    </details>`;
-  const details=archive.querySelector('.group-archive-frame-box');
-  const frame=archive.querySelector('.group-archive-frame');
-  details?.addEventListener('toggle',()=>{
-    if(details.open&&frame&&!frame.src)frame.src=frame.dataset.src;
-  },{once:false});
+    <div class="group-archive-footer">
+      <div>
+        <strong>${lt('Pełna historia meczów i punktów','Full match and point history','Storico completo di partite e punti')}</strong>
+        <span>${lt('Raport otworzy się jako czysta strona raportowa, bez osadzania strony głównej w małym oknie.','The report opens as a clean report page, without embedding the main site in a small window.','Il report si apre come pagina pulita, senza incorporare il sito principale in una finestra piccola.')}</span>
+      </div>
+      <a class="group-archive-report secondary" href="${groupReportHref()}">${lt('Otwórz raport','Open report','Apri report')}</a>
+    </div>`;
 }
 
 function backToPageTop(){

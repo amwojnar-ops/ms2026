@@ -563,16 +563,14 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
 }
 .group-archive-table td:nth-child(2),
 .group-archive-table .strong { color:#fff; font-weight:800; }
-.group-archive-frame-box {
-  padding:16px 18px 18px; background:rgba(8,15,29,.44);
+.group-archive-footer {
+  display:flex; justify-content:space-between; gap:18px; align-items:center;
+  padding:18px 20px; background:rgba(8,15,29,.44);
+  border-top:1px solid var(--border);
 }
-.group-archive-frame-box summary {
-  cursor:pointer; color:var(--gold); font-weight:800;
-}
-.group-archive-frame {
-  width:100%; height:min(72vh,760px); margin-top:14px;
-  border:1px solid var(--border); border-radius:12px; background:#fff;
-}
+.group-archive-footer strong { display:block; color:#fff; }
+.group-archive-footer span { display:block; margin-top:4px; color:var(--muted); line-height:1.35; }
+.group-archive-report.secondary { background:transparent; color:var(--gold); border:1px solid rgba(232,184,75,.42); }
 
 .rank-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .rank-table th {
