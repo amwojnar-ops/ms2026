@@ -408,7 +408,12 @@ const KNOCKOUT_TIP_ROUNDS = [
   }
 ];
 
+const KNOCKOUT_SUBMISSIONS = {
+  qf: new Set(['Andrzej W.'])
+};
+
 function knockoutTipDotPlayers(){
+  const submitted = new Set(Object.values(KNOCKOUT_SUBMISSIONS).flatMap(players => [...players]));
   const requiredMatches = KNOCKOUT_TIP_ROUNDS.flatMap(round =>
     (round.matches || [])
       .filter(match => match.home && match.away)
@@ -418,7 +423,7 @@ function knockoutTipDotPlayers(){
       }))
   );
 
-  if(!requiredMatches.length) return new Set();
+  if(!requiredMatches.length) return submitted;
 
   const completePlayers = PLAYERS.filter(player =>
     requiredMatches.every(({round, key}) => {
@@ -427,9 +432,10 @@ function knockoutTipDotPlayers(){
     })
   );
 
-  return completePlayers.length === PLAYERS.length
-    ? new Set()
-    : new Set(completePlayers.map(player => player.name));
+  if(completePlayers.length !== PLAYERS.length){
+    completePlayers.forEach(player => submitted.add(player.name));
+  }
+  return submitted;
 }
 
 const PLAYER_KNOCKOUT_STAGES = [
@@ -1050,7 +1056,7 @@ function renderPlayerCards(){
     const hasTips = true;
     const showTipDot = tipDotPlayers.has(p.name);
     const isLeader = hasResults && rp._pos === 1;
-    card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '');
+    card.className = 'fifa-card' + (isLeader ? ' leader' : '') + (hasTips ? ' has-tips' : '') + (showTipDot ? ' tips-submitted' : '');
     card.dataset.name = p.name;
 
     const pts = rp.pts;
@@ -1296,12 +1302,17 @@ function knockoutTipMatch(tipRound,apiMatch,index){
 
 function knockoutRoundProgress(round,roundMatches){
   const tipRound=knockoutTipsForRound(round);
-  if(!tipRound)return {tipRound:null,completePlayers:[],complete:false};
+  const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();
+  if(!tipRound)return {
+    tipRound:null,
+    completePlayers:PLAYERS.filter(player=>submitted.has(player.name)),
+    complete:false
+  };
   const required=roundMatches.map((match,index)=>knockoutTipMatch(tipRound,match,index)).filter(Boolean);
-  const completePlayers=PLAYERS.filter(player=>required.length===round.count&&required.every(({key})=>{
+  const completePlayers=PLAYERS.filter(player=>submitted.has(player.name)||(required.length===round.count&&required.every(({key})=>{
     const tip=tipRound.tipsByPlayer?.[player.name]?.[key];
     return typeof tip==='string'&&tip.trim()!=='';
-  }));
+  })));
   return {tipRound,completePlayers,complete:completePlayers.length===PLAYERS.length};
 }
 

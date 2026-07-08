@@ -430,6 +430,16 @@ check(
     css.includes('.fifa-card.tips-submitted { box-shadow:'),
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
+check(
+  core.includes("qf: new Set(['Andrzej W.'])") &&
+    core.includes("(showTipDot ? ' tips-submitted' : '')") &&
+    core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
+  "Andrzej W. nie jest oznaczony jako pierwszy typujacy cwiercfinaly"
+);
+check(
+  !/id:'qf'[\s\S]*?tipsByPlayer/.test(core.slice(core.indexOf('const KNOCKOUT_TIP_ROUNDS'), core.indexOf('const PLAYER_KNOCKOUT_STAGES'))),
+  "Typy cwiercfinalowe zostaly przedwczesnie dodane do HSO"
+);
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
 check(
