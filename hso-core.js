@@ -424,7 +424,7 @@ const KNOCKOUT_TIP_ROUNDS = [
 ];
 
 const KNOCKOUT_SUBMISSIONS = {
-  qf: new Set(['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał'])
+  qf: new Set(['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał','Robert','Waldemar','Justyna'])
 };
 
 function knockoutTipDotPlayers(){
