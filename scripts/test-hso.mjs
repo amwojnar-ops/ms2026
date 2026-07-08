@@ -431,10 +431,12 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("qf: new Set(['Andrzej W.','Łukasz'])") &&
+  ['Andrzej W.','Łukasz','Lucas','Leszek'].every(player =>
+    core.match(/qf:\s*new Set\(\[([^\]]*)\]\)/)?.[1].includes(`'${player}'`)
+  ) &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
-  "Andrzej W. i Lukasz nie sa oznaczeni jako typujacy cwiercfinaly"
+  "Nie wszyscy gracze z oddanymi typami sa oznaczeni w cwiercfinalach"
 );
 check(
   core.includes("className='lock-badge-progress'") &&
