@@ -24,6 +24,26 @@ check(
   "Automat wynikow anuluje poprzednie uruchomienie i moze powodowac konflikt zapisu"
 );
 
+let formHistoryHelpers;
+try {
+  const start = formCore.indexOf("function finishedMatchScore(");
+  const end = formCore.indexOf("function teamHistory(");
+  formHistoryHelpers = new Function(
+    `${formCore.slice(start, end)}; return {finishedMatchScore};`
+  )();
+} catch (error) {
+  errors.push(`Historia wynikow formularza: ${error.message}`);
+}
+
+if (formHistoryHelpers) {
+  const switzerlandColombia = footballData.matches.find(match => match.id === 537382);
+  const regulationScore = formHistoryHelpers.finishedMatchScore(switzerlandColombia);
+  check(
+    regulationScore?.home === 0 && regulationScore?.away === 0,
+    "Historia formularza pokazuje wynik karnych zamiast 0-0 po 90 minutach w meczu Szwajcaria-Kolumbia"
+  );
+}
+
 let espnFallbackHelpers;
 try {
   const mapStart = footballDataUpdater.indexOf("function mapEspnMatch(");

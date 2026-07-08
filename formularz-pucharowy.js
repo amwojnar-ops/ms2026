@@ -281,10 +281,10 @@ function teamKey(team) {
 }
 
 function finishedMatchScore(match) {
-  const score = match?.score?.fullTime;
-  return Number.isInteger(score?.home) && Number.isInteger(score?.away)
-    ? score
-    : null;
+  const scores = [match?.score?.regularTime, match?.score?.fullTime];
+  return scores.find(score =>
+    Number.isInteger(score?.home) && Number.isInteger(score?.away)
+  ) || null;
 }
 
 function teamHistory(team, beforeUtcDate) {
