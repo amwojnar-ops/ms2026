@@ -431,10 +431,10 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("qf: new Set(['Andrzej W.'])") &&
+  core.includes("qf: new Set(['Andrzej W.','Łukasz'])") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
-  "Andrzej W. nie jest oznaczony jako pierwszy typujacy cwiercfinaly"
+  "Andrzej W. i Lukasz nie sa oznaczeni jako typujacy cwiercfinaly"
 );
 check(
   !/id:'qf'[\s\S]*?tipsByPlayer/.test(core.slice(core.indexOf('const KNOCKOUT_TIP_ROUNDS'), core.indexOf('const PLAYER_KNOCKOUT_STAGES'))),
