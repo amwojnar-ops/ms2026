@@ -327,8 +327,10 @@ check(
 );
 check(
   entries.some(entry => entry.id === 537386 && entry.side === "homeTeam" && entry.team === "Argentina") &&
-    formCore.includes('{ matchId: 537386, side: "homeTeam", team: { name: "Argentina"'),
-  "Argentyna nie zostala przeniesiona do cwiercfinalu 12.07 o 03:00 lub formularza"
+    entries.some(entry => entry.id === 537386 && entry.side === "awayTeam" && entry.team === "Switzerland") &&
+    formCore.includes('{ matchId: 537386, side: "homeTeam", team: { name: "Argentina"') &&
+    formCore.includes('{ matchId: 537386, side: "awayTeam", team: { name: "Switzerland"'),
+  "Para Argentyna-Szwajcaria nie zostala przeniesiona do cwiercfinalu 12.07 o 03:00 lub formularza"
 );
 check(
   entries.some(entry => entry.id === 537375 && entry.side === "homeTeam" && entry.team === "Paraguay") &&
