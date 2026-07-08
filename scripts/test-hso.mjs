@@ -437,6 +437,12 @@ check(
   "Andrzej W. i Lukasz nie sa oznaczeni jako typujacy cwiercfinaly"
 );
 check(
+  core.includes("className='lock-badge-progress'") &&
+    core.includes("value:headerTipProgress.completePlayers.length") &&
+    css.includes('.lock-badge-progress-bar {'),
+  "Gorny baner nie pokazuje paska postepu typowania"
+);
+check(
   !/id:'qf'[\s\S]*?tipsByPlayer/.test(core.slice(core.indexOf('const KNOCKOUT_TIP_ROUNDS'), core.indexOf('const PLAYER_KNOCKOUT_STAGES'))),
   "Typy cwiercfinalowe zostaly przedwczesnie dodane do HSO"
 );

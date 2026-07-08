@@ -199,6 +199,10 @@ header::after {
 .lock-badge #lockBadgeText { display:flex; min-width:0; flex-direction:column; gap:2px; line-height:1.2; }
 .lock-badge-main { font-weight:700; }
 .lock-badge-detail { font-size:11px; font-weight:500; overflow-wrap:anywhere; }
+.lock-badge-progress { display:grid; grid-template-columns:auto minmax(70px,1fr); align-items:center; gap:7px; margin-top:3px; }
+.lock-badge-progress-title { font-size:10px; font-weight:600; white-space:nowrap; }
+.lock-badge-progress-bar { display:block; height:4px; overflow:hidden; border-radius:99px; background:rgba(255,255,255,.16); }
+.lock-badge-progress-fill { display:block; height:100%; border-radius:inherit; background:currentColor; transition:width .25s ease; }
 .lock-badge.available {
   color: var(--green);
   background: var(--green-dim);

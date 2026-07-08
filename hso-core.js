@@ -124,7 +124,7 @@ function groupReportHref(){
   if(HSO_MODE!=='test')return base;
   return `${base}&from=test&lang=${LANG}`;
 }
-function setHeaderBadge(text,state='locked',detail=''){
+function setHeaderBadge(text,state='locked',detail='',progress=null){
   const badge=document.getElementById('lockBadge');
   const badgeText=document.getElementById('lockBadgeText');
   if(!badge||!badgeText)return;
@@ -140,6 +140,21 @@ function setHeaderBadge(text,state='locked',detail=''){
     secondary.className='lock-badge-detail';
     secondary.textContent=detail;
     badgeText.appendChild(secondary);
+  }
+  if(progress){
+    const progressWrap=document.createElement('span');
+    progressWrap.className='lock-badge-progress';
+    const progressTitle=document.createElement('span');
+    progressTitle.className='lock-badge-progress-title';
+    progressTitle.textContent=`${progress.label}: ${progress.value}/${progress.total}`;
+    const progressBar=document.createElement('span');
+    progressBar.className='lock-badge-progress-bar';
+    const progressFill=document.createElement('span');
+    progressFill.className='lock-badge-progress-fill';
+    progressFill.style.width=`${progress.total?progress.value/progress.total*100:0}%`;
+    progressBar.appendChild(progressFill);
+    progressWrap.append(progressTitle,progressBar);
+    badgeText.appendChild(progressWrap);
   }
 }
 function applyLanguage(){
@@ -1511,6 +1526,7 @@ function renderKnockout(){
   const headerKnownPairs=headerFormMatches.filter(match=>match.homeTeam?.name&&match.awayTeam?.name).length;
   const headerIsFinalForm=headerRound.form==='hso-typowanie1.html';
   const headerDeadline=knockoutDeadline(headerFormMatches[0]?.utcDate,headerRound.id);
+  const headerTipProgress=knockoutRoundProgress(headerRound,headerMatches);
   setHeaderBadge(
     LANG==='en'
       ? `${headerIsFinalForm?'Final stage':knockoutRoundName(headerRound)} · available fixtures: ${headerKnownPairs}/${headerRound.count}`
@@ -1522,7 +1538,12 @@ function renderKnockout(){
       ? `deadline ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (then Magda and I are going to a party)':''}`
       : LANG==='it'
         ? `scadenza ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (poi io e Magda andiamo a una festa)':''}`
-        : `termin ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (potem idziemy z Magdą na imprezę)':''}`
+        : `termin ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (potem idziemy z Magdą na imprezę)':''}`,
+    {
+      label:lt('Oddane typy','Predictions submitted','Pronostici inviati'),
+      value:headerTipProgress.completePlayers.length,
+      total:PLAYERS.length
+    }
   );
 
   const nav=document.getElementById('koStageNav');
