@@ -168,15 +168,22 @@ function applyLanguage(){
   document.getElementById('headerSubtitle').innerHTML=tr('headerSubtitle');
   setHeaderBadge(tr('locked'),'locked');
   setText('playedLabel','played'); setText('nextMatchLabel','nextMatch');
-  setText('tabPlayersBtn','players'); setText('tabMatchesBtn','matches'); setText('tabRankingBtn','ranking');
+  setText('tabPlayersBtn','players');
+  const groupTab=document.getElementById('tabMatchesBtn');
+  if(groupTab)groupTab.textContent=HSO_MODE==='test'?lt('Faza grupowa','Group stage','Fase a gironi'):tr('matches');
+  setText('tabRankingBtn','ranking');
   document.getElementById('tabPlayersBtn').setAttribute('aria-label',tr('players'));
   document.getElementById('tabKnockoutBtn').setAttribute('aria-label',tr('knockout'));
   document.getElementById('tabMatchesBtn').setAttribute('aria-label',tr('matches'));
   document.getElementById('tabRankingBtn').setAttribute('aria-label',tr('ranking'));
   document.getElementById('mainTabs').dataset.label=lt('MENU GŁÓWNE','MAIN MENU','MENU PRINCIPALE');
   document.getElementById('koStageNav').dataset.label=lt('WYBIERZ RUNDĘ','SELECT ROUND','SELEZIONA TURNO');
-  document.getElementById('tabMatchesBtn').title=lt('Otwórz raport fazy grupowej','Open the group-stage report','Apri il report della fase a gironi');
-  document.getElementById('tabMatchesBtn').href=groupReportHref();
+  if(groupTab){
+    groupTab.title=HSO_MODE==='test'
+      ? lt('Pokaż archiwum fazy grupowej','Show the group-stage archive','Mostra l’archivio della fase a gironi')
+      : lt('Otwórz raport fazy grupowej','Open the group-stage report','Apri il report della fase a gironi');
+    if('href' in groupTab)groupTab.href=groupReportHref();
+  }
   setText('tabKnockoutBtn','knockout');
   const backLabel=document.getElementById('mobileSectionBackLabel');
   if(backLabel)backLabel.textContent=lt('Wróć','Back','Indietro');
@@ -204,6 +211,7 @@ function switchLanguage(){
   renderPlayerCards();
   renderRanking();
   renderKnockout();
+  renderGroupArchive();
 }
 document.getElementById('langSwitch').addEventListener('click',switchLanguage);
 applyLanguage();
@@ -1037,6 +1045,62 @@ function updateMobileSectionBack(){
   button?.classList.toggle('visible',Boolean(anchor&&pastAnchor));
 }
 
+function renderGroupArchive(){
+  const archive=document.getElementById('groupArchive');
+  if(!archive)return;
+  const ranked=assignPositions(calcAll()).sort((a,b)=>b.group.pts-a.group.pts||b.group.ex-a.group.ex||a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
+  const totalPoints=ranked.reduce((sum,p)=>sum+p.group.pts,0);
+  const exactHits=ranked.reduce((sum,p)=>sum+p.group.ex,0);
+  const outcomeHits=ranked.reduce((sum,p)=>sum+p.group.en,0);
+  const leader=ranked[0];
+  archive.innerHTML=`
+    <div class="group-archive-head">
+      <div>
+        <p class="eyebrow">${lt('Archiwum','Archive','Archivio')}</p>
+        <h2>${lt('Faza grupowa','Group stage','Fase a gironi')}</h2>
+        <p>${lt('Zamrożone wyniki po fazie grupowej. Dane nie są przeliczane na żywo, więc sekcja działa lekko i służy do sprawdzania historii punktów.','Frozen results after the group stage. Data is not recalculated live, so this section stays light and is meant for checking point history.','Risultati congelati dopo la fase a gironi. I dati non vengono ricalcolati live, quindi la sezione resta leggera e serve per controllare la storia dei punti.')}</p>
+      </div>
+      <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
+    </div>
+    <div class="group-archive-stats">
+      <div><span>${lt('Lider','Leader','Leader')}</span><strong>${leader?.name||'—'}</strong></div>
+      <div><span>${lt('Punkty graczy','Player points','Punti giocatori')}</span><strong>${totalPoints}</strong></div>
+      <div><span>${lt('Trafienia za 3','Exact scores','Risultati esatti')}</span><strong>${exactHits}</strong></div>
+      <div><span>${lt('Trafienia za 1','Outcomes','Esiti corretti')}</span><strong>${outcomeHits}</strong></div>
+    </div>
+    <div class="group-archive-table-wrap">
+      <table class="group-archive-table">
+        <thead><tr>
+          <th>#</th>
+          <th>${lt('Gracz','Player','Giocatore')}</th>
+          <th>${lt('Pkt','Pts','Pt')}</th>
+          <th>3 ${pointsLabel(3)}</th>
+          <th>1 ${pointsLabel(1)}</th>
+          <th>${lt('Mistrz','Champion','Campione')}</th>
+        </tr></thead>
+        <tbody>
+          ${ranked.map((p,i)=>`<tr>
+            <td>${i+1}</td>
+            <td>${p.name}</td>
+            <td class="strong">${p.group.pts}</td>
+            <td>${p.group.ex}</td>
+            <td>${p.group.en}</td>
+            <td>${p.champ?teamName(p.champ):'—'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <details class="group-archive-frame-box">
+      <summary>${lt('Pokaż pełny statyczny raport w tej zakładce','Show the full static report in this tab','Mostra il report statico completo in questa scheda')}</summary>
+      <iframe class="group-archive-frame" data-src="${groupReportHref()}" title="${lt('Raport fazy grupowej','Group-stage report','Report fase a gironi')}"></iframe>
+    </details>`;
+  const details=archive.querySelector('.group-archive-frame-box');
+  const frame=archive.querySelector('.group-archive-frame');
+  details?.addEventListener('toggle',()=>{
+    if(details.open&&frame&&!frame.src)frame.src=frame.dataset.src;
+  },{once:false});
+}
+
 function backToPageTop(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -1659,10 +1723,14 @@ function renderKnockout(){
 
 function switchTab(tab,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
-  ['gracze','ranking','pucharowa'].forEach(t=>document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none');
+  ['gracze','ranking','pucharowa','grupowa'].forEach(t=>{
+    const section=document.getElementById(`tab-${t}`);
+    if(section)section.style.display=t===tab?'block':'none';
+  });
   document.body.classList.toggle('ranking-active',tab==='ranking');
   document.body.classList.toggle('ranking-panel-open',tab==='ranking'&&document.getElementById('sidePanel').classList.contains('open'));
   if(tab==='pucharowa')renderKnockout();
+  if(tab==='grupowa')renderGroupArchive();
   requestAnimationFrame(updateMobileSectionBack);
 }
 initFeaturedKnockoutLink();

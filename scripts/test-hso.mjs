@@ -197,12 +197,25 @@ for (const [file, html, mode] of [
 }
 
 const normalizeWrapper = html => html
+  .replace(
+    /  <button class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" type="button" onclick="switchTab\('grupowa',this\)">Faza grupowa<\/button>\n/,
+    '<a class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" href="Raport_typow_MS_2026.html?v=20260704-5">Raport fazy grupowej</a>\n'
+  )
+  .replace(/\n<div id="tab-grupowa" style="display:none">[\s\S]*?<\/div>\n\n(?=<div id="tab-gracze">)/, "\n")
   .replace(/window\.HSO_CONFIG=\{mode:'production'\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/window\.HSO_CONFIG=\{mode:'test',languages:\['pl','en','it'\]\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/\r\n/g, "\n");
 check(
   normalizeWrapper(production) === normalizeWrapper(test),
   "hso.html i hso-test.html roznia sie czyms wiecej niz trybem"
+);
+
+check(
+  test.includes('id="tab-grupowa"') &&
+    test.includes('onclick="switchTab(\'grupowa\',this)"') &&
+    core.includes('function renderGroupArchive()') &&
+    core.includes("if(tab==='grupowa')renderGroupArchive();"),
+  "hso-test nie ma lekkiego archiwum fazy grupowej"
 );
 
 const productionVersion = production.match(/hso-core\.js\?v=([^"']+)/)?.[1];

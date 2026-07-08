@@ -65,7 +65,12 @@
   <button class="tab active" id="tabPlayersBtn" data-icon="★" onclick="switchTab('gracze',this)">Gracze</button>
   <button class="tab" id="tabKnockoutBtn" data-icon="★" type="button" onclick="switchTab('pucharowa',this)">Faza pucharowa</button>
   <button class="tab" id="tabRankingBtn" data-icon="★" onclick="switchTab('ranking',this)">Ranking</button>
-<a class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" href="Raport_typow_MS_2026.html?v=20260704-5">Raport fazy grupowej</a>
+  <button class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" type="button" onclick="switchTab('grupowa',this)">Faza grupowa</button>
+</div>
+
+<div id="tab-grupowa" style="display:none">
+  <a class="group-archive-preload-link" href="Raport_typow_MS_2026.html?v=20260704-5" hidden>Raport fazy grupowej</a>
+  <section class="group-archive" id="groupArchive"></section>
 </div>
 
 <div id="tab-gracze">
