@@ -258,7 +258,8 @@ check(
     core.includes("switchTab('pucharowa',document.getElementById('tabKnockoutBtn'))") &&
     core.includes("return diff<=4*60*60*1000?'live':'waiting'") &&
     !core.includes('knockoutMatches().slice(0,16)') &&
-    core.includes('const reveal=Boolean(tipData&&progress.complete)') &&
+    core.includes('const reveal=Boolean(tipData&&progress.complete&&afterRevealDeadline)') &&
+    core.includes('Typy są wprowadzone. Pokażą się o ${knockoutDeadlineLabel(revealDeadline)}.') &&
     css.includes('.next-match-card.has-match-link') &&
     css.includes('.live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:15px;') &&
     core.includes("classList.add('is-live')"),
@@ -431,9 +432,15 @@ check(
 );
 check(
   core.includes("? lt('Typowanie zakończone','Predictions closed','Pronostici chiusi')") &&
-    core.includes("actionPanel.classList.toggle('deadline-closed',!beforeDeadline)") &&
+    core.includes("actionPanel.classList.toggle('deadline-closed',predictionsClosed)") &&
     css.includes('.ko-main > .ko-action.deadline-closed { order:4; }'),
   "Zamkniete typowanie nie ma poprawnego naglowka lub pozycji mobilnej"
+);
+check(
+  core.includes("const predictionsClosed=!beforeDeadline||tipProgress.complete;") &&
+    core.includes("Wszystkie typy tej rundy zostały wprowadzone.") &&
+    core.includes("const allowForm=formReady&&!predictionsClosed;"),
+  "Komplet typow rundy nie zamyka formularza i nie przenosi go na koniec mobilnie"
 );
 check(
   core.includes('const hasTips = true;') &&
@@ -444,12 +451,10 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  ['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał','Robert','Waldemar','Justyna','Magda','Tomek','Iwona','Ola','Mariusz','Jacek','Aldona','Agnieszka','Alex','Borys','Maria','Andrzej G.','Paweł'].every(player =>
-    core.match(/qf:\s*new Set\(\[([^\]]*)\]\)/)?.[1].includes(`'${player}'`)
-  ) &&
+  core.includes("const KNOCKOUT_SUBMISSIONS = {};") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
-  "Nie wszyscy gracze z oddanymi typami sa oznaczeni w cwiercfinalach"
+  "Robocze podswietlenie cwiercfinalow nie zostalo wyczyszczone po publikacji typow"
 );
 check(
   core.includes("className='lock-badge-progress'") &&
@@ -458,8 +463,12 @@ check(
   "Gorny baner nie pokazuje paska postepu typowania"
 );
 check(
-  !/id:'qf'[\s\S]*?tipsByPlayer/.test(core.slice(core.indexOf('const KNOCKOUT_TIP_ROUNDS'), core.indexOf('const PLAYER_KNOCKOUT_STAGES'))),
-  "Typy cwiercfinalowe zostaly przedwczesnie dodane do HSO"
+  /id:'qf'[\s\S]*?tipsByPlayer/.test(core.slice(core.indexOf('const KNOCKOUT_TIP_ROUNDS'), core.indexOf('const PLAYER_KNOCKOUT_STAGES'))) &&
+    ['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał','Robert','Waldemar','Justyna','Magda','Tomek','Iwona','Ola','Mariusz','Jacek','Aldona','Agnieszka','Alex','Borys','Maria','Andrzej G.','Paweł','Kacper','Izunia'].every(player =>
+      core.match(/id:'qf'[\s\S]*?tipsByPlayer:\{([\s\S]*?)\n    \}/)?.[1].includes(`'${player}'`)
+    ) &&
+    ['537383','537384','537385','537386'].every(matchId => core.includes(`'${matchId}'`)),
+  "Typy cwiercfinalowe nie sa kompletne po publikacji"
 );
 const southAfricaCanada = footballData.matches.find(match => match.id === 537417);
 check(southAfricaCanada?.status === "FINISHED", "RPA-Kanada: mecz nie ma statusu FINISHED");
@@ -530,15 +539,17 @@ check(!core.includes("const MATCHES=["), "Terminarz grupowy pozostal w aktywnym 
 
 const knockoutTipsStart = core.indexOf("const KNOCKOUT_TIP_ROUNDS = [");
 const r16TipsStart = core.indexOf("    id:'r16',", knockoutTipsStart);
-const knockoutTipsEnd = core.indexOf("const PLAYER_KNOCKOUT_STAGES", r16TipsStart);
+const qfTipsStart = core.indexOf("    id:'qf',", r16TipsStart);
 const r32TipsBlock = core.slice(knockoutTipsStart, r16TipsStart);
-const r16TipsBlock = core.slice(r16TipsStart, knockoutTipsEnd);
+const r16TipsBlock = core.slice(r16TipsStart, qfTipsStart);
+const qfTipsBlock = core.slice(qfTipsStart, core.indexOf("const PLAYER_KNOCKOUT_STAGES", qfTipsStart));
 const parseRoundTips = block => [...block.matchAll(/^\s*'([^']+)':\{([^}]*)\}/gm)].map(match => ({
   name: match[1],
   scores: [...match[2].matchAll(/'\d+':'(\d+-\d+)'/g)].map(score => score[1])
 }));
 const r32PlayerTips = parseRoundTips(r32TipsBlock);
 const r16PlayerTips = parseRoundTips(r16TipsBlock);
+const qfPlayerTips = parseRoundTips(qfTipsBlock);
 const baselineNames = new Set(baselineEntries.map(player => player.name));
 check(r32PlayerTips.length === 24, `Typy 1/16: ${r32PlayerTips.length}/24 graczy`);
 check(new Set(r32PlayerTips.map(player => player.name)).size === r32PlayerTips.length, "Typy 1/16: powtorzony gracz");
@@ -551,6 +562,12 @@ check(new Set(r16PlayerTips.map(player => player.name)).size === 24, "Typy 1/8: 
 r16PlayerTips.forEach(player => {
   check(baselineNames.has(player.name), `Typy 1/8: nieznany gracz ${player.name}`);
   check(player.scores.length === 8, `Typy 1/8 ${player.name}: ${player.scores.length}/8 meczow`);
+});
+check(qfPlayerTips.length === 24, `Typy 1/4: ${qfPlayerTips.length}/24 graczy`);
+check(new Set(qfPlayerTips.map(player => player.name)).size === 24, "Typy 1/4: powtorzony gracz");
+qfPlayerTips.forEach(player => {
+  check(baselineNames.has(player.name), `Typy 1/4: nieznany gracz ${player.name}`);
+  check(player.scores.length === 4, `Typy 1/4 ${player.name}: ${player.scores.length}/4 mecze`);
 });
 check(fs.existsSync(path.join(root, "output", "pdf", "typy-1-8-zestawienie.pdf")), "Brak PDF zestawienia 1/8 finalu");
 
@@ -624,3 +641,4 @@ console.log("- zamrozona baza punktow po fazie grupowej");
 console.log("- historia 1728 punktacji w statycznym raporcie");
 console.log(`- przygotowane typy 1/16 finalu: ${r32PlayerTips.length}/24 graczy`);
 console.log(`- przygotowane typy 1/8 finalu: ${r16PlayerTips.length}/24 graczy`);
+console.log(`- przygotowane typy 1/4 finalu: ${qfPlayerTips.length}/24 graczy`);

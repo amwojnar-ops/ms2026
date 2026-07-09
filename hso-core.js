@@ -428,12 +428,45 @@ const KNOCKOUT_TIP_ROUNDS = [
       'Borys':{'537376':'0-2','537375':'0-3','537377':'2-1','537378':'1-1','537379':'1-2','537380':'1-1','537381':'2-0','537382':'0-1'},
       'Izunia':{'537376':'1-1','537375':'0-2','537377':'2-1','537378':'1-1','537379':'1-2','537380':'1-2','537381':'2-0','537382':'1-1'}
     }
+  },
+  {
+    id:'qf',
+    matches:[
+      {id:537383,apiId:537383,home:'Francja',away:'Maroko'},
+      {id:537384,apiId:537384,home:'Hiszpania',away:'Belgia'},
+      {id:537385,apiId:537385,home:'Norwegia',away:'Anglia'},
+      {id:537386,apiId:537386,home:'Argentyna',away:'Szwajcaria'}
+    ],
+    tipsByPlayer:{
+      'Andrzej W.':{'537383':'3-1','537384':'3-1','537385':'1-1','537386':'2-1'},
+      'Łukasz':{'537383':'2-0','537384':'1-0','537385':'2-1','537386':'2-0'},
+      'Lucas':{'537383':'3-2','537384':'2-1','537385':'2-2','537386':'3-1'},
+      'Leszek':{'537383':'2-1','537384':'2-0','537385':'2-2','537386':'2-1'},
+      'Mateusz':{'537383':'1-1','537384':'2-1','537385':'2-2','537386':'2-1'},
+      'Michał':{'537383':'2-1','537384':'2-0','537385':'2-2','537386':'2-0'},
+      'Robert':{'537383':'2-1','537384':'2-0','537385':'1-1','537386':'2-1'},
+      'Waldemar':{'537383':'1-1','537384':'2-2','537385':'1-3','537386':'1-2'},
+      'Justyna':{'537383':'1-1','537384':'2-0','537385':'1-0','537386':'2-0'},
+      'Magda':{'537383':'3-1','537384':'2-1','537385':'2-1','537386':'2-0'},
+      'Tomek':{'537383':'2-1','537384':'2-0','537385':'1-2','537386':'1-0'},
+      'Iwona':{'537383':'0-0','537384':'1-1','537385':'1-1','537386':'1-1'},
+      'Ola':{'537383':'3-1','537384':'1-1','537385':'2-1','537386':'2-2'},
+      'Mariusz':{'537383':'2-1','537384':'1-1','537385':'2-1','537386':'2-1'},
+      'Jacek':{'537383':'2-0','537384':'1-0','537385':'1-1','537386':'1-1'},
+      'Aldona':{'537383':'2-0','537384':'2-0','537385':'1-2','537386':'2-1'},
+      'Agnieszka':{'537383':'2-0','537384':'3-0','537385':'1-0','537386':'1-1'},
+      'Alex':{'537383':'3-1','537384':'1-0','537385':'2-1','537386':'2-2'},
+      'Borys':{'537383':'2-1','537384':'2-0','537385':'1-2','537386':'2-0'},
+      'Maria':{'537383':'3-1','537384':'3-2','537385':'1-2','537386':'3-2'},
+      'Andrzej G.':{'537383':'1-1','537384':'2-1','537385':'1-2','537386':'2-0'},
+      'Paweł':{'537383':'3-1','537384':'2-0','537385':'2-2','537386':'2-1'},
+      'Kacper':{'537383':'3-2','537384':'4-2','537385':'1-2','537386':'3-1'},
+      'Izunia':{'537383':'2-1','537384':'2-0','537385':'1-2','537386':'2-0'}
+    }
   }
 ];
 
-const KNOCKOUT_SUBMISSIONS = {
-    qf: new Set(['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał','Robert','Waldemar','Justyna','Magda','Tomek','Iwona','Ola','Mariusz','Jacek','Aldona','Agnieszka','Alex','Borys','Maria','Andrzej G.','Paweł'])
-};
+const KNOCKOUT_SUBMISSIONS = {};
 
 function knockoutTipDotPlayers(){
   const submitted = new Set(Object.values(KNOCKOUT_SUBMISSIONS).flatMap(players => [...players]));
@@ -1397,14 +1430,16 @@ function knockoutMatchDetails(round,match,index,roundMatches){
   const progress=knockoutRoundProgress(round,roundMatches);
   const tipData=knockoutTipMatch(progress.tipRound,match,index);
   const finishedResult=apiResult(match);
-  const reveal=Boolean(tipData&&progress.complete);
+  const revealDeadline=knockoutDeadline(roundMatches[0]?.utcDate,round.id);
+  const afterRevealDeadline=!revealDeadline||Date.now()>=revealDeadline.getTime();
+  const reveal=Boolean(tipData&&progress.complete&&afterRevealDeadline);
   const playersAlphabetically=[...PLAYERS].sort((a,b)=>a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
   if(!reveal){
     const message=!progress.tipRound
       ? lt('Typy nie zostały jeszcze wprowadzone.','Predictions have not been entered yet.','I pronostici non sono ancora stati inseriti.')
       : !progress.complete
         ? lt(`Wprowadzone komplety: ${progress.completePlayers.length}/${PLAYERS.length}.`,`Predictions entered: ${progress.completePlayers.length}/${PLAYERS.length}.`,`Pronostici inseriti: ${progress.completePlayers.length}/${PLAYERS.length}.`)
-        : lt('Typy pozostają ukryte do końca terminu typowania.','Predictions remain hidden until the deadline.','I pronostici restano nascosti fino alla scadenza.');
+        : lt(`Typy są wprowadzone. Pokażą się o ${knockoutDeadlineLabel(revealDeadline)}.`,`Predictions are entered. They will appear at ${knockoutDeadlineLabel(revealDeadline)}.`,`I pronostici sono inseriti. Saranno visibili alle ${knockoutDeadlineLabel(revealDeadline)}.`);
     return `<div class="ko-match-details" hidden><div class="ko-details-empty">${message}</div></div>`;
   }
   if(finishedResult){
@@ -1677,13 +1712,18 @@ function renderKnockout(){
   });
 
   const medalForm=activeRound.form==='hso-typowanie1.html';
-  document.getElementById('koActionTitle').textContent=!beforeDeadline
+  const tipProgress=knockoutRoundProgress(activeRound,roundMatches);
+  const completedTips=tipProgress.completePlayers.length;
+  const predictionsClosed=!beforeDeadline||tipProgress.complete;
+  document.getElementById('koActionTitle').textContent=predictionsClosed
     ? lt('Typowanie zakończone','Predictions closed','Pronostici chiusi')
     : medalForm
       ? lt('Typowanie meczów o medale','Medal-match predictions','Pronostici delle partite per le medaglie')
       : lt('Typowanie rundy','Round predictions','Pronostici del turno');
-  document.getElementById('koActionCopy').textContent=!beforeDeadline
-    ? lt('Termin typowania tej rundy minął.','The prediction deadline for this stage has passed.','La scadenza dei pronostici per questo turno è trascorsa.')
+  document.getElementById('koActionCopy').textContent=predictionsClosed
+    ? (tipProgress.complete
+      ? lt('Wszystkie typy tej rundy zostały wprowadzone.','All predictions for this stage have been entered.','Tutti i pronostici di questo turno sono stati inseriti.')
+      : lt('Termin typowania tej rundy minął.','The prediction deadline for this stage has passed.','La scadenza dei pronostici per questo turno è trascorsa.'))
     : medalForm
       ? lt('Jeden wspólny formularz obejmuje mecz o 3. miejsce oraz finał.','One shared form covers both the third-place match and the final.','Un unico modulo comprende la finale per il 3° posto e la finale.')
     : formKnownPairs>0
@@ -1693,22 +1733,22 @@ function renderKnockout(){
   const actionBtn=document.getElementById('koActionBtn');
   const actionPanel=actionBtn.closest('.ko-action');
   actionPanel.hidden=activeRound.id==='final';
-  actionPanel.classList.toggle('deadline-closed',!beforeDeadline);
-  actionBtn.textContent=!beforeDeadline
+  actionPanel.classList.toggle('deadline-closed',predictionsClosed);
+  actionPanel.classList.toggle('tips-complete',tipProgress.complete);
+  actionBtn.textContent=predictionsClosed
     ? lt('Typowanie zamknięte','Predictions closed','Pronostici chiusi')
     : formKnownPairs>0
     ? medalForm
       ? lt('Otwórz typowanie meczów o medale','Open medal-match form','Apri i pronostici delle partite per le medaglie')
       : lt('Otwórz formularz typowania','Open prediction form','Apri il modulo dei pronostici')
     : lt('Oczekiwanie na drużyny','Waiting for teams','In attesa delle squadre');
-  actionBtn.href=formReady?activeRound.form:'#';
-  actionBtn.target=formReady?'_blank':'';
-  actionBtn.rel=formReady?'noopener noreferrer':'';
-  actionBtn.classList.toggle('ready',formReady);
-  actionBtn.setAttribute('aria-disabled',String(!formReady));
-  actionBtn.onclick=formReady?null:event=>event.preventDefault();
-  const tipProgress=knockoutRoundProgress(activeRound,roundMatches);
-  const completedTips=tipProgress.completePlayers.length;
+  const allowForm=formReady&&!predictionsClosed;
+  actionBtn.href=allowForm?activeRound.form:'#';
+  actionBtn.target=allowForm?'_blank':'';
+  actionBtn.rel=allowForm?'noopener noreferrer':'';
+  actionBtn.classList.toggle('ready',allowForm);
+  actionBtn.setAttribute('aria-disabled',String(!allowForm));
+  actionBtn.onclick=allowForm?null:event=>event.preventDefault();
   document.getElementById('koProgressLabel').textContent=lt('Oddane typy','Predictions submitted','Pronostici inviati');
   document.getElementById('koProgressValue').textContent=`${completedTips} / ${PLAYERS.length}`;
   document.getElementById('koProgressFill').style.width=`${completedTips/PLAYERS.length*100}%`;
