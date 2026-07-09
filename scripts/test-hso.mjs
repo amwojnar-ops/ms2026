@@ -444,7 +444,7 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  ['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał','Robert','Waldemar','Justyna','Magda','Tomek','Iwona','Ola','Mariusz','Jacek','Aldona'].every(player =>
+  ['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał','Robert','Waldemar','Justyna','Magda','Tomek','Iwona','Ola','Mariusz','Jacek','Aldona','Agnieszka'].every(player =>
     core.match(/qf:\s*new Set\(\[([^\]]*)\]\)/)?.[1].includes(`'${player}'`)
   ) &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
