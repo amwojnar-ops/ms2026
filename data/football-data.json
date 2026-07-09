@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-09T10:00:25.542Z",
+  "updatedAt": "2026-07-09T20:02:15.011Z",
   "matches": [
     {
       "id": 537327,
@@ -3844,7 +3844,7 @@
     {
       "id": 537383,
       "utcDate": "2026-07-09T20:00:00Z",
-      "status": "TIMED",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "France",
         "shortName": "France",
@@ -3856,11 +3856,11 @@
         "tla": "MAR"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3879,7 +3879,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-09T05:20:10Z"
+      "lastUpdated": "2026-07-09T20:02:15.001Z"
     },
     {
       "id": 537384,
