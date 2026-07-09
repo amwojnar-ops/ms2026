@@ -542,6 +542,17 @@ function knockoutRoundComplete(round){
   }));
 }
 
+function knockoutRoundTipsRevealAllowed(stageId){
+  const uiRound=KNOCKOUT_ROUNDS.find(round=>round.id===stageId);
+  if(!uiRound)return true;
+  const matches=knockoutMatches().slice(uiRound.start,uiRound.start+uiRound.count);
+  const formMatches=uiRound.form==='hso-typowanie1.html'
+    ? knockoutMatches().slice(30,32)
+    : matches;
+  const revealDeadline=knockoutDeadline(formMatches[0]?.utcDate,uiRound.id);
+  return !revealDeadline||Date.now()>=revealDeadline.getTime();
+}
+
 function playerKnockoutStageData(stage,p){
   let rounds=KNOCKOUT_TIP_ROUNDS.filter(round=>stage.ids.includes(round.id));
   let matches=rounds.flatMap(round=>(round.matches||[])
@@ -555,7 +566,7 @@ function playerKnockoutStageData(stage,p){
       matches=[{round:medalRound,match:medalMatch,key:medalMatch.id||String(stage.medalIndex)}];
     }
   }
-  const visible=rounds.length>0&&rounds.every(knockoutRoundComplete);
+  const visible=rounds.length>0&&rounds.every(knockoutRoundComplete)&&knockoutRoundTipsRevealAllowed(stage.id);
   const tips=matches.filter(({round,key})=>{
     const tip=round.tipsByPlayer?.[p.name]?.[key];
     return typeof tip==='string'&&tip.trim()!=='';

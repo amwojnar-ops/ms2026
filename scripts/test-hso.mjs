@@ -260,6 +260,8 @@ check(
     !core.includes('knockoutMatches().slice(0,16)') &&
     core.includes('const reveal=Boolean(tipData&&progress.complete&&afterRevealDeadline)') &&
     core.includes('Typy są wprowadzone. Pokażą się o ${knockoutDeadlineLabel(revealDeadline)}.') &&
+    core.includes('function knockoutRoundTipsRevealAllowed(stageId)') &&
+    core.includes('const visible=rounds.length>0&&rounds.every(knockoutRoundComplete)&&knockoutRoundTipsRevealAllowed(stage.id);') &&
     css.includes('.next-match-card.has-match-link') &&
     css.includes('.live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:15px;') &&
     core.includes("classList.add('is-live')"),
