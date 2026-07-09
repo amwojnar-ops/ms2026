@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-09T21:29:15.846Z",
+  "updatedAt": "2026-07-09T21:30:54.959Z",
   "matches": [
     {
       "id": 537327,
@@ -3844,7 +3844,7 @@
     {
       "id": 537383,
       "utcDate": "2026-07-09T20:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "France",
         "shortName": "France",
@@ -3859,7 +3859,7 @@
         "winner": "HOME_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": 1,
+          "home": 2,
           "away": 0
         },
         "regularTime": {
@@ -3879,7 +3879,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-09T21:29:04Z"
+      "lastUpdated": "2026-07-09T21:30:54.900Z"
     },
     {
       "id": 537384,
