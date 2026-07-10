@@ -13,6 +13,7 @@ const production = read("hso.html");
 const test = read("hso-test.html");
 const core = read("hso-core.js");
 const css = read("hso.css");
+const groupReportSourceJs = read("data/group-report-source.js");
 const formCore = read("formularz-pucharowy.js");
 const groupReport = read("Raport_typow_MS_2026.html");
 const footballData = JSON.parse(read("data/football-data.json"));
@@ -198,10 +199,11 @@ for (const [file, html, mode] of [
 
 const normalizeWrapper = html => html
   .replace(
-    /  <button class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" type="button" onclick="switchTab\('grupowa',this\)">Faza grupowa<\/button>\n/,
+    /  <button class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" type="button" onclick="switchTab\('grupowa',this\)">Historia punktów<\/button>\n/,
     '<a class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" href="Raport_typow_MS_2026.html?v=20260704-5">Raport fazy grupowej</a>\n'
   )
   .replace(/\n<div id="tab-grupowa" style="display:none">[\s\S]*?<\/div>\n\n(?=<div id="tab-gracze">)/, "\n")
+  .replace(/\n  <script src="data\/group-report-source\.js\?v=[^"]+"><\/script>/, "")
   .replace(/window\.HSO_CONFIG=\{mode:'production'\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/window\.HSO_CONFIG=\{mode:'test',languages:\['pl','en','it'\]\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/\r\n/g, "\n");
@@ -213,10 +215,20 @@ check(
 check(
   test.includes('id="tab-grupowa"') &&
     test.includes('onclick="switchTab(\'grupowa\',this)"') &&
+    test.includes('data/group-report-source.js') &&
+    groupReportSourceJs.includes("window.HSO_GROUP_REPORT = ") &&
     core.includes('function renderGroupArchive()') &&
+    core.includes('function historyPlayerGroups(entries)') &&
     core.includes("if(tab==='grupowa')renderGroupArchive();"),
-  "hso-test nie ma lekkiego archiwum fazy grupowej"
+  "hso-test nie ma historii punktow z kaflami meczow"
 );
+try {
+  const groupReportSource = JSON.parse(groupReportSourceJs.replace(/^\uFEFF?window\.HSO_GROUP_REPORT = /, "").replace(/;\s*$/, ""));
+  check(groupReportSource.matches?.length === 72, `Historia punktow test: ${groupReportSource.matches?.length || 0}/72 meczow grupowych`);
+  check(groupReportSource.players?.length === 24, `Historia punktow test: ${groupReportSource.players?.length || 0}/24 graczy`);
+} catch (error) {
+  errors.push(`Historia punktow test: ${error.message}`);
+}
 
 const productionVersion = production.match(/hso-core\.js\?v=([^"']+)/)?.[1];
 const testVersion = test.match(/hso-core\.js\?v=([^"']+)/)?.[1];

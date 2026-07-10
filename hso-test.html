@@ -65,7 +65,7 @@
   <button class="tab active" id="tabPlayersBtn" data-icon="★" onclick="switchTab('gracze',this)">Gracze</button>
   <button class="tab" id="tabKnockoutBtn" data-icon="★" type="button" onclick="switchTab('pucharowa',this)">Faza pucharowa</button>
   <button class="tab" id="tabRankingBtn" data-icon="★" onclick="switchTab('ranking',this)">Ranking</button>
-  <button class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" type="button" onclick="switchTab('grupowa',this)">Faza grupowa</button>
+  <button class="tab tab-archive" id="tabMatchesBtn" data-icon="▤" type="button" onclick="switchTab('grupowa',this)">Historia punktów</button>
 </div>
 
 <div id="tab-grupowa" style="display:none">
@@ -162,6 +162,7 @@
 
 </div>
 <script>window.HSO_CONFIG={mode:'test',languages:['pl','en','it']};</script>
+  <script src="data/group-report-source.js?v=20260710-1"></script>
   <script src="hso-core.js?v=20260708-81"></script>
 </body>
 </html>

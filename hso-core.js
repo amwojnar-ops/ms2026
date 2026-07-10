@@ -170,7 +170,7 @@ function applyLanguage(){
   setText('playedLabel','played'); setText('nextMatchLabel','nextMatch');
   setText('tabPlayersBtn','players');
   const groupTab=document.getElementById('tabMatchesBtn');
-  if(groupTab)groupTab.textContent=HSO_MODE==='test'?lt('Faza grupowa','Group stage','Fase a gironi'):tr('matches');
+  if(groupTab)groupTab.textContent=HSO_MODE==='test'?lt('Historia punktów','Point history','Storico punti'):tr('matches');
   setText('tabRankingBtn','ranking');
   document.getElementById('tabPlayersBtn').setAttribute('aria-label',tr('players'));
   document.getElementById('tabKnockoutBtn').setAttribute('aria-label',tr('knockout'));
@@ -180,7 +180,7 @@ function applyLanguage(){
   document.getElementById('koStageNav').dataset.label=lt('WYBIERZ RUNDĘ','SELECT ROUND','SELEZIONA TURNO');
   if(groupTab){
     groupTab.title=HSO_MODE==='test'
-      ? lt('Pokaż archiwum fazy grupowej','Show the group-stage archive','Mostra l’archivio della fase a gironi')
+      ? lt('Pokaż historię punktów','Show point history','Mostra storico punti')
       : lt('Otwórz raport fazy grupowej','Open the group-stage report','Apri il report della fase a gironi');
     if('href' in groupTab)groupTab.href=groupReportHref();
   }
@@ -1081,66 +1081,190 @@ function updateMobileSectionBack(){
   const playersTab=document.getElementById('tab-gracze');
   const rankingTab=document.getElementById('tab-ranking');
   const knockoutTab=document.getElementById('tab-pucharowa');
+  const historyTab=document.getElementById('tab-grupowa');
   const playersVisible=playersTab&&playersTab.style.display!=='none';
   const rankingVisible=rankingTab&&rankingTab.style.display!=='none';
   const knockoutVisible=knockoutTab&&knockoutTab.style.display!=='none';
-  const anchor=playersVisible?playersTab:rankingVisible?rankingTab:knockoutVisible?knockoutTab:null;
+  const historyVisible=historyTab&&historyTab.style.display!=='none';
+  const anchor=playersVisible?playersTab:rankingVisible?rankingTab:knockoutVisible?knockoutTab:historyVisible?historyTab:null;
   const pastAnchor=anchor&&(window.scrollY>anchor.getBoundingClientRect().top+window.scrollY+260);
   button?.classList.toggle('visible',Boolean(anchor&&pastAnchor));
+}
+
+let historyPointsFilter='all';
+let expandedHistoryMatchKey=null;
+
+function historyPlayerGroups(entries){
+  const groups={3:[],1:[],0:[]};
+  entries.forEach(entry=>{
+    if(groups[entry.points])groups[entry.points].push(entry);
+  });
+  return [3,1,0].map(points=>{
+    const cls=points===3?'lbl-g':points===1?'lbl-a':'lbl-r';
+    const chip=points===3?'chip-g':points===1?'chip-a':'chip-r';
+    return `<div class="exp-section">
+      <div class="exp-lbl ${cls}">${points} ${pointsLabel(points)} · ${groups[points].length}</div>
+      <div class="chips">${groups[points].map(entry=>`<span class="chip ${chip}"><span class="chip-pname">${entry.name}</span><span class="chip-tip">${entry.tip}</span></span>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function groupHistoryMatches(){
+  const source=window.HSO_GROUP_REPORT;
+  if(!source?.matches||!source?.players)return [];
+  return source.matches.map((match,index)=>{
+    const entries=source.players.map(player=>({
+      name:player.name,
+      tip:player.tips?.[index]||'—',
+      points:sc(player.tips?.[index],match.result)??0
+    })).sort((a,b)=>a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
+    const exact=entries.filter(entry=>entry.points===3).length;
+    const outcome=entries.filter(entry=>entry.points===1).length;
+    return {
+      key:`group:${match.id||index}`,
+      round:'group',
+      roundLabel:`${lt('Faza grupowa','Group stage','Fase a gironi')} · ${lt('Grupa','Group','Girone')} ${match.g}`,
+      date:match.date,
+      home:match.home,
+      away:match.away,
+      result:match.result,
+      status:lt('Zakończony','Finished','Terminata'),
+      entries,
+      exact,
+      outcome,
+      misses:entries.length-exact-outcome,
+      available:true
+    };
+  });
+}
+
+function knockoutHistoryMatches(){
+  const apiMatches=knockoutMatches();
+  return KNOCKOUT_TIP_ROUNDS.flatMap(tipRound=>{
+    const uiRound=KNOCKOUT_ROUNDS.find(round=>round.id===tipRound.id);
+    const revealAllowed=knockoutRoundTipsRevealAllowed(tipRound.id);
+    const roundMatches=uiRound?apiMatches.slice(uiRound.start,uiRound.start+uiRound.count):[];
+    return (tipRound.matches||[]).filter(match=>match.home&&match.away).map((match,index)=>{
+      const apiMatch=roundMatches.find(item=>item.id===Number(match.apiId??match.id))||API_MATCHES.find(item=>item.id===Number(match.apiId??match.id));
+      const result=knockoutMatchResult(match);
+      const complete=knockoutRoundComplete(tipRound);
+      const available=complete&&revealAllowed;
+      const entries=available?PLAYERS.map(player=>{
+        const tip=tipRound.tipsByPlayer?.[player.name]?.[match.id||String(index)]||'—';
+        return {name:player.name,tip,points:result?sc(tip,result)??0:0};
+      }).sort((a,b)=>a.name.localeCompare(b.name,'pl',{sensitivity:'base'})):[];
+      const exact=result?entries.filter(entry=>entry.points===3).length:0;
+      const outcome=result?entries.filter(entry=>entry.points===1).length:0;
+      const roundLabel=knockoutRoundName(uiRound||{pl:tipRound.id,en:tipRound.id,it:tipRound.id});
+      return {
+        key:`ko:${tipRound.id}:${match.id||index}`,
+        round:tipRound.id,
+        roundLabel,
+        date:apiMatch?.utcDate?knockoutDate(apiMatch.utcDate):(match.date||'—'),
+        home:match.home,
+        away:match.away,
+        result:result||'—',
+        status:result?lt('Zakończony','Finished','Terminata'):lt('Nierozstrzygnięty','Pending','In attesa'),
+        entries,
+        exact,
+        outcome,
+        misses:result?entries.length-exact-outcome:0,
+        available,
+        hiddenReason:complete
+          ? lt('Typy są wprowadzone, ale zostaną pokazane po terminie ujawnienia.','Predictions are entered, but will be shown after the reveal deadline.','I pronostici sono inseriti, ma saranno visibili dopo la scadenza.')
+          : lt('Typy tej rundy nie są jeszcze kompletne.','Predictions for this round are not complete yet.','I pronostici di questo turno non sono ancora completi.')
+      };
+    });
+  });
+}
+
+function historyFilterLabel(filter){
+  const labels={
+    all:lt('Wszystkie','All','Tutte'),
+    group:lt('Faza grupowa','Group stage','Fase a gironi'),
+    r32:lt('1/16','Round of 32','Sedicesimi'),
+    r16:lt('1/8','Round of 16','Ottavi'),
+    qf:lt('1/4','Quarter-finals','Quarti'),
+    open:lt('Z punktami','With points','Con punti')
+  };
+  return labels[filter]||filter;
 }
 
 function renderGroupArchive(){
   const archive=document.getElementById('groupArchive');
   if(!archive)return;
   const ranked=assignPositions(calcAll()).sort((a,b)=>b.group.pts-a.group.pts||b.group.ex-a.group.ex||a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
-  const totalPoints=ranked.reduce((sum,p)=>sum+p.group.pts,0);
-  const exactHits=ranked.reduce((sum,p)=>sum+p.group.ex,0);
-  const outcomeHits=ranked.reduce((sum,p)=>sum+p.group.en,0);
+  const groupMatches=groupHistoryMatches();
+  const knockoutMatchesHistory=knockoutHistoryMatches();
+  const matches=[...groupMatches,...knockoutMatchesHistory];
+  const filtered=matches.filter(match=>historyPointsFilter==='all'
+    || match.round===historyPointsFilter
+    || (historyPointsFilter==='open'&&match.available));
+  const totalPoints=ranked.reduce((sum,p)=>sum+p.pts,0);
+  const exactHits=ranked.reduce((sum,p)=>sum+p.ex,0);
+  const outcomeHits=ranked.reduce((sum,p)=>sum+p.en,0);
   const leader=ranked[0];
   archive.innerHTML=`
     <div class="group-archive-head">
       <div>
         <p class="eyebrow">${lt('Archiwum','Archive','Archivio')}</p>
-        <h2>${lt('Faza grupowa','Group stage','Fase a gironi')}</h2>
-        <p>${lt('Zamrożone wyniki po fazie grupowej. Dane nie są przeliczane na żywo, więc sekcja działa lekko i służy do sprawdzania historii punktów.','Frozen results after the group stage. Data is not recalculated live, so this section stays light and is meant for checking point history.','Risultati congelati dopo la fase a gironi. I dati non vengono ricalcolati live, quindi la sezione resta leggera e serve per controllare la storia dei punti.')}</p>
+        <h2>${lt('Historia punktów','Point history','Storico punti')}</h2>
+        <p>${lt('Kafle wszystkich meczów z rozwijaną listą punktów graczy. Faza grupowa korzysta z zamrożonego raportu, a faza pucharowa z aktualnych typów i wyników.','Match cards with expandable player-point lists. Group-stage data comes from the frozen report; knockout data uses current predictions and results.','Schede di tutte le partite con elenco punti espandibile. La fase a gironi usa il report congelato, la fase a eliminazione usa pronostici e risultati attuali.')}</p>
       </div>
       <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
     </div>
     <div class="group-archive-stats">
       <div><span>${lt('Lider','Leader','Leader')}</span><strong>${leader?.name||'—'}</strong></div>
-      <div><span>${lt('Punkty graczy','Player points','Punti giocatori')}</span><strong>${totalPoints}</strong></div>
+      <div><span>${lt('Mecze w historii','Matches in history','Partite nello storico')}</span><strong>${matches.length}</strong></div>
       <div><span>${lt('Trafienia za 3','Exact scores','Risultati esatti')}</span><strong>${exactHits}</strong></div>
       <div><span>${lt('Trafienia za 1','Outcomes','Esiti corretti')}</span><strong>${outcomeHits}</strong></div>
     </div>
-    <div class="group-archive-table-wrap">
-      <table class="group-archive-table">
-        <thead><tr>
-          <th>#</th>
-          <th>${lt('Gracz','Player','Giocatore')}</th>
-          <th>${lt('Pkt','Pts','Pt')}</th>
-          <th>3 ${pointsLabel(3)}</th>
-          <th>1 ${pointsLabel(1)}</th>
-          <th>${lt('Mistrz','Champion','Campione')}</th>
-        </tr></thead>
-        <tbody>
-          ${ranked.map((p,i)=>`<tr>
-            <td>${i+1}</td>
-            <td>${p.name}</td>
-            <td class="strong">${p.group.pts}</td>
-            <td>${p.group.ex}</td>
-            <td>${p.group.en}</td>
-            <td>${p.champ?teamName(p.champ):'—'}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
+    <div class="history-filter-bar" role="tablist" aria-label="${lt('Filtr rund','Round filter','Filtro turni')}">
+      ${['all','group','r32','r16','qf','open'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
+    </div>
+    <div class="history-match-grid">
+      ${filtered.map(match=>`<article class="history-match${expandedHistoryMatchKey===match.key?' expanded':''}" data-history-key="${match.key}" tabindex="0" role="button" aria-expanded="${expandedHistoryMatchKey===match.key}">
+        <div class="history-match-top"><span>${match.roundLabel}</span><span>${match.date}</span></div>
+        <div class="history-scoreline">
+          <span class="history-team home">${flag(match.home)}<strong>${teamName(match.home)}</strong></span>
+          <span class="history-result">${match.result}</span>
+          <span class="history-team away"><strong>${teamName(match.away)}</strong>${flag(match.away)}</span>
+        </div>
+        <div class="history-match-foot">
+          <span>${match.status}</span>
+          <span class="history-points-summary"><b class="p3">${match.exact}</b> / <b class="p1">${match.outcome}</b> / <b class="p0">${match.misses}</b></span>
+        </div>
+        <div class="history-details" ${expandedHistoryMatchKey===match.key?'':'hidden'}>
+          ${match.available
+            ? historyPlayerGroups(match.entries)
+            : `<div class="ko-details-empty">${match.hiddenReason||lt('Brak widocznych typów dla tego meczu.','No visible predictions for this match.','Nessun pronostico visibile per questa partita.')}</div>`}
+        </div>
+      </article>`).join('')}
     </div>
     <div class="group-archive-footer">
       <div>
-        <strong>${lt('Pełna historia meczów i punktów','Full match and point history','Storico completo di partite e punti')}</strong>
-        <span>${lt('Raport otworzy się jako czysta strona raportowa, bez osadzania strony głównej w małym oknie.','The report opens as a clean report page, without embedding the main site in a small window.','Il report si apre come pagina pulita, senza incorporare il sito principale in una finestra piccola.')}</span>
+        <strong>${lt('Źródło fazy grupowej','Group-stage source','Fonte fase a gironi')}</strong>
+        <span>${lt('Pełny statyczny raport pozostaje dostępny jako wersja do druku i PDF.','The full static report remains available as the print/PDF version.','Il report statico completo resta disponibile come versione stampa/PDF.')}</span>
       </div>
       <a class="group-archive-report secondary" href="${groupReportHref()}">${lt('Otwórz raport','Open report','Apri report')}</a>
     </div>`;
+  archive.querySelectorAll('[data-history-filter]').forEach(button=>button.addEventListener('click',event=>{
+    historyPointsFilter=button.dataset.historyFilter;
+    expandedHistoryMatchKey=null;
+    renderGroupArchive();
+  }));
+  archive.querySelectorAll('[data-history-key]').forEach(card=>{
+    const toggle=()=>{
+      expandedHistoryMatchKey=expandedHistoryMatchKey===card.dataset.historyKey?null:card.dataset.historyKey;
+      renderGroupArchive();
+    };
+    card.addEventListener('click',toggle);
+    card.addEventListener('keydown',event=>{
+      if(!['Enter',' '].includes(event.key))return;
+      event.preventDefault();
+      toggle();
+    });
+  });
 }
 
 function backToPageTop(){
