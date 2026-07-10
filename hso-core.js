@@ -1200,10 +1200,6 @@ function renderGroupArchive(){
   const filtered=matches.filter(match=>historyPointsFilter==='all'
     || match.round===historyPointsFilter
     || (historyPointsFilter==='open'&&match.available));
-  const totalPoints=ranked.reduce((sum,p)=>sum+p.pts,0);
-  const exactHits=ranked.reduce((sum,p)=>sum+p.ex,0);
-  const outcomeHits=ranked.reduce((sum,p)=>sum+p.en,0);
-  const leader=ranked[0];
   archive.innerHTML=`
     <div class="group-archive-head">
       <div>
@@ -1212,12 +1208,6 @@ function renderGroupArchive(){
         <p>${lt('Kafle wszystkich meczów z rozwijaną listą punktów graczy. Faza grupowa korzysta z zamrożonego raportu, a faza pucharowa z aktualnych typów i wyników.','Match cards with expandable player-point lists. Group-stage data comes from the frozen report; knockout data uses current predictions and results.','Schede di tutte le partite con elenco punti espandibile. La fase a gironi usa il report congelato, la fase a eliminazione usa pronostici e risultati attuali.')}</p>
       </div>
       <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
-    </div>
-    <div class="group-archive-stats">
-      <div><span>${lt('Lider','Leader','Leader')}</span><strong>${leader?.name||'—'}</strong></div>
-      <div><span>${lt('Mecze w historii','Matches in history','Partite nello storico')}</span><strong>${matches.length}</strong></div>
-      <div><span>${lt('Trafienia za 3','Exact scores','Risultati esatti')}</span><strong>${exactHits}</strong></div>
-      <div><span>${lt('Trafienia za 1','Outcomes','Esiti corretti')}</span><strong>${outcomeHits}</strong></div>
     </div>
     <div class="history-filter-bar" role="tablist" aria-label="${lt('Filtr rund','Round filter','Filtro turni')}">
       ${['all','group','r32','r16','qf','open'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}

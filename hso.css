@@ -536,20 +536,6 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
   min-height:38px; padding:0 16px; border-radius:10px;
   color:#08111f; background:var(--gold); text-decoration:none; font-weight:800;
 }
-.group-archive-stats {
-  display:grid; grid-template-columns:repeat(4,1fr); border-bottom:1px solid var(--border);
-}
-.group-archive-stats div {
-  padding:16px 18px; border-right:1px solid var(--border);
-}
-.group-archive-stats div:last-child { border-right:0; }
-.group-archive-stats span {
-  display:block; color:var(--muted); font:700 10px 'Barlow',sans-serif;
-  letter-spacing:.08em; text-transform:uppercase;
-}
-.group-archive-stats strong {
-  display:block; margin-top:6px; color:#fff; font:700 25px 'Barlow Condensed',sans-serif;
-}
 .history-filter-bar {
   display:flex; flex-wrap:wrap; gap:8px; padding:16px 18px;
   border-bottom:1px solid var(--border); background:rgba(8,15,29,.28);
@@ -1285,8 +1271,6 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
   .ko-road { grid-column: auto; }
   .group-archive-head,
   .group-archive-footer { flex-direction:column; align-items:stretch; }
-  .group-archive-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .group-archive-stats div:nth-child(2n) { border-right:0; }
   .history-filter-bar {
     flex-wrap:nowrap; overflow-x:auto; padding:12px;
     scrollbar-width:thin;
