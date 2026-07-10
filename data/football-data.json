@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-10T19:56:21.941Z",
+  "updatedAt": "2026-07-10T19:57:12.433Z",
   "matches": [
     {
       "id": 537327,
@@ -3884,7 +3884,7 @@
     {
       "id": 537384,
       "utcDate": "2026-07-10T19:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Spain",
         "shortName": "Spain",
@@ -3907,8 +3907,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "extraTime": {
           "home": null,
@@ -3919,7 +3919,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-10T19:56:06Z"
+      "lastUpdated": "2026-07-10T19:56:43Z"
     },
     {
       "id": 537385,
