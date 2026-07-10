@@ -648,6 +648,27 @@ function groupReportLink(){
   return `<a class="phase-report-link" href="${groupReportHref()}">${lt('Otwórz statyczny raport fazy grupowej','Open the static group-stage report','Apri il report statico della fase a gironi')}</a>`;
 }
 
+function playerGroupPhaseRows(p){
+  const source=window.HSO_GROUP_REPORT;
+  const player=source?.players?.find(item=>item.name===p.name);
+  if(!source?.matches?.length||!player?.tips?.length)return groupReportLink();
+  const rows=source.matches.map((match,index)=>{
+    const tip=player.tips?.[index]||'—';
+    const points=sc(tip,match.result)??0;
+    const resultClass=`r${points}`;
+    return `<div class="pdp-match pdp-group-match ${resultClass}">
+      <span class="pdp-fixture">
+        <span class="pdp-kickoff">${lt('Grupa','Group','Girone')} ${match.g} · ${match.date}</span>
+        <span class="pdp-team-line">${flag(match.home)}<span>${teamName(match.home)}</span></span>
+        <span class="pdp-team-line">${flag(match.away)}<span>${teamName(match.away)}</span></span>
+      </span>
+      <span class="pdp-result">${match.result}</span>
+      <span class="pdp-tip-card"><strong>${tip}</strong><small>${points} ${pointsLabel(points)}</small></span>
+    </div>`;
+  }).join('');
+  return `${playerSubsectionLabel(lt('Mecze fazy grupowej','Group-stage matches','Partite fase a gironi'))}${rows}${groupReportLink()}`;
+}
+
 function buildPlayerPhases(p){
   const ranked=calcAll().find(player=>player.name===p.name)||p;
   return `<section class="pdp-phase open">
@@ -670,7 +691,7 @@ function buildPlayerPhases(p){
           <span><strong>${ranked.group.ex}</strong>${lt('trafień za 3','exact scores','risultati esatti')}</span>
           <span><strong>${ranked.group.en}</strong>${lt('trafień za 1','outcomes','esiti corretti')}</span>
         </div>
-        ${groupReportLink()}
+        ${playerGroupPhaseRows(ranked)}
       </div>
     </section>`;
 }
