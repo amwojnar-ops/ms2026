@@ -1184,8 +1184,7 @@ function historyFilterLabel(filter){
     group:lt('Faza grupowa','Group stage','Fase a gironi'),
     r32:lt('1/16','Round of 32','Sedicesimi'),
     r16:lt('1/8','Round of 16','Ottavi'),
-    qf:lt('1/4','Quarter-finals','Quarti'),
-    open:lt('Z punktami','With points','Con punti')
+    qf:lt('1/4','Quarter-finals','Quarti')
   };
   return labels[filter]||filter;
 }
@@ -1198,8 +1197,7 @@ function renderGroupArchive(){
   const knockoutMatchesHistory=knockoutHistoryMatches();
   const matches=[...groupMatches,...knockoutMatchesHistory];
   const filtered=matches.filter(match=>historyPointsFilter==='all'
-    || match.round===historyPointsFilter
-    || (historyPointsFilter==='open'&&match.available));
+    || match.round===historyPointsFilter);
   archive.innerHTML=`
     <div class="group-archive-head">
       <div>
@@ -1210,7 +1208,7 @@ function renderGroupArchive(){
       <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
     </div>
     <div class="history-filter-bar" role="tablist" aria-label="${lt('Filtr rund','Round filter','Filtro turni')}">
-      ${['all','group','r32','r16','qf','open'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
+      ${['all','group','r32','r16','qf'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
     </div>
     <div class="history-match-grid">
       ${filtered.map(match=>`<article class="history-match${expandedHistoryMatchKey===match.key?' expanded':''}" data-history-key="${match.key}" tabindex="0" role="button" aria-expanded="${expandedHistoryMatchKey===match.key}">
