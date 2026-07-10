@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-10T06:30:50.677Z",
+  "updatedAt": "2026-07-10T19:02:16.257Z",
   "matches": [
     {
       "id": 537327,
@@ -3884,7 +3884,7 @@
     {
       "id": 537384,
       "utcDate": "2026-07-10T19:00:00Z",
-      "status": "TIMED",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Spain",
         "shortName": "Spain",
@@ -3896,11 +3896,11 @@
         "tla": "BEL"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3919,7 +3919,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-10T05:20:09Z"
+      "lastUpdated": "2026-07-10T19:02:16.241Z"
     },
     {
       "id": 537385,
