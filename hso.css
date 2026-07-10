@@ -1269,7 +1269,17 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
   .ko-matches { grid-template-columns: 1fr; }
   .ko-side { grid-template-columns: 1fr; }
   .ko-road { grid-column: auto; }
-  .group-archive-head,
+  .group-archive-head {
+    display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center;
+    gap:8px 12px; padding:14px;
+  }
+  .group-archive-head .eyebrow { margin-bottom:3px; font-size:8px; letter-spacing:.14em; }
+  .group-archive-head h2 { font-size:25px; line-height:.95; }
+  .group-archive-head p { display:none; }
+  .group-archive-report {
+    min-height:30px; padding:0 10px; border-radius:8px;
+    font-size:11px; white-space:nowrap;
+  }
   .group-archive-footer { flex-direction:column; align-items:stretch; }
   .history-filter-bar {
     flex-wrap:nowrap; overflow-x:auto; padding:12px;
