@@ -85,12 +85,13 @@ const TEAM_IT = {
   'Tunezja':'Tunisia','Turcja':'Turchia','Urugwaj':'Uruguay','USA':'USA','Uzbekistan':'Uzbekistan',
   'Wybrzeże K.Sł.':"Costa d'Avorio"
 };
-const AVAILABLE_LANGUAGES=HSO_MODE==='test'?['pl','en','it']:['pl','en'];
+const CONFIG_LANGUAGES=Array.isArray(window.HSO_CONFIG?.languages)?window.HSO_CONFIG.languages:null;
+const AVAILABLE_LANGUAGES=CONFIG_LANGUAGES?.filter(language=>TRANSLATIONS[language])||['pl','en'];
 const queryLanguage=new URLSearchParams(location.search).get('lang');
 let savedLanguage=null;
 try{const saved=localStorage.getItem('hso_lang');savedLanguage=AVAILABLE_LANGUAGES.includes(saved)?saved:null;}catch(e){}
 const browserLanguages=[...(navigator.languages||[]),navigator.language].filter(Boolean);
-const detectedLanguage=HSO_MODE==='test'&&browserLanguages.some(language=>/^it(?:-|$)/i.test(language))?'it':'pl';
+const detectedLanguage=AVAILABLE_LANGUAGES.includes('it')&&HSO_MODE==='test'&&browserLanguages.some(language=>/^it(?:-|$)/i.test(language))?'it':'pl';
 let LANG=AVAILABLE_LANGUAGES.includes(queryLanguage)?queryLanguage:(savedLanguage||detectedLanguage);
 function tr(key){ return TRANSLATIONS[LANG][key] ?? key; }
 function teamName(name){ return LANG==='en'?(TEAM_EN[name]||name):LANG==='it'?(TEAM_IT[name]||TEAM_EN[name]||name):name; }

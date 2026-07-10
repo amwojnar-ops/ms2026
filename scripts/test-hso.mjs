@@ -205,7 +205,7 @@ const normalizeWrapper = html => html
   .replace(/\n<div id="tab-grupowa" style="display:none">[\s\S]*?<\/div>\n\n(?=<div id="tab-gracze">)/, "\n")
   .replace(/\n  <script src="data\/group-report-source\.js\?v=[^"]+"><\/script>/, "")
   .replace(/window\.HSO_CONFIG=\{mode:'production'\}/, "window.HSO_CONFIG={mode:'MODE'}")
-  .replace(/window\.HSO_CONFIG=\{mode:'test',languages:\['pl','en','it'\]\}/, "window.HSO_CONFIG={mode:'MODE'}")
+  .replace(/window\.HSO_CONFIG=\{mode:'test',languages:\['pl','en'\]\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/\r\n/g, "\n");
 check(
   normalizeWrapper(production) === normalizeWrapper(test),
@@ -234,26 +234,13 @@ const productionVersion = production.match(/hso-core\.js\?v=([^"']+)/)?.[1];
 const testVersion = test.match(/hso-core\.js\?v=([^"']+)/)?.[1];
 check(productionVersion === testVersion, "Rozne wersje cache hso-core.js");
 check(
-  test.includes("window.HSO_CONFIG={mode:'test',languages:['pl','en','it']}") &&
+  test.includes("window.HSO_CONFIG={mode:'test',languages:['pl','en']}") &&
+    !test.includes("languages:['pl','en','it']") &&
     !production.includes("languages:['pl','en','it']") &&
-    core.includes("const AVAILABLE_LANGUAGES=HSO_MODE==='test'?['pl','en','it']:['pl','en'];") &&
-    core.includes("pageTitle:'Salotto degli Esperti · Mondiali 2026'") &&
-    core.includes("it:'Ottavi'") &&
-    core.includes("LANG==='it'?(TEAM_IT[name]||TEAM_EN[name]||name)"),
-  "Wloska wersja nie jest kompletna lub zostala wlaczona w produkcji"
-);
-check(
-  core.includes("const browserLanguages=[...(navigator.languages||[]),navigator.language].filter(Boolean);") &&
-    core.includes("/^it(?:-|$)/i.test(language)") &&
-    core.includes("HSO_MODE==='test'&&browserLanguages.some") &&
-    core.includes("savedLanguage||detectedLanguage"),
-  "hso-test nie wykrywa automatycznie wloskiego jezyka telefonu"
-);
-check(
-  core.includes('document.documentElement.dataset.hsoMode=HSO_MODE;') &&
-    css.includes('html[data-hso-mode="test"][lang="it"] .header-title h1') &&
-    css.includes('white-space:nowrap;'),
-  "Wloski naglowek testowy nie miesci sie w jednym wierszu na telefonie"
+    core.includes("const CONFIG_LANGUAGES=Array.isArray(window.HSO_CONFIG?.languages)?window.HSO_CONFIG.languages:null;") &&
+    core.includes("const AVAILABLE_LANGUAGES=CONFIG_LANGUAGES?.filter(language=>TRANSLATIONS[language])||['pl','en'];") &&
+    core.includes("AVAILABLE_LANGUAGES.includes('it')&&HSO_MODE==='test'&&browserLanguages.some"),
+  "hso-test powinien miec tylko polski i angielski"
 );
 check(
   production.includes('class="stat-card next-match-card"') &&
