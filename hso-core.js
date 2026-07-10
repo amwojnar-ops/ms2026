@@ -171,7 +171,8 @@ function applyLanguage(){
   setText('playedLabel','played'); setText('nextMatchLabel','nextMatch');
   setText('tabPlayersBtn','players');
   const groupTab=document.getElementById('tabMatchesBtn');
-  if(groupTab)groupTab.textContent=HSO_MODE==='test'?lt('Historia punktów','Point history','Storico punti'):tr('matches');
+  const groupTabIsHistory=groupTab?.tagName==='BUTTON';
+  if(groupTab)groupTab.textContent=groupTabIsHistory?lt('Historia punktów','Point history','Storico punti'):tr('matches');
   setText('tabRankingBtn','ranking');
   document.getElementById('tabPlayersBtn').setAttribute('aria-label',tr('players'));
   document.getElementById('tabKnockoutBtn').setAttribute('aria-label',tr('knockout'));
@@ -180,7 +181,7 @@ function applyLanguage(){
   document.getElementById('mainTabs').dataset.label=lt('MENU GŁÓWNE','MAIN MENU','MENU PRINCIPALE');
   document.getElementById('koStageNav').dataset.label=lt('WYBIERZ RUNDĘ','SELECT ROUND','SELEZIONA TURNO');
   if(groupTab){
-    groupTab.title=HSO_MODE==='test'
+    groupTab.title=groupTabIsHistory
       ? lt('Pokaż historię punktów','Show point history','Mostra storico punti')
       : lt('Otwórz raport fazy grupowej','Open the group-stage report','Apri il report della fase a gironi');
     if('href' in groupTab)groupTab.href=groupReportHref();
