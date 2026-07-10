@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-10T19:42:14.240Z",
+  "updatedAt": "2026-07-10T19:43:14.036Z",
   "matches": [
     {
       "id": 537327,
@@ -3884,7 +3884,7 @@
     {
       "id": 537384,
       "utcDate": "2026-07-10T19:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Spain",
         "shortName": "Spain",
@@ -3919,7 +3919,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-10T19:42:14.209Z"
+      "lastUpdated": "2026-07-10T19:43:14.013Z"
     },
     {
       "id": 537385,
