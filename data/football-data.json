@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-11T21:57:12.466Z",
+  "updatedAt": "2026-07-11T21:58:17.996Z",
   "matches": [
     {
       "id": 537327,
@@ -3924,7 +3924,7 @@
     {
       "id": 537385,
       "utcDate": "2026-07-11T21:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "Norway",
         "shortName": "Norway",
@@ -3947,8 +3947,8 @@
           "away": null
         },
         "halfTime": {
-          "home": 0,
-          "away": 0
+          "home": 1,
+          "away": 1
         },
         "extraTime": {
           "home": null,
@@ -3959,7 +3959,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-11T21:56:18Z"
+      "lastUpdated": "2026-07-11T21:58:07Z"
     },
     {
       "id": 537386,
