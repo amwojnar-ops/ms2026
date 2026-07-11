@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-11T23:08:17.219Z",
+  "updatedAt": "2026-07-11T23:11:14.553Z",
   "matches": [
     {
       "id": 537327,
@@ -3924,7 +3924,7 @@
     {
       "id": 537385,
       "utcDate": "2026-07-11T21:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Norway",
         "shortName": "Norway",
@@ -3936,11 +3936,11 @@
         "tla": "ENG"
       },
       "score": {
-        "winner": "DRAW",
-        "duration": "REGULAR",
+        "winner": "AWAY_TEAM",
+        "duration": "EXTRA_TIME",
         "fullTime": {
           "home": 1,
-          "away": 1
+          "away": 2
         },
         "regularTime": {
           "home": null,
@@ -3959,7 +3959,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-11T23:07:31Z"
+      "lastUpdated": "2026-07-11T23:11:14.543Z"
     },
     {
       "id": 537386,
