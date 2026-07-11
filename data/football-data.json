@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-11T21:37:11.907Z",
+  "updatedAt": "2026-07-11T21:38:15.740Z",
   "matches": [
     {
       "id": 537327,
@@ -3924,7 +3924,7 @@
     {
       "id": 537385,
       "utcDate": "2026-07-11T21:00:00Z",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Norway",
         "shortName": "Norway",
@@ -3959,7 +3959,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-11T21:37:11.889Z"
+      "lastUpdated": "2026-07-11T21:38:15.658Z"
     },
     {
       "id": 537386,
