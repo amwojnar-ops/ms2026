@@ -457,10 +457,11 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("const KNOCKOUT_SUBMISSIONS = {};") &&
+  core.includes("const KNOCKOUT_SUBMISSIONS = {") &&
+    core.includes("sf:new Set(['Michał','Kacper'])") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
-  "Robocze podswietlenie cwiercfinalow nie zostalo wyczyszczone po publikacji typow"
+  "Robocze podswietlenie polfinalow nie pokazuje graczy z oddanymi typami"
 );
 check(
   core.includes("className='lock-badge-progress'") &&
