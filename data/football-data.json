@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-12T03:09:12.215Z",
+  "updatedAt": "2026-07-12T03:12:16.173Z",
   "matches": [
     {
       "id": 537327,
@@ -3977,7 +3977,7 @@
       },
       "score": {
         "winner": "DRAW",
-        "duration": "REGULAR",
+        "duration": "EXTRA_TIME",
         "fullTime": {
           "home": 1,
           "away": 1
@@ -3991,15 +3991,15 @@
           "away": 0
         },
         "extraTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "penalties": {
           "home": null,
           "away": null
         }
       },
-      "lastUpdated": "2026-07-12T03:08:46Z"
+      "lastUpdated": "2026-07-12T03:11:46Z"
     },
     {
       "id": 537387,
