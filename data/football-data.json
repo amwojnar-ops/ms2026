@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-12T03:39:12.651Z",
+  "updatedAt": "2026-07-12T03:40:44.978Z",
   "matches": [
     {
       "id": 537327,
@@ -3976,10 +3976,10 @@
         "tla": "SUI"
       },
       "score": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "duration": "EXTRA_TIME",
         "fullTime": {
-          "home": 1,
+          "home": 2,
           "away": 1
         },
         "regularTime": {
@@ -3991,7 +3991,7 @@
           "away": 0
         },
         "extraTime": {
-          "home": 0,
+          "home": 1,
           "away": 0
         },
         "penalties": {
@@ -3999,7 +3999,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-12T03:38:46Z"
+      "lastUpdated": "2026-07-12T03:40:34Z"
     },
     {
       "id": 537387,
