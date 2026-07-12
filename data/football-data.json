@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-12T00:30:57.024Z",
+  "updatedAt": "2026-07-12T01:06:14.385Z",
   "matches": [
     {
       "id": 537327,
@@ -3964,7 +3964,7 @@
     {
       "id": 537386,
       "utcDate": "2026-07-12T01:00:00Z",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "homeTeam": {
         "name": "Argentina",
         "shortName": "Argentina",
@@ -3976,11 +3976,11 @@
         "tla": "SUI"
       },
       "score": {
-        "winner": null,
+        "winner": "DRAW",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regularTime": {
           "home": null,
@@ -3999,7 +3999,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-11T05:20:09Z"
+      "lastUpdated": "2026-07-12T01:05:46Z"
     },
     {
       "id": 537387,
