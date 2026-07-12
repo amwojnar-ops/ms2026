@@ -469,7 +469,7 @@ const KNOCKOUT_TIP_ROUNDS = [
 ];
 
 const KNOCKOUT_SUBMISSIONS = {
-  sf:new Set(['Michał','Kacper'])
+  sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar'])
 };
 
 function knockoutTipDotPlayers(){
