@@ -458,7 +458,7 @@ check(
 );
 check(
   core.includes("const KNOCKOUT_SUBMISSIONS = {") &&
-    core.includes("sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar'])") &&
+    core.includes("sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar','Andrzej W.'])") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
   "Robocze podswietlenie polfinalow nie pokazuje graczy z oddanymi typami"
