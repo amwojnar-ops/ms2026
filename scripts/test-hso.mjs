@@ -467,11 +467,11 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("const KNOCKOUT_SUBMISSIONS = {") &&
-    core.includes("sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar','Andrzej W.','Justyna','Łukasz','Mariusz','Agnieszka','Alex','Ola','Robert','Paweł','Iwona','Tomek','Aldona','Jacek','Andrzej G.','Borys','Magda','Maria','Izunia','Mateusz'])") &&
+  core.includes("const KNOCKOUT_SUBMISSIONS = {};") &&
+    !core.includes("sf:new Set(") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
-  "Robocze podswietlenie polfinalow nie pokazuje graczy z oddanymi typami"
+  "Robocze podswietlenie polfinalow nie zostalo wyczyszczone po komplecie typow"
 );
 check(
   core.includes("className='lock-badge-progress'") &&

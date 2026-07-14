@@ -501,9 +501,7 @@ const KNOCKOUT_TIP_ROUNDS = [
   }
 ];
 
-const KNOCKOUT_SUBMISSIONS = {
-  sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar','Andrzej W.','Justyna','Łukasz','Mariusz','Agnieszka','Alex','Ola','Robert','Paweł','Iwona','Tomek','Aldona','Jacek','Andrzej G.','Borys','Magda','Maria','Izunia','Mateusz'])
-};
+const KNOCKOUT_SUBMISSIONS = {};
 
 function knockoutTipDotPlayers(){
   const submitted = new Set(Object.values(KNOCKOUT_SUBMISSIONS).flatMap(players => [...players]));
