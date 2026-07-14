@@ -261,6 +261,8 @@ check(
     core.includes('Typy są wprowadzone. Pokażą się o ${knockoutDeadlineLabel(revealDeadline)}.') &&
     core.includes('function knockoutRoundTipsRevealAllowed(stageId)') &&
     core.includes('const visible=rounds.length>0&&rounds.every(knockoutRoundComplete)&&knockoutRoundTipsRevealAllowed(stage.id);') &&
+    core.includes('const available=complete&&revealAllowed;') &&
+    core.includes('const entries=available?PLAYERS.map(player=>') &&
     css.includes('.next-match-card.has-match-link') &&
     css.includes('.live-summary-side { display:flex; align-items:center; gap:6px; min-width:0; color:#fff; font-size:15px;') &&
     core.includes("classList.add('is-live')"),
@@ -366,6 +368,13 @@ check(
   "Hiszpania nie zostala przeniesiona do polfinalu 14.07 o 21:00 lub formularza"
 );
 check(
+  entries.some(entry => entry.id === 537388 && entry.side === "homeTeam" && entry.team === "England") &&
+    entries.some(entry => entry.id === 537388 && entry.side === "awayTeam" && entry.team === "Argentina") &&
+    formCore.includes('{ matchId: 537388, side: "homeTeam", team: { name: "England"') &&
+    formCore.includes('{ matchId: 537388, side: "awayTeam", team: { name: "Argentina"'),
+  "Para Anglia-Argentyna nie zostala przeniesiona do polfinalu lub formularza"
+);
+check(
   entries.some(entry => entry.id === 537386 && entry.side === "homeTeam" && entry.team === "Argentina") &&
     entries.some(entry => entry.id === 537386 && entry.side === "awayTeam" && entry.team === "Switzerland") &&
     formCore.includes('{ matchId: 537386, side: "homeTeam", team: { name: "Argentina"') &&
@@ -458,7 +467,7 @@ check(
 );
 check(
   core.includes("const KNOCKOUT_SUBMISSIONS = {") &&
-    core.includes("sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar','Andrzej W.','Justyna','Łukasz','Mariusz','Agnieszka','Alex','Ola','Robert','Paweł','Iwona','Tomek','Aldona','Jacek','Andrzej G.','Borys','Magda','Maria','Izunia'])") &&
+    core.includes("sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar','Andrzej W.','Justyna','Łukasz','Mariusz','Agnieszka','Alex','Ola','Robert','Paweł','Iwona','Tomek','Aldona','Jacek','Andrzej G.','Borys','Magda','Maria','Izunia','Mateusz'])") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
   "Robocze podswietlenie polfinalow nie pokazuje graczy z oddanymi typami"
@@ -547,9 +556,11 @@ check(!core.includes("const MATCHES=["), "Terminarz grupowy pozostal w aktywnym 
 const knockoutTipsStart = core.indexOf("const KNOCKOUT_TIP_ROUNDS = [");
 const r16TipsStart = core.indexOf("    id:'r16',", knockoutTipsStart);
 const qfTipsStart = core.indexOf("    id:'qf',", r16TipsStart);
+const sfTipsStart = core.indexOf("    id:'sf',", qfTipsStart);
 const r32TipsBlock = core.slice(knockoutTipsStart, r16TipsStart);
 const r16TipsBlock = core.slice(r16TipsStart, qfTipsStart);
-const qfTipsBlock = core.slice(qfTipsStart, core.indexOf("const PLAYER_KNOCKOUT_STAGES", qfTipsStart));
+const qfTipsBlock = core.slice(qfTipsStart, sfTipsStart);
+const sfTipsBlock = core.slice(sfTipsStart, core.indexOf("const PLAYER_KNOCKOUT_STAGES", sfTipsStart));
 const parseRoundTips = block => [...block.matchAll(/^\s*'([^']+)':\{([^}]*)\}/gm)].map(match => ({
   name: match[1],
   scores: [...match[2].matchAll(/'\d+':'(\d+-\d+)'/g)].map(score => score[1])
@@ -557,6 +568,7 @@ const parseRoundTips = block => [...block.matchAll(/^\s*'([^']+)':\{([^}]*)\}/gm
 const r32PlayerTips = parseRoundTips(r32TipsBlock);
 const r16PlayerTips = parseRoundTips(r16TipsBlock);
 const qfPlayerTips = parseRoundTips(qfTipsBlock);
+const sfPlayerTips = parseRoundTips(sfTipsBlock);
 const baselineNames = new Set(baselineEntries.map(player => player.name));
 check(r32PlayerTips.length === 24, `Typy 1/16: ${r32PlayerTips.length}/24 graczy`);
 check(new Set(r32PlayerTips.map(player => player.name)).size === r32PlayerTips.length, "Typy 1/16: powtorzony gracz");
@@ -575,6 +587,12 @@ check(new Set(qfPlayerTips.map(player => player.name)).size === 24, "Typy 1/4: p
 qfPlayerTips.forEach(player => {
   check(baselineNames.has(player.name), `Typy 1/4: nieznany gracz ${player.name}`);
   check(player.scores.length === 4, `Typy 1/4 ${player.name}: ${player.scores.length}/4 mecze`);
+});
+check(sfPlayerTips.length === 24, `Typy 1/2: ${sfPlayerTips.length}/24 graczy`);
+check(new Set(sfPlayerTips.map(player => player.name)).size === 24, "Typy 1/2: powtorzony gracz");
+sfPlayerTips.forEach(player => {
+  check(baselineNames.has(player.name), `Typy 1/2: nieznany gracz ${player.name}`);
+  check(player.scores.length === 2, `Typy 1/2 ${player.name}: ${player.scores.length}/2 mecze`);
 });
 check(fs.existsSync(path.join(root, "output", "pdf", "typy-1-8-zestawienie.pdf")), "Brak PDF zestawienia 1/8 finalu");
 

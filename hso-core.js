@@ -465,11 +465,44 @@ const KNOCKOUT_TIP_ROUNDS = [
       'Kacper':{'537383':'3-2','537384':'4-2','537385':'1-2','537386':'3-1'},
       'Izunia':{'537383':'2-1','537384':'2-0','537385':'1-2','537386':'2-0'}
     }
+  },
+  {
+    id:'sf',
+    matches:[
+      {id:537387,apiId:537387,home:'Francja',away:'Hiszpania'},
+      {id:537388,apiId:537388,home:'Anglia',away:'Argentyna'}
+    ],
+    tipsByPlayer:{
+      'Michał':{'537387':'2-2','537388':'1-1'},
+      'Kacper':{'537387':'1-2','537388':'1-2'},
+      'Lucas':{'537387':'2-1','537388':'2-3'},
+      'Leszek':{'537387':'3-1','537388':'1-0'},
+      'Waldemar':{'537387':'2-2','537388':'3-1'},
+      'Andrzej W.':{'537387':'2-2','537388':'1-1'},
+      'Justyna':{'537387':'1-1','537388':'1-2'},
+      'Łukasz':{'537387':'2-1','537388':'1-2'},
+      'Mariusz':{'537387':'2-2','537388':'1-3'},
+      'Agnieszka':{'537387':'2-3','537388':'1-1'},
+      'Alex':{'537387':'2-2','537388':'1-3'},
+      'Ola':{'537387':'2-1','537388':'2-2'},
+      'Robert':{'537387':'1-1','537388':'1-1'},
+      'Paweł':{'537387':'1-2','537388':'2-1'},
+      'Iwona':{'537387':'1-1','537388':'1-1'},
+      'Tomek':{'537387':'2-2','537388':'1-1'},
+      'Aldona':{'537387':'1-2','537388':'1-1'},
+      'Jacek':{'537387':'2-2','537388':'0-0'},
+      'Andrzej G.':{'537387':'1-2','537388':'1-1'},
+      'Borys':{'537387':'2-1','537388':'1-1'},
+      'Magda':{'537387':'2-1','537388':'2-2'},
+      'Maria':{'537387':'7-6','537388':'4-1'},
+      'Izunia':{'537387':'1-1','537388':'1-2'},
+      'Mateusz':{'537387':'3-2','537388':'1-2'}
+    }
   }
 ];
 
 const KNOCKOUT_SUBMISSIONS = {
-  sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar','Andrzej W.','Justyna','Łukasz','Mariusz','Agnieszka','Alex','Ola','Robert','Paweł','Iwona','Tomek','Aldona','Jacek','Andrzej G.','Borys','Magda','Maria','Izunia'])
+  sf:new Set(['Michał','Kacper','Lucas','Leszek','Waldemar','Andrzej W.','Justyna','Łukasz','Mariusz','Agnieszka','Alex','Ola','Robert','Paweł','Iwona','Tomek','Aldona','Jacek','Andrzej G.','Borys','Magda','Maria','Izunia','Mateusz'])
 };
 
 function knockoutTipDotPlayers(){
@@ -1509,6 +1542,8 @@ const KNOWN_KNOCKOUT_TEAMS = [
   {matchId:537386, side:'homeTeam', team:{name:'Argentina',shortName:'Argentina',tla:'ARG'}},
   {matchId:537386, side:'awayTeam', team:{name:'Switzerland',shortName:'Switzerland',tla:'SUI'}},
   {matchId:537387, side:'awayTeam', team:{name:'Spain',shortName:'Spain',tla:'ESP'}},
+  {matchId:537388, side:'homeTeam', team:{name:'England',shortName:'England',tla:'ENG'}},
+  {matchId:537388, side:'awayTeam', team:{name:'Argentina',shortName:'Argentina',tla:'ARG'}},
   {matchId:537425, side:'homeTeam', team:{name:'Mexico',shortName:'Mexico',tla:'MEX'}},
   {matchId:537425, side:'awayTeam', team:{name:'Ecuador',shortName:'Ecuador',tla:'ECU'}},
   {matchId:537421, side:'homeTeam', team:{name:'United States',shortName:'United States',tla:'USA'}},
