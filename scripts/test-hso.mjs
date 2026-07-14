@@ -375,6 +375,13 @@ check(
   "Para Anglia-Argentyna nie zostala przeniesiona do polfinalu lub formularza"
 );
 check(
+  entries.some(entry => entry.id === 537389 && entry.side === "homeTeam" && entry.team === "France") &&
+    entries.some(entry => entry.id === 537390 && entry.side === "homeTeam" && entry.team === "Spain") &&
+    formCore.includes('{ matchId: 537389, side: "homeTeam", team: { name: "France"') &&
+    formCore.includes('{ matchId: 537390, side: "homeTeam", team: { name: "Spain"'),
+  "Francja i Hiszpania nie zostaly przeniesione do meczow medalowych"
+);
+check(
   entries.some(entry => entry.id === 537386 && entry.side === "homeTeam" && entry.team === "Argentina") &&
     entries.some(entry => entry.id === 537386 && entry.side === "awayTeam" && entry.team === "Switzerland") &&
     formCore.includes('{ matchId: 537386, side: "homeTeam", team: { name: "Argentina"') &&
