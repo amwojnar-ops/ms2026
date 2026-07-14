@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-14T06:30:55.250Z",
+  "updatedAt": "2026-07-14T19:58:15.057Z",
   "matches": [
     {
       "id": 537327,
@@ -4004,7 +4004,7 @@
     {
       "id": 537387,
       "utcDate": "2026-07-14T19:00:00Z",
-      "status": "TIMED",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "France",
         "shortName": "France",
@@ -4016,19 +4016,19 @@
         "tla": "ESP"
       },
       "score": {
-        "winner": null,
+        "winner": "AWAY_TEAM",
         "duration": "REGULAR",
         "fullTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "regularTime": {
           "home": null,
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "extraTime": {
           "home": null,
@@ -4039,7 +4039,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-14T05:20:10Z"
+      "lastUpdated": "2026-07-14T19:57:16Z"
     },
     {
       "id": 537388,
