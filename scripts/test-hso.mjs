@@ -437,9 +437,10 @@ check(
   "Formularz medalowy lub specjalny kafel finalu sa nieprawidlowe"
 );
 check(
-  core.includes("r16:'2026-07-04T13:00:00Z'") &&
+    core.includes("r16:'2026-07-04T13:00:00Z'") &&
     core.includes("nextDeadlineIndex") &&
-    core.includes("dostępne pary: ${headerKnownPairs}/${headerRound.count}") &&
+    core.includes("const headerPairTotal=headerFormMatches.length||headerRound.count;") &&
+    core.includes("dostępne pary: ${headerKnownPairs}/${headerPairTotal}") &&
     core.includes("(potem idziemy z Magdą na imprezę)") &&
     core.includes("lock-badge-detail") &&
     core.includes("headerKnownPairs>0?'available':'waiting'"),

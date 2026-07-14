@@ -1805,15 +1805,16 @@ function renderKnockout(){
     ? allMatches.slice(30,32)
     : headerMatches;
   const headerKnownPairs=headerFormMatches.filter(match=>match.homeTeam?.name&&match.awayTeam?.name).length;
+  const headerPairTotal=headerFormMatches.length||headerRound.count;
   const headerIsFinalForm=headerRound.form==='hso-typowanie1.html';
   const headerDeadline=knockoutDeadline(headerFormMatches[0]?.utcDate,headerRound.id);
   const headerTipProgress=knockoutRoundProgress(headerRound,headerMatches);
   setHeaderBadge(
     LANG==='en'
-      ? `${headerIsFinalForm?'Final stage':knockoutRoundName(headerRound)} · available fixtures: ${headerKnownPairs}/${headerRound.count}`
+      ? `${headerIsFinalForm?'Final stage':knockoutRoundName(headerRound)} · available fixtures: ${headerKnownPairs}/${headerPairTotal}`
       : LANG==='it'
-        ? `${headerIsFinalForm?'Fase finale':knockoutRoundName(headerRound)} · abbinamenti disponibili: ${headerKnownPairs}/${headerRound.count}`
-        : `${headerIsFinalForm?'Faza finałowa':knockoutRoundName(headerRound)} · dostępne pary: ${headerKnownPairs}/${headerRound.count}`,
+        ? `${headerIsFinalForm?'Fase finale':knockoutRoundName(headerRound)} · abbinamenti disponibili: ${headerKnownPairs}/${headerPairTotal}`
+        : `${headerIsFinalForm?'Faza finałowa':knockoutRoundName(headerRound)} · dostępne pary: ${headerKnownPairs}/${headerPairTotal}`,
     headerKnownPairs>0?'available':'waiting',
     LANG==='en'
       ? `deadline ${knockoutDeadlineLabel(headerDeadline)}${headerRound.id==='r16'?' (then Magda and I are going to a party)':''}`
