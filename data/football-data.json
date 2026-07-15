@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-15T19:54:15.714Z",
+  "updatedAt": "2026-07-15T19:55:20.052Z",
   "matches": [
     {
       "id": 537327,
@@ -4044,7 +4044,7 @@
     {
       "id": 537388,
       "utcDate": "2026-07-15T19:00:00Z",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "homeTeam": {
         "name": "England",
         "shortName": "England",
@@ -4067,8 +4067,8 @@
           "away": null
         },
         "halfTime": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "extraTime": {
           "home": null,
@@ -4079,7 +4079,7 @@
           "away": null
         }
       },
-      "lastUpdated": "2026-07-15T19:54:01Z"
+      "lastUpdated": "2026-07-15T19:55:13Z"
     },
     {
       "id": 537389,
