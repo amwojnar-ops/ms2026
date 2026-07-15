@@ -376,10 +376,14 @@ check(
 );
 check(
   entries.some(entry => entry.id === 537389 && entry.side === "homeTeam" && entry.team === "France") &&
+    entries.some(entry => entry.id === 537389 && entry.side === "awayTeam" && entry.team === "England") &&
     entries.some(entry => entry.id === 537390 && entry.side === "homeTeam" && entry.team === "Spain") &&
+    entries.some(entry => entry.id === 537390 && entry.side === "awayTeam" && entry.team === "Argentina") &&
     formCore.includes('{ matchId: 537389, side: "homeTeam", team: { name: "France"') &&
-    formCore.includes('{ matchId: 537390, side: "homeTeam", team: { name: "Spain"'),
-  "Francja i Hiszpania nie zostaly przeniesione do meczow medalowych"
+    formCore.includes('{ matchId: 537389, side: "awayTeam", team: { name: "England"') &&
+    formCore.includes('{ matchId: 537390, side: "homeTeam", team: { name: "Spain"') &&
+    formCore.includes('{ matchId: 537390, side: "awayTeam", team: { name: "Argentina"'),
+  "Pary medalowe nie zostaly przeniesione do meczu o 3. miejsce i finalu"
 );
 check(
   entries.some(entry => entry.id === 537386 && entry.side === "homeTeam" && entry.team === "Argentina") &&
