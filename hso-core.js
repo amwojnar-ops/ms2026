@@ -501,7 +501,10 @@ const KNOCKOUT_TIP_ROUNDS = [
   }
 ];
 
-const KNOCKOUT_SUBMISSIONS = {};
+const KNOCKOUT_SUBMISSIONS = {
+  third:new Set(['Waldemar']),
+  final:new Set(['Waldemar'])
+};
 
 function knockoutTipDotPlayers(){
   const submitted = new Set(Object.values(KNOCKOUT_SUBMISSIONS).flatMap(players => [...players]));

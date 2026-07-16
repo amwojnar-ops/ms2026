@@ -478,11 +478,12 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("const KNOCKOUT_SUBMISSIONS = {};") &&
+  core.includes("third:new Set(['Waldemar'])") &&
+    core.includes("final:new Set(['Waldemar'])") &&
     !core.includes("sf:new Set(") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
-  "Robocze podswietlenie polfinalow nie zostalo wyczyszczone po komplecie typow"
+  "Robocze podswietlenie rund medalowych nie jest ustawione zgodnie z oddanymi typami"
 );
 check(
   core.includes("className='lock-badge-progress'") &&
