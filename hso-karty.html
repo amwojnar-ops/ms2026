@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Karta gracza · Loża Ekspertów · MŚ 2026</title>
+<meta name="description" content="Pamiątkowa karta gracza Loży Ekspertów MŚ 2026 gotowa do druku.">
+<link rel="apple-touch-icon" sizes="180x180" href="img/hso-icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/hso-icon-32.png">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hso-karty.css?v=20260717-1">
+</head>
+<body>
+<main class="souvenir-wrap">
+  <header class="souvenir-hero">
+    <div>
+      <p class="eyebrow">LOŻA EKSPERTÓW · MŚ 2026</p>
+      <h1>Karta gracza</h1>
+      <p class="lead">Pamiątkowa karta z miejscem, punktami i najważniejszymi statystykami. Wybierz osobę, wydrukuj albo zapisz do PDF.</p>
+    </div>
+    <div class="souvenir-actions">
+      <a class="ghost-btn" href="hso.html">← Wróć</a>
+      <button class="print-btn" id="printCard" type="button">Drukuj kartę</button>
+    </div>
+  </header>
+
+  <section class="control-card">
+    <label class="player-picker">
+      <span>Gracz</span>
+      <select id="playerSelect" aria-label="Wybierz gracza"></select>
+    </label>
+    <p id="cardNote">Karta korzysta z aktualnego rankingu i zakończonych meczów.</p>
+  </section>
+
+  <section class="souvenir-stage">
+    <article class="memory-card" id="memoryCard" aria-live="polite"></article>
+  </section>
+</main>
+
+<script>window.HSO_CONFIG={mode:'cards'};</script>
+<script src="data/group-report-source.js?v=20260710-1"></script>
+<script src="hso-core.js?v=20260717-105"></script>
+<script src="hso-karty.js?v=20260717-1"></script>
+</body>
+</html>

@@ -19,6 +19,9 @@ const groupReport = read("Raport_typow_MS_2026.html");
 const trendsPage = read("hso-trendy.html");
 const trendsScript = read("hso-trendy.js");
 const trendsCss = read("hso-trendy.css");
+const cardsPage = read("hso-karty.html");
+const cardsScript = read("hso-karty.js");
+const cardsCss = read("hso-karty.css");
 const footballData = JSON.parse(read("data/football-data.json"));
 const footballDataUpdater = read("scripts/update-football-data.mjs");
 const footballDataWorkflow = read(".github/workflows/football-data.yml");
@@ -38,6 +41,19 @@ check(
     core.includes("window.HSO_SHARED = {") &&
     core.includes('href="hso-trendy.html"'),
   "Strona trendu miejsc nie ma wyboru gracza, wykresu, wydruku lub eksportu danych"
+);
+check(
+  cardsPage.includes('id="memoryCard"') &&
+    cardsPage.includes('id="printCard"') &&
+    cardsPage.includes('hso-karty.js?v=') &&
+    cardsScript.includes("renderCard") &&
+    cardsScript.includes("shared.setApiMatches") &&
+    cardsScript.includes("window.print()") &&
+    cardsCss.includes("@media print") &&
+    core.includes("PHOTOS,") &&
+    core.includes("setApiMatches(matches)") &&
+    core.includes('href="hso-karty.html"'),
+  "Strona pamiatkowych kart graczy nie ma wyboru, druku, zdjec lub aktualnych danych"
 );
 
 let formHistoryHelpers;

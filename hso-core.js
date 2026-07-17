@@ -1269,6 +1269,7 @@ function renderGroupArchive(){
         <p>${lt('Kafle wszystkich meczów z rozwijaną listą punktów graczy. Faza grupowa korzysta z zamrożonego raportu, a faza pucharowa z aktualnych typów i wyników.','Match cards with expandable player-point lists. Group-stage data comes from the frozen report; knockout data uses current predictions and results.','Schede di tutte le partite con elenco punti espandibile. La fase a gironi usa il report congelato, la fase a eliminazione usa pronostici e risultati attuali.')}</p>
       </div>
       <div class="group-archive-actions">
+        <a class="group-archive-report" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>
         <a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>
         <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
       </div>
@@ -1301,6 +1302,7 @@ function renderGroupArchive(){
         <span>${lt('Pełny statyczny raport pozostaje dostępny jako wersja do druku i PDF.','The full static report remains available as the print/PDF version.','Il report statico completo resta disponibile come versione stampa/PDF.')}</span>
       </div>
       <div class="group-archive-actions">
+        <a class="group-archive-report secondary" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>
         <a class="group-archive-report secondary" href="hso-trendy.html">${lt('Pokaż trend miejsc','Show place trend','Mostra trend posizioni')}</a>
         <a class="group-archive-report secondary" href="${groupReportHref()}">${lt('Otwórz raport','Open report','Apri report')}</a>
       </div>
@@ -1974,9 +1976,17 @@ function switchTab(tab,el){
 window.HSO_SHARED = {
   PLAYERS,
   KNOCKOUT_TIP_ROUNDS,
+  PHOTOS,
+  ISO,
+  SHORT,
+  teamName,
   sc,
   apiRegulationScore,
   apiResult,
+  setApiMatches(matches){
+    API_MATCHES = Array.isArray(matches) ? matches : [];
+  },
+  calcAll,
   assignPositions
 };
 
