@@ -47,6 +47,7 @@ check(
     cardsPage.includes('id="printCard"') &&
     cardsPage.includes('hso-karty.js?v=') &&
     cardsScript.includes("renderCard") &&
+    cardsScript.includes("players.map(player =>") &&
     cardsScript.includes("shared.setApiMatches") &&
     cardsScript.includes("window.print()") &&
     cardsCss.includes("@media print") &&

@@ -97,7 +97,10 @@
       document.getElementById('cardNote').textContent = 'Nie udało się pobrać aktualnych danych pucharowych. Karta pokazuje dostępne dane lokalne.';
     }
     rebuildRanking();
-    select.innerHTML = ranked.map(player => `<option value="${esc(player.name)}">${player._pos}. ${esc(player.name)}</option>`).join('');
+    select.innerHTML = players.map(player => {
+      const stats = rankByName.get(player.name);
+      return `<option value="${esc(player.name)}">${esc(player.name)}${stats ? ` · ${stats._pos}. miejsce` : ''}</option>`;
+    }).join('');
     const first = ranked[0]?.name || players[0]?.name;
     if (first) {
       select.value = first;
