@@ -176,5 +176,18 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .memory-card {
     width:620px; min-height:820px; height:820px; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
-  .card-inner { min-height:820px; height:820px; }
+  .card-inner { min-height:820px; height:820px; padding:30px; }
+  .brand-mark { font-size:42px; }
+  .portrait-wrap { width:230px; height:230px; margin:30px auto 18px; padding:8px; }
+  .portrait { border-width:7px; }
+  .player-name { font-size:58px; }
+  .main-stats { grid-template-columns:repeat(3,1fr); margin-top:24px; gap:10px; }
+  .stat { min-height:86px; padding:10px; }
+  .stat strong { font-size:40px; }
+  .stat span { margin-top:6px; font-size:10px; }
+  .detail-grid { grid-template-columns:repeat(2,1fr); margin-top:14px; gap:10px; }
+  .detail { padding:11px 13px; }
+  .detail span { font-size:10px; }
+  .detail strong { font-size:23px; }
+  .footer-line { padding-top:18px; }
 }
