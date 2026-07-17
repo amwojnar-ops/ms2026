@@ -137,22 +137,24 @@
     const ticks = [1, 5, 10, 15, 20, 24].filter((value, index, arr) => value <= maxPos && arr.indexOf(value) === index);
     const eventTicks = [0, Math.floor((data.length - 1) / 4), Math.floor((data.length - 1) / 2), Math.floor((data.length - 1) * 3 / 4), data.length - 1]
       .filter((value, index, arr) => value >= 0 && arr.indexOf(value) === index);
+    const markerIndexes = new Set(eventTicks);
+    markerIndexes.add(data.length - 1);
     chartTitle.textContent = name;
     chartBox.innerHTML = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Trend miejsc gracza ${esc(name)}">
       <defs>
         <linearGradient id="trendArea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#f6c247" stop-opacity=".32"/>
-          <stop offset="100%" stop-color="#f6c247" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#2563eb" stop-opacity=".12"/>
+          <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
         </linearGradient>
       </defs>
-      <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
+      <rect x="0" y="0" width="${width}" height="${height}" fill="#ffffff"/>
       ${ticks.map(tick => `<line class="chart-grid-line" x1="${left}" x2="${left + chartW}" y1="${y(tick)}" y2="${y(tick)}"/><text class="tick-label" x="${left - 16}" y="${y(tick) + 4}" text-anchor="end">#${tick}</text>`).join('')}
       ${eventTicks.map(index => `<text class="tick-label" x="${x(index)}" y="${height - 25}" text-anchor="middle">${data[index].eventIndex}</text>`).join('')}
       <text class="axis-label" x="${left}" y="${height - 8}">kolejne zakończone mecze</text>
       <text class="axis-label" transform="translate(18 ${top + chartH / 2}) rotate(-90)" text-anchor="middle">miejsce w rankingu</text>
       <polygon class="trend-area" points="${area}"/>
       <polyline class="trend-line" points="${points}"/>
-      ${data.map((item, index) => `<circle class="trend-dot ${index === data.length - 1 ? 'last' : ''}" cx="${x(index)}" cy="${y(item.pos)}" r="${index === data.length - 1 ? 7 : 4}">
+      ${data.map((item, index) => ({ item, index })).filter(({ index }) => markerIndexes.has(index)).map(({ item, index }) => `<circle class="trend-dot ${index === data.length - 1 ? 'last' : ''}" cx="${x(index)}" cy="${y(item.pos)}" r="${index === data.length - 1 ? 5 : 2.8}">
         <title>${esc(item.event.phase)} · ${esc(item.event.label)} · miejsce ${item.pos} · ${item.pts} pkt</title>
       </circle>`).join('')}
     </svg>`;
