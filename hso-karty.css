@@ -80,67 +80,103 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   position:relative; width:min(620px,100%); min-height:820px; overflow:hidden;
   border-radius:34px; color:#fff;
   background:
-    radial-gradient(circle at 68% 24%,rgba(255,255,255,.22),transparent 18%),
-    radial-gradient(circle at 34% 13%,rgba(246,196,71,.28),transparent 24%),
+    radial-gradient(circle at 68% 22%,rgba(255,255,255,.20),transparent 17%),
+    radial-gradient(circle at 34% 12%,rgba(246,196,71,.24),transparent 23%),
     linear-gradient(150deg,#102d66 0%,#07152d 48%,#061023 100%);
   box-shadow:0 30px 90px rgba(7,21,45,.34), inset 0 0 0 2px rgba(246,196,71,.72);
 }
 .memory-card.leader {
   background:
-    radial-gradient(circle at 70% 22%,rgba(255,255,255,.24),transparent 18%),
-    radial-gradient(circle at 34% 13%,rgba(255,245,177,.36),transparent 24%),
+    radial-gradient(circle at 70% 22%,rgba(255,255,255,.22),transparent 17%),
+    radial-gradient(circle at 34% 13%,rgba(255,245,177,.34),transparent 23%),
     linear-gradient(150deg,#bf7c04 0%,#6a3d00 44%,#07152d 100%);
 }
 .memory-card::before {
-  content:""; position:absolute; inset:18px; border-radius:24px;
+  content:""; position:absolute; inset:18px 18px 52px; border-radius:24px;
   border:1px solid rgba(246,196,71,.52); pointer-events:none;
 }
 .memory-card::after {
-  content:""; position:absolute; width:560px; height:560px; right:-250px; bottom:-250px;
-  border:54px solid rgba(246,196,71,.10); border-radius:50%;
+  content:""; position:absolute; width:560px; height:560px; right:-250px; bottom:-248px;
+  border:54px solid rgba(246,196,71,.10); border-radius:50%; pointer-events:none;
 }
-.card-inner { position:relative; z-index:1; padding:30px; min-height:820px; display:flex; flex-direction:column; }
+.card-inner {
+  position:relative; z-index:1; min-height:820px; padding:26px 30px 25px;
+  display:grid; grid-template-rows:auto auto auto auto 1fr auto; gap:12px;
+}
 .card-topline { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; }
 .brand-mark { font:700 42px/.86 'Barlow Condensed',sans-serif; letter-spacing:.02em; text-transform:uppercase; }
 .brand-mark span { color:var(--gold); }
 .season { color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
-.champ-badge { display:flex; align-items:center; gap:8px; color:var(--gold); font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+.champ-badge {
+  display:flex; align-items:center; gap:8px; color:var(--gold);
+  font-weight:800; text-transform:uppercase; letter-spacing:.08em; white-space:nowrap;
+}
 .champ-badge img { width:30px; height:21px; border-radius:4px; object-fit:cover; box-shadow:0 0 0 1px rgba(255,255,255,.2); }
+.card-hero {
+  display:grid; grid-template-columns:164px minmax(0,1fr); align-items:center;
+  gap:24px; padding:4px 0 2px;
+}
 .portrait-wrap {
-  margin:30px auto 18px; width:230px; height:230px; border-radius:50%; padding:8px;
+  width:164px; height:164px; border-radius:50%; padding:7px;
   background:linear-gradient(135deg,var(--gold),rgba(255,255,255,.6),#315b9e);
-  box-shadow:0 26px 70px rgba(0,0,0,.35);
+  box-shadow:0 22px 54px rgba(0,0,0,.35);
 }
 .portrait {
   width:100%; height:100%; border-radius:50%; overflow:hidden;
   background:#0a1830; display:grid; place-items:center;
-  border:7px solid rgba(7,21,45,.72);
+  border:6px solid rgba(7,21,45,.72);
 }
 .portrait img { width:100%; height:100%; object-fit:cover; }
-.portrait-placeholder { font-size:90px; opacity:.72; }
+.portrait-placeholder { font-size:64px; opacity:.72; }
+.identity { min-width:0; }
 .player-name {
-  margin:0; text-align:center; font:700 clamp(38px,7vw,58px)/.9 'Barlow Condensed',sans-serif;
+  margin:0; font:700 clamp(44px,7vw,62px)/.88 'Barlow Condensed',sans-serif;
   letter-spacing:.035em; text-transform:uppercase; text-shadow:0 8px 24px rgba(0,0,0,.28);
+  overflow-wrap:anywhere;
 }
-.subtitle { margin:10px 0 0; text-align:center; color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
-.main-stats { margin:24px 0 0; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.subtitle { margin:8px 0 0; color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+.main-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
 .stat {
-  min-height:86px; border-radius:16px; padding:10px;
+  min-height:80px; border-radius:16px; padding:10px;
   background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);
   display:flex; flex-direction:column; justify-content:center; align-items:center;
 }
 .stat strong { font:700 40px/.9 'Barlow Condensed',sans-serif; color:var(--gold); }
 .stat span { margin-top:6px; color:rgba(221,232,255,.74); font-weight:800; font-size:10px; letter-spacing:.12em; text-transform:uppercase; text-align:center; }
+.trend-panel {
+  min-height:124px; display:grid; grid-template-columns:112px minmax(0,1fr) 90px; align-items:center; gap:12px;
+  border-radius:16px; padding:11px 13px;
+  background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.13);
+}
+.trend-title span,
+.detail span,
+.trend-title small {
+  display:block; color:rgba(221,232,255,.68); font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
+}
+.trend-title strong {
+  display:block; margin-top:6px; font:700 34px/.9 'Barlow Condensed',sans-serif; color:var(--gold);
+}
+.trend-title small { margin-top:5px; letter-spacing:.08em; }
+.trend-chart { min-width:0; }
+.trend-chart svg { display:block; width:100%; height:auto; }
+.trend-grid { stroke:rgba(221,232,255,.14); stroke-width:1; }
+.trend-area { fill:rgba(244,196,71,.12); }
+.trend-line { fill:none; stroke:#f6d15e; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+.trend-dot { fill:#f6d15e; stroke:#07152d; stroke-width:3; }
+.trend-summary { display:grid; gap:6px; justify-items:end; color:rgba(221,232,255,.72); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+.trend-summary strong { display:block; color:#fff; font:700 17px/1 'Barlow Condensed',sans-serif; text-align:right; }
+.trend-summary .good { color:#7df0a6; }
+.trend-summary .bad { color:#ff9aa4; }
+.trend-summary .neutral { color:rgba(221,232,255,.84); }
 .detail-grid {
-  margin-top:14px; display:grid; grid-template-columns:repeat(2,1fr); gap:10px;
+  display:grid; grid-template-columns:repeat(2,1fr); gap:9px;
 }
 .detail {
-  border-radius:14px; padding:11px 13px; background:rgba(0,0,0,.16); border:1px solid rgba(255,255,255,.10);
+  min-height:58px; border-radius:14px; padding:10px 13px; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.10);
 }
-.detail span { display:block; color:rgba(221,232,255,.68); font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
-.detail strong { display:block; margin-top:4px; font:700 23px/1 'Barlow Condensed',sans-serif; }
+.detail strong { display:block; margin-top:4px; font:700 22px/1 'Barlow Condensed',sans-serif; }
 .footer-line {
-  margin-top:auto; padding-top:18px; display:flex; justify-content:space-between; gap:18px;
+  display:flex; justify-content:space-between; align-items:center; gap:18px;
   color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.08em; text-transform:uppercase;
 }
 .movement.good { color:#7df0a6; }
@@ -155,12 +191,16 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .custom-select-menu { max-height:220px; }
   #cardNote { text-align:left; }
   .souvenir-stage { padding:12px; }
-  .memory-card,.card-inner { min-height:760px; }
-  .card-inner { padding:26px; }
-  .portrait-wrap { width:190px; height:190px; margin-top:26px; }
-  .brand-mark { font-size:40px; }
-  .main-stats { grid-template-columns:1fr; }
-  .stat { min-height:86px; }
+  .memory-card { min-height:780px; }
+  .card-inner { min-height:780px; padding:22px; }
+  .card-hero { grid-template-columns:124px minmax(0,1fr); gap:18px; }
+  .portrait-wrap { width:124px; height:124px; }
+  .brand-mark { font-size:38px; }
+  .player-name { font-size:clamp(36px,11vw,52px); }
+  .main-stats { gap:8px; }
+  .stat { min-height:72px; }
+  .trend-panel { grid-template-columns:1fr; gap:8px; min-height:0; }
+  .trend-summary { grid-template-columns:repeat(3,1fr); justify-items:start; }
   .detail-grid { grid-template-columns:1fr; }
 }
 @media print {
@@ -176,19 +216,20 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .memory-card {
     width:620px; min-height:820px; height:820px; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
-  .memory-card::before { inset:18px 18px 34px; }
-  .card-inner { min-height:820px; height:820px; padding:30px; }
+  .memory-card::before { inset:18px 18px 52px; }
+  .card-inner { min-height:820px; height:820px; padding:26px 30px 25px; gap:12px; }
   .brand-mark { font-size:42px; }
-  .portrait-wrap { width:230px; height:230px; margin:30px auto 18px; padding:8px; }
-  .portrait { border-width:7px; }
-  .player-name { font-size:58px; }
-  .main-stats { grid-template-columns:repeat(3,1fr); margin-top:24px; gap:10px; }
-  .stat { min-height:86px; padding:10px; }
+  .card-hero { grid-template-columns:164px minmax(0,1fr); gap:24px; }
+  .portrait-wrap { width:164px; height:164px; padding:7px; }
+  .portrait { border-width:6px; }
+  .player-name { font-size:62px; }
+  .main-stats { grid-template-columns:repeat(3,1fr); gap:10px; }
+  .stat { min-height:80px; padding:10px; }
   .stat strong { font-size:40px; }
   .stat span { margin-top:6px; font-size:10px; }
-  .detail-grid { grid-template-columns:repeat(2,1fr); margin-top:14px; gap:10px; }
-  .detail { padding:11px 13px; }
+  .trend-panel { grid-template-columns:112px minmax(0,1fr) 90px; min-height:124px; padding:11px 13px; gap:12px; }
+  .detail-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
+  .detail { min-height:58px; padding:10px 13px; }
   .detail span { font-size:10px; }
-  .detail strong { font-size:23px; }
-  .footer-line { padding-top:18px; }
+  .detail strong { font-size:22px; }
 }
