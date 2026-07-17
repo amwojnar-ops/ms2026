@@ -144,7 +144,7 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .stat strong { font:700 40px/.9 'Barlow Condensed',sans-serif; color:var(--gold); }
 .stat span { margin-top:6px; color:rgba(221,232,255,.74); font-weight:800; font-size:10px; letter-spacing:.12em; text-transform:uppercase; text-align:center; }
 .trend-panel {
-  min-height:158px; display:grid; grid-template-rows:auto minmax(0,1fr); align-items:center; gap:8px;
+  min-height:184px; display:grid; grid-template-rows:auto minmax(0,1fr); align-items:stretch; gap:6px;
   border-radius:16px; padding:11px 13px;
   background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.13);
 }
@@ -156,10 +156,10 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .trend-title span { white-space:nowrap; }
 .trend-title strong { display:none; }
 .trend-title small { display:none; }
-.trend-chart { min-width:0; }
-.trend-chart svg { display:block; width:100%; height:auto; }
-.trend-grid { stroke:rgba(221,232,255,.14); stroke-width:1; }
-.trend-area { fill:rgba(244,196,71,.12); }
+.trend-chart { min-width:0; height:100%; }
+.trend-chart svg { display:block; width:100%; height:150px; }
+.trend-grid { stroke:rgba(221,232,255,.10); stroke-width:1; }
+.trend-area { fill:rgba(244,196,71,.14); }
 .trend-line { fill:none; stroke:#f6d15e; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
 .trend-dot { fill:#f6d15e; stroke:#07152d; stroke-width:3; }
 .detail-grid {
@@ -205,8 +205,8 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .main-stats { gap:8px; }
   .stat { min-height:68px; }
   .stat strong { font-size:34px; }
-  .trend-panel { gap:7px; min-height:0; padding:10px 12px; }
-  .trend-chart svg { max-height:122px; }
+  .trend-panel { gap:6px; min-height:166px; padding:10px 12px; }
+  .trend-chart svg { height:132px; max-height:none; }
   .detail-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
   .detail { min-height:52px; padding:9px 10px; }
   .detail strong { font-size:20px; }
@@ -228,7 +228,7 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
     width:172mm; min-height:0; height:232mm; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
   .memory-card::before { inset:18px 18px 52px; }
-  .card-inner { min-height:0; height:232mm; padding:30px 34px 29px; gap:14px; }
+  .card-inner { min-height:0; height:232mm; padding:28px 34px 27px; gap:12px; }
   .brand-mark { font-size:46px; }
   .season { font-size:13px; }
   .champ-badge { font-size:15px; }
@@ -242,14 +242,15 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .stat { min-height:90px; padding:11px; }
   .stat strong { font-size:46px; }
   .stat span { margin-top:6px; font-size:10px; }
-  .trend-panel { grid-template-rows:auto minmax(0,1fr); min-height:184px; padding:13px 15px; gap:10px; }
+  .trend-panel { grid-template-rows:auto minmax(0,1fr); min-height:210px; padding:12px 15px; gap:7px; }
   .trend-title span { font-size:11px; }
+  .trend-chart svg { height:174px; }
   .trend-line { stroke-width:4.6; }
   .trend-dot { r:6px; stroke-width:3.4; }
   .detail-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
   .trend-detail { grid-column:1 / -1; }
   .trend-detail strong { grid-template-columns:repeat(3,1fr); gap:8px; }
-  .detail { min-height:60px; padding:10px 14px; }
+  .detail { min-height:56px; padding:9px 14px; }
   .detail span { font-size:11px; }
   .detail strong { font-size:25px; }
   .footer-line { font-size:15px; }
