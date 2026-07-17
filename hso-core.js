@@ -1272,7 +1272,7 @@ function renderGroupArchive(){
       <div class="group-archive-actions">
         <a class="group-archive-report" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>
         <a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>
-        <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
+        <a class="group-archive-report" href="${groupReportHref()}">${lt('Raport fazy grupowej','Group-stage report','Report fase a gironi')}</a>
       </div>
     </div>
     <div class="history-filter-bar" role="tablist" aria-label="${lt('Filtr rund','Round filter','Filtro turni')}">
