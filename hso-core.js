@@ -506,8 +506,8 @@ const KNOCKOUT_TIP_ROUNDS = [
 ];
 
 const KNOCKOUT_SUBMISSIONS = {
-  third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.']),
-  final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.'])
+  third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.']),
+  final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.'])
 };
 
 function knockoutTipDotPlayers(){
