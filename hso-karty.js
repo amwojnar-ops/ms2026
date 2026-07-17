@@ -158,6 +158,7 @@
     const maxPos = Math.max(players.length, ...data.map(item => item.pos));
     const x = index => data.length === 1 ? width / 2 : index / (data.length - 1) * width;
     const y = pos => 14 + (pos - 1) / Math.max(1, maxPos - 1) * 86;
+    const last = data[data.length - 1];
     const points = data.map((item, index) => `${x(index).toFixed(1)},${y(item.pos).toFixed(1)}`).join(' ');
     const area = `0,108 ${points} ${width},108`;
     const summary = trendSummary(name);
