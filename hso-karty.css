@@ -230,30 +230,30 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
     width:172mm; min-height:0; height:232mm; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
   .memory-card::before { inset:18px 18px 52px; }
-  .card-inner { min-height:0; height:232mm; padding:28px 34px 27px; gap:12px; }
+  .card-inner { min-height:0; height:232mm; padding:27px 34px 25px; gap:10px; }
   .brand-mark { font-size:46px; }
   .season { font-size:13px; }
   .champ-badge { font-size:17px; max-width:260px; }
   .champ-badge img { width:35px; height:24px; }
-  .card-hero { grid-template-columns:186px minmax(0,1fr); gap:28px; }
-  .portrait-wrap { width:186px; height:186px; padding:8px; }
+  .card-hero { grid-template-columns:204px minmax(0,1fr); gap:30px; }
+  .portrait-wrap { width:204px; height:204px; padding:8px; }
   .portrait { border-width:7px; }
   .player-name { font-size:64px; }
   .subtitle { font-size:16px; }
-  .main-stats { grid-template-columns:repeat(3,1fr); gap:10px; }
-  .stat { min-height:90px; padding:11px; }
-  .stat strong { font-size:46px; }
+  .main-stats { grid-template-columns:repeat(3,1fr); gap:9px; }
+  .stat { min-height:82px; padding:9px; }
+  .stat strong { font-size:43px; }
   .stat span { margin-top:6px; font-size:10px; }
-  .trend-panel { grid-template-rows:auto minmax(0,1fr); min-height:210px; padding:12px 15px; gap:7px; }
+  .trend-panel { grid-template-rows:auto minmax(0,1fr); min-height:246px; padding:12px 15px; gap:7px; }
   .trend-title span { font-size:11px; }
-  .trend-chart svg { height:174px; }
-  .trend-line { stroke-width:4.6; }
+  .trend-chart svg { height:210px; }
+  .trend-line { stroke-width:5; }
   .trend-dot { r:6px; stroke-width:3.4; }
-  .detail-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
+  .detail-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
   .trend-detail { grid-column:1 / -1; }
   .trend-detail strong { grid-template-columns:repeat(3,1fr); gap:8px; }
-  .detail { min-height:56px; padding:9px 14px; }
-  .detail span { font-size:11px; }
-  .detail strong { font-size:25px; }
+  .detail { min-height:50px; padding:8px 13px; }
+  .detail span { font-size:10px; }
+  .detail strong { font-size:23px; }
   .footer-line { font-size:15px; }
 }

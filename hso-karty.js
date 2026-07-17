@@ -151,7 +151,7 @@
     }
 
     const width = 640;
-    const height = 210;
+    const height = 240;
     const positions = data.map(item => item.pos);
     const bestPos = Math.min(...positions);
     const worstPos = Math.max(...positions);
@@ -159,10 +159,10 @@
     const minPos = Math.max(1, bestPos - pad);
     const maxPos = Math.min(players.length, worstPos + pad);
     const x = index => data.length === 1 ? width / 2 : index / (data.length - 1) * width;
-    const y = pos => 18 + (pos - minPos) / Math.max(1, maxPos - minPos) * 164;
+    const y = pos => 18 + (pos - minPos) / Math.max(1, maxPos - minPos) * 194;
     const last = data[data.length - 1];
     const points = data.map((item, index) => `${x(index).toFixed(1)},${y(item.pos).toFixed(1)}`).join(' ');
-    const area = `0,196 ${points} ${width},196`;
+    const area = `0,226 ${points} ${width},226`;
 
     return `
       <div class="trend-panel">
@@ -171,9 +171,9 @@
         </div>
         <div class="trend-chart">
           <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Trend miejsc gracza ${esc(name)}">
-            <line class="trend-grid" x1="0" x2="${width}" y1="24" y2="24"></line>
-            <line class="trend-grid" x1="0" x2="${width}" y1="105" y2="105"></line>
-            <line class="trend-grid" x1="0" x2="${width}" y1="186" y2="186"></line>
+            <line class="trend-grid" x1="0" x2="${width}" y1="26" y2="26"></line>
+            <line class="trend-grid" x1="0" x2="${width}" y1="120" y2="120"></line>
+            <line class="trend-grid" x1="0" x2="${width}" y1="214" y2="214"></line>
             <polygon class="trend-area" points="${area}"></polygon>
             <polyline class="trend-line" points="${points}"></polyline>
             <circle class="trend-dot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(last.pos).toFixed(1)}" r="6"></circle>
