@@ -43,11 +43,13 @@ check(
   "Strona trendu miejsc nie ma wyboru gracza, wykresu, wydruku lub eksportu danych"
 );
 check(
-  cardsPage.includes('id="memoryCard"') &&
+    cardsPage.includes('id="memoryCard"') &&
+    cardsPage.includes('id="playerSelectMenu"') &&
     cardsPage.includes('id="printCard"') &&
     cardsPage.includes('hso-karty.js?v=') &&
     cardsScript.includes("renderCard") &&
-    cardsScript.includes("players.map(player =>") &&
+    cardsScript.includes("renderPlayerMenu") &&
+    cardsScript.includes("openPlayerMenu") &&
     cardsScript.includes("const first = players[0]?.name;") &&
     !cardsScript.includes(". miejsce</option>") &&
     cardsScript.includes("shared.setApiMatches") &&

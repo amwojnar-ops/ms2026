@@ -45,12 +45,30 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   padding:18px; border:1px solid rgba(45,103,216,.12); border-radius:18px;
   background:#fff; box-shadow:0 18px 50px rgba(33,56,99,.10);
 }
-.player-picker { display:flex; align-items:center; gap:12px; min-width:min(100%,420px); }
+.player-picker { display:flex; align-items:center; gap:12px; min-width:min(100%,420px); position:relative; z-index:5; }
 .player-picker span { color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:12px; }
-select {
+.custom-select { position:relative; width:100%; min-width:260px; }
+.custom-select-button {
   width:100%; min-height:44px; border-radius:12px; border:1px solid rgba(45,103,216,.18);
-  background:#fff; color:var(--ink); padding:0 14px; font:700 18px 'Barlow Condensed',sans-serif;
+  background:#fff; color:var(--ink); padding:0 12px 0 14px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  font:700 18px 'Barlow Condensed',sans-serif; cursor:pointer;
 }
+.custom-select-button:focus-visible { outline:3px solid rgba(45,103,216,.22); outline-offset:2px; }
+.custom-select-arrow { color:#9aa6ba; font-size:18px; line-height:1; }
+.custom-select-menu {
+  position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20;
+  max-height:260px; overflow:auto; padding:6px; border-radius:13px;
+  background:#fff; border:1px solid rgba(45,103,216,.18);
+  box-shadow:0 18px 40px rgba(33,56,99,.18);
+}
+.custom-select-option {
+  width:100%; min-height:36px; border:0; border-radius:9px; padding:0 10px;
+  background:transparent; color:var(--ink); text-align:left;
+  font:700 17px 'Barlow Condensed',sans-serif; cursor:pointer;
+}
+.custom-select-option:hover,
+.custom-select-option.active { background:#eef4ff; color:#174ea6; }
 #cardNote { margin:0; color:var(--muted); text-align:right; }
 .souvenir-stage {
   margin-top:22px; display:flex; justify-content:center; padding:28px;
@@ -132,6 +150,9 @@ select {
   .souvenir-hero { grid-template-columns:1fr; padding:24px; }
   .souvenir-actions { justify-content:flex-start; }
   .control-card { align-items:stretch; flex-direction:column; }
+  .player-picker { align-items:stretch; flex-direction:column; gap:7px; }
+  .custom-select { min-width:0; }
+  .custom-select-menu { max-height:220px; }
   #cardNote { text-align:left; }
   .souvenir-stage { padding:12px; }
   .memory-card,.card-inner { min-height:760px; }

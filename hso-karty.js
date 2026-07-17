@@ -1,7 +1,9 @@
 (() => {
   const shared = window.HSO_SHARED || {};
   const players = [...(shared.PLAYERS || [])].sort((a, b) => a.name.localeCompare(b.name, 'pl', { sensitivity: 'base' }));
-  const select = document.getElementById('playerSelect');
+  const selectButton = document.getElementById('playerSelectButton');
+  const selectLabel = document.getElementById('playerSelectLabel');
+  const selectMenu = document.getElementById('playerSelectMenu');
   const card = document.getElementById('memoryCard');
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
@@ -11,6 +13,7 @@
   let leaderPts = 0;
   let rankByName = new Map();
   let groupByName = new Map();
+  let selectedPlayer = null;
 
   const rebuildRanking = () => {
     ranked = shared.assignPositions ? shared.assignPositions(shared.calcAll ? shared.calcAll() : []) : [];
@@ -88,6 +91,41 @@
       </div>`;
   };
 
+  const closePlayerMenu = () => {
+    selectMenu.hidden = true;
+    selectButton.setAttribute('aria-expanded', 'false');
+  };
+
+  const openPlayerMenu = () => {
+    selectMenu.hidden = false;
+    selectButton.setAttribute('aria-expanded', 'true');
+    selectMenu.querySelector('.custom-select-option.active')?.scrollIntoView({ block: 'nearest' });
+  };
+
+  const setSelectedPlayer = name => {
+    selectedPlayer = name;
+    selectLabel.textContent = name || 'Wybierz gracza';
+    selectMenu.querySelectorAll('.custom-select-option').forEach(option => {
+      const active = option.dataset.value === name;
+      option.classList.toggle('active', active);
+      option.setAttribute('aria-selected', String(active));
+    });
+    renderCard(name);
+  };
+
+  const renderPlayerMenu = () => {
+    selectMenu.innerHTML = players.map(player =>
+      `<button class="custom-select-option" type="button" role="option" data-value="${esc(player.name)}">${esc(player.name)}</button>`
+    ).join('');
+    selectMenu.querySelectorAll('.custom-select-option').forEach(option => {
+      option.addEventListener('click', () => {
+        setSelectedPlayer(option.dataset.value);
+        closePlayerMenu();
+        selectButton.focus();
+      });
+    });
+  };
+
   const init = async () => {
     try {
       const response = await fetch(`data/football-data.json?t=${Date.now()}`, { cache: 'no-store' });
@@ -97,13 +135,38 @@
       document.getElementById('cardNote').textContent = 'Nie udało się pobrać aktualnych danych pucharowych. Karta pokazuje dostępne dane lokalne.';
     }
     rebuildRanking();
-    select.innerHTML = players.map(player => `<option value="${esc(player.name)}">${esc(player.name)}</option>`).join('');
+    renderPlayerMenu();
     const first = players[0]?.name;
     if (first) {
-      select.value = first;
-      renderCard(first);
+      setSelectedPlayer(first);
     }
-    select.addEventListener('change', () => renderCard(select.value));
+    selectButton.addEventListener('click', () => {
+      if (selectMenu.hidden) openPlayerMenu();
+      else closePlayerMenu();
+    });
+    selectButton.addEventListener('keydown', event => {
+      if (!['ArrowDown', 'Enter', ' '].includes(event.key)) return;
+      event.preventDefault();
+      openPlayerMenu();
+      selectMenu.querySelector('.custom-select-option.active, .custom-select-option')?.focus();
+    });
+    selectMenu.addEventListener('keydown', event => {
+      const options = [...selectMenu.querySelectorAll('.custom-select-option')];
+      const index = options.indexOf(document.activeElement);
+      if (event.key === 'Escape') {
+        closePlayerMenu();
+        selectButton.focus();
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        options[Math.min(options.length - 1, index + 1)]?.focus();
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        options[Math.max(0, index - 1)]?.focus();
+      }
+    });
+    document.addEventListener('click', event => {
+      if (!event.target.closest('#playerSelectWrap')) closePlayerMenu();
+    });
     document.getElementById('printCard').addEventListener('click', () => window.print());
   };
 

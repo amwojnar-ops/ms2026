@@ -28,10 +28,16 @@
   </header>
 
   <section class="control-card">
-    <label class="player-picker">
+    <div class="player-picker">
       <span>Gracz</span>
-      <select id="playerSelect" aria-label="Wybierz gracza"></select>
-    </label>
+      <div class="custom-select" id="playerSelectWrap">
+        <button class="custom-select-button" id="playerSelectButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <span id="playerSelectLabel">Wybierz gracza</span>
+          <span class="custom-select-arrow" aria-hidden="true">⌄</span>
+        </button>
+        <div class="custom-select-menu" id="playerSelectMenu" role="listbox" hidden></div>
+      </div>
+    </div>
     <p id="cardNote">Karta korzysta z aktualnego rankingu i zakończonych meczów.</p>
   </section>
 
@@ -43,6 +49,6 @@
 <script>window.HSO_CONFIG={mode:'cards'};</script>
 <script src="data/group-report-source.js?v=20260710-1"></script>
 <script src="hso-core.js?v=20260717-108"></script>
-<script src="hso-karty.js?v=20260717-3"></script>
+<script src="hso-karty.js?v=20260717-4"></script>
 </body>
 </html>
