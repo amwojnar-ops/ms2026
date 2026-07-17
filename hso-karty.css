@@ -176,6 +176,7 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .memory-card {
     width:620px; min-height:820px; height:820px; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
+  .memory-card::before { inset:18px 18px 34px; }
   .card-inner { min-height:820px; height:820px; padding:30px; }
   .brand-mark { font-size:42px; }
   .portrait-wrap { width:230px; height:230px; margin:30px auto 18px; padding:8px; }
