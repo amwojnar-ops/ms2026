@@ -130,11 +130,11 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .portrait-placeholder { font-size:64px; opacity:.72; }
 .identity { min-width:0; }
 .player-name {
-  margin:0; font:700 clamp(44px,7vw,62px)/.88 'Barlow Condensed',sans-serif;
+  margin:0; font:700 clamp(38px,6.4vw,58px)/.88 'Barlow Condensed',sans-serif;
   letter-spacing:.035em; text-transform:uppercase; text-shadow:0 8px 24px rgba(0,0,0,.28);
-  overflow-wrap:anywhere;
+  white-space:nowrap; overflow:hidden; text-overflow:clip;
 }
-.subtitle { margin:8px 0 0; color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+.subtitle { margin:8px 0 0; color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.1em; text-transform:uppercase; white-space:nowrap; }
 .main-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
 .stat {
   min-height:80px; border-radius:16px; padding:10px;
@@ -144,7 +144,7 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .stat strong { font:700 40px/.9 'Barlow Condensed',sans-serif; color:var(--gold); }
 .stat span { margin-top:6px; color:rgba(221,232,255,.74); font-weight:800; font-size:10px; letter-spacing:.12em; text-transform:uppercase; text-align:center; }
 .trend-panel {
-  min-height:124px; display:grid; grid-template-columns:112px minmax(0,1fr); align-items:center; gap:12px;
+  min-height:124px; display:grid; grid-template-rows:auto minmax(0,1fr); align-items:center; gap:8px;
   border-radius:16px; padding:11px 13px;
   background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.13);
 }
@@ -153,10 +153,9 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .trend-title small {
   display:block; color:rgba(221,232,255,.68); font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
 }
-.trend-title strong {
-  display:block; margin-top:6px; font:700 34px/.9 'Barlow Condensed',sans-serif; color:var(--gold);
-}
-.trend-title small { margin-top:5px; letter-spacing:.08em; }
+.trend-title span { white-space:nowrap; }
+.trend-title strong { display:none; }
+.trend-title small { display:none; }
 .trend-chart { min-width:0; }
 .trend-chart svg { display:block; width:100%; height:auto; }
 .trend-grid { stroke:rgba(221,232,255,.14); stroke-width:1; }
@@ -193,17 +192,27 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .custom-select-menu { max-height:220px; }
   #cardNote { text-align:left; }
   .souvenir-stage { padding:12px; }
-  .memory-card { min-height:780px; }
-  .card-inner { min-height:780px; padding:22px; }
-  .card-hero { grid-template-columns:124px minmax(0,1fr); gap:18px; }
-  .portrait-wrap { width:124px; height:124px; }
-  .brand-mark { font-size:38px; }
-  .player-name { font-size:clamp(36px,11vw,52px); }
+  .memory-card { min-height:0; }
+  .card-inner { min-height:0; padding:18px; gap:10px; }
+  .card-hero { grid-template-columns:112px minmax(0,1fr); gap:14px; }
+  .portrait-wrap { width:112px; height:112px; }
+  .brand-mark { font-size:34px; }
+  .season { font-size:11px; }
+  .champ-badge { font-size:12px; }
+  .champ-badge img { width:24px; height:17px; }
+  .player-name { font-size:clamp(31px,9vw,45px); letter-spacing:.025em; }
+  .subtitle { font-size:12px; letter-spacing:.08em; }
   .main-stats { gap:8px; }
-  .stat { min-height:72px; }
-  .trend-panel { grid-template-columns:1fr; gap:8px; min-height:0; }
-  .detail-grid { grid-template-columns:1fr; }
-  .trend-detail strong { grid-template-columns:1fr; }
+  .stat { min-height:68px; }
+  .stat strong { font-size:34px; }
+  .trend-panel { gap:7px; min-height:0; padding:10px 12px; }
+  .trend-chart svg { max-height:96px; }
+  .detail-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+  .detail { min-height:52px; padding:9px 10px; }
+  .detail strong { font-size:20px; }
+  .trend-detail { grid-column:1 / -1; }
+  .trend-detail strong { grid-template-columns:repeat(3,1fr); gap:6px; font-size:18px; }
+  .footer-line { font-size:12px; gap:10px; }
 }
 @media print {
   @page { size:A4 portrait; margin:8mm; }
@@ -212,24 +221,24 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .souvenir-wrap { width:100%; height:100%; padding:0; margin:0; }
   .souvenir-hero,.control-card { display:none !important; }
   .souvenir-stage {
-    width:100%; height:100%; margin:0; padding:0; border:0; box-shadow:none; background:#fff;
+    width:100%; height:281mm; margin:0; padding:0; border:0; box-shadow:none; background:#fff;
     display:flex; align-items:center; justify-content:center;
   }
   .memory-card {
-    width:620px; min-height:820px; height:820px; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
+    width:154mm; min-height:0; height:208mm; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
   .memory-card::before { inset:18px 18px 52px; }
-  .card-inner { min-height:820px; height:820px; padding:26px 30px 25px; gap:12px; }
+  .card-inner { min-height:0; height:208mm; padding:26px 30px 25px; gap:12px; }
   .brand-mark { font-size:42px; }
   .card-hero { grid-template-columns:164px minmax(0,1fr); gap:24px; }
   .portrait-wrap { width:164px; height:164px; padding:7px; }
   .portrait { border-width:6px; }
-  .player-name { font-size:62px; }
+  .player-name { font-size:58px; }
   .main-stats { grid-template-columns:repeat(3,1fr); gap:10px; }
   .stat { min-height:80px; padding:10px; }
   .stat strong { font-size:40px; }
   .stat span { margin-top:6px; font-size:10px; }
-  .trend-panel { grid-template-columns:112px minmax(0,1fr); min-height:124px; padding:11px 13px; gap:12px; }
+  .trend-panel { grid-template-rows:auto minmax(0,1fr); min-height:124px; padding:11px 13px; gap:8px; }
   .detail-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
   .trend-detail { grid-column:1 / -1; }
   .trend-detail strong { grid-template-columns:repeat(3,1fr); gap:8px; }

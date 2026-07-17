@@ -146,9 +146,7 @@
       return `
         <div class="trend-panel empty">
           <div class="trend-title">
-            <span>Trend miejsc</span>
-            <strong>—</strong>
-            <small>Brak historii</small>
+            <span>Trend miejsc · brak historii</span>
           </div>
         </div>`;
     }
@@ -161,14 +159,11 @@
     const last = data[data.length - 1];
     const points = data.map((item, index) => `${x(index).toFixed(1)},${y(item.pos).toFixed(1)}`).join(' ');
     const area = `0,108 ${points} ${width},108`;
-    const summary = trendSummary(name);
 
     return `
       <div class="trend-panel">
         <div class="trend-title">
-          <span>Trend miejsc</span>
-          <strong>${summary.current}</strong>
-          <small>Od 1. meczu</small>
+          <span>Trend miejsc od 1. meczu</span>
         </div>
         <div class="trend-chart">
           <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Trend miejsc gracza ${esc(name)}">
