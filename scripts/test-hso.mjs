@@ -55,6 +55,11 @@ check(
     core.includes('href="hso-karty.html"'),
   "Strona pamiatkowych kart graczy nie ma wyboru, druku, zdjec lub aktualnych danych"
 );
+check(
+  core.includes("sf:lt('1/2','Semi-finals','Semifinali')") &&
+    core.includes("['all','group','r32','r16','qf','sf']"),
+  "Historia punktow nie zawiera filtra 1/2 finalu"
+);
 
 let formHistoryHelpers;
 try {

@@ -1247,7 +1247,8 @@ function historyFilterLabel(filter){
     group:lt('Faza grupowa','Group stage','Fase a gironi'),
     r32:lt('1/16','Round of 32','Sedicesimi'),
     r16:lt('1/8','Round of 16','Ottavi'),
-    qf:lt('1/4','Quarter-finals','Quarti')
+    qf:lt('1/4','Quarter-finals','Quarti'),
+    sf:lt('1/2','Semi-finals','Semifinali')
   };
   return labels[filter]||filter;
 }
@@ -1275,7 +1276,7 @@ function renderGroupArchive(){
       </div>
     </div>
     <div class="history-filter-bar" role="tablist" aria-label="${lt('Filtr rund','Round filter','Filtro turni')}">
-      ${['all','group','r32','r16','qf'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
+      ${['all','group','r32','r16','qf','sf'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
     </div>
     <div class="history-match-grid">
       ${filtered.map(match=>`<article class="history-match${expandedHistoryMatchKey===match.key?' expanded':''}" data-history-key="${match.key}" tabindex="0" role="button" aria-expanded="${expandedHistoryMatchKey===match.key}">
