@@ -150,13 +150,18 @@
     }
 
     const width = 520;
-    const height = 118;
-    const maxPos = Math.max(players.length, ...data.map(item => item.pos));
+    const height = 150;
+    const positions = data.map(item => item.pos);
+    const bestPos = Math.min(...positions);
+    const worstPos = Math.max(...positions);
+    const pad = Math.max(1, Math.ceil((worstPos - bestPos) * 0.18));
+    const minPos = Math.max(1, bestPos - pad);
+    const maxPos = Math.min(players.length, worstPos + pad);
     const x = index => data.length === 1 ? width / 2 : index / (data.length - 1) * width;
-    const y = pos => 14 + (pos - 1) / Math.max(1, maxPos - 1) * 86;
+    const y = pos => 14 + (pos - minPos) / Math.max(1, maxPos - minPos) * 112;
     const last = data[data.length - 1];
     const points = data.map((item, index) => `${x(index).toFixed(1)},${y(item.pos).toFixed(1)}`).join(' ');
-    const area = `0,108 ${points} ${width},108`;
+    const area = `0,138 ${points} ${width},138`;
 
     return `
       <div class="trend-panel">
@@ -166,11 +171,11 @@
         <div class="trend-chart">
           <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Trend miejsc gracza ${esc(name)}">
             <line class="trend-grid" x1="0" x2="${width}" y1="20" y2="20"></line>
-            <line class="trend-grid" x1="0" x2="${width}" y1="58" y2="58"></line>
-            <line class="trend-grid" x1="0" x2="${width}" y1="96" y2="96"></line>
+            <line class="trend-grid" x1="0" x2="${width}" y1="75" y2="75"></line>
+            <line class="trend-grid" x1="0" x2="${width}" y1="130" y2="130"></line>
             <polygon class="trend-area" points="${area}"></polygon>
             <polyline class="trend-line" points="${points}"></polyline>
-            <circle class="trend-dot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(last.pos).toFixed(1)}" r="5"></circle>
+            <circle class="trend-dot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(last.pos).toFixed(1)}" r="6"></circle>
           </svg>
         </div>
       </div>`;

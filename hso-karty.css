@@ -144,7 +144,7 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .stat strong { font:700 40px/.9 'Barlow Condensed',sans-serif; color:var(--gold); }
 .stat span { margin-top:6px; color:rgba(221,232,255,.74); font-weight:800; font-size:10px; letter-spacing:.12em; text-transform:uppercase; text-align:center; }
 .trend-panel {
-  min-height:124px; display:grid; grid-template-rows:auto minmax(0,1fr); align-items:center; gap:8px;
+  min-height:158px; display:grid; grid-template-rows:auto minmax(0,1fr); align-items:center; gap:8px;
   border-radius:16px; padding:11px 13px;
   background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.13);
 }
@@ -206,7 +206,7 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .stat { min-height:68px; }
   .stat strong { font-size:34px; }
   .trend-panel { gap:7px; min-height:0; padding:10px 12px; }
-  .trend-chart svg { max-height:96px; }
+  .trend-chart svg { max-height:122px; }
   .detail-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
   .detail { min-height:52px; padding:9px 10px; }
   .detail strong { font-size:20px; }
@@ -225,24 +225,32 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
     display:flex; align-items:center; justify-content:center;
   }
   .memory-card {
-    width:154mm; min-height:0; height:208mm; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
+    width:172mm; min-height:0; height:232mm; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
   .memory-card::before { inset:18px 18px 52px; }
-  .card-inner { min-height:0; height:208mm; padding:26px 30px 25px; gap:12px; }
-  .brand-mark { font-size:42px; }
-  .card-hero { grid-template-columns:164px minmax(0,1fr); gap:24px; }
-  .portrait-wrap { width:164px; height:164px; padding:7px; }
-  .portrait { border-width:6px; }
-  .player-name { font-size:58px; }
+  .card-inner { min-height:0; height:232mm; padding:30px 34px 29px; gap:14px; }
+  .brand-mark { font-size:46px; }
+  .season { font-size:13px; }
+  .champ-badge { font-size:15px; }
+  .champ-badge img { width:33px; height:23px; }
+  .card-hero { grid-template-columns:186px minmax(0,1fr); gap:28px; }
+  .portrait-wrap { width:186px; height:186px; padding:8px; }
+  .portrait { border-width:7px; }
+  .player-name { font-size:64px; }
+  .subtitle { font-size:16px; }
   .main-stats { grid-template-columns:repeat(3,1fr); gap:10px; }
-  .stat { min-height:80px; padding:10px; }
-  .stat strong { font-size:40px; }
+  .stat { min-height:90px; padding:11px; }
+  .stat strong { font-size:46px; }
   .stat span { margin-top:6px; font-size:10px; }
-  .trend-panel { grid-template-rows:auto minmax(0,1fr); min-height:124px; padding:11px 13px; gap:8px; }
+  .trend-panel { grid-template-rows:auto minmax(0,1fr); min-height:184px; padding:13px 15px; gap:10px; }
+  .trend-title span { font-size:11px; }
+  .trend-line { stroke-width:4.6; }
+  .trend-dot { r:6px; stroke-width:3.4; }
   .detail-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
   .trend-detail { grid-column:1 / -1; }
   .trend-detail strong { grid-template-columns:repeat(3,1fr); gap:8px; }
-  .detail { min-height:58px; padding:10px 13px; }
-  .detail span { font-size:10px; }
-  .detail strong { font-size:22px; }
+  .detail { min-height:60px; padding:10px 14px; }
+  .detail span { font-size:11px; }
+  .detail strong { font-size:25px; }
+  .footer-line { font-size:15px; }
 }
