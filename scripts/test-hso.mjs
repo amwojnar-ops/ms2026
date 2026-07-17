@@ -478,8 +478,8 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("third:new Set(['Waldemar'])") &&
-    core.includes("final:new Set(['Waldemar'])") &&
+  core.includes("third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.'])") &&
+    core.includes("final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.'])") &&
     !core.includes("sf:new Set(") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
