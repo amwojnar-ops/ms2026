@@ -112,14 +112,11 @@
     const last = data[data.length - 1];
     const best = Math.min(...data.map(item => item.pos));
     const worst = Math.max(...data.map(item => item.pos));
-    const move = first.pos - last.pos;
-    const deltaClass = move > 0 ? 'good' : move < 0 ? 'bad' : '';
     summaryList.innerHTML = [
       ['Po 1. meczu', first.pos],
       ['Aktualnie', last.pos],
       ['Najwyżej', best],
-      ['Najniżej', worst],
-      ['Zmiana', move > 0 ? `▲ ${move}` : move < 0 ? `▼ ${Math.abs(move)}` : '—', deltaClass]
+      ['Najniżej', worst]
     ].map(([label, value, cls]) => `<div class="summary-item ${cls || ''}"><span>${label}</span><strong>${value}</strong></div>`).join('');
     currentPlace.textContent = `#${last.pos}`;
   };

@@ -159,7 +159,7 @@ select {
   }
   .summary-panel .eyebrow { display:none; }
   .summary-list {
-    grid-template-columns:repeat(5,1fr); gap:2.4mm;
+    grid-template-columns:repeat(4,1fr); gap:2.8mm;
   }
   .summary-item {
     min-height:19mm; padding:3mm; align-items:center;
