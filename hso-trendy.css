@@ -128,5 +128,33 @@ select {
   .trend-actions { display:none !important; }
   .lead,.trend-note,.summary-item span,.axis-label,.tick-label { color:#444; fill:#444; }
   .chart-box { border-color:#ddd; background:#fff; }
-  .trend-grid { grid-template-columns:1fr 260px; }
+  .trend-grid {
+    display:flex; flex-direction:column; gap:10px; align-items:stretch;
+  }
+  .summary-panel {
+    order:1; margin-top:0; padding:12px;
+  }
+  .summary-panel .eyebrow { margin-bottom:8px; }
+  .summary-list {
+    grid-template-columns:repeat(5,1fr); gap:8px;
+  }
+  .summary-item {
+    min-height:54px; padding:8px 10px; align-items:center;
+  }
+  .summary-item span {
+    font-size:11px; line-height:1.15;
+  }
+  .summary-item strong {
+    font-size:28px; line-height:1;
+  }
+  .chart-panel {
+    order:2; margin-top:0; padding:12px;
+  }
+  .chart-head { display:none; }
+  .chart-box {
+    width:100%; min-height:560px; border-radius:12px;
+  }
+  .chart-box svg {
+    width:100%; min-height:560px;
+  }
 }
