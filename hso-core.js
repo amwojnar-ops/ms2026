@@ -101,6 +101,7 @@ function pointsLabel(value){ return value===1 ? tr('point') : tr('points'); }
 const INTRO_SESSION_KEY='loza_ekspertow_intro_seen';
 const siteIntro=document.getElementById('siteIntro');
 function closeIntro(){
+  if(!siteIntro)return;
   siteIntro.classList.add('hidden');
   document.body.classList.remove('intro-active');
   try{sessionStorage.setItem(INTRO_SESSION_KEY,'1');}catch(e){}
@@ -108,12 +109,14 @@ function closeIntro(){
 }
 let introSeen=false;
 try{introSeen=sessionStorage.getItem(INTRO_SESSION_KEY)==='1';}catch(e){}
-if(introSeen || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-  siteIntro.remove();
-  document.body.classList.remove('intro-active');
-}else{
-  document.getElementById('introSkip').addEventListener('click',closeIntro);
-  setTimeout(closeIntro,2000);
+if(siteIntro){
+  if(introSeen || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    siteIntro.remove();
+    document.body.classList.remove('intro-active');
+  }else{
+    document.getElementById('introSkip')?.addEventListener('click',closeIntro);
+    setTimeout(closeIntro,2000);
+  }
 }
 
 function setText(id,key){
@@ -159,6 +162,7 @@ function setHeaderBadge(text,state='locked',detail='',progress=null){
   }
 }
 function applyLanguage(){
+  if(!document.getElementById('headerTitle'))return;
   document.documentElement.lang=LANG;
   document.title=tr('pageTitle');
   const intro=document.getElementById('siteIntro');
@@ -215,7 +219,7 @@ function switchLanguage(){
   renderKnockout();
   renderGroupArchive();
 }
-document.getElementById('langSwitch').addEventListener('click',switchLanguage);
+document.getElementById('langSwitch')?.addEventListener('click',switchLanguage);
 applyLanguage();
 
 let API_MATCHES = [];
@@ -1264,7 +1268,10 @@ function renderGroupArchive(){
         <h2>${lt('Historia punktów','Point history','Storico punti')}</h2>
         <p>${lt('Kafle wszystkich meczów z rozwijaną listą punktów graczy. Faza grupowa korzysta z zamrożonego raportu, a faza pucharowa z aktualnych typów i wyników.','Match cards with expandable player-point lists. Group-stage data comes from the frozen report; knockout data uses current predictions and results.','Schede di tutte le partite con elenco punti espandibile. La fase a gironi usa il report congelato, la fase a eliminazione usa pronostici e risultati attuali.')}</p>
       </div>
-      <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
+      <div class="group-archive-actions">
+        <a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>
+        <a class="group-archive-report" href="${groupReportHref()}">${lt('Pełny raport','Full report','Report completo')}</a>
+      </div>
     </div>
     <div class="history-filter-bar" role="tablist" aria-label="${lt('Filtr rund','Round filter','Filtro turni')}">
       ${['all','group','r32','r16','qf'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
@@ -1293,7 +1300,10 @@ function renderGroupArchive(){
         <strong>${lt('Źródło fazy grupowej','Group-stage source','Fonte fase a gironi')}</strong>
         <span>${lt('Pełny statyczny raport pozostaje dostępny jako wersja do druku i PDF.','The full static report remains available as the print/PDF version.','Il report statico completo resta disponibile come versione stampa/PDF.')}</span>
       </div>
-      <a class="group-archive-report secondary" href="${groupReportHref()}">${lt('Otwórz raport','Open report','Apri report')}</a>
+      <div class="group-archive-actions">
+        <a class="group-archive-report secondary" href="hso-trendy.html">${lt('Pokaż trend miejsc','Show place trend','Mostra trend posizioni')}</a>
+        <a class="group-archive-report secondary" href="${groupReportHref()}">${lt('Otwórz raport','Open report','Apri report')}</a>
+      </div>
     </div>`;
   archive.querySelectorAll('[data-history-filter]').forEach(button=>button.addEventListener('click',event=>{
     historyPointsFilter=button.dataset.historyFilter;
@@ -1961,8 +1971,19 @@ function switchTab(tab,el){
   if(tab==='grupowa')renderGroupArchive();
   requestAnimationFrame(updateMobileSectionBack);
 }
-initFeaturedKnockoutLink();
-refreshApiData().then(loaded=>{
-  if(!loaded)renderPlayerCards(),renderRanking(),renderKnockout();
-});
-setInterval(refreshApiData,60*1000);
+window.HSO_SHARED = {
+  PLAYERS,
+  KNOCKOUT_TIP_ROUNDS,
+  sc,
+  apiRegulationScore,
+  apiResult,
+  assignPositions
+};
+
+if(document.getElementById('playersGrid')&&document.getElementById('rankingBody')){
+  initFeaturedKnockoutLink();
+  refreshApiData().then(loaded=>{
+    if(!loaded)renderPlayerCards(),renderRanking(),renderKnockout();
+  });
+  setInterval(refreshApiData,60*1000);
+}

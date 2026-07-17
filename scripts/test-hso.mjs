@@ -16,6 +16,9 @@ const css = read("hso.css");
 const groupReportSourceJs = read("data/group-report-source.js");
 const formCore = read("formularz-pucharowy.js");
 const groupReport = read("Raport_typow_MS_2026.html");
+const trendsPage = read("hso-trendy.html");
+const trendsScript = read("hso-trendy.js");
+const trendsCss = read("hso-trendy.css");
 const footballData = JSON.parse(read("data/football-data.json"));
 const footballDataUpdater = read("scripts/update-football-data.mjs");
 const footballDataWorkflow = read(".github/workflows/football-data.yml");
@@ -23,6 +26,18 @@ check(
   footballDataWorkflow.includes("group: football-data-live-monitor") &&
     footballDataWorkflow.includes("cancel-in-progress: false"),
   "Automat wynikow anuluje poprzednie uruchomienie i moze powodowac konflikt zapisu"
+);
+check(
+  trendsPage.includes('id="playerSelect"') &&
+    trendsPage.includes('id="printTrend"') &&
+    trendsPage.includes('hso-trendy.js?v=') &&
+    trendsScript.includes("timelineByPlayer") &&
+    trendsScript.includes("apiRegulationResult") &&
+    trendsScript.includes("window.print()") &&
+    trendsCss.includes("@media print") &&
+    core.includes("window.HSO_SHARED = {") &&
+    core.includes('href="hso-trendy.html"'),
+  "Strona trendu miejsc nie ma wyboru gracza, wykresu, wydruku lub eksportu danych"
 );
 
 let formHistoryHelpers;

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Trend miejsc · Loża Ekspertów · MŚ 2026</title>
+<meta name="description" content="Interaktywny wykres trendu zajmowanych miejsc graczy Loży Ekspertów.">
+<link rel="apple-touch-icon" sizes="180x180" href="img/hso-icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/hso-icon-32.png">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hso-trendy.css?v=20260717-1">
+</head>
+<body>
+<main class="trend-wrap">
+  <header class="trend-hero">
+    <div>
+      <p class="eyebrow">LOŻA EKSPERTÓW · MŚ 2026</p>
+      <h1>Trend miejsc</h1>
+      <p class="lead">Wybierz gracza i zobacz, jak zmieniało się jego miejsce w rankingu od pierwszego zakończonego meczu do ostatniego dostępnego wyniku.</p>
+    </div>
+    <div class="trend-actions">
+      <a class="ghost-btn" href="hso.html">← Wróć</a>
+      <button class="print-btn" id="printTrend" type="button">Drukuj wykres</button>
+    </div>
+  </header>
+
+  <section class="trend-panel controls-panel">
+    <label class="player-picker">
+      <span>Gracz</span>
+      <select id="playerSelect" aria-label="Wybierz gracza"></select>
+    </label>
+    <div class="trend-note" id="trendNote">Ładowanie danych…</div>
+  </section>
+
+  <section class="trend-grid">
+    <article class="trend-panel chart-panel">
+      <div class="chart-head">
+        <div>
+          <p class="eyebrow">wykres</p>
+          <h2 id="chartTitle">—</h2>
+        </div>
+        <div class="current-place" id="currentPlace">—</div>
+      </div>
+      <div class="chart-box" id="chartBox" aria-live="polite"></div>
+    </article>
+
+    <aside class="trend-panel summary-panel">
+      <p class="eyebrow">podsumowanie</p>
+      <div class="summary-list" id="summaryList"></div>
+    </aside>
+  </section>
+
+  <section class="trend-panel timeline-panel">
+    <div class="chart-head">
+      <div>
+        <p class="eyebrow">historia</p>
+        <h2>Ostatnie punkty kontrolne</h2>
+      </div>
+    </div>
+    <div class="timeline-table" id="timelineTable"></div>
+  </section>
+</main>
+
+<script>window.HSO_CONFIG={mode:'trends'};</script>
+<script src="data/group-report-source.js?v=20260710-1"></script>
+<script src="hso-core.js?v=20260717-103"></script>
+<script src="hso-trendy.js?v=20260717-1"></script>
+</body>
+</html>

@@ -536,6 +536,9 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
   min-height:38px; padding:0 16px; border-radius:10px;
   color:#08111f; background:var(--gold); text-decoration:none; font-weight:800;
 }
+.group-archive-actions {
+  flex:0 0 auto; display:flex; gap:10px; align-items:center; justify-content:flex-end; flex-wrap:wrap;
+}
 .history-filter-bar {
   display:flex; flex-wrap:wrap; gap:8px; padding:16px 18px;
   border-bottom:1px solid var(--border); background:rgba(8,15,29,.28);
