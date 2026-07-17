@@ -127,6 +127,19 @@
     return { text: '—', cls: 'neutral' };
   };
 
+  const trendSummary = name => {
+    const data = timelineByPlayer.get(name) || [];
+    if (!data.length) return { first: '—', worst: '—', moveText: '—', moveClass: 'neutral', current: '—' };
+
+    const first = data[0];
+    const last = data[data.length - 1];
+    const worst = Math.max(...data.map(item => item.pos));
+    const move = first.pos - last.pos;
+    const moveText = move > 0 ? `▲ ${move}` : move < 0 ? `▼ ${Math.abs(move)}` : '—';
+    const moveClass = move > 0 ? 'good' : move < 0 ? 'bad' : 'neutral';
+    return { first: `#${first.pos}`, worst: `#${worst}`, moveText, moveClass, current: `#${last.pos}` };
+  };
+
   const renderTrend = name => {
     const data = timelineByPlayer.get(name) || [];
     if (!data.length) {
@@ -140,26 +153,20 @@
         </div>`;
     }
 
-    const width = 360;
+    const width = 520;
     const height = 118;
     const maxPos = Math.max(players.length, ...data.map(item => item.pos));
     const x = index => data.length === 1 ? width / 2 : index / (data.length - 1) * width;
     const y = pos => 14 + (pos - 1) / Math.max(1, maxPos - 1) * 86;
     const points = data.map((item, index) => `${x(index).toFixed(1)},${y(item.pos).toFixed(1)}`).join(' ');
     const area = `0,108 ${points} ${width},108`;
-    const first = data[0];
-    const last = data[data.length - 1];
-    const best = Math.min(...data.map(item => item.pos));
-    const worst = Math.max(...data.map(item => item.pos));
-    const move = first.pos - last.pos;
-    const moveText = move > 0 ? `▲ ${move}` : move < 0 ? `▼ ${Math.abs(move)}` : '—';
-    const moveClass = move > 0 ? 'good' : move < 0 ? 'bad' : 'neutral';
+    const summary = trendSummary(name);
 
     return `
       <div class="trend-panel">
         <div class="trend-title">
           <span>Trend miejsc</span>
-          <strong>#${last.pos}</strong>
+          <strong>${summary.current}</strong>
           <small>Od 1. meczu</small>
         </div>
         <div class="trend-chart">
@@ -171,11 +178,6 @@
             <polyline class="trend-line" points="${points}"></polyline>
             <circle class="trend-dot" cx="${x(data.length - 1).toFixed(1)}" cy="${y(last.pos).toFixed(1)}" r="5"></circle>
           </svg>
-        </div>
-        <div class="trend-summary">
-          <span>Start <strong>#${first.pos}</strong></span>
-          <span>Najniżej <strong>#${worst}</strong></span>
-          <span>Zmiana <strong class="${moveClass}">${moveText}</strong></span>
         </div>
       </div>`;
   };
@@ -193,6 +195,7 @@
     const exactTotal = stats.ex;
     const oneTotal = stats.en;
     const knockoutPoints = Math.max(0, stats.pts - base.group.pts);
+    const trend = trendSummary(name);
     card.className = `memory-card${stats._pos === 1 ? ' leader' : ''}`;
     card.innerHTML = `
       <div class="card-inner">
@@ -223,8 +226,14 @@
         ${renderTrend(name)}
 
         <div class="detail-grid">
-          <div class="detail"><span>Typ mistrza</span><strong>${esc(teamName(champ))}</strong></div>
-          <div class="detail"><span>Zmiana od fazy grupowej</span><strong class="movement ${movement.cls}">${movement.text}</strong></div>
+          <div class="detail trend-detail">
+            <span>Podsumowanie trendu</span>
+            <strong>
+              <em>Start ${trend.first}</em>
+              <em>Najniżej ${trend.worst}</em>
+              <em class="movement ${trend.moveClass}">Zmiana ${trend.moveText}</em>
+            </strong>
+          </div>
           <div class="detail"><span>Trafienia za 3</span><strong>${exactTotal}</strong></div>
           <div class="detail"><span>Trafienia za 1</span><strong>${oneTotal}</strong></div>
           <div class="detail"><span>Faza grupowa</span><strong>${base.group.pts} ${pointsLabel(base.group.pts)}</strong></div>

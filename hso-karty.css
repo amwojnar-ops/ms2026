@@ -144,7 +144,7 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .stat strong { font:700 40px/.9 'Barlow Condensed',sans-serif; color:var(--gold); }
 .stat span { margin-top:6px; color:rgba(221,232,255,.74); font-weight:800; font-size:10px; letter-spacing:.12em; text-transform:uppercase; text-align:center; }
 .trend-panel {
-  min-height:124px; display:grid; grid-template-columns:112px minmax(0,1fr) 90px; align-items:center; gap:12px;
+  min-height:124px; display:grid; grid-template-columns:112px minmax(0,1fr); align-items:center; gap:12px;
   border-radius:16px; padding:11px 13px;
   background:rgba(255,255,255,.075); border:1px solid rgba(255,255,255,.13);
 }
@@ -163,11 +163,6 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .trend-area { fill:rgba(244,196,71,.12); }
 .trend-line { fill:none; stroke:#f6d15e; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
 .trend-dot { fill:#f6d15e; stroke:#07152d; stroke-width:3; }
-.trend-summary { display:grid; gap:6px; justify-items:end; color:rgba(221,232,255,.72); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
-.trend-summary strong { display:block; color:#fff; font:700 17px/1 'Barlow Condensed',sans-serif; text-align:right; }
-.trend-summary .good { color:#7df0a6; }
-.trend-summary .bad { color:#ff9aa4; }
-.trend-summary .neutral { color:rgba(221,232,255,.84); }
 .detail-grid {
   display:grid; grid-template-columns:repeat(2,1fr); gap:9px;
 }
@@ -175,6 +170,13 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   min-height:58px; border-radius:14px; padding:10px 13px; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.10);
 }
 .detail strong { display:block; margin-top:4px; font:700 22px/1 'Barlow Condensed',sans-serif; }
+.trend-detail { grid-column:1 / -1; }
+.trend-detail strong {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px; align-items:center;
+}
+.trend-detail em {
+  font-style:normal; white-space:nowrap;
+}
 .footer-line {
   display:flex; justify-content:space-between; align-items:center; gap:18px;
   color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.08em; text-transform:uppercase;
@@ -200,8 +202,8 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .main-stats { gap:8px; }
   .stat { min-height:72px; }
   .trend-panel { grid-template-columns:1fr; gap:8px; min-height:0; }
-  .trend-summary { grid-template-columns:repeat(3,1fr); justify-items:start; }
   .detail-grid { grid-template-columns:1fr; }
+  .trend-detail strong { grid-template-columns:1fr; }
 }
 @media print {
   @page { size:A4 portrait; margin:8mm; }
@@ -227,8 +229,10 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .stat { min-height:80px; padding:10px; }
   .stat strong { font-size:40px; }
   .stat span { margin-top:6px; font-size:10px; }
-  .trend-panel { grid-template-columns:112px minmax(0,1fr) 90px; min-height:124px; padding:11px 13px; gap:12px; }
+  .trend-panel { grid-template-columns:112px minmax(0,1fr); min-height:124px; padding:11px 13px; gap:12px; }
   .detail-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
+  .trend-detail { grid-column:1 / -1; }
+  .trend-detail strong { grid-template-columns:repeat(3,1fr); gap:8px; }
   .detail { min-height:58px; padding:10px 13px; }
   .detail span { font-size:10px; }
   .detail strong { font-size:22px; }
