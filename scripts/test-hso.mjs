@@ -48,6 +48,8 @@ check(
     cardsPage.includes('hso-karty.js?v=') &&
     cardsScript.includes("renderCard") &&
     cardsScript.includes("players.map(player =>") &&
+    cardsScript.includes("const first = players[0]?.name;") &&
+    !cardsScript.includes(". miejsce</option>") &&
     cardsScript.includes("shared.setApiMatches") &&
     cardsScript.includes("window.print()") &&
     cardsCss.includes("@media print") &&
