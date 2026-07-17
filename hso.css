@@ -582,13 +582,6 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
 .history-points-summary .p1 { color:var(--amber); }
 .history-points-summary .p0 { color:var(--red); }
 .history-details { margin-top:12px; padding-top:12px; border-top:1px solid var(--border); cursor:default; }
-.group-archive-footer {
-  display:flex; justify-content:space-between; gap:18px; align-items:center;
-  padding:18px 20px; background:rgba(8,15,29,.44);
-  border-top:1px solid var(--border);
-}
-.group-archive-footer strong { display:block; color:#fff; }
-.group-archive-footer span { display:block; margin-top:4px; color:var(--muted); line-height:1.35; }
 .group-archive-report.secondary { background:transparent; color:var(--gold); border:1px solid rgba(232,184,75,.42); }
 
 .rank-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
@@ -1283,7 +1276,6 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
     min-height:30px; padding:0 10px; border-radius:8px;
     font-size:11px; white-space:nowrap;
   }
-  .group-archive-footer { flex-direction:column; align-items:stretch; }
   .history-filter-bar {
     flex-wrap:nowrap; overflow-x:auto; padding:12px;
     scrollbar-width:thin;

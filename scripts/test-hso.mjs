@@ -61,6 +61,13 @@ check(
     core.includes("['all','group','r32','r16','qf','sf']"),
   "Historia punktow nie zawiera filtra 1/2 finalu"
 );
+check(
+  !core.includes("Pokaż trend miejsc") &&
+    !core.includes("Otwórz raport','Open report','Apri report") &&
+    !core.includes("group-archive-footer") &&
+    !css.includes(".group-archive-footer"),
+  "Dolna stopka historii punktow nadal jest widoczna albo ma martwe style"
+);
 
 let formHistoryHelpers;
 try {

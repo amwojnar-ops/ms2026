@@ -1297,17 +1297,7 @@ function renderGroupArchive(){
         </div>
       </article>`).join('')}
     </div>
-    <div class="group-archive-footer">
-      <div>
-        <strong>${lt('Źródło fazy grupowej','Group-stage source','Fonte fase a gironi')}</strong>
-        <span>${lt('Pełny statyczny raport pozostaje dostępny jako wersja do druku i PDF.','The full static report remains available as the print/PDF version.','Il report statico completo resta disponibile come versione stampa/PDF.')}</span>
-      </div>
-      <div class="group-archive-actions">
-        <a class="group-archive-report secondary" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>
-        <a class="group-archive-report secondary" href="hso-trendy.html">${lt('Pokaż trend miejsc','Show place trend','Mostra trend posizioni')}</a>
-        <a class="group-archive-report secondary" href="${groupReportHref()}">${lt('Otwórz raport','Open report','Apri report')}</a>
-      </div>
-    </div>`;
+    `;
   archive.querySelectorAll('[data-history-filter]').forEach(button=>button.addEventListener('click',event=>{
     historyPointsFilter=button.dataset.historyFilter;
     expandedHistoryMatchKey=null;
