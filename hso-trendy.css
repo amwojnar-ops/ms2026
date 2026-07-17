@@ -96,6 +96,7 @@ select {
 .delta-up { color:var(--green); font-weight:700; }
 .delta-down { color:var(--red); font-weight:700; }
 .delta-same { color:var(--muted); font-weight:700; }
+.print-trend-footer { display:none; }
 @media (max-width:840px) {
   .trend-hero,.trend-grid { grid-template-columns:1fr; }
   .trend-actions { justify-content:flex-start; }
@@ -111,50 +112,84 @@ select {
 }
 @media print {
   @page { size:A4 portrait; margin:10mm; }
-  body { background:#fff; color:#111; }
-  .trend-wrap { width:100%; padding:0; }
+  html,body { width:210mm; height:297mm; overflow:hidden; }
+  body {
+    background:
+      radial-gradient(circle at 85% 12%, rgba(246,194,71,.12), transparent 24%),
+      linear-gradient(rgba(17,34,64,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(17,34,64,.025) 1px, transparent 1px),
+      #fff;
+    background-size:auto,18mm 18mm,18mm 18mm;
+    color:#111827;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  .trend-wrap {
+    width:100%; min-height:calc(297mm - 20mm); padding:13mm 12mm 10mm;
+    border:1px solid #d8b14a; border-radius:18px;
+    background:
+      radial-gradient(circle at 92% 94%, rgba(246,194,71,.11), transparent 29%),
+      linear-gradient(180deg,#ffffff,#fbfdff);
+    display:flex; flex-direction:column;
+  }
   .trend-hero,.controls-panel { display:none !important; }
   .print-trend-title {
-    display:block; margin:0 0 12px; padding:0 0 12px; border-bottom:1px solid #ddd;
+    display:grid; grid-template-columns:1fr auto; gap:16px; align-items:end;
+    margin:0 0 14px; padding:0 0 13px; border-bottom:2px solid #ead38a;
   }
   .print-trend-title p {
-    margin:0 0 4px; color:#9a6b00; font:700 10px 'Barlow Condensed',sans-serif;
+    grid-column:1 / -1;
+    margin:0 0 2px; color:#9a6b00; font:700 10px 'Barlow Condensed',sans-serif;
     letter-spacing:.18em; text-transform:uppercase;
   }
   .print-trend-title h1 {
-    margin:0; color:#111827; font:700 34px/.95 'Barlow Condensed',sans-serif; text-transform:uppercase;
+    margin:0; color:#111827; font:700 43px/.9 'Barlow Condensed',sans-serif; text-transform:uppercase;
+    letter-spacing:.015em;
   }
-  .trend-panel { box-shadow:none; background:#fff; color:#111; border-color:#ddd; }
+  .trend-panel { box-shadow:none; background:#fff; color:#111827; border-color:#dfe7f3; }
   .trend-actions { display:none !important; }
-  .lead,.trend-note,.summary-item span,.axis-label,.tick-label { color:#444; fill:#444; }
-  .chart-box { border-color:#ddd; background:#fff; }
+  .lead,.trend-note,.summary-item span,.axis-label,.tick-label { color:#526172; fill:#526172; }
   .trend-grid {
-    display:flex; flex-direction:column; gap:10px; align-items:stretch;
+    display:flex; flex-direction:column; gap:14px; align-items:stretch; flex:1;
   }
   .summary-panel {
-    order:1; margin-top:0; padding:12px;
+    order:1; margin-top:0; padding:0; border:0; background:transparent;
   }
-  .summary-panel .eyebrow { margin-bottom:8px; }
+  .summary-panel .eyebrow { display:none; }
   .summary-list {
-    grid-template-columns:repeat(5,1fr); gap:8px;
+    grid-template-columns:repeat(5,1fr); gap:9px;
   }
   .summary-item {
-    min-height:54px; padding:8px 10px; align-items:center;
+    min-height:76px; padding:12px 13px; align-items:center;
+    border:1px solid #dfe7f3; border-radius:14px;
+    background:linear-gradient(180deg,#ffffff,#f7faff);
   }
   .summary-item span {
-    font-size:11px; line-height:1.15;
+    font-size:10px; line-height:1.15; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
   }
   .summary-item strong {
-    font-size:28px; line-height:1;
+    font-size:36px; line-height:.9; color:#111827;
   }
+  .summary-item.good strong { color:#168a4a; }
+  .summary-item.bad strong { color:#d33c48; }
   .chart-panel {
-    order:2; margin-top:0; padding:12px;
+    order:2; margin-top:0; padding:16px; flex:1;
+    border-radius:18px; border:1px solid #dfe7f3;
+    background:linear-gradient(180deg,#ffffff,#f9fbff);
   }
   .chart-head { display:none; }
   .chart-box {
-    width:100%; min-height:560px; border-radius:12px;
+    width:100%; min-height:600px; border-radius:16px; border-color:#dfe7f3; background:#fff;
   }
   .chart-box svg {
-    width:100%; min-height:560px;
+    width:100%; min-height:600px;
+  }
+  .chart-grid-line { stroke:#e1e8f2; }
+  .trend-line { stroke:#1f5edb; stroke-width:3.6; }
+  .trend-dot.last { fill:#1f5edb; stroke:#1f5edb; }
+  .print-trend-footer {
+    display:flex; justify-content:space-between; align-items:center; gap:18px;
+    margin-top:12px; padding-top:10px; border-top:1px solid #ead38a;
+    color:#526172; font:700 13px 'Barlow',sans-serif; letter-spacing:.1em; text-transform:uppercase;
   }
 }
