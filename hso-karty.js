@@ -10,6 +10,7 @@
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const pointsLabel = () => 'pkt';
   const teamName = name => shared.teamName ? shared.teamName(name) : name;
+  const cardPlayerName = name => /^Andrzej\s+/i.test(name) ? 'Andrzej' : name;
   let ranked = [];
   let leaderPts = 0;
   let rankByName = new Map();
@@ -195,6 +196,7 @@
     const oneTotal = stats.en;
     const knockoutPoints = Math.max(0, stats.pts - base.group.pts);
     const trend = trendSummary(name);
+    const displayName = cardPlayerName(name);
     card.className = `memory-card${stats._pos === 1 ? ' leader' : ''}`;
     card.innerHTML = `
       <div class="card-inner">
@@ -208,10 +210,10 @@
 
         <div class="card-hero">
           <div class="portrait-wrap">
-            <div class="portrait">${photo ? `<img src="${esc(photo)}" alt="${esc(name)}">` : '<div class="portrait-placeholder">👤</div>'}</div>
+            <div class="portrait">${photo ? `<img src="${esc(photo)}" alt="${esc(displayName)}">` : '<div class="portrait-placeholder">👤</div>'}</div>
           </div>
           <div class="identity">
-            <h2 class="player-name">${esc(name)}</h2>
+            <h2 class="player-name">${esc(displayName)}</h2>
             <p class="subtitle">Pamiątkowa karta turnieju</p>
           </div>
         </div>
