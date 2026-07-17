@@ -129,15 +129,13 @@
 
   const trendSummary = name => {
     const data = timelineByPlayer.get(name) || [];
-    if (!data.length) return { first: '—', worst: '—', moveText: '—', moveClass: 'neutral', current: '—' };
+    if (!data.length) return { first: '—', best: '—', worst: '—', current: '—' };
 
     const first = data[0];
     const last = data[data.length - 1];
+    const best = Math.min(...data.map(item => item.pos));
     const worst = Math.max(...data.map(item => item.pos));
-    const move = first.pos - last.pos;
-    const moveText = move > 0 ? `▲ ${move}` : move < 0 ? `▼ ${Math.abs(move)}` : '—';
-    const moveClass = move > 0 ? 'good' : move < 0 ? 'bad' : 'neutral';
-    return { first: `#${first.pos}`, worst: `#${worst}`, moveText, moveClass, current: `#${last.pos}` };
+    return { first: `#${first.pos}`, best: `#${best}`, worst: `#${worst}`, current: `#${last.pos}` };
   };
 
   const renderTrend = name => {
@@ -227,7 +225,7 @@
             <strong>
               <em>Start ${trend.first}</em>
               <em>Najniżej ${trend.worst}</em>
-              <em class="movement ${trend.moveClass}">Zmiana ${trend.moveText}</em>
+              <em>Najwyżej ${trend.best}</em>
             </strong>
           </div>
           <div class="detail"><span>Trafienia za 3</span><strong>${exactTotal}</strong></div>
