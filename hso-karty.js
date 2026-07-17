@@ -205,7 +205,7 @@
             <div class="brand-mark">MŚ <span>2026</span></div>
             <div class="season">Loża Ekspertów</div>
           </div>
-          <div class="champ-badge">${flagHtml(champ)}<span>${esc(shared.SHORT?.[champ] || teamName(champ))}</span></div>
+          <div class="champ-badge">${flagHtml(champ)}<span>${esc(teamName(champ))}</span></div>
         </div>
 
         <div class="card-hero">

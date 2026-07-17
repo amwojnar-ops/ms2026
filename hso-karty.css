@@ -109,9 +109,11 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 .season { color:rgba(221,232,255,.78); font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
 .champ-badge {
   display:flex; align-items:center; gap:8px; color:var(--gold);
-  font-weight:800; text-transform:uppercase; letter-spacing:.08em; white-space:nowrap;
+  font-weight:800; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap;
+  font-size:15px; max-width:230px; justify-content:flex-end; min-width:0;
 }
-.champ-badge img { width:30px; height:21px; border-radius:4px; object-fit:cover; box-shadow:0 0 0 1px rgba(255,255,255,.2); }
+.champ-badge span { overflow:hidden; text-overflow:ellipsis; }
+.champ-badge img { flex:0 0 auto; width:32px; height:22px; border-radius:4px; object-fit:cover; box-shadow:0 0 0 1px rgba(255,255,255,.2); }
 .card-hero {
   display:grid; grid-template-columns:164px minmax(0,1fr); align-items:center;
   gap:24px; padding:4px 0 2px;
@@ -198,8 +200,8 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .portrait-wrap { width:112px; height:112px; }
   .brand-mark { font-size:34px; }
   .season { font-size:11px; }
-  .champ-badge { font-size:12px; }
-  .champ-badge img { width:24px; height:17px; }
+  .champ-badge { font-size:13px; max-width:150px; letter-spacing:.04em; }
+  .champ-badge img { width:26px; height:18px; }
   .player-name { font-size:clamp(31px,9vw,45px); letter-spacing:.025em; }
   .subtitle { font-size:12px; letter-spacing:.08em; }
   .main-stats { gap:8px; }
@@ -231,8 +233,8 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
   .card-inner { min-height:0; height:232mm; padding:28px 34px 27px; gap:12px; }
   .brand-mark { font-size:46px; }
   .season { font-size:13px; }
-  .champ-badge { font-size:15px; }
-  .champ-badge img { width:33px; height:23px; }
+  .champ-badge { font-size:17px; max-width:260px; }
+  .champ-badge img { width:35px; height:24px; }
   .card-hero { grid-template-columns:186px minmax(0,1fr); gap:28px; }
   .portrait-wrap { width:186px; height:186px; padding:8px; }
   .portrait { border-width:7px; }
