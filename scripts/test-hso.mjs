@@ -37,6 +37,8 @@ check(
     trendsScript.includes("timelineByPlayer") &&
     trendsScript.includes("apiRegulationResult") &&
     trendsScript.includes("window.print()") &&
+    !trendsPage.includes("timelineTable") &&
+    !trendsScript.includes("renderTable") &&
     trendsCss.includes("@media print") &&
     core.includes("window.HSO_SHARED = {") &&
     core.includes('href="hso-trendy.html"'),

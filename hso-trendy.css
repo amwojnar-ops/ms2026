@@ -63,7 +63,7 @@ select {
 }
 .trend-note { color:var(--muted); font-size:14px; text-align:right; }
 .trend-grid { display:grid; grid-template-columns:minmax(0,1fr) 290px; gap:18px; align-items:start; }
-.chart-panel,.summary-panel,.timeline-panel { padding:20px; }
+.chart-panel,.summary-panel { padding:20px; }
 .chart-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:16px; }
 .current-place {
   min-width:94px; border-radius:14px; padding:10px 12px; text-align:center;
@@ -92,12 +92,6 @@ select {
 .summary-item strong { font:700 24px 'Barlow Condensed',sans-serif; }
 .summary-item.good strong { color:var(--green); }
 .summary-item.bad strong { color:var(--red); }
-.timeline-table { overflow:auto; border-radius:14px; border:1px solid var(--line); }
-.timeline-table table { width:100%; border-collapse:collapse; min-width:720px; }
-.timeline-table th,.timeline-table td { padding:11px 12px; border-bottom:1px solid var(--line); text-align:left; }
-.timeline-table th { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.08em; }
-.timeline-table td { color:#233047; }
-.timeline-table tr:last-child td { border-bottom:0; }
 .delta-up { color:var(--green); font-weight:700; }
 .delta-down { color:var(--red); font-weight:700; }
 .delta-same { color:var(--muted); font-weight:700; }
@@ -110,7 +104,7 @@ select {
 @media (max-width:560px) {
   .trend-wrap { width:min(100% - 18px,1180px); padding-top:12px; }
   .trend-hero { padding:22px 18px; border-radius:14px; }
-  .chart-panel,.summary-panel,.timeline-panel { padding:14px; }
+  .chart-panel,.summary-panel { padding:14px; }
   .chart-box,.chart-box svg { min-height:330px; }
   .current-place { font-size:28px; min-width:74px; }
 }
@@ -118,7 +112,7 @@ select {
   body { background:#fff; color:#111; }
   .trend-wrap { width:100%; padding:0; }
   .trend-hero,.trend-panel { box-shadow:none; background:#fff; color:#111; border-color:#ddd; }
-  .trend-actions,.controls-panel,.timeline-panel { display:none !important; }
+  .trend-actions,.controls-panel { display:none !important; }
   .lead,.trend-note,.summary-item span,.axis-label,.tick-label { color:#444; fill:#444; }
   .chart-box { border-color:#ddd; background:#fff; }
   .trend-grid { grid-template-columns:1fr 260px; }

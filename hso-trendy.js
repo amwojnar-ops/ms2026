@@ -7,7 +7,6 @@
   const chartTitle = document.getElementById('chartTitle');
   const currentPlace = document.getElementById('currentPlace');
   const summaryList = document.getElementById('summaryList');
-  const timelineTable = document.getElementById('timelineTable');
   const trendNote = document.getElementById('trendNote');
 
   const score = (tip, result) => {
@@ -160,33 +159,11 @@
     </svg>`;
   };
 
-  const renderTable = data => {
-    const rows = [...data].slice(-14).reverse();
-    timelineTable.innerHTML = `<table>
-      <thead><tr><th>Mecz</th><th>Etap</th><th>Wynik</th><th>Miejsce</th><th>Punkty</th><th>Zmiana</th></tr></thead>
-      <tbody>${rows.map(item => {
-        const previous = data[item.eventIndex - 2];
-        const delta = previous ? previous.pos - item.pos : 0;
-        const deltaText = delta > 0 ? `▲ ${delta}` : delta < 0 ? `▼ ${Math.abs(delta)}` : '—';
-        const cls = delta > 0 ? 'delta-up' : delta < 0 ? 'delta-down' : 'delta-same';
-        return `<tr>
-          <td>${esc(item.event.date)} · ${esc(item.event.label)}</td>
-          <td>${esc(item.event.phase)}</td>
-          <td>${esc(item.event.result)}</td>
-          <td>#${item.pos}</td>
-          <td>${item.pts}</td>
-          <td class="${cls}">${deltaText}</td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table>`;
-  };
-
   const renderPlayer = name => {
     const data = timelineByPlayer.get(name) || [];
     if (!data.length) return;
     renderSummary(data);
     renderChart(name, data);
-    renderTable(data);
   };
 
   const init = async () => {
