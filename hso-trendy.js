@@ -139,6 +139,7 @@
     const markerIndexes = new Set(eventTicks);
     markerIndexes.add(data.length - 1);
     chartTitle.textContent = name;
+    document.getElementById('printTrendTitle').textContent = `Trend miejsc · ${name}`;
     chartBox.innerHTML = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Trend miejsc gracza ${esc(name)}">
       <defs>
         <linearGradient id="trendArea" x1="0" y1="0" x2="0" y2="1">

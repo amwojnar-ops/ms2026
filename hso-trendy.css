@@ -62,6 +62,7 @@ select {
   background:#fff; color:var(--text); padding:0 14px; font:700 18px 'Barlow Condensed',sans-serif;
 }
 .trend-note { color:var(--muted); font-size:14px; text-align:right; }
+.print-trend-title { display:none; }
 .trend-grid { display:grid; grid-template-columns:minmax(0,1fr) 290px; gap:18px; align-items:start; }
 .chart-panel,.summary-panel { padding:20px; }
 .chart-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:16px; }
@@ -109,10 +110,22 @@ select {
   .current-place { font-size:28px; min-width:74px; }
 }
 @media print {
+  @page { size:A4 portrait; margin:10mm; }
   body { background:#fff; color:#111; }
   .trend-wrap { width:100%; padding:0; }
-  .trend-hero,.trend-panel { box-shadow:none; background:#fff; color:#111; border-color:#ddd; }
-  .trend-actions,.controls-panel { display:none !important; }
+  .trend-hero,.controls-panel { display:none !important; }
+  .print-trend-title {
+    display:block; margin:0 0 12px; padding:0 0 12px; border-bottom:1px solid #ddd;
+  }
+  .print-trend-title p {
+    margin:0 0 4px; color:#9a6b00; font:700 10px 'Barlow Condensed',sans-serif;
+    letter-spacing:.18em; text-transform:uppercase;
+  }
+  .print-trend-title h1 {
+    margin:0; color:#111827; font:700 34px/.95 'Barlow Condensed',sans-serif; text-transform:uppercase;
+  }
+  .trend-panel { box-shadow:none; background:#fff; color:#111; border-color:#ddd; }
+  .trend-actions { display:none !important; }
   .lead,.trend-note,.summary-item span,.axis-label,.tick-label { color:#444; fill:#444; }
   .chart-box { border-color:#ddd; background:#fff; }
   .trend-grid { grid-template-columns:1fr 260px; }

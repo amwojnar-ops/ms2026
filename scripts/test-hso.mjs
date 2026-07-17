@@ -32,10 +32,12 @@ check(
 );
 check(
   trendsPage.includes('id="playerSelect"') &&
+    trendsPage.includes('id="printTrendTitle"') &&
     trendsPage.includes('id="printTrend"') &&
     trendsPage.includes('hso-trendy.js?v=') &&
     trendsScript.includes("timelineByPlayer") &&
     trendsScript.includes("apiRegulationResult") &&
+    trendsScript.includes("printTrendTitle") &&
     trendsScript.includes("window.print()") &&
     !trendsPage.includes("timelineTable") &&
     !trendsScript.includes("renderTable") &&
