@@ -618,6 +618,7 @@ function knockoutRoundComplete(round){
 }
 
 function knockoutRoundTipsRevealAllowed(stageId){
+  if(stageId==='third'||stageId==='final'||stageId==='medale')return true;
   const uiRound=KNOCKOUT_ROUNDS.find(round=>round.id===stageId);
   if(!uiRound)return true;
   const matches=knockoutMatches().slice(uiRound.start,uiRound.start+uiRound.count);
@@ -1657,7 +1658,7 @@ function knockoutMatchDetails(round,match,index,roundMatches){
   const tipData=knockoutTipMatch(progress.tipRound,match,index);
   const finishedResult=apiResult(match);
   const revealDeadline=knockoutDeadline(roundMatches[0]?.utcDate,round.id);
-  const afterRevealDeadline=!revealDeadline||Date.now()>=revealDeadline.getTime();
+  const afterRevealDeadline=round.id==='third'||round.id==='final'||!revealDeadline||Date.now()>=revealDeadline.getTime();
   const reveal=Boolean(tipData&&progress.complete&&afterRevealDeadline);
   const playersAlphabetically=[...PLAYERS].sort((a,b)=>a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
   if(!reveal){
