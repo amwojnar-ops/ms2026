@@ -530,12 +530,15 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys','Mateusz','Ola','Alex'])") &&
-    core.includes("final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys','Mateusz','Ola','Alex'])") &&
-    !core.includes("sf:new Set(") &&
+  core.includes("third:new Set()") &&
+    core.includes("final:new Set()") &&
+    core.includes("id:'medale'") &&
+    ['Andrzej W.','Łukasz','Lucas','Leszek','Mateusz','Michał','Robert','Waldemar','Justyna','Magda','Tomek','Iwona','Ola','Mariusz','Jacek','Aldona','Agnieszka','Alex','Borys','Maria','Andrzej G.','Paweł','Kacper','Izunia'].every(player =>
+      core.match(/id:'medale'[\s\S]*?tipsByPlayer:\{([\s\S]*?)\n    \}/)?.[1].includes(`'${player}'`)
+    ) &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
-  "Robocze podswietlenie rund medalowych nie jest ustawione zgodnie z oddanymi typami"
+  "Typy medalowe nie sa kompletne albo robocze podswietlenie nie zostalo zdjete"
 );
 check(
   core.includes("className='lock-badge-progress'") &&
@@ -622,10 +625,12 @@ const knockoutTipsStart = core.indexOf("const KNOCKOUT_TIP_ROUNDS = [");
 const r16TipsStart = core.indexOf("    id:'r16',", knockoutTipsStart);
 const qfTipsStart = core.indexOf("    id:'qf',", r16TipsStart);
 const sfTipsStart = core.indexOf("    id:'sf',", qfTipsStart);
+const medalTipsStart = core.indexOf("    id:'medale',", sfTipsStart);
 const r32TipsBlock = core.slice(knockoutTipsStart, r16TipsStart);
 const r16TipsBlock = core.slice(r16TipsStart, qfTipsStart);
 const qfTipsBlock = core.slice(qfTipsStart, sfTipsStart);
-const sfTipsBlock = core.slice(sfTipsStart, core.indexOf("const PLAYER_KNOCKOUT_STAGES", sfTipsStart));
+const sfTipsBlock = core.slice(sfTipsStart, medalTipsStart);
+const medalTipsBlock = core.slice(medalTipsStart, core.indexOf("const PLAYER_KNOCKOUT_STAGES", medalTipsStart));
 const parseRoundTips = block => [...block.matchAll(/^\s*'([^']+)':\{([^}]*)\}/gm)].map(match => ({
   name: match[1],
   scores: [...match[2].matchAll(/'\d+':'(\d+-\d+)'/g)].map(score => score[1])
@@ -634,6 +639,7 @@ const r32PlayerTips = parseRoundTips(r32TipsBlock);
 const r16PlayerTips = parseRoundTips(r16TipsBlock);
 const qfPlayerTips = parseRoundTips(qfTipsBlock);
 const sfPlayerTips = parseRoundTips(sfTipsBlock);
+const medalPlayerTips = parseRoundTips(medalTipsBlock);
 const baselineNames = new Set(baselineEntries.map(player => player.name));
 check(r32PlayerTips.length === 24, `Typy 1/16: ${r32PlayerTips.length}/24 graczy`);
 check(new Set(r32PlayerTips.map(player => player.name)).size === r32PlayerTips.length, "Typy 1/16: powtorzony gracz");
@@ -658,6 +664,12 @@ check(new Set(sfPlayerTips.map(player => player.name)).size === 24, "Typy 1/2: p
 sfPlayerTips.forEach(player => {
   check(baselineNames.has(player.name), `Typy 1/2: nieznany gracz ${player.name}`);
   check(player.scores.length === 2, `Typy 1/2 ${player.name}: ${player.scores.length}/2 mecze`);
+});
+check(medalPlayerTips.length === 24, `Typy medalowe: ${medalPlayerTips.length}/24 graczy`);
+check(new Set(medalPlayerTips.map(player => player.name)).size === 24, "Typy medalowe: powtorzony gracz");
+medalPlayerTips.forEach(player => {
+  check(baselineNames.has(player.name), `Typy medalowe: nieznany gracz ${player.name}`);
+  check(player.scores.length === 2, `Typy medalowe ${player.name}: ${player.scores.length}/2 mecze`);
 });
 check(fs.existsSync(path.join(root, "output", "pdf", "typy-1-8-zestawienie.pdf")), "Brak PDF zestawienia 1/8 finalu");
 

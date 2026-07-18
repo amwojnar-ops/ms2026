@@ -502,12 +502,45 @@ const KNOCKOUT_TIP_ROUNDS = [
       'Izunia':{'537387':'1-1','537388':'1-2'},
       'Mateusz':{'537387':'3-2','537388':'1-2'}
     }
+  },
+  {
+    id:'medale',
+    matches:[
+      {id:537389,apiId:537389,home:'Francja',away:'Anglia'},
+      {id:537390,apiId:537390,home:'Hiszpania',away:'Argentyna'}
+    ],
+    tipsByPlayer:{
+      'Waldemar':{'537389':'3-1','537390':'3-1'},
+      'Michał':{'537389':'2-1','537390':'1-2'},
+      'Tomek':{'537389':'1-3','537390':'0-1'},
+      'Iwona':{'537389':'3-1','537390':'3-1'},
+      'Andrzej W.':{'537389':'3-1','537390':'1-1'},
+      'Lucas':{'537389':'2-1','537390':'2-3'},
+      'Agnieszka':{'537389':'2-1','537390':'3-1'},
+      'Leszek':{'537389':'2-2','537390':'1-2'},
+      'Andrzej G.':{'537389':'2-1','537390':'2-1'},
+      'Justyna':{'537389':'2-1','537390':'2-2'},
+      'Jacek':{'537389':'2-0','537390':'2-0'},
+      'Aldona':{'537389':'2-1','537390':'2-1'},
+      'Magda':{'537389':'3-1','537390':'3-2'},
+      'Kacper':{'537389':'3-2','537390':'1-1'},
+      'Robert':{'537389':'2-1','537390':'2-1'},
+      'Łukasz':{'537389':'2-0','537390':'2-0'},
+      'Mariusz':{'537389':'2-1','537390':'1-1'},
+      'Maria':{'537389':'6-7','537390':'9-1'},
+      'Borys':{'537389':'2-1','537390':'1-1'},
+      'Mateusz':{'537389':'3-2','537390':'3-1'},
+      'Ola':{'537389':'3-2','537390':'2-2'},
+      'Alex':{'537389':'2-1','537390':'2-2'},
+      'Izunia':{'537389':'2-1','537390':'1-0'},
+      'Paweł':{'537389':'2-2','537390':'3-1'}
+    }
   }
 ];
 
 const KNOCKOUT_SUBMISSIONS = {
-  third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys','Mateusz','Ola','Alex']),
-  final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys','Mateusz','Ola','Alex'])
+  third:new Set(),
+  final:new Set()
 };
 
 function knockoutTipDotPlayers(){
