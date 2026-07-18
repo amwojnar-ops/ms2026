@@ -530,8 +530,8 @@ check(
   "Podswietlenie 1/8 nie zostalo usuniete lub styl nie jest gotowy na 1/4"
 );
 check(
-  core.includes("third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys'])") &&
-    core.includes("final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys'])") &&
+  core.includes("third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys','Mateusz','Ola','Alex'])") &&
+    core.includes("final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna','Jacek','Aldona','Magda','Kacper','Robert','Łukasz','Mariusz','Maria','Borys','Mateusz','Ola','Alex'])") &&
     !core.includes("sf:new Set(") &&
     core.includes("(showTipDot ? ' tips-submitted' : '')") &&
     core.includes("const submitted=KNOCKOUT_SUBMISSIONS[round.id]||new Set();"),
