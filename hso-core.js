@@ -1307,6 +1307,7 @@ function renderGroupArchive(){
       <div class="group-archive-actions">
         ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>`:''}
         ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>`:''}
+        ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-zgodnosc.html">${lt('Ranking zgodności','Compatibility ranking','Classifica affinità')}</a>`:''}
         <a class="group-archive-report" href="${groupReportHref()}">${lt('Raport fazy grupowej','Group-stage report','Report fase a gironi')}</a>
       </div>
     </div>

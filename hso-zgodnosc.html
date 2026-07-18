@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Ranking zgodności · Loża Ekspertów · MŚ 2026</title>
+<meta name="description" content="Interaktywny ranking podobieństwa typów graczy Loży Ekspertów.">
+<link rel="apple-touch-icon" sizes="180x180" href="img/hso-icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/hso-icon-32.png">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hso-zgodnosc.css?v=20260718-1">
+</head>
+<body>
+<main class="compat-wrap">
+  <header class="compat-hero">
+    <div>
+      <p class="eyebrow">LOŻA EKSPERTÓW · MŚ 2026</p>
+      <h1>Ranking zgodności</h1>
+      <p class="lead">Sprawdź, kto typuje najbardziej podobnie. Identyczny wynik daje pełną zgodność, a ten sam kierunek meczu — częściową.</p>
+    </div>
+    <a class="back-btn" href="hso-test.html">← Wróć</a>
+  </header>
+
+  <section class="control-panel">
+    <label class="player-picker">
+      <span>Gracz</span>
+      <select id="compatPlayer" aria-label="Wybierz gracza"></select>
+    </label>
+    <div class="phase-filters" id="phaseFilters" role="group" aria-label="Zakres typów">
+      <button class="phase-filter active" type="button" data-phase="all">Wszystkie</button>
+      <button class="phase-filter" type="button" data-phase="group">Faza grupowa</button>
+      <button class="phase-filter" type="button" data-phase="knockout">Faza pucharowa</button>
+      <button class="phase-filter" type="button" data-phase="champ">Typ mistrza</button>
+    </div>
+  </section>
+
+  <section class="compat-summary" id="compatSummary" aria-live="polite"></section>
+  <section class="compat-ranking" id="compatRanking" aria-live="polite"></section>
+
+  <footer class="method-note">
+    <strong>Jak liczymy?</strong>
+    <span>Identyczny wynik: 2 pkt · ten sam zwycięzca lub remis: 1 pkt · inne wskazanie: 0 pkt.</span>
+  </footer>
+</main>
+
+<script>window.HSO_CONFIG={mode:'compatibility'};</script>
+<script src="data/group-report-source.js?v=20260710-1"></script>
+<script src="hso-core.js?v=20260718-117"></script>
+<script src="hso-zgodnosc.js?v=20260718-1"></script>
+</body>
+</html>

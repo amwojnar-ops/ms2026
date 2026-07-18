@@ -22,6 +22,9 @@ const trendsCss = read("hso-trendy.css");
 const cardsPage = read("hso-karty.html");
 const cardsScript = read("hso-karty.js");
 const cardsCss = read("hso-karty.css");
+const compatibilityPage = read("hso-zgodnosc.html");
+const compatibilityScript = read("hso-zgodnosc.js");
+const compatibilityCss = read("hso-zgodnosc.css");
 const footballData = JSON.parse(read("data/football-data.json"));
 const footballDataUpdater = read("scripts/update-football-data.mjs");
 const footballDataWorkflow = read(".github/workflows/football-data.yml");
@@ -63,6 +66,17 @@ check(
     core.includes("setApiMatches(matches)") &&
     core.includes('href="hso-karty.html"'),
   "Strona pamiatkowych kart graczy nie ma wyboru, druku, zdjec lub aktualnych danych"
+);
+check(
+  compatibilityPage.includes('id="compatPlayer"') &&
+    compatibilityPage.includes('id="phaseFilters"') &&
+    compatibilityPage.includes('hso-zgodnosc.js?v=') &&
+    compatibilityScript.includes("const complete = players.every") &&
+    compatibilityScript.includes("points:exact ? 2 : sameOutcome ? 1 : 0") &&
+    compatibilityScript.includes("expandedName") &&
+    compatibilityCss.includes(".compat-ranking") &&
+    core.includes('href="hso-zgodnosc.html"'),
+  "Ranking zgodnosci nie ma wyboru gracza, filtrow, szczegolow lub ochrony niekompletnych rund"
 );
 check(
   core.includes("sf:lt('1/2','Semi-finals','Semifinali')") &&
