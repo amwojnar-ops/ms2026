@@ -98,6 +98,7 @@ select {
 .delta-same { color:var(--muted); font-weight:700; }
 .print-trend-footer { display:none; }
 @media (max-width:840px) {
+  .print-btn { display:none; }
   .trend-hero,.trend-grid { grid-template-columns:1fr; }
   .trend-actions { justify-content:flex-start; }
   .controls-panel { align-items:stretch; flex-direction:column; }
