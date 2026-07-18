@@ -506,8 +506,8 @@ const KNOCKOUT_TIP_ROUNDS = [
 ];
 
 const KNOCKOUT_SUBMISSIONS = {
-  third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.']),
-  final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.'])
+  third:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna']),
+  final:new Set(['Waldemar','Michał','Tomek','Iwona','Andrzej W.','Lucas','Agnieszka','Leszek','Andrzej G.','Justyna'])
 };
 
 function knockoutTipDotPlayers(){
@@ -1256,6 +1256,7 @@ function historyFilterLabel(filter){
 function renderGroupArchive(){
   const archive=document.getElementById('groupArchive');
   if(!archive)return;
+  const showExperimentalArchiveLinks=HSO_MODE==='test';
   const ranked=assignPositions(calcAll()).sort((a,b)=>b.group.pts-a.group.pts||b.group.ex-a.group.ex||a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
   const groupMatches=groupHistoryMatches();
   const knockoutMatchesHistory=knockoutHistoryMatches();
@@ -1270,8 +1271,8 @@ function renderGroupArchive(){
         <p>${lt('Kafle wszystkich meczów z rozwijaną listą punktów graczy. Faza grupowa korzysta z zamrożonego raportu, a faza pucharowa z aktualnych typów i wyników.','Match cards with expandable player-point lists. Group-stage data comes from the frozen report; knockout data uses current predictions and results.','Schede di tutte le partite con elenco punti espandibile. La fase a gironi usa il report congelato, la fase a eliminazione usa pronostici e risultati attuali.')}</p>
       </div>
       <div class="group-archive-actions">
-        <a class="group-archive-report" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>
-        <a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>
+        ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>`:''}
+        ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>`:''}
         <a class="group-archive-report" href="${groupReportHref()}">${lt('Raport fazy grupowej','Group-stage report','Report fase a gironi')}</a>
       </div>
     </div>
