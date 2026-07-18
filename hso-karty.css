@@ -218,23 +218,23 @@ h1 { margin:0; font:700 clamp(46px,7vw,86px)/.95 'Barlow Condensed',sans-serif; 
 }
 @media print {
   @page { size:A4 portrait; margin:8mm; }
-  html,body { width:210mm; height:297mm; overflow:hidden; }
+  html,body { width:auto; height:auto; min-height:0; margin:0; overflow:hidden; }
   body { background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .souvenir-wrap { width:100%; height:100%; padding:0; margin:0; }
+  .souvenir-wrap { width:194mm; height:280mm; padding:0; margin:0; overflow:hidden; }
   .souvenir-hero,.control-card { display:none !important; }
   .souvenir-stage {
-    width:100%; height:281mm; margin:0; padding:0; border:0; box-shadow:none; background:#fff;
+    width:194mm; height:280mm; margin:0; padding:0; border:0; box-shadow:none; background:#fff;
     display:flex; align-items:center; justify-content:center;
   }
   .memory-card {
     width:172mm; min-height:0; height:232mm; box-shadow:none; break-inside:avoid; page-break-inside:avoid;
   }
-  .memory-card::before { inset:18px 18px 52px; }
-  .card-inner { min-height:0; height:232mm; padding:27px 34px 25px; gap:10px; }
+  .memory-card::before { inset:18px; }
+  .card-inner { min-height:0; height:232mm; padding:27px 34px 40px; gap:10px; }
   .brand-mark { font-size:46px; }
   .season { font-size:13px; }
-  .champ-badge { font-size:17px; max-width:260px; }
-  .champ-badge img { width:35px; height:24px; }
+  .champ-badge { gap:10px; font-size:21px; max-width:300px; }
+  .champ-badge img { width:42px; height:28px; }
   .card-hero { grid-template-columns:204px minmax(0,1fr); gap:30px; }
   .portrait-wrap { width:204px; height:204px; padding:8px; }
   .portrait { border-width:7px; }
