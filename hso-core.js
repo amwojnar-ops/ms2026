@@ -114,7 +114,6 @@ if(siteIntro&&HSO_MODE==='test'){
       <div class="victory-name">Łukasz</div>
       <div class="victory-crown" aria-hidden="true">★ ★ ★</div>
       <div class="victory-title">Zwycięzca Loży Ekspertów</div>
-      <div class="victory-seal"><span>Matematycznie</span><strong>nie do dogonienia</strong></div>
       <div class="victory-congrats">Gratulacje!</div>
     </div>
     <button class="intro-skip" id="introSkip" type="button">Przejdź do rankingu</button>`;
