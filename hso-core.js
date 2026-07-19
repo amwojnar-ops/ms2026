@@ -1837,8 +1837,7 @@ function orderedKnockoutRounds(allMatches){
     .sort((a,b)=>Number(a.done)-Number(b.done));
 }
 const FAMILY_CUP_GROUPS = [
-  {name:'Wojnarowscy',members:['Andrzej W.','Magda']},
-  {name:'Rodzina Leszka',members:['Leszek','Alex','Lucas']},
+  {name:'Wojnarowscy',members:['Andrzej W.','Magda','Leszek','Alex','Lucas']},
   {name:'Aldona i Jacek',members:['Aldona','Jacek']},
   {name:'Rodzina Justyny',members:['Justyna','Mariusz','Łukasz']},
   {name:'Glinkowie i bliscy',members:['Andrzej G.','Tomek','Iwona','Kacper','Izunia','Maria']},
