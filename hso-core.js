@@ -1857,10 +1857,11 @@ function orderedKnockoutRounds(allMatches){
 }
 const FAMILY_CUP_GROUPS = [
   {name:'Wojnarowscy',members:['Andrzej W.','Magda','Leszek','Alex','Lucas']},
+  {name:'Sinickie Plemię',members:['Magda','Aldona','Justyna','Agnieszka','Iwona'],extra:true},
   {name:'Aldona i Jacek',members:['Aldona','Jacek']},
   {name:'Rodzina Justyny',members:['Justyna','Mariusz','Łukasz']},
   {name:'Glinkowie i bliscy',members:['Andrzej G.','Tomek','Iwona','Kacper','Izunia','Maria']},
-  {name:'Maciołkowie i bliscy',members:['Waldemar','Robert','Agnieszka','Paweł','Ola']},
+  {name:'Maciołkowie',members:['Waldemar','Robert','Agnieszka','Paweł','Ola']},
   {name:'Wolni strzelcy',members:['Mateusz','Michał','Borys']}
 ];
 let familyCupMetric='average';
@@ -1893,7 +1894,7 @@ function renderFamilyCup(){
     <header class="family-cup-hero">
       <div><p class="family-cup-eyebrow">${lt('Loża Ekspertów · klasyfikacja drużynowa','Experts’ Lounge · team standings','Salotto degli Esperti · classifica a squadre')}</p>
       <h2>${lt('Puchar Rodzin','Family Cup','Coppa delle famiglie')}</h2>
-      <p>${lt('Każdy gracz należy do jednej drużyny. Główny ranking porównuje średnią punktów na osobę.','Each player belongs to one team. The main ranking compares average points per player.','Ogni giocatore appartiene a una squadra. La classifica principale confronta la media punti per giocatore.')}</p></div>
+      <p>${lt('Drużyny podstawowe są rozłączne, a Sinickie Plemię jest dodatkowym kręgiem rodzinnym. Główny ranking porównuje średnią punktów na osobę.','The core teams are exclusive, while the Sinicki clan is an additional family circle. The main ranking compares average points per player.','Le squadre principali sono separate, mentre il clan Sinicki è un gruppo familiare aggiuntivo. La classifica confronta la media punti per giocatore.')}</p></div>
       <div class="family-cup-switch" role="group" aria-label="${lt('Sposób klasyfikacji','Ranking method','Metodo di classifica')}">
         <button type="button" data-family-metric="average" class="${familyCupMetric==='average'?'active':''}">${lt('Średnia','Average','Media')}</button>
         <button type="button" data-family-metric="sum" class="${familyCupMetric==='sum'?'active':''}">${lt('Suma','Total','Totale')}</button>
@@ -1912,7 +1913,7 @@ function renderFamilyCup(){
         return `<article class="family-team${expanded?' open':''}">
           <button class="family-team-main" type="button" data-family-name="${group.name}" aria-expanded="${expanded}">
             <span class="family-place">${index+1}</span>
-            <span class="family-team-name"><strong>${group.name}</strong><small>${group.members.length} ${lt('os.','players','pers.')}</small></span>
+            <span class="family-team-name"><strong>${group.name}</strong><small>${group.members.length} ${lt('os.','players','pers.')}${group.extra?` · ${lt('grupa dodatkowa','additional group','gruppo aggiuntivo')}`:''}</small></span>
             <span class="family-meter"><i style="width:${max?value/max*100:0}%"></i></span>
             <span class="family-score"><strong>${familyCupMetric==='average'?value.toFixed(1):value}</strong><small>pkt</small></span>
           </button>

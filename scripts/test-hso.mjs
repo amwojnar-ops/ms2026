@@ -99,10 +99,13 @@ check(
 try {
   const familySource = core.match(/const FAMILY_CUP_GROUPS = \[[\s\S]*?\n\];/)?.[0] || "";
   const familyGroups = new Function(`${familySource}; return FAMILY_CUP_GROUPS;`)();
-  const familyMembers = familyGroups.flatMap(group => group.members);
-  check(familyGroups.length === 6, `Puchar Rodzin: ${familyGroups.length}/6 grup`);
-  check(familyMembers.length === 24, `Puchar Rodzin: ${familyMembers.length}/24 miejsc w grupach`);
-  check(new Set(familyMembers).size === 24, "Puchar Rodzin zawiera gracza w wiecej niz jednej grupie");
+  const baseGroups = familyGroups.filter(group => !group.extra);
+  const familyMembers = baseGroups.flatMap(group => group.members);
+  const sinickiClan = familyGroups.find(group => group.name === "Sinickie Plemię");
+  check(familyGroups.length === 7, `Puchar Rodzin: ${familyGroups.length}/7 grup`);
+  check(familyMembers.length === 24, `Puchar Rodzin: ${familyMembers.length}/24 miejsc w grupach podstawowych`);
+  check(new Set(familyMembers).size === 24, "Podstawowe grupy Pucharu Rodzin zawieraja gracza wiecej niz raz");
+  check(sinickiClan?.extra === true && sinickiClan.members.join(",") === "Magda,Aldona,Justyna,Agnieszka,Iwona", "Sinickie Plemie ma nieprawidlowy sklad lub nie jest grupa dodatkowa");
 } catch (error) {
   errors.push(`Puchar Rodzin: ${error.message}`);
 }
