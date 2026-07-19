@@ -68,6 +68,15 @@ check(
   "Strona pamiatkowych kart graczy nie ma wyboru, druku, zdjec lub aktualnych danych"
 );
 check(
+  core.includes("loza_ekspertow_victory_lukasz_seen_v1") &&
+    core.includes("victory-intro") &&
+    core.includes("Mamy mistrza") &&
+    core.includes("Łukasz") &&
+    css.includes('.victory-name') &&
+    css.includes('@keyframes victory-confetti-fall'),
+  "Gratulacyjne intro Lukasza nie ma tresci lub animacji"
+);
+check(
   compatibilityPage.includes('id="compatPlayer"') &&
     compatibilityPage.includes('id="phaseFilters"') &&
     compatibilityPage.includes('hso-zgodnosc.js?v=') &&

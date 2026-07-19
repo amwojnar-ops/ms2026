@@ -98,8 +98,27 @@ function teamName(name){ return LANG==='en'?(TEAM_EN[name]||name):LANG==='it'?(T
 function lt(pl,en,it){return LANG==='pl'?pl:LANG==='it'?it:en;}
 function pointsLabel(value){ return value===1 ? tr('point') : tr('points'); }
 
-const INTRO_SESSION_KEY='loza_ekspertow_intro_seen';
+const INTRO_SESSION_KEY=HSO_MODE==='test'?'loza_ekspertow_victory_lukasz_seen_v1':'loza_ekspertow_intro_seen';
 const siteIntro=document.getElementById('siteIntro');
+if(siteIntro&&HSO_MODE==='test'){
+  siteIntro.classList.add('victory-intro');
+  siteIntro.setAttribute('aria-label','Gratulacje dla Łukasza, zwycięzcy Loży Ekspertów MŚ 2026');
+  const confetti=Array.from({length:32},(_,index)=>`<i style="--i:${index};--x:${(index*37)%101};--d:${(index%8)*.11}s;--r:${(index*47)%180}deg"></i>`).join('');
+  siteIntro.innerHTML=`
+    <div class="victory-rays" aria-hidden="true"></div>
+    <div class="victory-confetti" aria-hidden="true">${confetti}</div>
+    <div class="victory-stage">
+      <div class="victory-kicker">Loża Ekspertów · MŚ 2026</div>
+      <div class="victory-trophy" aria-hidden="true">🏆</div>
+      <div class="victory-announcement">Mamy mistrza</div>
+      <div class="victory-name">Łukasz</div>
+      <div class="victory-crown" aria-hidden="true">★ ★ ★</div>
+      <div class="victory-title">Zwycięzca Loży Ekspertów</div>
+      <div class="victory-seal"><span>Matematycznie</span><strong>nie do dogonienia</strong></div>
+      <div class="victory-congrats">Gratulacje!</div>
+    </div>
+    <button class="intro-skip" id="introSkip" type="button">Przejdź do rankingu</button>`;
+}
 function closeIntro(){
   if(!siteIntro)return;
   siteIntro.classList.add('hidden');
@@ -115,7 +134,7 @@ if(siteIntro){
     document.body.classList.remove('intro-active');
   }else{
     document.getElementById('introSkip')?.addEventListener('click',closeIntro);
-    setTimeout(closeIntro,2000);
+    setTimeout(closeIntro,HSO_MODE==='test'?5200:2000);
   }
 }
 
