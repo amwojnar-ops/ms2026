@@ -667,7 +667,10 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
   .family-team-main .family-meter { grid-column:2 / -1; grid-row:2; }
   .family-team-name { display:block; }
   .family-team-name strong,.family-team-name small { display:block; }
-  .family-team-name strong { font-size:18px; }
+  .family-team-name strong {
+    overflow:visible; font-size:18px; line-height:1.05;
+    text-overflow:clip; white-space:normal;
+  }
   .family-members { padding:0 10px 11px; }
   .family-member { grid-template-columns:minmax(0,1fr) 55px 55px; font-size:9px; }
   .family-member > span:last-child { display:none; }
