@@ -645,6 +645,70 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
 .group-archive-actions .group-archive-report {
   width:100%; min-width:0; padding:0 10px; text-align:center; white-space:normal; line-height:1.1;
 }
+
+/* Puchar Rodzin · hso-test */
+.family-cup { display:grid; gap:14px; }
+.family-cup-hero {
+  margin:0; padding:24px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px;
+  border:1px solid rgba(232,184,75,.28); border-radius:14px;
+  background:
+    radial-gradient(circle at 85% 15%,rgba(232,184,75,.16),transparent 28%),
+    linear-gradient(145deg,#17233a,#0c1424);
+  box-shadow:0 18px 42px rgba(0,0,0,.24);
+}
+.family-cup-hero::before,.family-cup-hero::after { display:none; }
+.family-cup-eyebrow { margin:0 0 5px; color:var(--gold); font-size:9px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+.family-cup-hero h2 { margin:0; color:#fff; font:700 42px/.95 'Barlow Condensed',sans-serif; text-transform:uppercase; }
+.family-cup-hero p:not(.family-cup-eyebrow) { max-width:570px; margin:8px 0 0; color:var(--muted); font-size:13px; }
+.family-cup-switch { flex:0 0 auto; display:flex; padding:4px; border:1px solid var(--border); border-radius:10px; background:rgba(4,9,17,.5); }
+.family-cup-switch button { min-height:34px; padding:0 13px; border:0; border-radius:7px; background:transparent; color:var(--muted); font-weight:700; cursor:pointer; }
+.family-cup-switch button.active { color:#161000; background:var(--gold); }
+.family-cup-highlights { display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:10px; }
+.family-highlight { min-width:0; padding:15px 16px; border:1px solid var(--border); border-radius:11px; background:var(--card); }
+.family-highlight.gold { border-color:rgba(232,184,75,.4); background:linear-gradient(140deg,rgba(232,184,75,.16),var(--card)); }
+.family-highlight span,.family-highlight small { display:block; color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.family-highlight strong { display:block; margin:5px 0 3px; overflow:hidden; color:#fff; font:700 21px/1 'Barlow Condensed',sans-serif; text-overflow:ellipsis; white-space:nowrap; }
+.family-highlight.gold strong { color:var(--gold); }
+.family-cup-ranking { display:grid; gap:8px; }
+.family-team { overflow:hidden; border:1px solid var(--border); border-radius:11px; background:var(--surface); transition:border-color .2s; }
+.family-team.open { border-color:rgba(232,184,75,.42); }
+.family-team-main { width:100%; padding:12px 14px; display:grid; grid-template-columns:38px minmax(150px,1fr) minmax(150px,2fr) 74px; gap:12px; align-items:center; border:0; background:transparent; color:var(--text); text-align:left; cursor:pointer; }
+.family-place { width:32px; height:32px; display:grid; place-items:center; border-radius:8px; color:var(--muted); background:var(--card); font:700 17px 'Barlow Condensed',sans-serif; }
+.family-team:first-child .family-place { color:#2b1c00; background:linear-gradient(135deg,#c8960a,#f5d060); }
+.family-team-name { min-width:0; display:flex; align-items:baseline; gap:8px; }
+.family-team-name strong { overflow:hidden; color:#fff; font:700 20px 'Barlow Condensed',sans-serif; text-overflow:ellipsis; white-space:nowrap; }
+.family-team-name small { color:var(--muted); font-size:9px; white-space:nowrap; }
+.family-meter { height:9px; overflow:hidden; border-radius:99px; background:rgba(255,255,255,.07); }
+.family-meter i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#245fc8,var(--gold)); }
+.family-score { text-align:right; }
+.family-score strong { color:#fff; font:700 25px 'Barlow Condensed',sans-serif; }
+.family-score small { margin-left:3px; color:var(--muted); font-size:9px; }
+.family-members { padding:0 14px 13px 64px; }
+.family-member { display:grid; grid-template-columns:minmax(150px,1fr) 70px 70px 70px; gap:8px; align-items:center; min-height:42px; padding:6px 9px; border-top:1px solid var(--border); color:var(--muted); font-size:10px; }
+.family-member-person { display:flex; align-items:center; gap:8px; min-width:0; }
+.family-member-person img,.family-member-person i { width:30px; height:30px; flex:0 0 auto; border-radius:50%; object-fit:cover; display:grid; place-items:center; background:var(--card); font-style:normal; }
+.family-member-person strong { overflow:hidden; color:#fff; font-size:12px; text-overflow:ellipsis; white-space:nowrap; }
+.family-member b,.family-team-stats b { color:var(--gold); }
+.family-team-stats { display:flex; gap:18px; flex-wrap:wrap; padding:10px 9px 0; color:var(--muted); font-size:10px; }
+@media (max-width:650px) {
+  .family-cup-hero { align-items:stretch; flex-direction:column; padding:18px; }
+  .family-cup-hero h2 { font-size:34px; }
+  .family-cup-switch { width:100%; }
+  .family-cup-switch button { flex:1; }
+  .family-cup-highlights { grid-template-columns:1fr 1fr; }
+  .family-highlight.gold { grid-column:1 / -1; }
+  .family-highlight { padding:12px; }
+  .family-highlight strong { font-size:18px; white-space:normal; }
+  .family-team-main { grid-template-columns:34px minmax(0,1fr) 64px; gap:8px; padding:11px 10px; }
+  .family-team-main .family-meter { grid-column:2 / -1; grid-row:2; }
+  .family-team-name { display:block; }
+  .family-team-name strong,.family-team-name small { display:block; }
+  .family-team-name strong { font-size:18px; }
+  .family-members { padding:0 10px 11px; }
+  .family-member { grid-template-columns:minmax(0,1fr) 55px 55px; font-size:9px; }
+  .family-member > span:last-child { display:none; }
+  .family-team-stats { gap:10px; }
+}
 .history-filter-bar {
   display:flex; flex-wrap:wrap; gap:8px; padding:16px 18px;
   border-bottom:1px solid var(--border); background:rgba(8,15,29,.28);

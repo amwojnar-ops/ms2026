@@ -197,7 +197,7 @@ function applyLanguage(){
   if(groupTab)groupTab.textContent=groupTabIsHistory?lt('Historia punktów','Point history','Storico punti'):tr('matches');
   setText('tabRankingBtn','ranking');
   document.getElementById('tabPlayersBtn').setAttribute('aria-label',tr('players'));
-  document.getElementById('tabKnockoutBtn').setAttribute('aria-label',tr('knockout'));
+  document.getElementById('tabKnockoutBtn').setAttribute('aria-label',HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout'));
   document.getElementById('tabMatchesBtn').setAttribute('aria-label',tr('matches'));
   document.getElementById('tabRankingBtn').setAttribute('aria-label',tr('ranking'));
   document.getElementById('mainTabs').dataset.label=lt('MENU GŁÓWNE','MAIN MENU','MENU PRINCIPALE');
@@ -208,10 +208,11 @@ function applyLanguage(){
       : lt('Otwórz raport fazy grupowej','Open the group-stage report','Apri il report della fase a gironi');
     if('href' in groupTab)groupTab.href=groupReportHref();
   }
-  setText('tabKnockoutBtn','knockout');
+  const knockoutTabButton=document.getElementById('tabKnockoutBtn');
+  if(knockoutTabButton)knockoutTabButton.textContent=HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
   const backLabel=document.getElementById('mobileSectionBackLabel');
   if(backLabel)backLabel.textContent=lt('Wróć','Back','Indietro');
-  document.getElementById('tabKnockoutBtn').title=tr('knockout');
+  document.getElementById('tabKnockoutBtn').title=HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
   setText('subtab-grupy','byGroups'); setText('subtab-daty','byDates'); setText('subtab-tabele','groupTables');
   setText('pdpChampLabel','championPick'); setText('spChampLabel','championPick');
   setText('rankPlayer','player'); setText('rankChampion','champion'); setText('rankTotal','total');
@@ -1048,6 +1049,7 @@ function openFeaturedKnockoutMatch(){
 }
 
 function initFeaturedKnockoutLink(){
+  if(HSO_MODE==='test')return;
   const card=document.querySelector('.next-match-card');
   if(!card)return;
   card.addEventListener('click',openFeaturedKnockoutMatch);
@@ -1834,9 +1836,90 @@ function orderedKnockoutRounds(allMatches){
   return KNOCKOUT_ROUNDS.map((round,index)=>({round,index,done:knockoutUiRoundComplete(round,allMatches)}))
     .sort((a,b)=>Number(a.done)-Number(b.done));
 }
+const FAMILY_CUP_GROUPS = [
+  {name:'Wojnarowscy',members:['Andrzej W.','Magda']},
+  {name:'Rodzina Leszka',members:['Leszek','Alex','Lucas']},
+  {name:'Aldona i Jacek',members:['Aldona','Jacek']},
+  {name:'Rodzina Justyny',members:['Justyna','Mariusz','Łukasz']},
+  {name:'Glinkowie i bliscy',members:['Andrzej G.','Tomek','Iwona','Kacper','Izunia','Maria']},
+  {name:'Maciołkowie i bliscy',members:['Waldemar','Robert','Agnieszka','Paweł','Ola']},
+  {name:'Wolni strzelcy',members:['Mateusz','Michał','Borys']}
+];
+let familyCupMetric='average';
+let expandedFamilyCup=null;
+
+function familyCupData(){
+  const results=new Map(assignPositions(calcAll()).map(player=>[player.name,player]));
+  return FAMILY_CUP_GROUPS.map(group=>{
+    const members=group.members.map(name=>results.get(name)).filter(Boolean);
+    const sum=members.reduce((total,player)=>total+player.pts,0);
+    const exact=members.reduce((total,player)=>total+player.ex,0);
+    const values=members.map(player=>player.pts);
+    const best=Math.max(...values);
+    const worst=Math.min(...values);
+    const bench=members.length>1?(sum-best)/(members.length-1):sum;
+    return {...group,members,sum,average:sum/members.length,exactAverage:exact/members.length,spread:best-worst,bench};
+  });
+}
+
+function renderFamilyCup(){
+  const root=document.getElementById('tab-pucharowa');
+  if(!root)return;
+  root.classList.remove('ko-final-view');
+  root.classList.add('family-cup-view');
+  const groups=familyCupData().sort((a,b)=>b[familyCupMetric]-a[familyCupMetric]||b.exactAverage-a.exactAverage||a.name.localeCompare(b.name,'pl'));
+  const mostBalanced=[...groups].sort((a,b)=>a.spread-b.spread||b.average-a.average)[0];
+  const strongestBench=[...groups].sort((a,b)=>b.bench-a.bench)[0];
+  const metricLabel=familyCupMetric==='average'?lt('średnio na osobę','average per player','media per giocatore'):lt('suma punktów','total points','punti totali');
+  root.innerHTML=`<section class="family-cup">
+    <header class="family-cup-hero">
+      <div><p class="family-cup-eyebrow">${lt('Loża Ekspertów · klasyfikacja drużynowa','Experts’ Lounge · team standings','Salotto degli Esperti · classifica a squadre')}</p>
+      <h2>${lt('Puchar Rodzin','Family Cup','Coppa delle famiglie')}</h2>
+      <p>${lt('Każdy gracz należy do jednej drużyny. Główny ranking porównuje średnią punktów na osobę.','Each player belongs to one team. The main ranking compares average points per player.','Ogni giocatore appartiene a una squadra. La classifica principale confronta la media punti per giocatore.')}</p></div>
+      <div class="family-cup-switch" role="group" aria-label="${lt('Sposób klasyfikacji','Ranking method','Metodo di classifica')}">
+        <button type="button" data-family-metric="average" class="${familyCupMetric==='average'?'active':''}">${lt('Średnia','Average','Media')}</button>
+        <button type="button" data-family-metric="sum" class="${familyCupMetric==='sum'?'active':''}">${lt('Suma','Total','Totale')}</button>
+      </div>
+    </header>
+    <div class="family-cup-highlights">
+      <div class="family-highlight gold"><span>${lt('Lider','Leader','Leader')}</span><strong>${groups[0].name}</strong><small>${familyCupMetric==='average'?groups[0].average.toFixed(1):groups[0].sum} pkt · ${metricLabel}</small></div>
+      <div class="family-highlight"><span>${lt('Najbardziej wyrównani','Most balanced','Più equilibrati')}</span><strong>${mostBalanced.name}</strong><small>${lt('różnica','spread','differenza')} ${mostBalanced.spread} pkt</small></div>
+      <div class="family-highlight"><span>${lt('Najsilniejsza ławka','Strongest bench','Panchina più forte')}</span><strong>${strongestBench.name}</strong><small>${strongestBench.bench.toFixed(1)} pkt ${lt('bez lidera','without the leader','senza il leader')}</small></div>
+    </div>
+    <div class="family-cup-ranking">
+      ${groups.map((group,index)=>{
+        const value=familyCupMetric==='average'?group.average:group.sum;
+        const max=familyCupMetric==='average'?groups[0].average:groups[0].sum;
+        const expanded=expandedFamilyCup===group.name;
+        return `<article class="family-team${expanded?' open':''}">
+          <button class="family-team-main" type="button" data-family-name="${group.name}" aria-expanded="${expanded}">
+            <span class="family-place">${index+1}</span>
+            <span class="family-team-name"><strong>${group.name}</strong><small>${group.members.length} ${lt('os.','players','pers.')}</small></span>
+            <span class="family-meter"><i style="width:${max?value/max*100:0}%"></i></span>
+            <span class="family-score"><strong>${familyCupMetric==='average'?value.toFixed(1):value}</strong><small>pkt</small></span>
+          </button>
+          <div class="family-members" ${expanded?'':'hidden'}>
+            ${group.members.slice().sort((a,b)=>b.pts-a.pts).map(player=>`<div class="family-member">
+              <span class="family-member-person">${PHOTOS[player.name]?`<img src="${PHOTOS[player.name]}" alt="">`:'<i>👤</i>'}<strong>${player.name}</strong></span>
+              <span><b>${player.pts}</b> pkt</span><span>${player.ex} × 3 pkt</span><span>${player.en} × 1 pkt</span>
+            </div>`).join('')}
+            <div class="family-team-stats"><span>${lt('Średnia','Average','Media')} <b>${group.average.toFixed(1)}</b></span><span>${lt('Suma','Total','Totale')} <b>${group.sum}</b></span><span>${lt('Śr. trafień za 3','Avg. exact hits','Media risultati esatti')} <b>${group.exactAverage.toFixed(1)}</b></span></div>
+          </div>
+        </article>`;
+      }).join('')}
+    </div>
+  </section>`;
+  root.querySelectorAll('[data-family-metric]').forEach(button=>button.addEventListener('click',()=>{familyCupMetric=button.dataset.familyMetric;renderFamilyCup();}));
+  root.querySelectorAll('[data-family-name]').forEach(button=>button.addEventListener('click',()=>{expandedFamilyCup=expandedFamilyCup===button.dataset.familyName?null:button.dataset.familyName;renderFamilyCup();}));
+}
+
 function renderKnockout(){
   const root=document.getElementById('tab-pucharowa');
   if(!root)return;
+  if(HSO_MODE==='test'){
+    renderFamilyCup();
+    return;
+  }
   const allMatches=knockoutMatches();
   const currentIndex=currentKnockoutRoundIndex(allMatches);
   if(!knockoutRoundSelectionManual)selectedKnockoutRound=currentIndex;
