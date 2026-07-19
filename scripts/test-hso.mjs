@@ -603,10 +603,11 @@ check(
   "Typy medalowe nie sa kompletne albo robocze podswietlenie nie zostalo zdjete"
 );
 check(
-  core.includes("className='lock-badge-progress'") &&
-    core.includes("value:headerTipProgress.completePlayers.length") &&
-    css.includes('.lock-badge-progress-bar {'),
-  "Gorny baner nie pokazuje paska postepu typowania"
+  !production.includes('id="lockBadge"') &&
+    !test.includes('id="lockBadge"') &&
+    !css.includes('.lock-badge {') &&
+    !css.includes('.lock-badge-progress-bar {'),
+  "Usuniety gorny baner statusu typowania nadal jest obecny"
 );
 check(
   /id:'qf'[\s\S]*?tipsByPlayer/.test(core.slice(core.indexOf('const KNOCKOUT_TIP_ROUNDS'), core.indexOf('const PLAYER_KNOCKOUT_STAGES'))) &&

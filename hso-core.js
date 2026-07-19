@@ -210,6 +210,7 @@ function applyLanguage(){
   }
   const knockoutTabButton=document.getElementById('tabKnockoutBtn');
   if(knockoutTabButton)knockoutTabButton.textContent=HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
+  if(HSO_MODE==='test'&&knockoutTabButton)document.getElementById('mainTabs')?.appendChild(knockoutTabButton);
   const backLabel=document.getElementById('mobileSectionBackLabel');
   if(backLabel)backLabel.textContent=lt('Wróć','Back','Indietro');
   document.getElementById('tabKnockoutBtn').title=HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
