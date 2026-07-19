@@ -69,6 +69,7 @@ check(
 );
 check(
   core.includes("function completedWorldChampion()") &&
+    core.includes("const officialWorldChampion='Hiszpania'") &&
     core.includes("api?.status!=='FINISHED'") &&
     core.includes("const champBonus=champion&&p.champ===champion?5:0") &&
     core.includes("completedWorldChampion,") &&
@@ -131,8 +132,9 @@ check(
 );
 check(
   core.includes("sf:lt('1/2','Semi-finals','Semifinali')") &&
-    core.includes("['all','group','r32','r16','qf','sf']"),
-  "Historia punktow nie zawiera filtra 1/2 finalu"
+    core.includes("medale:lt('Finały','Finals','Finali')") &&
+    core.includes("['all','group','r32','r16','qf','sf','medale']"),
+  "Historia punktow nie zawiera filtrow 1/2 finalu i finalow"
 );
 check(
   !core.includes("Pokaż trend miejsc") &&

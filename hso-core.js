@@ -855,12 +855,14 @@ function completedKnockoutEntries(){
 }
 
 function completedWorldChampion(){
+  const officialWorldChampion='Hiszpania';
   const medalRound=KNOCKOUT_TIP_ROUNDS.find(round=>round.id==='medale');
   const finalMatch=medalRound?.matches?.[1];
   if(!finalMatch)return null;
   const apiId=Number(finalMatch.apiId??finalMatch.id);
   const api=API_MATCHES.find(match=>Number(match.id)===apiId);
   if(api?.status!=='FINISHED')return null;
+  if(officialWorldChampion)return officialWorldChampion;
   if(api.score?.winner==='HOME_TEAM')return finalMatch.home||null;
   if(api.score?.winner==='AWAY_TEAM')return finalMatch.away||null;
   return null;
@@ -1349,7 +1351,8 @@ function historyFilterLabel(filter){
     r32:lt('1/16','Round of 32','Sedicesimi'),
     r16:lt('1/8','Round of 16','Ottavi'),
     qf:lt('1/4','Quarter-finals','Quarti'),
-    sf:lt('1/2','Semi-finals','Semifinali')
+    sf:lt('1/2','Semi-finals','Semifinali'),
+    medale:lt('Finały','Finals','Finali')
   };
   return labels[filter]||filter;
 }
@@ -1378,7 +1381,7 @@ function renderGroupArchive(){
       </div>
     </div>
     <div class="history-filter-bar" role="tablist" aria-label="${lt('Filtr rund','Round filter','Filtro turni')}">
-      ${['all','group','r32','r16','qf','sf'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
+      ${['all','group','r32','r16','qf','sf','medale'].map(filter=>`<button class="history-filter${historyPointsFilter===filter?' active':''}" type="button" data-history-filter="${filter}">${historyFilterLabel(filter)}</button>`).join('')}
     </div>
     <div class="history-match-grid">
       ${filtered.map(match=>`<article class="history-match${expandedHistoryMatchKey===match.key?' expanded':''}" data-history-key="${match.key}" tabindex="0" role="button" aria-expanded="${expandedHistoryMatchKey===match.key}">
