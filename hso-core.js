@@ -246,7 +246,6 @@ applyLanguage();
 let API_MATCHES = [];
 let API_LAST_UPDATED = null;
 let API_DATA_READY = false;
-let API_REFRESH_SEQUENCE = 0;
 let API_FINISHED_COUNT = 0;
 const KNOCKOUT_START_UTC = Date.parse('2026-06-28T19:00:00Z');
 
@@ -294,49 +293,17 @@ function knockoutDisplayScore(match){
   return validApiScore(match?.score?.fullTime)?match.score.fullTime:{home:null,away:null};
 }
 
-async function refreshApiData(){
-  const requestId=++API_REFRESH_SEQUENCE;
-  try{
-    const stamp=Date.now();
-    const sources=[
-      `data/football-data.json?t=${stamp}`,
-      `https://raw.githubusercontent.com/amwojnar-ops/ms2026/main/data/football-data.json?t=${stamp}`
-    ];
-    const responses=await Promise.allSettled(sources.map(async source=>{
-      const response=await fetch(source,{cache:'no-store'});
-      if(!response.ok)throw new Error(`${source}: HTTP ${response.status}`);
-      const data=await response.json();
-      if(!Array.isArray(data.matches))throw new Error(`${source}: niepełne dane`);
-      return data;
-    }));
-    const snapshots=responses.filter(item=>item.status==='fulfilled').map(item=>item.value);
-    if(!snapshots.length)throw new Error('Brak poprawnej odpowiedzi ze źródeł wyników.');
-    snapshots.sort((a,b)=>{
-      const finishedA=a.matches.filter(m=>m.status==='FINISHED').length;
-      const finishedB=b.matches.filter(m=>m.status==='FINISHED').length;
-      return finishedB-finishedA||(Date.parse(b.updatedAt)||0)-(Date.parse(a.updatedAt)||0);
-    });
-    const data=snapshots[0];
-    if(requestId!==API_REFRESH_SEQUENCE)return true;
-    const incomingFinished=data.matches.filter(m=>m.status==='FINISHED').length;
-    const currentFinished=API_FINISHED_COUNT;
-    const incomingUpdated=Date.parse(data.updatedAt)||0;
-    const currentUpdated=Date.parse(API_LAST_UPDATED)||0;
-    if(API_DATA_READY&&(incomingFinished<currentFinished||(
-      incomingFinished===currentFinished&&incomingUpdated<currentUpdated
-    )))return true;
-    API_MATCHES=data.matches.filter(match=>Date.parse(match.utcDate)>=KNOCKOUT_START_UTC);
-    API_FINISHED_COUNT=incomingFinished;
-    API_LAST_UPDATED=data.updatedAt||null;
-    API_DATA_READY=true;
-    renderPlayerCards();
-    renderRanking();
-    renderKnockout();
-    return true;
-  }catch(error){
-    console.warn('Nie udało się odczytać danych football-data.org:',error);
-    return false;
-  }
+function loadArchivedApiData(){
+  const data=window.HSO_FOOTBALL_DATA;
+  if(!Array.isArray(data?.matches))return false;
+  API_MATCHES=data.matches.filter(match=>Date.parse(match.utcDate)>=KNOCKOUT_START_UTC);
+  API_FINISHED_COUNT=data.matches.filter(match=>match.status==='FINISHED').length;
+  API_LAST_UPDATED=data.updatedAt||null;
+  API_DATA_READY=true;
+  renderPlayerCards();
+  renderRanking();
+  renderKnockout();
+  return true;
 }
 const PLAYERS=[
   {name:'Andrzej W.',champ:'Francja',group:{pts:60,ex:8,en:36}},
@@ -2170,8 +2137,5 @@ window.HSO_SHARED = {
 
 if(document.getElementById('playersGrid')&&document.getElementById('rankingBody')){
   initFeaturedKnockoutLink();
-  refreshApiData().then(loaded=>{
-    if(!loaded)renderPlayerCards(),renderRanking(),renderKnockout();
-  });
-  setInterval(refreshApiData,60*1000);
+  if(!loadArchivedApiData())renderPlayerCards(),renderRanking(),renderKnockout();
 }

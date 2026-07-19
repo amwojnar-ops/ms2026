@@ -2,9 +2,6 @@ name: Aktualizacja wynikow football-data.org
 
 on:
   workflow_dispatch:
-  schedule:
-    # Awaryjne uruchomienie, gdyby zewnetrzny cron-job.org nie odpowiedzial.
-    - cron: "*/5 * * * *"
 
 permissions:
   contents: write

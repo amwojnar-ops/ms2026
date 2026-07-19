@@ -293,16 +293,9 @@
     });
   };
 
-  const init = async () => {
-    let apiMatches = [];
-    try {
-      const response = await fetch(`data/football-data.json?t=${Date.now()}`, { cache: 'no-store' });
-      const payload = await response.json();
-      apiMatches = payload.matches || [];
-      shared.setApiMatches?.(apiMatches);
-    } catch (error) {
-      document.getElementById('cardNote').textContent = 'Nie udało się pobrać aktualnych danych pucharowych. Karta pokazuje dostępne dane lokalne.';
-    }
+  const init = () => {
+    const apiMatches = window.HSO_FOOTBALL_DATA?.matches || [];
+    shared.setApiMatches?.(apiMatches);
     buildTrend([...groupEvents(), ...knockoutEvents(apiMatches)]);
     rebuildRanking();
     renderPlayerMenu();

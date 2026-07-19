@@ -173,17 +173,10 @@
     renderChart(name, data);
   };
 
-  const init = async () => {
+  const init = () => {
     select.innerHTML = players.map(player => `<option value="${esc(player.name)}">${esc(player.name)}</option>`).join('');
-    let apiMatches = [];
-    try {
-      const response = await fetch(`data/football-data.json?t=${Date.now()}`, { cache: 'no-store' });
-      const payload = await response.json();
-      apiMatches = payload.matches || [];
-      shared.setApiMatches?.(apiMatches);
-    } catch (error) {
-      trendNote.textContent = 'Nie udało się pobrać aktualnych danych pucharowych. Pokazuję fazę grupową.';
-    }
+    const apiMatches = window.HSO_FOOTBALL_DATA?.matches || [];
+    shared.setApiMatches?.(apiMatches);
     const events = [...groupEvents(), ...knockoutEvents(apiMatches)];
     buildTrend(events);
     const selected = players[0]?.name;

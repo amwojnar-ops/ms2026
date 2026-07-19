@@ -26,12 +26,34 @@ const compatibilityPage = read("hso-zgodnosc.html");
 const compatibilityScript = read("hso-zgodnosc.js");
 const compatibilityCss = read("hso-zgodnosc.css");
 const footballData = JSON.parse(read("data/football-data.json"));
+const footballDataSource = read("data/football-data-source.js");
 const footballDataUpdater = read("scripts/update-football-data.mjs");
 const footballDataWorkflow = read(".github/workflows/football-data.yml");
 check(
-  footballDataWorkflow.includes("group: football-data-live-monitor") &&
-    footballDataWorkflow.includes("cancel-in-progress: false"),
-  "Automat wynikow anuluje poprzednie uruchomienie i moze powodowac konflikt zapisu"
+  footballDataWorkflow.includes("workflow_dispatch:") &&
+    !footballDataWorkflow.includes("schedule:") &&
+    !footballDataWorkflow.includes("cron:"),
+  "Automatyczny harmonogram aktualizacji wynikow nadal jest wlaczony"
+);
+try {
+  const archivedData = new Function("window", `${footballDataSource}; return window.HSO_FOOTBALL_DATA;`)({});
+  check(
+    archivedData?.matches?.length === footballData.matches.length &&
+      archivedData?.updatedAt === footballData.updatedAt,
+    "Lokalna migawka wynikow nie odpowiada koncowemu plikowi danych"
+  );
+} catch (error) {
+  errors.push(`Lokalna migawka wynikow: ${error.message}`);
+}
+check(
+  [production,test,cardsPage,trendsPage].every(page=>page.includes('data/football-data-source.js?v=')) &&
+    core.includes("function loadArchivedApiData()") &&
+    !core.includes("fetch(") &&
+    !core.includes("raw.githubusercontent.com") &&
+    !core.includes("setInterval(refreshApiData") &&
+    !cardsScript.includes("fetch(") &&
+    !trendsScript.includes("fetch("),
+  "Archiwum nadal pobiera lub cyklicznie aktualizuje wyniki"
 );
 check(
   trendsPage.includes('id="playerSelect"') &&
@@ -211,7 +233,7 @@ try {
 let scoreHelpers;
 try {
   const start = core.indexOf("function validApiScore(");
-  const end = core.indexOf("async function refreshApiData(");
+  const end = core.indexOf("function loadArchivedApiData(");
   scoreHelpers = new Function(
     `${core.slice(start, end)}; return {apiResult,apiLiveScore,knockoutDisplayScore};`
   )();
