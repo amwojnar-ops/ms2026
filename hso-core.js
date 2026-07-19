@@ -852,8 +852,24 @@ function completedKnockoutEntries(){
   }).filter(Boolean));
 }
 
+function completedWorldChampion(){
+  const medalRound=KNOCKOUT_TIP_ROUNDS.find(round=>round.id==='medale');
+  const finalMatch=medalRound?.matches?.[1];
+  if(!finalMatch)return null;
+  const apiId=Number(finalMatch.apiId??finalMatch.id);
+  const api=API_MATCHES.find(match=>Number(match.id)===apiId);
+  if(api?.status!=='FINISHED')return null;
+  if(api.score?.winner==='HOME_TEAM')return finalMatch.home||null;
+  if(api.score?.winner==='AWAY_TEAM')return finalMatch.away||null;
+  return null;
+}
+
 function calcAll(excludedToken=null){
   const entries=completedKnockoutEntries();
+  const medalRound=KNOCKOUT_TIP_ROUNDS.find(round=>round.id==='medale');
+  const finalMatch=medalRound?.matches?.[1];
+  const finalToken=finalMatch?`medale:${finalMatch.id||'1'}`:null;
+  const champion=excludedToken===finalToken?null:completedWorldChampion();
   return PLAYERS.map(p=>{
     let pts=p.group.pts,ex=p.group.ex,en=p.group.en;
     entries.forEach(({round,key,result,token})=>{
@@ -862,7 +878,9 @@ function calcAll(excludedToken=null){
       if(value===3){pts+=3;ex++;}
       else if(value===1){pts++;en++;}
     });
-    return{...p,pts,ex,en};
+    const champBonus=champion&&p.champ===champion?5:0;
+    pts+=champBonus;
+    return{...p,pts,ex,en,champBonus};
   }).sort((a,b)=>{
     if(b.pts!==a.pts)return b.pts-a.pts;
     if(b.ex!==a.ex)return b.ex-a.ex;
@@ -1111,14 +1129,14 @@ function openPanel(name,ranked,accordionState=null){
     if(exp){
       exp.classList.add('open');
       document.getElementById('exp-in-'+name).innerHTML=
-        `<div class="exp-champ-line">${tr('champion')}: <strong>${p.champ?teamName(p.champ):'—'}</strong> &nbsp;·&nbsp; ${p.pts} ${pointsLabel(p.pts)} (${p.ex}×3 + ${p.en}×1)</div>`
+        `<div class="exp-champ-line">${tr('champion')}: <strong>${p.champ?teamName(p.champ):'—'}</strong>${p.champBonus?` <b>+${p.champBonus} pkt</b>`:''} &nbsp;·&nbsp; ${p.pts} ${pointsLabel(p.pts)} (${p.ex}×3 + ${p.en}×1${p.champBonus?` + ${p.champBonus}`:''})</div>`
         +buildExpRows(p);
       restorePlayerAccordionState(document.getElementById('exp-in-'+name),accordionState);
     }
   } else {
     document.body.classList.add('ranking-panel-open');
     document.getElementById('spName').textContent=name;
-    document.getElementById('spSub').textContent=`${p.pts} ${pointsLabel(p.pts)} · ${p.ex}× 3 ${pointsLabel(3)} + ${p.en}× 1 ${pointsLabel(1)}`;
+    document.getElementById('spSub').textContent=`${p.pts} ${pointsLabel(p.pts)} · ${p.ex}× 3 ${pointsLabel(3)} + ${p.en}× 1 ${pointsLabel(1)}${p.champBonus?` + ${p.champBonus} ${lt('za mistrza','champion bonus','bonus campione')}`:''}`;
     document.getElementById('spChamp').textContent=p.champ?teamName(p.champ):'—';
     document.getElementById('spOverview').innerHTML=playerOverview(p);
     document.getElementById('spMatches').innerHTML=buildSpRows(p);
@@ -1175,7 +1193,7 @@ function renderRanking(){
       <td class="p-name">${p.name}</td>
       <td class="p-num">${p.ex}</td>
       <td class="p-num">${p.en}</td>
-      <td class="p-num" style="font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.champ?teamName(p.champ):'—'}</td>
+      <td class="p-num" style="font-size:11px;color:${p.champBonus?'var(--gold)':'var(--muted)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.champ?teamName(p.champ):'—'}${p.champBonus?' +5':''}</td>
       <td class="p-pts">${p.pts}</td>
       <td class="p-chg">${chg}</td>`;
     tr.onclick=()=>activePlayer===p.name?closePanel():openPanel(p.name,ranked);
@@ -2109,6 +2127,7 @@ window.HSO_SHARED = {
   sc,
   apiRegulationScore,
   apiResult,
+  completedWorldChampion,
   setApiMatches(matches){
     API_MATCHES = Array.isArray(matches) ? matches : [];
   },

@@ -68,6 +68,27 @@ check(
   "Strona pamiatkowych kart graczy nie ma wyboru, druku, zdjec lub aktualnych danych"
 );
 check(
+  core.includes("function completedWorldChampion()") &&
+    core.includes("api?.status!=='FINISHED'") &&
+    core.includes("const champBonus=champion&&p.champ===champion?5:0") &&
+    core.includes("completedWorldChampion,") &&
+    cardsScript.includes("id: 'champion:bonus'") &&
+    cardsScript.includes("row.pts += 5") &&
+    trendsScript.includes("id: 'champion:bonus'") &&
+    trendsScript.includes("row.pts += 5"),
+  "Premia 5 pkt za mistrza nie jest bezpiecznie doliczana do rankingu, kart lub trendow"
+);
+try {
+  const championStart = core.indexOf("function completedWorldChampion(");
+  const championEnd = core.indexOf("function calcAll(", championStart);
+  const championFactory = new Function("KNOCKOUT_TIP_ROUNDS", "API_MATCHES", `${core.slice(championStart, championEnd)}; return completedWorldChampion;`);
+  const rounds = [{id:"medale",matches:[{id:1,home:"A",away:"B"},{id:2,home:"Hiszpania",away:"Argentyna"}]}];
+  check(championFactory(rounds,[{id:2,status:"PAUSED",score:{winner:"HOME_TEAM"}}])() === null, "Bonus mistrza jest przyznawany przed zakonczeniem finalu");
+  check(championFactory(rounds,[{id:2,status:"FINISHED",score:{winner:"HOME_TEAM"}}])() === "Hiszpania", "Bonus mistrza nie rozpoznaje zwyciezcy finalu");
+} catch (error) {
+  errors.push(`Bonus mistrza: ${error.message}`);
+}
+check(
   core.includes("const FAMILY_CUP_GROUPS = [") &&
     core.includes("function renderFamilyCup()") &&
     core.includes("familyCupMetric='average'") &&

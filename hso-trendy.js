@@ -59,7 +59,7 @@
   const knockoutEvents = apiMatches => {
     const apiById = new Map((apiMatches || []).map(match => [Number(match.id), match]));
     const roundLabels = { r32: '1/16', r16: '1/8', qf: '1/4', sf: '1/2', medale: 'Medale' };
-    return (shared.KNOCKOUT_TIP_ROUNDS || []).flatMap(round => (round.matches || []).map((declared, index) => {
+    const events = (shared.KNOCKOUT_TIP_ROUNDS || []).flatMap(round => (round.matches || []).map((declared, index) => {
       const key = declared.id || String(index);
       const api = apiById.get(Number(declared.apiId ?? declared.id));
       const result = apiRegulationResult(api);
@@ -74,6 +74,14 @@
         pointsFor: name => score(round.tipsByPlayer?.[name]?.[key], result)
       };
     }).filter(Boolean)).sort((a, b) => a.sort - b.sort);
+    const champion = shared.completedWorldChampion?.();
+    if (champion) events.push({
+      id: 'champion:bonus', phase: 'Mistrz świata', date: '',
+      sort: Math.max(0, ...events.map(event => event.sort)) + 1,
+      label: `Premia za mistrza · ${champion}`, result: champion,
+      pointsFor: name => players.find(player => player.name === name)?.champ === champion ? 5 : 0
+    });
+    return events;
   };
 
   const buildTrend = events => {
@@ -83,7 +91,8 @@
       players.forEach(player => {
         const value = event.pointsFor(player.name);
         const row = totals.get(player.name);
-        if (value === 3) { row.pts += 3; row.ex += 1; }
+        if (value === 5) { row.pts += 5; }
+        else if (value === 3) { row.pts += 3; row.ex += 1; }
         else if (value === 1) { row.pts += 1; row.en += 1; }
       });
       const ranked = assignPositions([...totals.values()].map(row => ({ ...row })));
@@ -171,6 +180,7 @@
       const response = await fetch(`data/football-data.json?t=${Date.now()}`, { cache: 'no-store' });
       const payload = await response.json();
       apiMatches = payload.matches || [];
+      shared.setApiMatches?.(apiMatches);
     } catch (error) {
       trendNote.textContent = 'Nie udało się pobrać aktualnych danych pucharowych. Pokazuję fazę grupową.';
     }
