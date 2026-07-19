@@ -98,9 +98,9 @@ function teamName(name){ return LANG==='en'?(TEAM_EN[name]||name):LANG==='it'?(T
 function lt(pl,en,it){return LANG==='pl'?pl:LANG==='it'?it:en;}
 function pointsLabel(value){ return value===1 ? tr('point') : tr('points'); }
 
-const INTRO_SESSION_KEY=HSO_MODE==='test'?'loza_ekspertow_victory_lukasz_seen_v1':'loza_ekspertow_intro_seen';
+const INTRO_SESSION_KEY='loza_ekspertow_victory_lukasz_seen_v1';
 const siteIntro=document.getElementById('siteIntro');
-if(siteIntro&&HSO_MODE==='test'){
+if(siteIntro){
   siteIntro.classList.add('victory-intro');
   siteIntro.setAttribute('aria-label','Gratulacje dla Łukasza, zwycięzcy Loży Ekspertów MŚ 2026');
   const confetti=Array.from({length:32},(_,index)=>`<i style="--i:${index};--x:${(index*37)%101};--d:${(index%8)*.11}s;--r:${(index*47)%180}deg"></i>`).join('');
@@ -133,7 +133,7 @@ if(siteIntro){
     document.body.classList.remove('intro-active');
   }else{
     document.getElementById('introSkip')?.addEventListener('click',closeIntro);
-    setTimeout(closeIntro,HSO_MODE==='test'?5200:2000);
+    setTimeout(closeIntro,5200);
   }
 }
 
@@ -1308,7 +1308,6 @@ function historyFilterLabel(filter){
 function renderGroupArchive(){
   const archive=document.getElementById('groupArchive');
   if(!archive)return;
-  const showExperimentalArchiveLinks=HSO_MODE==='test';
   const ranked=assignPositions(calcAll()).sort((a,b)=>b.group.pts-a.group.pts||b.group.ex-a.group.ex||a.name.localeCompare(b.name,'pl',{sensitivity:'base'}));
   const groupMatches=groupHistoryMatches();
   const knockoutMatchesHistory=knockoutHistoryMatches();
@@ -1323,9 +1322,9 @@ function renderGroupArchive(){
         <p>${lt('Kafle wszystkich meczów z rozwijaną listą punktów graczy. Faza grupowa korzysta z zamrożonego raportu, a faza pucharowa z aktualnych typów i wyników.','Match cards with expandable player-point lists. Group-stage data comes from the frozen report; knockout data uses current predictions and results.','Schede di tutte le partite con elenco punti espandibile. La fase a gironi usa il report congelato, la fase a eliminazione usa pronostici e risultati attuali.')}</p>
       </div>
       <div class="group-archive-actions">
-        ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>`:''}
-        ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>`:''}
-        ${showExperimentalArchiveLinks?`<a class="group-archive-report" href="hso-zgodnosc.html">${lt('Ranking zgodności','Compatibility ranking','Classifica affinità')}</a>`:''}
+        <a class="group-archive-report" href="hso-karty.html">${lt('Karty graczy','Player cards','Carte giocatori')}</a>
+        <a class="group-archive-report" href="hso-trendy.html">${lt('Trend miejsc','Place trend','Trend posizioni')}</a>
+        <a class="group-archive-report" href="hso-zgodnosc.html">${lt('Ranking zgodności','Compatibility ranking','Classifica affinità')}</a>
         <a class="group-archive-report" href="${groupReportHref()}">${lt('Raport fazy grupowej','Group-stage report','Report fase a gironi')}</a>
       </div>
     </div>

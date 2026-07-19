@@ -102,14 +102,14 @@ body.intro-active { overflow: hidden; }
 @keyframes intro-atmosphere { from { transform: scale(.8); opacity: 0; } to { transform: scale(1.08); opacity: 1; } }
 
 /* zwycięskie intro Łukasza · tylko hso-test */
-html[data-hso-mode="test"] .victory-intro {
+.victory-intro {
   isolation:isolate;
   background:
     radial-gradient(circle at 50% 42%,rgba(232,184,75,.24),transparent 25%),
     radial-gradient(ellipse at 50% 115%,rgba(27,79,170,.68),transparent 52%),
     linear-gradient(155deg,#03060c 0%,#07152d 48%,#180f02 100%);
 }
-html[data-hso-mode="test"] .victory-intro::before {
+.victory-intro::before {
   inset:-60%; opacity:.8;
   background:conic-gradient(from 0deg at 50% 50%,transparent 0 8deg,rgba(244,196,71,.11) 8deg 12deg,transparent 12deg 28deg);
   animation:victory-rotate 12s linear infinite;
@@ -172,7 +172,7 @@ html[data-hso-mode="test"] .victory-intro::before {
   background:hsl(calc(var(--i)*47deg) 82% 60%); opacity:0;
   transform:rotate(var(--r)); animation:victory-confetti-fall 3.1s cubic-bezier(.2,.65,.55,1) calc(.6s + var(--d)) forwards;
 }
-html[data-hso-mode="test"] .victory-intro .intro-skip {
+.victory-intro .intro-skip {
   right:50%; bottom:18px; transform:translateX(50%); color:#f1d477;
   border-color:rgba(244,196,71,.38); background:rgba(5,10,19,.72);
   white-space:nowrap; animation:victory-skip-in .35s ease 2s forwards;
@@ -637,12 +637,12 @@ body.ranking-panel-open .wrap { max-width: 1180px; }
 .group-archive-actions {
   flex:0 0 auto; display:flex; gap:10px; align-items:center; justify-content:flex-end; flex-wrap:wrap;
 }
-html[data-hso-mode="test"] .group-archive-head > div:first-child { display:none; }
-html[data-hso-mode="test"] .group-archive-head { display:block; padding:18px; }
-html[data-hso-mode="test"] .group-archive-actions {
+.group-archive-head > div:first-child { display:none; }
+.group-archive-head { display:block; padding:18px; }
+.group-archive-actions {
   display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; width:100%;
 }
-html[data-hso-mode="test"] .group-archive-actions .group-archive-report {
+.group-archive-actions .group-archive-report {
   width:100%; min-width:0; padding:0 10px; text-align:center; white-space:normal; line-height:1.1;
 }
 .history-filter-bar {
@@ -1378,10 +1378,10 @@ html[data-hso-mode="test"] .group-archive-actions .group-archive-report {
   .group-archive-head .eyebrow { margin-bottom:3px; font-size:8px; letter-spacing:.14em; }
   .group-archive-head h2 { font-size:25px; line-height:.95; }
   .group-archive-head p { display:none; }
-  html[data-hso-mode="test"] .group-archive-actions {
+  .group-archive-actions {
     grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;
   }
-  html[data-hso-mode="test"] .group-archive-actions .group-archive-report {
+  .group-archive-actions .group-archive-report {
     padding:0 6px;
   }
   .group-archive-report {
