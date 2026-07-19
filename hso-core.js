@@ -936,6 +936,23 @@ function formatCountdown(ms){
   return `<span style="color:var(--green)">${pad(mins)}m ${pad(secs)}s</span>`;
 }
 
+const EURO_2028_OPENING_UTC=Date.parse('2028-06-09T00:00:00Z');
+function euro2028Countdown(){
+  const days=Math.max(0,Math.ceil((EURO_2028_OPENING_UTC-Date.now())/86400000));
+  return LANG==='en'?`${days} days`:LANG==='it'?`${days} giorni`:`${days} dni`;
+}
+function nextTournamentHTML(){
+  const card=document.querySelector('.next-match-card');
+  card?.classList.remove('is-live','is-upcoming');
+  card?.classList.add('is-tournament');
+  document.getElementById('nextMatchLabel').textContent=lt('Następny turniej','Next tournament','Prossimo torneo');
+  return `<span class="next-tournament-summary">
+    <strong>UEFA EURO 2028</strong>
+    <span>${lt('9 czerwca 2028 · Cardiff','9 June 2028 · Cardiff','9 giugno 2028 · Cardiff')}</span>
+    <span class="countdown-tick">⏱ ${euro2028Countdown()}</span>
+  </span>`;
+}
+
 function knockoutSummaryStatus(match){
   if(match?.status==='FINISHED')return 'done';
   const diff=Date.now()-Date.parse(match?.utcDate);
@@ -1011,9 +1028,15 @@ function nextKnockoutMatch(){
   if(!upcoming){
     setFeaturedKnockoutMatch(null);
     const card=document.querySelector('.next-match-card');
-    card?.classList.remove('is-live','is-upcoming');
+    const finalFinished=API_MATCHES.some(match=>Number(match.id)===537390&&match.status==='FINISHED');
+    if(finalFinished){
+      _countdownMatch={tournamentCountdown:true};startCountdown();
+      return nextTournamentHTML();
+    }
+    card?.classList.remove('is-live','is-upcoming','is-tournament');
     stopCountdown();_countdownMatch=null;return '—';
   }
+  document.querySelector('.next-match-card')?.classList.remove('is-tournament');
   setFeaturedKnockoutMatch(upcoming);
   document.getElementById('nextMatchLabel').textContent=tr('nextMatch');
   _countdownMatch=upcoming;startCountdown();
@@ -1023,6 +1046,10 @@ function nextKnockoutMatch(){
 function tickCountdown(){
   const elements=document.querySelectorAll('.countdown-tick');
   if(!elements.length||!_countdownMatch)return;
+  if(_countdownMatch.tournamentCountdown){
+    elements.forEach(el=>el.innerHTML=`⏱ ${euro2028Countdown()}`);
+    return;
+  }
   const diff=Date.parse(_countdownMatch.utcDate)-Date.now();
   const countdown=diff>0?formatCountdown(diff):null;
   if(countdown)elements.forEach(el=>el.innerHTML=`⏱ ${countdown}`);

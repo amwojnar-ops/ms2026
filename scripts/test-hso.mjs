@@ -360,6 +360,16 @@ check(
   "hso-test powinien miec tylko polski i angielski"
 );
 check(
+  core.includes("const EURO_2028_OPENING_UTC=Date.parse('2028-06-09T00:00:00Z')") &&
+    core.includes("function nextTournamentHTML()") &&
+    core.includes("Number(match.id)===537390&&match.status==='FINISHED'") &&
+    core.includes("_countdownMatch={tournamentCountdown:true}") &&
+    core.includes("UEFA EURO 2028") &&
+    css.includes(".next-tournament-summary") &&
+    css.includes(".next-match-card.is-tournament"),
+  "Kafel po finale nie przechodzi na odliczanie do EURO 2028"
+);
+check(
   production.includes('class="stat-card next-match-card"') &&
     css.includes('.stats .stat-card:not(.next-match-card) { display:none; }') &&
     css.includes('.next-match-card .countdown-tick { font-size:10px') &&
