@@ -321,12 +321,18 @@ const normalizeWrapper = html => html
   )
   .replace(/\n<div id="tab-grupowa" style="display:none">[\s\S]*?<\/div>\n\n(?=<div id="tab-gracze">)/, "\n")
   .replace(/\n  <script src="data\/group-report-source\.js\?v=[^"]+"><\/script>/, "")
-  .replace(/window\.HSO_CONFIG=\{mode:'production'\}/, "window.HSO_CONFIG={mode:'MODE'}")
+  .replace(/window\.HSO_CONFIG=\{mode:'production',familyCup:true\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/window\.HSO_CONFIG=\{mode:'test',languages:\['pl','en'\]\}/, "window.HSO_CONFIG={mode:'MODE'}")
   .replace(/\r\n/g, "\n");
 check(
   normalizeWrapper(production) === normalizeWrapper(test),
   "hso.html i hso-test.html roznia sie czyms wiecej niz trybem"
+);
+check(
+  production.includes("window.HSO_CONFIG={mode:'production',familyCup:true}") &&
+    core.includes("const HSO_FAMILY_CUP = HSO_MODE === 'test' || window.HSO_CONFIG?.familyCup === true;") &&
+    core.includes("if(HSO_FAMILY_CUP){\n    renderFamilyCup();"),
+  "hso produkcyjne nie ma wlaczonego Pucharu Rodzin"
 );
 
 check(

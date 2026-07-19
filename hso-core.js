@@ -1,4 +1,5 @@
 const HSO_MODE = window.HSO_CONFIG?.mode === 'test' ? 'test' : 'production';
+const HSO_FAMILY_CUP = HSO_MODE === 'test' || window.HSO_CONFIG?.familyCup === true;
 document.documentElement.dataset.hsoMode=HSO_MODE;
 const TRANSLATIONS = {
   pl: {
@@ -197,7 +198,7 @@ function applyLanguage(){
   if(groupTab)groupTab.textContent=groupTabIsHistory?lt('Historia punktów','Point history','Storico punti'):tr('matches');
   setText('tabRankingBtn','ranking');
   document.getElementById('tabPlayersBtn').setAttribute('aria-label',tr('players'));
-  document.getElementById('tabKnockoutBtn').setAttribute('aria-label',HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout'));
+  document.getElementById('tabKnockoutBtn').setAttribute('aria-label',HSO_FAMILY_CUP?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout'));
   document.getElementById('tabMatchesBtn').setAttribute('aria-label',tr('matches'));
   document.getElementById('tabRankingBtn').setAttribute('aria-label',tr('ranking'));
   document.getElementById('mainTabs').dataset.label=lt('MENU GŁÓWNE','MAIN MENU','MENU PRINCIPALE');
@@ -209,11 +210,11 @@ function applyLanguage(){
     if('href' in groupTab)groupTab.href=groupReportHref();
   }
   const knockoutTabButton=document.getElementById('tabKnockoutBtn');
-  if(knockoutTabButton)knockoutTabButton.textContent=HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
-  if(HSO_MODE==='test'&&knockoutTabButton)document.getElementById('mainTabs')?.appendChild(knockoutTabButton);
+  if(knockoutTabButton)knockoutTabButton.textContent=HSO_FAMILY_CUP?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
+  if(HSO_FAMILY_CUP&&knockoutTabButton)document.getElementById('mainTabs')?.appendChild(knockoutTabButton);
   const backLabel=document.getElementById('mobileSectionBackLabel');
   if(backLabel)backLabel.textContent=lt('Wróć','Back','Indietro');
-  document.getElementById('tabKnockoutBtn').title=HSO_MODE==='test'?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
+  document.getElementById('tabKnockoutBtn').title=HSO_FAMILY_CUP?lt('Puchar Rodzin','Family Cup','Coppa delle famiglie'):tr('knockout');
   setText('subtab-grupy','byGroups'); setText('subtab-daty','byDates'); setText('subtab-tabele','groupTables');
   setText('pdpChampLabel','championPick'); setText('spChampLabel','championPick');
   setText('rankPlayer','player'); setText('rankChampion','champion'); setText('rankTotal','total');
@@ -1962,7 +1963,7 @@ function renderFamilyCup(){
 function renderKnockout(){
   const root=document.getElementById('tab-pucharowa');
   if(!root)return;
-  if(HSO_MODE==='test'){
+  if(HSO_FAMILY_CUP){
     renderFamilyCup();
     return;
   }
